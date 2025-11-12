@@ -97,10 +97,6 @@ useHead({
             </p>
 
             <p class="font-semibold text-base">
-              SintGPT maakt voor jou een perfect Sinterklaasgedicht.
-            </p>
-
-            <p class="font-semibold text-base">
               Snel & makkelijk. Klaar binnen 20 seconden!
             </p>
           </div>
