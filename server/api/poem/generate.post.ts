@@ -5,6 +5,10 @@ import { z } from 'zod';
 // Get API keys from runtime config
 const runtimeConfig = useRuntimeConfig();
 
+// Rate limiting storage
+const rateLimitMap = new Map<string, number>();
+const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // 1 hour
+
 // Define the request schema for validation
 const PoemRequestSchema = z.object({
   name: z.string().min(1, 'Recipient name is required'),
@@ -126,6 +130,23 @@ async function generatePoemWithRetry(
 
 export default defineEventHandler(async (event) => {
   try {
+    // Rate limiting check
+    const ip = getRequestIP(event, { xForwardedFor: true }) || 'unknown';
+    const now = Date.now();
+    const lastRequestTime = rateLimitMap.get(ip);
+
+    if (lastRequestTime && now - lastRequestTime < RATE_LIMIT_WINDOW_MS) {
+      const timeRemaining = RATE_LIMIT_WINDOW_MS - (now - lastRequestTime);
+      const minutesRemaining = Math.ceil(timeRemaining / 60000);
+
+      consola.warn(`Rate limit exceeded for IP: ${ip}`);
+
+      throw createError({
+        statusCode: 429,
+        statusMessage: `Je kunt maar 1 gedicht per uur genereren. Probeer het over ${minutesRemaining} ${minutesRemaining === 1 ? 'minuut' : 'minuten'} opnieuw.`,
+      });
+    }
+
     // Read and parse the request body
     const body = await readBody(event);
 
@@ -176,6 +197,9 @@ export default defineEventHandler(async (event) => {
 
     consola.info('Poem generated successfully');
     console.dir(response.usageMetadata, { depth: null });
+
+    // Update rate limit timestamp on successful generation
+    rateLimitMap.set(ip, now);
 
     return {
       poem: response.text?.trim() || '',

@@ -54,6 +54,11 @@ useHead({
 function logClientError(error: unknown) {
   consola.error(error);
 }
+
+// Redirect to Rick Astley when devtools are opened
+useDisableDevTools().config.onDetectOpen = () => {
+  window.location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+};
 </script>
 
 <style>
