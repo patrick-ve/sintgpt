@@ -22,6 +22,14 @@ export default defineNuxtConfig({
     preference: 'light',
   },
 
+  app: {
+    head: {
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      ]
+    }
+  },
+
   // Configure Nuxt UI module
   ui: {
     global: true,
