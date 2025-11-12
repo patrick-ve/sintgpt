@@ -69,24 +69,19 @@ const poemTitle = computed(() => {
     : 'Jouw gedicht';
 });
 
-useHead({
+useSeoMeta({
   title:
     'SintGPT - Maak gepersonaliseerde Sinterklaasgedichten met AI. Snel, makkelijk en klaar binnen 30 seconden!',
-  meta: [
-    {
-      name: 'description',
-      content:
-        'SintGPT maakt voor jou een perfect Sinterklaasgedicht. Snel, makkelijk en klaar binnen 30 seconden!',
-    },
-    {
-      property: 'og:image',
-      content: '/og-image.png',
-    },
-    {
-      property: 'og:image:alt',
-      content: 'SintGPT - AI Sinterklaasgedichten Generator',
-    },
-  ],
+  description:
+    'SintGPT maakt voor jou een perfect Sinterklaasgedicht. Snel, makkelijk en klaar binnen 30 seconden!',
+  ogTitle:
+    'SintGPT - Maak gepersonaliseerde Sinterklaasgedichten met AI',
+  ogDescription:
+    'SintGPT maakt voor jou een perfect Sinterklaasgedicht. Snel, makkelijk en klaar binnen 30 seconden!',
+  ogImage: 'https://sintgpt.nl/og-image.png',
+  ogImageAlt: 'SintGPT - AI Sinterklaasgedichten Generator',
+  twitterCard: 'summary_large_image',
+  twitterImage: 'https://sintgpt.nl/og-image.png',
 });
 </script>
 
