@@ -41,6 +41,16 @@
 <script setup lang="ts">
 import { consola } from 'consola';
 
+useHead({
+  script: [
+    {
+      defer: true,
+      src: 'https://cloud.umami.is/script.js',
+      'data-website-id': 'd1e0319e-4736-4487-9be1-34f3878278eb',
+    },
+  ],
+});
+
 function logClientError(error: unknown) {
   consola.error(error);
 }
