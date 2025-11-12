@@ -13,7 +13,7 @@ const PoemRequestSchema = z.object({
   funFacts: z.string().optional(),
   style: z.enum(['funny', 'classic', 'ironic', 'old-fashioned']),
   rhymeScheme: z.enum(['AABB', 'ABBA', 'Limerick']),
-  lines: z.number().int().min(8).max(20),
+  lines: z.number().int().min(8).max(40),
   language: z.enum(['dutch', 'english']),
 });
 
@@ -83,6 +83,47 @@ Schrijf nu het gedicht:`;
   return prompt;
 }
 
+async function generatePoemWithRetry(
+  ai: GoogleGenAI,
+  config: any,
+  contents: any[],
+  maxRetries: number = 3
+): Promise<any> {
+  let lastError: any;
+
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      consola.info(`Attempt ${attempt} of ${maxRetries} to generate poem...`);
+
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-pro',
+        config,
+        contents,
+      });
+
+      return response;
+    } catch (error: any) {
+      lastError = error;
+
+      // Check if it's a 503 overload error
+      const isOverloadError = error?.error?.code === 503 ||
+                              error?.error?.status === 'UNAVAILABLE' ||
+                              error?.message?.includes('overloaded');
+
+      if (isOverloadError && attempt < maxRetries) {
+        consola.warn(`Model overloaded, retrying in 5 seconds... (attempt ${attempt}/${maxRetries})`);
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        continue;
+      }
+
+      // If it's not an overload error or we're out of retries, throw
+      throw error;
+    }
+  }
+
+  throw lastError;
+}
+
 export default defineEventHandler(async (event) => {
   try {
     // Read and parse the request body
@@ -130,12 +171,8 @@ export default defineEventHandler(async (event) => {
       },
     ];
 
-    // Generate the poem using Gemini 2.5 Pro with streaming
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-pro',
-      config,
-      contents,
-    });
+    // Generate the poem using Gemini 2.5 Pro with retry logic
+    const response = await generatePoemWithRetry(ai, config, contents);
 
     consola.info('Poem generated successfully');
     console.dir(response.usageMetadata, { depth: null });

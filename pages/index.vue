@@ -304,7 +304,7 @@ useHead({
                 v-model.number="formData.lines"
                 type="range"
                 min="8"
-                max="20"
+                max="40"
                 class="w-full h-2 bg-red-200 rounded-lg appearance-none cursor-pointer"
                 :disabled="isLoading"
               />
@@ -312,7 +312,7 @@ useHead({
                 class="flex justify-between text-xs text-gray-500 mt-1"
               >
                 <span>8 regels</span>
-                <span>20 regels</span>
+                <span>40 regels</span>
               </div>
             </div>
 
