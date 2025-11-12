@@ -63,14 +63,28 @@ const isFormValid = computed(() => {
   return formData.value.name.trim() !== '';
 });
 
+const poemTitle = computed(() => {
+  return formData.value.name.trim() !== ''
+    ? `Gedicht voor ${formData.value.name}`
+    : 'Jouw gedicht';
+});
+
 useHead({
   title:
-    'SintGPT - Maak gepersonaliseerde Sinterklaasgedichten met AI. Snel, makkelijk en klaar binnen 20 seconden!',
+    'SintGPT - Maak gepersonaliseerde Sinterklaasgedichten met AI. Snel, makkelijk en klaar binnen 30 seconden!',
   meta: [
     {
       name: 'description',
       content:
-        'SintGPT maakt voor jou een perfect Sinterklaasgedicht. Snel, makkelijk en klaar binnen 20 seconden!',
+        'SintGPT maakt voor jou een perfect Sinterklaasgedicht. Snel, makkelijk en klaar binnen 30 seconden!',
+    },
+    {
+      property: 'og:image',
+      content: '/og-image.png',
+    },
+    {
+      property: 'og:image:alt',
+      content: 'SintGPT - AI Sinterklaasgedichten Generator',
     },
   ],
 });
@@ -97,7 +111,7 @@ useHead({
             </p>
 
             <p class="font-semibold text-base">
-              Snel & makkelijk. Klaar binnen 20 seconden!
+              Snel & makkelijk. Klaar binnen 30 seconden!
             </p>
           </div>
         </div>
@@ -335,7 +349,7 @@ useHead({
         <section class="bg-white rounded-2xl shadow-xl p-8">
           <div class="flex justify-between items-center mb-6">
             <h2 class="text-2xl font-semibold text-gray-800">
-              Jouw gedicht
+              {{ poemTitle }}
             </h2>
             <UButton
               v-if="poem"
@@ -373,13 +387,8 @@ useHead({
 
           <!-- Poem Display -->
           <div v-else-if="poem" class="prose prose-lg max-w-none">
-            <div
-              class="bg-amber-50 rounded-xl p-6 border-2 border-amber-200"
-            >
-              <pre
-                class="whitespace-pre-wrap font-serif text-gray-800 leading-relaxed"
-                >{{ poem }}</pre
-              >
+            <div class="poem-parchment">
+              <pre class="poem-text has-dropcap">{{ poem }}</pre>
             </div>
           </div>
 
@@ -415,8 +424,9 @@ useHead({
         class="container mx-auto px-6 py-6 text-center text-gray-400"
       >
         <p>
-          Copyright {{ new Date().getFullYear() }} SintGPT. Alle
-          rechten voorbehouden.
+          Copyright
+          {{ new Date().getFullYear() }} SintGPT. Alle rechten
+          voorbehouden.
         </p>
       </div>
     </footer>
@@ -424,6 +434,8 @@ useHead({
 </template>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel&family=Cinzel+Decorative&family=IM+Fell+DW+Pica+SC&family=IM+Fell+DW+Pica:ital@0;1&display=swap');
+
 input[type='range']::-webkit-slider-thumb {
   appearance: none;
   width: 20px;
@@ -440,5 +452,30 @@ input[type='range']::-moz-range-thumb {
   cursor: pointer;
   border-radius: 50%;
   border: none;
+}
+
+.poem-parchment {
+  background-color: #fff3c9;
+  padding: 2rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.poem-text {
+  font-family: 'IM Fell DW Pica', serif;
+  white-space: pre-wrap;
+  color: #000000;
+  line-height: 1.8;
+  margin: 0;
+  font-size: 1.25crem;
+}
+
+.poem-text.has-dropcap::first-letter {
+  font-family: 'IM Fell DW Pica SC', serif;
+  float: left;
+  font-size: 4rem;
+  line-height: 0.65;
+  margin: 0.1em 0.1em 0.2em 0;
+  color: #8b0000;
 }
 </style>
