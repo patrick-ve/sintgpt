@@ -8,13 +8,13 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@vueuse/nuxt',
     '@nuxt/ui',
-    '@nuxtjs/leaflet',
   ],
 
   css: ['@/assets/css/main.css'],
 
   runtimeConfig: {
-    openaiApiKey: process.env.OPENAI_API_KEY,
+    googleApiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+    enrichLayerApiKey: process.env.ENRICH_LAYER_API_KEY,
     public: {},
   },
 
