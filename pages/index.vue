@@ -78,10 +78,10 @@ useSeoMeta({
     'SintGPT - Maak gepersonaliseerde Sinterklaasgedichten met AI',
   ogDescription:
     'SintGPT maakt voor jou een perfect Sinterklaasgedicht. Snel, makkelijk en klaar binnen 30 seconden!',
-  ogImage: 'https://www.sintgpt.nl/og-image.png',
+  ogImage: '/og-image.png',
   ogImageAlt: 'SintGPT - AI Sinterklaasgedichten Generator',
   twitterCard: 'summary_large_image',
-  twitterImage: 'https://www.sintgpt.nl/og-image.png',
+  twitterImage: '/og-image.png',
 });
 </script>
 
