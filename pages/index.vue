@@ -97,20 +97,22 @@ useHead({
     <!-- Header -->
     <header class="bg-red-900 text-white shadow-lg">
       <div class="container mx-auto px-6 py-8 text-[rgb(244,205,96)]">
-        <div class="flex items-center justify-between w-full gap-8">
+        <div
+          class="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-4 md:gap-8"
+        >
           <!-- Left: Heading -->
           <div class="flex-shrink-0">
-            <h1 class="text-5xl font-bold">SintGPT</h1>
+            <h1 class="text-3xl md:text-5xl font-bold">SintGPT</h1>
           </div>
 
           <!-- Right: Paragraphs -->
-          <div class="flex flex-col text-right">
-            <p class="font-semibold text-base">
+          <div class="flex flex-col md:text-right">
+            <p class="font-semibold text-sm md:text-base">
               Maak gepersonaliseerde Sinterklaasgedichten en laat AI
               het rijmen doen.
             </p>
 
-            <p class="font-semibold text-base">
+            <p class="font-semibold text-sm md:text-base">
               Snel & makkelijk. Klaar binnen 30 seconden!
             </p>
           </div>
@@ -122,7 +124,7 @@ useHead({
     <main class="container mx-auto px-6 pb-12 py-12">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- Form Section -->
-        <section class="bg-white rounded-2xl shadow-xl p-8">
+        <section class="bg-white rounded-2xl shadow-xl p-4 md:p-8">
           <h2 class="text-2xl font-semibold text-gray-800 mb-6">
             Details voor het gedicht
           </h2>
@@ -346,7 +348,7 @@ useHead({
         </section>
 
         <!-- Poem Display Section -->
-        <section class="bg-white rounded-2xl shadow-xl p-8">
+        <section class="bg-white rounded-2xl shadow-xl p-4 md:p-8">
           <div class="flex justify-between items-center mb-6">
             <h2 class="text-2xl font-semibold text-gray-800">
               {{ poemTitle }}
@@ -355,7 +357,7 @@ useHead({
               v-if="poem"
               icon="i-heroicons-clipboard-document"
               size="sm"
-              :color="copySuccess ? 'green' : 'gray'"
+              :color="copySuccess ? 'success' : 'neutral'"
               @click="copyToClipboard"
             >
               {{ copySuccess ? 'Gekopieerd!' : 'Kopieer' }}
