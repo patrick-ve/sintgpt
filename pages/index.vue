@@ -301,6 +301,7 @@ useHead({
                 type="range"
                 min="8"
                 max="40"
+                step="4"
                 class="w-full h-2 bg-red-200 rounded-lg appearance-none cursor-pointer"
                 :disabled="isLoading"
               />
