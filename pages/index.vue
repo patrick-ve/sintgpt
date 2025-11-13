@@ -360,14 +360,24 @@ useSeoMeta({
           </div>
 
           <!-- Loading State -->
-          <div
-            v-if="isLoading"
-            class="flex flex-col items-center justify-center h-96 text-gray-500"
-          >
-            <div
-              class="animate-spin rounded-full h-16 w-16 border-b-2 border-red-600 mb-4"
-            />
-            <p class="text-lg">
+          <div v-if="isLoading" class="prose prose-lg max-w-none">
+            <div class="poem-parchment">
+              <div class="animate-pulse space-y-3">
+                <div
+                  v-for="index in formData.lines"
+                  :key="index"
+                  class="h-3 rounded bg-gray-300"
+                  :class="{
+                    'w-11/12': index % 4 === 1,
+                    'w-10/12': index % 4 === 2,
+                    'w-full': index % 4 === 3,
+                    'w-9/12': index % 4 === 0,
+                    'mb-6': index % 4 === 0,
+                  }"
+                />
+              </div>
+            </div>
+            <p class="text-center text-gray-500 mt-4">
               Jouw gepersonaliseerde gedicht wordt gemaakt...
             </p>
           </div>
@@ -375,7 +385,7 @@ useSeoMeta({
           <!-- Error State -->
           <UAlert
             v-else-if="error"
-            color="red"
+            color="warning"
             variant="soft"
             title="Fout"
             :description="error"
