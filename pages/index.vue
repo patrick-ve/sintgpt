@@ -372,6 +372,7 @@ useSeoMeta({
               :disabled="!isFormValid || isLoading"
               :loading="isLoading"
               class="bg-red-600 hover:bg-red-700"
+              data-umami-event="Generate poem"
             >
               {{
                 isLoading
@@ -394,6 +395,7 @@ useSeoMeta({
               size="sm"
               :color="copySuccess ? 'success' : 'neutral'"
               @click="copyToClipboard"
+              data-umami-event="Copy to clipboard"
             >
               {{ copySuccess ? 'Gekopieerd!' : 'Kopieer' }}
             </UButton>
