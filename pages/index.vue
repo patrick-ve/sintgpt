@@ -69,6 +69,43 @@ const poemTitle = computed(() => {
     : 'Jouw gedicht';
 });
 
+const isLimerick = computed(
+  () => formData.value.rhymeScheme === 'Limerick'
+);
+
+// Dynamic slider parameters based on rhyme scheme
+const sliderMin = computed(() => (isLimerick.value ? 10 : 8));
+const sliderMax = computed(() => (isLimerick.value ? 50 : 40));
+const sliderStep = computed(() => (isLimerick.value ? 5 : 4));
+
+// Auto-adjust lines when switching rhyme schemes
+watch(
+  () => formData.value.rhymeScheme,
+  (newScheme, oldScheme) => {
+    if (newScheme === 'Limerick') {
+      // Set to nearest valid value for Limerick (10-50, step 5)
+      if (formData.value.lines < 10) {
+        formData.value.lines = 10;
+      } else {
+        // Round to nearest multiple of 5
+        formData.value.lines =
+          Math.round(formData.value.lines / 5) * 5;
+        if (formData.value.lines > 50) formData.value.lines = 50;
+      }
+    } else if (oldScheme === 'Limerick') {
+      // Set to nearest valid value for non-Limerick (8-40, step 4)
+      if (formData.value.lines < 8) {
+        formData.value.lines = 12;
+      } else {
+        // Round to nearest multiple of 4
+        formData.value.lines =
+          Math.round(formData.value.lines / 4) * 4;
+        if (formData.value.lines > 40) formData.value.lines = 40;
+      }
+    }
+  }
+);
+
 useSeoMeta({
   title:
     'SintGPT - Maak gepersonaliseerde Sinterklaasgedichten met AI. Snel, makkelijk en klaar binnen 30 seconden!',
@@ -310,18 +347,21 @@ useSeoMeta({
               <input
                 v-model.number="formData.lines"
                 type="range"
-                min="8"
-                max="40"
-                step="4"
-                class="w-full h-2 bg-red-200 rounded-lg appearance-none cursor-pointer"
+                :min="sliderMin"
+                :max="sliderMax"
+                :step="sliderStep"
+                class="w-full h-2 bg-red-200 rounded-lg appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 :disabled="isLoading"
               />
               <div
                 class="flex justify-between text-xs text-gray-500 mt-1"
               >
-                <span>8 regels</span>
-                <span>40 regels</span>
+                <span>{{ sliderMin }} regels</span>
+                <span>{{ sliderMax }} regels</span>
               </div>
+              <p v-if="isLimerick" class="text-xs text-gray-500 mt-2">
+                Limericks zijn altijd 5 regels (AABBA rijmschema)
+              </p>
             </div>
 
             <!-- Submit Button -->
