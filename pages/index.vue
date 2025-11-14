@@ -141,7 +141,9 @@ useSeoMeta({
         >
           <!-- Left: Heading -->
           <div class="flex-shrink-0">
-            <h1 class="text-3xl md:text-5xl font-bold">{{ t('header.title') }}</h1>
+            <h1 class="text-3xl md:text-5xl font-bold">
+              {{ t('header.title') }}
+            </h1>
           </div>
 
           <!-- Right: Paragraphs and Language Switcher -->
@@ -161,7 +163,12 @@ useSeoMeta({
               v-model="selectedLocale"
               :items="uiLanguageItems"
               class="w-44"
-              size="sm"
+              size="md"
+              :ui="{
+                base: 'bg-red-900 border-[rgb(244,205,96)] border-1 text-[rgb(244,205,96)] font-bold',
+                value: 'text-[rgb(244,205,96)]',
+                trailingIcon: 'text-[rgb(244,205,96)]',
+              }"
             />
           </div>
         </div>
@@ -183,7 +190,10 @@ useSeoMeta({
               <label
                 class="block text-sm font-medium text-gray-700 mb-2"
               >
-                {{ t('form.name.label') }}<span class="text-red-500">{{ t('form.required') }}</span>
+                {{ t('form.name.label')
+                }}<span class="text-red-500">{{
+                  t('form.required')
+                }}</span>
               </label>
 
               <UInput
@@ -258,7 +268,10 @@ useSeoMeta({
               <label
                 class="block text-sm font-medium text-gray-700 mb-3"
               >
-                {{ t('form.style.label') }} <span class="text-red-500">{{ t('form.required') }}</span>
+                {{ t('form.style.label') }}
+                <span class="text-red-500">{{
+                  t('form.required')
+                }}</span>
               </label>
               <div class="space-y-2">
                 <label
@@ -291,7 +304,10 @@ useSeoMeta({
               <label
                 class="block text-sm font-medium text-gray-700 mb-3"
               >
-                {{ t('form.rhymeScheme.label') }} <span class="text-red-500">{{ t('form.required') }}</span>
+                {{ t('form.rhymeScheme.label') }}
+                <span class="text-red-500">{{
+                  t('form.required')
+                }}</span>
               </label>
               <div class="space-y-2">
                 <label
@@ -324,7 +340,10 @@ useSeoMeta({
               <label
                 class="block text-sm font-medium text-gray-700 mb-3"
               >
-                {{ t('form.language.label') }} <span class="text-red-500">{{ t('form.required') }}</span>
+                {{ t('form.language.label') }}
+                <span class="text-red-500">{{
+                  t('form.required')
+                }}</span>
               </label>
               <div class="space-y-2">
                 <label
@@ -488,7 +507,12 @@ useSeoMeta({
         class="container mx-auto px-6 py-6 text-center text-gray-400"
       >
         <p>
-          {{ t('footer.copyright').replace('{year}', new Date().getFullYear().toString()) }}
+          {{
+            t('footer.copyright').replace(
+              '{year}',
+              new Date().getFullYear().toString()
+            )
+          }}
         </p>
       </div>
     </footer>
