@@ -7,17 +7,16 @@
         <template #error="{ error, clearError }">
           <div class="p-4 text-center bg-primary-500">
             <h3 class="text-lg font-semibold text-red-600">
-              Oeps! Er ging iets mis.
+              {{ t('error.title') }}
             </h3>
             <p class="mt-4 text-sm text-gray-700">
-              Er is een fout opgetreden bij het weergeven van dit
-              gedeelte van de pagina.
+              {{ t('error.message') }}
             </p>
             <p
               v-if="error.message"
               class="mt-2 text-xs text-gray-500"
             >
-              Fout: {{ error.message }}
+              {{ t('error.label') }}: {{ error.message }}
             </p>
 
             <UButton
@@ -27,7 +26,7 @@
               size="sm"
               @click="clearError"
             >
-              Probeer opnieuw
+              {{ t('error.retry') }}
             </UButton>
           </div>
         </template>
@@ -40,6 +39,8 @@
 
 <script setup lang="ts">
 import { consola } from 'consola';
+
+const { t } = useI18n();
 
 useHead({
   script: [

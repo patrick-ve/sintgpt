@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { generatePoem, isLoading, error, poem } = usePoemGenerator();
+const { t, locale, setLocale } = useI18n();
 
 // Form state
 const formData = ref({
@@ -13,31 +14,41 @@ const formData = ref({
   language: 'dutch' as 'dutch' | 'english',
 });
 
-const styleOptions = [
-  { value: 'funny', label: '😄 Grappig' },
-  { value: 'classic', label: '📜 Klassiek' },
-  { value: 'ironic', label: '😏 Ironisch' },
-  { value: 'old-fashioned', label: '🎩 Ouderwets' },
-];
+const styleOptions = computed(() => [
+  { value: 'funny', label: t('form.style.funny') },
+  { value: 'classic', label: t('form.style.classic') },
+  { value: 'ironic', label: t('form.style.ironic') },
+  { value: 'old-fashioned', label: t('form.style.oldFashioned') },
+]);
 
-const rhymeSchemeOptions = [
-  { value: 'AABB', label: 'AABB (Rijmparen)' },
-  { value: 'ABBA', label: 'ABBA (Omarmend)' },
-  { value: 'Limerick', label: 'Limerick' },
-];
+const rhymeSchemeOptions = computed(() => [
+  { value: 'AABB', label: t('form.rhymeScheme.aabb') },
+  { value: 'ABBA', label: t('form.rhymeScheme.abba') },
+  { value: 'Limerick', label: t('form.rhymeScheme.limerick') },
+]);
 
-const languageOptions = [
-  { value: 'dutch', label: '🇳🇱 Nederlands' },
-  { value: 'english', label: '🇬🇧 Engels' },
-];
+const languageOptions = computed(() => [
+  { value: 'dutch', label: t('form.language.dutch') },
+  { value: 'english', label: t('form.language.english') },
+]);
 
-const revealPresentOptions = [
-  { value: true, label: 'Ja, vermeldt het cadeau in het gedicht' },
+const revealPresentOptions = computed(() => [
+  { value: true, label: t('form.revealPresent.yes') },
   {
     value: false,
-    label: 'Nee, houd het cadeau geheim (vaag omschrijven)',
+    label: t('form.revealPresent.no'),
   },
+]);
+
+const uiLanguageItems = [
+  { value: 'nl', label: '🇳🇱 Nederlands' },
+  { value: 'en', label: '🇬🇧 English' },
 ];
+
+const selectedLocale = computed({
+  get: () => locale.value,
+  set: (value) => setLocale(value),
+});
 
 const copySuccess = ref(false);
 
@@ -65,8 +76,8 @@ const isFormValid = computed(() => {
 
 const poemTitle = computed(() => {
   return formData.value.name.trim() !== ''
-    ? `Gedicht voor ${formData.value.name}`
-    : 'Jouw gedicht';
+    ? t('poem.title').replace('{name}', formData.value.name)
+    : t('poem.defaultTitle');
 });
 
 const isLimerick = computed(
@@ -107,16 +118,12 @@ watch(
 );
 
 useSeoMeta({
-  title:
-    'SintGPT - Maak gepersonaliseerde Sinterklaasgedichten met AI. Snel, makkelijk en klaar binnen 30 seconden!',
-  description:
-    'SintGPT maakt voor jou een perfect Sinterklaasgedicht. Snel, makkelijk en klaar binnen 30 seconden!',
-  ogTitle:
-    'SintGPT - Maak gepersonaliseerde Sinterklaasgedichten met AI',
-  ogDescription:
-    'SintGPT maakt voor jou een perfect Sinterklaasgedicht. Snel, makkelijk en klaar binnen 30 seconden!',
+  title: computed(() => t('seo.title')),
+  description: computed(() => t('seo.description')),
+  ogTitle: computed(() => t('seo.ogTitle')),
+  ogDescription: computed(() => t('seo.ogDescription')),
   ogImage: '/og-image.png',
-  ogImageAlt: 'SintGPT - AI Sinterklaasgedichten Generator',
+  ogImageAlt: computed(() => t('seo.ogImageAlt')),
   twitterCard: 'summary_large_image',
   twitterImage: '/og-image.png',
 });
@@ -134,19 +141,28 @@ useSeoMeta({
         >
           <!-- Left: Heading -->
           <div class="flex-shrink-0">
-            <h1 class="text-3xl md:text-5xl font-bold">SintGPT</h1>
+            <h1 class="text-3xl md:text-5xl font-bold">{{ t('header.title') }}</h1>
           </div>
 
-          <!-- Right: Paragraphs -->
-          <div class="flex flex-col md:text-right">
-            <p class="font-semibold text-sm md:text-base">
-              Maak gepersonaliseerde Sinterklaasgedichten en laat AI
-              het rijmen doen.
-            </p>
+          <!-- Right: Paragraphs and Language Switcher -->
+          <div class="flex flex-col md:items-end gap-3">
+            <div class="flex flex-col md:text-right">
+              <p class="font-semibold text-sm md:text-base">
+                {{ t('header.subtitle1') }}
+              </p>
 
-            <p class="font-semibold text-sm md:text-base">
-              Snel & makkelijk. Klaar binnen 30 seconden!
-            </p>
+              <p class="font-semibold text-sm md:text-base">
+                {{ t('header.subtitle2') }}
+              </p>
+            </div>
+
+            <!-- Language Switcher -->
+            <USelect
+              v-model="selectedLocale"
+              :items="uiLanguageItems"
+              class="w-44"
+              size="sm"
+            />
           </div>
         </div>
       </div>
@@ -158,7 +174,7 @@ useSeoMeta({
         <!-- Form Section -->
         <section class="bg-white rounded-2xl shadow-xl p-4 md:p-8">
           <h2 class="text-2xl font-semibold text-gray-800 mb-6">
-            Details voor het gedicht
+            {{ t('form.title') }}
           </h2>
 
           <form @submit.prevent="handleSubmit" class="space-y-6">
@@ -167,12 +183,12 @@ useSeoMeta({
               <label
                 class="block text-sm font-medium text-gray-700 mb-2"
               >
-                Naam ontvanger<span class="text-red-500">*</span>
+                {{ t('form.name.label') }}<span class="text-red-500">{{ t('form.required') }}</span>
               </label>
 
               <UInput
                 v-model="formData.name"
-                placeholder="Sint Nicolaas"
+                :placeholder="t('form.name.placeholder')"
                 size="xl"
                 :disabled="isLoading"
                 class="w-full"
@@ -184,11 +200,11 @@ useSeoMeta({
               <label
                 class="block text-sm font-medium text-gray-700 mb-2"
               >
-                Sinterklaascadeau
+                {{ t('form.present.label') }}
               </label>
               <UInput
                 v-model="formData.present"
-                placeholder="Een boek, speelgoed, kookgerei, etc."
+                :placeholder="t('form.present.placeholder')"
                 size="xl"
                 :disabled="isLoading"
                 class="w-full"
@@ -200,7 +216,7 @@ useSeoMeta({
               <label
                 class="block text-sm font-medium text-gray-700 mb-2"
               >
-                Cadeau vermelden?
+                {{ t('form.revealPresent.label') }}
               </label>
               <select
                 v-model="formData.revealPresent"
@@ -222,19 +238,18 @@ useSeoMeta({
               <label
                 class="block text-sm font-medium text-gray-700 mb-2"
               >
-                Leuke weetjes over de ontvanger
+                {{ t('form.funFacts.label') }}
               </label>
               <UTextarea
                 v-model="formData.funFacts"
-                placeholder="Vertel zo uitgebreid mogelijk over hobby's, werk, sport, interesses of andere anekdotes..."
+                :placeholder="t('form.funFacts.placeholder')"
                 :rows="5"
                 size="xl"
                 :disabled="isLoading"
                 class="w-full"
               />
               <p class="text-xs text-gray-500 mt-1">
-                Deze informatie wordt gebruikt om het gedicht
-                persoonlijker te maken
+                {{ t('form.funFacts.help') }}
               </p>
             </div>
 
@@ -243,7 +258,7 @@ useSeoMeta({
               <label
                 class="block text-sm font-medium text-gray-700 mb-3"
               >
-                Gedichtstijl <span class="text-red-500">*</span>
+                {{ t('form.style.label') }} <span class="text-red-500">{{ t('form.required') }}</span>
               </label>
               <div class="space-y-2">
                 <label
@@ -276,7 +291,7 @@ useSeoMeta({
               <label
                 class="block text-sm font-medium text-gray-700 mb-3"
               >
-                Rijmschema <span class="text-red-500">*</span>
+                {{ t('form.rhymeScheme.label') }} <span class="text-red-500">{{ t('form.required') }}</span>
               </label>
               <div class="space-y-2">
                 <label
@@ -309,7 +324,7 @@ useSeoMeta({
               <label
                 class="block text-sm font-medium text-gray-700 mb-3"
               >
-                Taal <span class="text-red-500">*</span>
+                {{ t('form.language.label') }} <span class="text-red-500">{{ t('form.required') }}</span>
               </label>
               <div class="space-y-2">
                 <label
@@ -342,7 +357,7 @@ useSeoMeta({
               <label
                 class="block text-sm font-medium text-gray-700 mb-2"
               >
-                Aantal regels: {{ formData.lines }}
+                {{ t('form.lines.label') }}: {{ formData.lines }}
               </label>
               <input
                 v-model.number="formData.lines"
@@ -356,11 +371,11 @@ useSeoMeta({
               <div
                 class="flex justify-between text-xs text-gray-500 mt-1"
               >
-                <span>{{ sliderMin }} regels</span>
-                <span>{{ sliderMax }} regels</span>
+                <span>{{ sliderMin }} {{ t('form.lines.min') }}</span>
+                <span>{{ sliderMax }} {{ t('form.lines.max') }}</span>
               </div>
               <p v-if="isLimerick" class="text-xs text-gray-500 mt-2">
-                Limericks zijn altijd 5 regels (AABBA rijmschema)
+                {{ t('form.lines.limerickNote') }}
               </p>
             </div>
 
@@ -376,8 +391,8 @@ useSeoMeta({
             >
               {{
                 isLoading
-                  ? 'Gedicht genereren...'
-                  : 'Genereer gedicht'
+                  ? t('form.submit.generating')
+                  : t('form.submit.generate')
               }}
             </UButton>
           </form>
@@ -397,7 +412,7 @@ useSeoMeta({
               @click="copyToClipboard"
               data-umami-event="Copy to clipboard"
             >
-              {{ copySuccess ? 'Gekopieerd!' : 'Kopieer' }}
+              {{ copySuccess ? t('poem.copied') : t('poem.copy') }}
             </UButton>
           </div>
 
@@ -420,7 +435,7 @@ useSeoMeta({
               </div>
             </div>
             <p class="text-center text-gray-500 mt-4">
-              Jouw gepersonaliseerde gedicht wordt gemaakt...
+              {{ t('poem.loading') }}
             </p>
           </div>
 
@@ -429,7 +444,7 @@ useSeoMeta({
             v-else-if="error"
             color="warning"
             variant="soft"
-            title="Fout"
+            :title="t('poem.error')"
             :description="error"
             icon="i-heroicons-exclamation-triangle"
           />
@@ -460,7 +475,7 @@ useSeoMeta({
               />
             </svg>
             <p class="text-lg">
-              Vul het formulier in om een gedicht te genereren
+              {{ t('poem.empty') }}
             </p>
           </div>
         </section>
@@ -473,9 +488,7 @@ useSeoMeta({
         class="container mx-auto px-6 py-6 text-center text-gray-400"
       >
         <p>
-          Copyright
-          {{ new Date().getFullYear() }} SintGPT. Alle rechten
-          voorbehouden.
+          {{ t('footer.copyright').replace('{year}', new Date().getFullYear().toString()) }}
         </p>
       </div>
     </footer>
