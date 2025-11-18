@@ -6,7 +6,10 @@ import { z } from 'zod';
 const runtimeConfig = useRuntimeConfig();
 
 // Rate limiting storage
-const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+const rateLimitMap = new Map<
+  string,
+  { count: number; resetTime: number }
+>();
 const RATE_LIMIT_MAX_REQUESTS = 3;
 const RATE_LIMIT_WINDOW_MS = 24 * 60 * 60 * 1000; // 24 hours
 
@@ -98,10 +101,12 @@ async function generatePoemWithRetry(
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      consola.info(`Attempt ${attempt} of ${maxRetries} to generate poem...`);
+      consola.info(
+        `Attempt ${attempt} of ${maxRetries} to generate poem...`
+      );
 
       const response = await ai.models.generateContent({
-        model: 'gemini-2.5-pro',
+        model: 'gemini-3-pro-preview',
         config,
         contents,
       });
@@ -111,13 +116,16 @@ async function generatePoemWithRetry(
       lastError = error;
 
       // Check if it's a 503 overload error
-      const isOverloadError = error?.error?.code === 503 ||
-                              error?.error?.status === 'UNAVAILABLE' ||
-                              error?.message?.includes('overloaded');
+      const isOverloadError =
+        error?.error?.code === 503 ||
+        error?.error?.status === 'UNAVAILABLE' ||
+        error?.message?.includes('overloaded');
 
       if (isOverloadError && attempt < maxRetries) {
-        consola.warn(`Model overloaded, retrying in 5 seconds... (attempt ${attempt}/${maxRetries})`);
-        await new Promise(resolve => setTimeout(resolve, 5000));
+        consola.warn(
+          `Model overloaded, retrying in 5 seconds... (attempt ${attempt}/${maxRetries})`
+        );
+        await new Promise((resolve) => setTimeout(resolve, 5000));
         continue;
       }
 
@@ -133,7 +141,8 @@ export default defineEventHandler(async (event) => {
   try {
     // Rate limiting check (skip in development)
     if (!import.meta.dev) {
-      const ip = getRequestIP(event, { xForwardedFor: true }) || 'unknown';
+      const ip =
+        getRequestIP(event, { xForwardedFor: true }) || 'unknown';
       const now = Date.now();
       const rateLimitData = rateLimitMap.get(ip);
 
@@ -146,9 +155,13 @@ export default defineEventHandler(async (event) => {
       } else if (rateLimitData.count >= RATE_LIMIT_MAX_REQUESTS) {
         // Rate limit exceeded
         const timeRemaining = rateLimitData.resetTime - now;
-        const hoursRemaining = Math.ceil(timeRemaining / (60 * 60 * 1000));
+        const hoursRemaining = Math.ceil(
+          timeRemaining / (60 * 60 * 1000)
+        );
 
-        consola.warn(`Rate limit exceeded for IP: ${ip} (${rateLimitData.count}/${RATE_LIMIT_MAX_REQUESTS} requests)`);
+        consola.warn(
+          `Rate limit exceeded for IP: ${ip} (${rateLimitData.count}/${RATE_LIMIT_MAX_REQUESTS} requests)`
+        );
 
         throw createError({
           statusCode: 429,
@@ -203,21 +216,28 @@ export default defineEventHandler(async (event) => {
     ];
 
     // Generate the poem using Gemini 2.5 Pro with retry logic
-    const response = await generatePoemWithRetry(ai, config, contents);
+    const response = await generatePoemWithRetry(
+      ai,
+      config,
+      contents
+    );
 
     consola.info('Poem generated successfully');
     console.dir(response.usageMetadata, { depth: null });
 
     // Update rate limit counter on successful generation (skip in development)
     if (!import.meta.dev) {
-      const ip = getRequestIP(event, { xForwardedFor: true }) || 'unknown';
+      const ip =
+        getRequestIP(event, { xForwardedFor: true }) || 'unknown';
       const currentData = rateLimitMap.get(ip)!;
       rateLimitMap.set(ip, {
         count: currentData.count + 1,
         resetTime: currentData.resetTime,
       });
 
-      consola.info(`Rate limit for IP ${ip}: ${currentData.count + 1}/${RATE_LIMIT_MAX_REQUESTS} requests used`);
+      consola.info(
+        `Rate limit for IP ${ip}: ${currentData.count + 1}/${RATE_LIMIT_MAX_REQUESTS} requests used`
+      );
     }
 
     return {
