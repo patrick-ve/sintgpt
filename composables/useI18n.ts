@@ -21,7 +21,7 @@ export const useI18n = () => {
     }
   });
 
-  const t = (key: string): string => {
+  const t = (key: string, params?: Record<string, any>): any => {
     const keys = key.split('.');
     let value: any = translations[locale.value];
 
@@ -34,7 +34,18 @@ export const useI18n = () => {
       }
     }
 
-    return typeof value === 'string' ? value : key;
+    if (value === undefined) {
+      return key;
+    }
+
+    // Handle parameter interpolation for strings
+    if (typeof value === 'string' && params) {
+      return value.replace(/\{(\w+)\}/g, (match, paramKey) => {
+        return params[paramKey] !== undefined ? String(params[paramKey]) : match;
+      });
+    }
+
+    return value;
   };
 
   const setLocale = (newLocale: Locale) => {

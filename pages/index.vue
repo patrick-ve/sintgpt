@@ -679,11 +679,15 @@ useHead({
       </div>
     </footer>
 
-    <!-- Payment Modal -->
-    <PaymentModal
-      v-model="showPaymentModal"
-      @payment-success="handlePaymentSuccess"
-    />
+    <!-- Payment Modal - Temporarily Hidden -->
+    <!--
+    <ClientOnly>
+      <PaymentModal
+        v-model="showPaymentModal"
+        @payment-success="handlePaymentSuccess"
+      />
+    </ClientOnly>
+    -->
   </div>
 </template>
 
