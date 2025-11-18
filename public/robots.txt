@@ -1,1 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /server/
 
+Sitemap: https://sintgpt.com/sitemap.xml

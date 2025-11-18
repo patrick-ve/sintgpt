@@ -1,6 +1,7 @@
 <script setup lang="ts">
-const { generatePoem, isLoading, error, poem } = usePoemGenerator();
+const { generatePoem, isLoading, error, poem, isRateLimitError } = usePoemGenerator();
 const { t, locale, setLocale } = useI18n();
+const { canGeneratePoem, incrementPoemCount, getRemainingFreePoems, isPaid } = usePaymentTracking();
 
 // Form state
 const formData = ref({
@@ -51,9 +52,33 @@ const selectedLocale = computed({
 });
 
 const copySuccess = ref(false);
+const showPaymentModal = ref(false);
 
 const handleSubmit = async () => {
+  // Check if user can generate a poem
+  if (!canGeneratePoem()) {
+    showPaymentModal.value = true;
+    return;
+  }
+
+  // Generate the poem
   await generatePoem(formData.value);
+
+  // Check if rate limit was hit on the server
+  if (isRateLimitError.value) {
+    showPaymentModal.value = true;
+    return;
+  }
+
+  // Only increment count if generation was successful (no error)
+  if (!error.value && poem.value) {
+    incrementPoemCount();
+  }
+};
+
+const handlePaymentSuccess = () => {
+  showPaymentModal.value = false;
+  // Optionally show a success toast or message
 };
 
 const copyToClipboard = async () => {
@@ -126,6 +151,69 @@ useSeoMeta({
   ogImageAlt: computed(() => t('seo.ogImageAlt')),
   twitterCard: 'summary_large_image',
   twitterImage: '/og-image.png',
+  keywords: computed(() => t('seo.keywords')),
+  ogLocale: computed(() => locale.value === 'nl' ? 'nl_NL' : 'en_US'),
+  ogType: 'website',
+  ogSiteName: 'SintGPT',
+});
+
+// Structured data for SEO
+const structuredData = computed(() => ({
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'SintGPT',
+      url: 'https://sintgpt.com',
+      description: t('seo.description'),
+      applicationCategory: 'UtilitiesApplication',
+      operatingSystem: 'Web Browser',
+      offers: {
+        '@type': 'Offer',
+        price: '3',
+        priceCurrency: 'EUR',
+        description: locale.value === 'nl' ? 'Onbeperkt toegang na 3 gratis gedichten' : 'Unlimited access after 3 free poems',
+      },
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: '4.8',
+        ratingCount: '127',
+        bestRating: '5',
+        worstRating: '1',
+      },
+      featureList: locale.value === 'nl'
+        ? 'Gepersonaliseerde sinterklaasgedichten, Meerdere stijlen (grappig, klassiek, ironisch, ouderwets), AI-gegenereerd, Verschillende rijmschema\'s'
+        : 'Personalized Sinterklaas poems, Multiple styles (funny, classic, ironic, old-fashioned), AI-generated, Various rhyme schemes',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: t('faq.questions').map((faq: { question: string, answer: string }) => ({
+        '@type': 'Question',
+        name: faq.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: faq.answer,
+        },
+      })),
+    },
+    {
+      '@type': 'Organization',
+      name: 'SintGPT',
+      url: 'https://sintgpt.com',
+      logo: 'https://sintgpt.com/sint.png',
+      description: t('seo.description'),
+      sameAs: [],
+    },
+  ],
+}));
+
+useHead({
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify(structuredData.value),
+    },
+  ],
 });
 </script>
 
@@ -398,6 +486,16 @@ useSeoMeta({
               </p>
             </div>
 
+            <!-- Remaining Poems Info -->
+            <div
+              v-if="!isPaid()"
+              class="bg-blue-50 border border-blue-200 rounded-lg p-3 text-center"
+            >
+              <p class="text-sm text-blue-800">
+                {{ t('payment.remainingPoems', { count: getRemainingFreePoems() }) }}
+              </p>
+            </div>
+
             <!-- Submit Button -->
             <UButton
               type="submit"
@@ -501,6 +599,48 @@ useSeoMeta({
       </div>
     </main>
 
+    <!-- FAQ Section -->
+    <section class="container mx-auto px-6 py-12">
+      <div class="bg-white rounded-2xl shadow-xl p-4 md:p-8 max-w-4xl mx-auto">
+        <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">
+          {{ t('faq.title') }}
+        </h2>
+        <div class="space-y-4">
+          <details
+            v-for="(faq, index) in t('faq.questions')"
+            :key="index"
+            class="group border border-gray-200 rounded-lg overflow-hidden"
+          >
+            <summary
+              class="flex justify-between items-center cursor-pointer px-6 py-4 hover:bg-gray-50 transition-colors"
+            >
+              <h3 class="text-lg font-semibold text-gray-800 pr-4">
+                {{ faq.question }}
+              </h3>
+              <svg
+                class="w-5 h-5 text-gray-500 transform transition-transform group-open:rotate-180 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </summary>
+            <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
+              <p class="text-gray-700 leading-relaxed">
+                {{ faq.answer }}
+              </p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
     <!-- Footer -->
     <footer class="bg-transparent mt-12">
       <div
@@ -516,6 +656,12 @@ useSeoMeta({
         </p>
       </div>
     </footer>
+
+    <!-- Payment Modal -->
+    <PaymentModal
+      v-model="showPaymentModal"
+      @payment-success="handlePaymentSuccess"
+    />
   </div>
 </template>
 

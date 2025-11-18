@@ -7,7 +7,7 @@ const runtimeConfig = useRuntimeConfig();
 
 // Rate limiting storage
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
-const RATE_LIMIT_MAX_REQUESTS = 5;
+const RATE_LIMIT_MAX_REQUESTS = 3;
 const RATE_LIMIT_WINDOW_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 // Define the request schema for validation
@@ -131,28 +131,30 @@ async function generatePoemWithRetry(
 
 export default defineEventHandler(async (event) => {
   try {
-    // Rate limiting check
-    const ip = getRequestIP(event, { xForwardedFor: true }) || 'unknown';
-    const now = Date.now();
-    const rateLimitData = rateLimitMap.get(ip);
+    // Rate limiting check (skip in development)
+    if (!import.meta.dev) {
+      const ip = getRequestIP(event, { xForwardedFor: true }) || 'unknown';
+      const now = Date.now();
+      const rateLimitData = rateLimitMap.get(ip);
 
-    // If no data or reset time has passed, initialize/reset the counter
-    if (!rateLimitData || now >= rateLimitData.resetTime) {
-      rateLimitMap.set(ip, {
-        count: 0,
-        resetTime: now + RATE_LIMIT_WINDOW_MS,
-      });
-    } else if (rateLimitData.count >= RATE_LIMIT_MAX_REQUESTS) {
-      // Rate limit exceeded
-      const timeRemaining = rateLimitData.resetTime - now;
-      const hoursRemaining = Math.ceil(timeRemaining / (60 * 60 * 1000));
+      // If no data or reset time has passed, initialize/reset the counter
+      if (!rateLimitData || now >= rateLimitData.resetTime) {
+        rateLimitMap.set(ip, {
+          count: 0,
+          resetTime: now + RATE_LIMIT_WINDOW_MS,
+        });
+      } else if (rateLimitData.count >= RATE_LIMIT_MAX_REQUESTS) {
+        // Rate limit exceeded
+        const timeRemaining = rateLimitData.resetTime - now;
+        const hoursRemaining = Math.ceil(timeRemaining / (60 * 60 * 1000));
 
-      consola.warn(`Rate limit exceeded for IP: ${ip} (${rateLimitData.count}/${RATE_LIMIT_MAX_REQUESTS} requests)`);
+        consola.warn(`Rate limit exceeded for IP: ${ip} (${rateLimitData.count}/${RATE_LIMIT_MAX_REQUESTS} requests)`);
 
-      throw createError({
-        statusCode: 429,
-        statusMessage: `Je hebt het maximale aantal van ${RATE_LIMIT_MAX_REQUESTS} gedichten per 24 uur bereikt. Probeer het over ${hoursRemaining} ${hoursRemaining === 1 ? 'uur' : 'uren'} opnieuw.`,
-      });
+        throw createError({
+          statusCode: 429,
+          statusMessage: `You have reached the maximum of ${RATE_LIMIT_MAX_REQUESTS} free poems per 24 hours. Upgrade to unlimited access for just €3!`,
+        });
+      }
     }
 
     // Read and parse the request body
@@ -206,14 +208,17 @@ export default defineEventHandler(async (event) => {
     consola.info('Poem generated successfully');
     console.dir(response.usageMetadata, { depth: null });
 
-    // Update rate limit counter on successful generation
-    const currentData = rateLimitMap.get(ip)!;
-    rateLimitMap.set(ip, {
-      count: currentData.count + 1,
-      resetTime: currentData.resetTime,
-    });
+    // Update rate limit counter on successful generation (skip in development)
+    if (!import.meta.dev) {
+      const ip = getRequestIP(event, { xForwardedFor: true }) || 'unknown';
+      const currentData = rateLimitMap.get(ip)!;
+      rateLimitMap.set(ip, {
+        count: currentData.count + 1,
+        resetTime: currentData.resetTime,
+      });
 
-    consola.info(`Rate limit for IP ${ip}: ${currentData.count + 1}/${RATE_LIMIT_MAX_REQUESTS} requests used`);
+      consola.info(`Rate limit for IP ${ip}: ${currentData.count + 1}/${RATE_LIMIT_MAX_REQUESTS} requests used`);
+    }
 
     return {
       poem: response.text?.trim() || '',
