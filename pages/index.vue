@@ -230,62 +230,78 @@ useHead({
 
 <template>
   <div class="min-h-screen bg-sinterklaas-pattern">
-    <!-- Header -->
-    <header
-      class="bg-red-900 text-white shadow-xl border-b-4 border-[#F4CD60] relative overflow-hidden"
-    >
-      <!-- Decorative corner elements -->
-      <div
-        class="absolute top-0 left-0 w-16 h-16 bg-[#F4CD60] -translate-x-8 -translate-y-8 rotate-45 transform"
-      ></div>
-      <div
-        class="absolute top-0 right-0 w-16 h-16 bg-[#F4CD60] translate-x-8 -translate-y-8 rotate-45 transform"
-      ></div>
-
-      <div
-        class="container mx-auto px-6 py-8 text-[#F4CD60] relative z-10"
+    <!-- Header Wrapper with Mobile Banner -->
+    <div class="relative z-20">
+      <header
+        class="bg-red-900 text-white shadow-xl border-b-4 border-[#F4CD60] relative overflow-hidden"
       >
+        <!-- Decorative corner elements -->
         <div
-          class="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-4 md:gap-8"
+          class="absolute top-0 left-0 w-16 h-16 bg-[#F4CD60] -translate-x-8 -translate-y-8 rotate-45 transform"
+        ></div>
+        <div
+          class="absolute top-0 right-0 w-16 h-16 bg-[#F4CD60] translate-x-8 -translate-y-8 rotate-45 transform"
+        ></div>
+
+        <div
+          class="container mx-auto px-6 pt-8 pb-12 md:py-8 text-[#F4CD60] relative z-10"
         >
-          <!-- Left: Heading -->
-          <div class="flex-shrink-0 flex items-center gap-4">
-            <div class="hidden md:block text-5xl">🎁</div>
-            <h1
-              class="text-4xl md:text-6xl font-bold font-cinzel drop-shadow-md"
-            >
-              {{ t('header.title') }}
-            </h1>
-          </div>
-
-          <!-- Right: Paragraphs and Language Switcher -->
-          <div class="flex flex-col md:items-end gap-3">
-            <div class="flex flex-col md:text-right">
-              <p class="font-semibold text-sm md:text-base">
-                {{ t('header.subtitle1') }}
-              </p>
-
-              <p class="font-semibold text-sm md:text-base">
-                {{ t('header.subtitle2') }}
-              </p>
+          <div
+            class="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-4 md:gap-8"
+          >
+            <!-- Left: Heading -->
+            <div class="flex-shrink-0 flex items-center gap-4">
+              <div class="hidden md:block text-5xl">🎁</div>
+              <h1
+                class="text-4xl md:text-6xl font-bold font-cinzel drop-shadow-md"
+              >
+                {{ t('header.title') }}
+              </h1>
             </div>
 
-            <!-- Language Switcher -->
-            <USelect
-              v-model="selectedLocale"
-              :items="uiLanguageItems"
-              class="w-44"
-              size="md"
-              :ui="{
-                base: 'bg-red-900 border-[rgb(244,205,96)] border-1 text-[rgb(244,205,96)] font-bold',
-                value: 'text-[rgb(244,205,96)]',
-                trailingIcon: 'text-[rgb(244,205,96)]',
-              }"
-            />
+            <!-- Center: Poem Counter (Desktop) -->
+            <div class="hidden md:block">
+              <PoemCounter
+                class="transform hover:scale-110 transition-transform duration-300"
+              />
+            </div>
+
+            <!-- Right: Paragraphs and Language Switcher -->
+            <div class="flex flex-col md:items-end gap-3">
+              <div class="flex flex-col md:text-right">
+                <p class="font-semibold text-sm md:text-base">
+                  {{ t('header.subtitle1') }}
+                </p>
+
+                <p class="font-semibold text-sm md:text-base">
+                  {{ t('header.subtitle2') }}
+                </p>
+              </div>
+
+              <!-- Language Switcher -->
+              <USelect
+                v-model="selectedLocale"
+                :items="uiLanguageItems"
+                class="w-44"
+                size="md"
+                :ui="{
+                  base: 'bg-red-900 border-[rgb(244,205,96)] border-1 text-[rgb(244,205,96)] font-bold',
+                  value: 'text-[rgb(244,205,96)]',
+                  trailingIcon: 'text-[rgb(244,205,96)]',
+                }"
+              />
+            </div>
           </div>
         </div>
+      </header>
+
+      <!-- Mobile Banner (Overlapping Bottom Border) -->
+      <div
+        class="md:hidden absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 z-30 filter drop-shadow-lg"
+      >
+        <PoemCounter />
       </div>
-    </header>
+    </div>
 
     <!-- Main Content -->
     <main class="container mx-auto px-6 pb-12 py-12">
