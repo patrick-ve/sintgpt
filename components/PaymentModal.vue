@@ -148,15 +148,6 @@ const closeModal = () => {
 
       <div v-else>
         <div class="space-y-4">
-          <!-- Sinterklaas Image -->
-          <div class="flex justify-center mb-2">
-            <img
-              src="/sint.png"
-              alt="Sinterklaas"
-              class="w-24 h-24 object-contain"
-            />
-          </div>
-
           <div
             class="bg-blue-50 border border-blue-200 rounded-lg p-4"
           >

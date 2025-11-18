@@ -64,14 +64,11 @@ const handleSubmit = async () => {
   // Generate the poem
   await generatePoem(formData.value);
 
-  // Check if rate limit was hit on the server
-  if (isRateLimitError.value) {
-    showPaymentModal.value = true;
-    return;
-  }
+  // If rate limit was hit, it will be displayed in the UI with upgrade button
+  // No need to show modal immediately
 
-  // Only increment count if generation was successful (no error)
-  if (!error.value && poem.value) {
+  // Only increment count if generation was successful (no error and no rate limit)
+  if (!error.value && !isRateLimitError.value && poem.value) {
     incrementPoemCount();
   }
 };
@@ -554,6 +551,31 @@ useHead({
             <p class="text-center text-gray-500 mt-4">
               {{ t('poem.loading') }}
             </p>
+          </div>
+
+          <!-- Rate Limit Error State -->
+          <div
+            v-else-if="isRateLimitError"
+            class="flex flex-col items-center justify-center h-96 text-center"
+          >
+            <img
+              src="/sint.png"
+              alt="Sinterklaas"
+              class="w-32 h-32 object-contain mb-6"
+            />
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">
+              {{ t('payment.limitReached') }}
+            </h3>
+            <p class="text-gray-600 mb-6 max-w-md">
+              {{ t('payment.description') }}
+            </p>
+            <UButton
+              size="xl"
+              class="bg-red-600 hover:bg-red-700"
+              @click="showPaymentModal = true"
+            >
+              {{ t('payment.unlimitedAccess') }}
+            </UButton>
           </div>
 
           <!-- Error State -->
