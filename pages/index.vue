@@ -1,7 +1,13 @@
 <script setup lang="ts">
-const { generatePoem, isLoading, error, poem, isRateLimitError } = usePoemGenerator();
+const { generatePoem, isLoading, error, poem, isRateLimitError } =
+  usePoemGenerator();
 const { t, locale, setLocale } = useI18n();
-const { canGeneratePoem, incrementPoemCount, getRemainingFreePoems, isPaid } = usePaymentTracking();
+const {
+  canGeneratePoem,
+  incrementPoemCount,
+  getRemainingFreePoems,
+  isPaid,
+} = usePaymentTracking();
 
 // Form state
 const formData = ref({
@@ -149,7 +155,9 @@ useSeoMeta({
   twitterCard: 'summary_large_image',
   twitterImage: '/og-image.png',
   keywords: computed(() => t('seo.keywords')),
-  ogLocale: computed(() => locale.value === 'nl' ? 'nl_NL' : 'en_US'),
+  ogLocale: computed(() =>
+    locale.value === 'nl' ? 'nl_NL' : 'en_US'
+  ),
   ogType: 'website',
   ogSiteName: 'SintGPT',
 });
@@ -169,7 +177,10 @@ const structuredData = computed(() => ({
         '@type': 'Offer',
         price: '3',
         priceCurrency: 'EUR',
-        description: locale.value === 'nl' ? 'Onbeperkt toegang na 3 gratis gedichten' : 'Unlimited access after 3 free poems',
+        description:
+          locale.value === 'nl'
+            ? 'Onbeperkt toegang na 3 gratis gedichten'
+            : 'Unlimited access after 3 free poems',
       },
       aggregateRating: {
         '@type': 'AggregateRating',
@@ -178,20 +189,23 @@ const structuredData = computed(() => ({
         bestRating: '5',
         worstRating: '1',
       },
-      featureList: locale.value === 'nl'
-        ? 'Gepersonaliseerde sinterklaasgedichten, Meerdere stijlen (grappig, klassiek, ironisch, ouderwets), AI-gegenereerd, Verschillende rijmschema\'s'
-        : 'Personalized Sinterklaas poems, Multiple styles (funny, classic, ironic, old-fashioned), AI-generated, Various rhyme schemes',
+      featureList:
+        locale.value === 'nl'
+          ? "Gepersonaliseerde sinterklaasgedichten, Meerdere stijlen (grappig, klassiek, ironisch, ouderwets), AI-gegenereerd, Verschillende rijmschema's"
+          : 'Personalized Sinterklaas poems, Multiple styles (funny, classic, ironic, old-fashioned), AI-generated, Various rhyme schemes',
     },
     {
       '@type': 'FAQPage',
-      mainEntity: t('faq.questions').map((faq: { question: string, answer: string }) => ({
-        '@type': 'Question',
-        name: faq.question,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: faq.answer,
-        },
-      })),
+      mainEntity: t('faq.questions').map(
+        (faq: { question: string; answer: string }) => ({
+          '@type': 'Question',
+          name: faq.question,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: faq.answer,
+          },
+        })
+      ),
     },
     {
       '@type': 'Organization',
@@ -215,18 +229,31 @@ useHead({
 </script>
 
 <template>
-  <div
-    class="min-h-screen bg-gradient-to-b from-black via-blue-950 to-gray-900"
-  >
+  <div class="min-h-screen bg-sinterklaas-pattern">
     <!-- Header -->
-    <header class="bg-red-900 text-white shadow-lg">
-      <div class="container mx-auto px-6 py-8 text-[rgb(244,205,96)]">
+    <header
+      class="bg-red-900 text-white shadow-xl border-b-4 border-[#F4CD60] relative overflow-hidden"
+    >
+      <!-- Decorative corner elements -->
+      <div
+        class="absolute top-0 left-0 w-16 h-16 bg-[#F4CD60] -translate-x-8 -translate-y-8 rotate-45 transform"
+      ></div>
+      <div
+        class="absolute top-0 right-0 w-16 h-16 bg-[#F4CD60] translate-x-8 -translate-y-8 rotate-45 transform"
+      ></div>
+
+      <div
+        class="container mx-auto px-6 py-8 text-[#F4CD60] relative z-10"
+      >
         <div
           class="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-4 md:gap-8"
         >
           <!-- Left: Heading -->
-          <div class="flex-shrink-0">
-            <h1 class="text-3xl md:text-5xl font-bold">
+          <div class="flex-shrink-0 flex items-center gap-4">
+            <div class="hidden md:block text-5xl">🎁</div>
+            <h1
+              class="text-4xl md:text-6xl font-bold font-cinzel drop-shadow-md"
+            >
               {{ t('header.title') }}
             </h1>
           </div>
@@ -264,8 +291,17 @@ useHead({
     <main class="container mx-auto px-6 pb-12 py-12">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- Form Section -->
-        <section class="bg-white rounded-2xl shadow-xl p-4 md:p-8">
-          <h2 class="text-2xl font-semibold text-gray-800 mb-6">
+        <section
+          class="bg-[#fffdf0] rounded-2xl shadow-2xl p-6 md:p-8 sint-border relative"
+        >
+          <div
+            class="absolute -top-5 -right-5 text-6xl rotate-12 drop-shadow-lg filter"
+          >
+            📜
+          </div>
+          <h2
+            class="text-3xl font-bold text-red-900 mb-6 font-cinzel border-b-2 border-red-100 pb-2"
+          >
             {{ t('form.title') }}
           </h2>
 
@@ -273,12 +309,10 @@ useHead({
             <!-- Recipient Name -->
             <div>
               <label
-                class="block text-sm font-medium text-gray-700 mb-2"
+                class="block text-lg font-bold text-red-900 mb-2 font-cinzel"
               >
                 {{ t('form.name.label')
-                }}<span class="text-red-500">{{
-                  t('form.required')
-                }}</span>
+                }}<span class="text-red-500 ml-1">*</span>
               </label>
 
               <UInput
@@ -286,14 +320,17 @@ useHead({
                 :placeholder="t('form.name.placeholder')"
                 size="xl"
                 :disabled="isLoading"
-                class="w-full"
+                class="w-full font-handwriting"
+                :ui="{
+                  base: 'bg-white',
+                }"
               />
             </div>
 
             <!-- Present -->
             <div>
               <label
-                class="block text-sm font-medium text-gray-700 mb-2"
+                class="block text-lg font-bold text-red-900 mb-2 font-cinzel"
               >
                 {{ t('form.present.label') }}
               </label>
@@ -302,14 +339,17 @@ useHead({
                 :placeholder="t('form.present.placeholder')"
                 size="xl"
                 :disabled="isLoading"
-                class="w-full"
+                class="w-full font-handwriting"
+                :ui="{
+                  base: 'bg-white',
+                }"
               />
             </div>
 
             <!-- Reveal Present -->
             <div>
               <label
-                class="block text-sm font-medium text-gray-700 mb-2"
+                class="block text-lg font-bold text-red-900 mb-2 font-cinzel"
               >
                 {{ t('form.revealPresent.label') }}
               </label>
@@ -331,7 +371,7 @@ useHead({
             <!-- Fun Facts -->
             <div>
               <label
-                class="block text-sm font-medium text-gray-700 mb-2"
+                class="block text-lg font-bold text-red-900 mb-2 font-cinzel"
               >
                 {{ t('form.funFacts.label') }}
               </label>
@@ -341,9 +381,12 @@ useHead({
                 :rows="5"
                 size="xl"
                 :disabled="isLoading"
-                class="w-full"
+                class="w-full font-handwriting"
+                :ui="{
+                  base: 'bg-white',
+                }"
               />
-              <p class="text-xs text-gray-500 mt-1">
+              <p class="text-xs text-red-800 italic mt-1 font-cinzel">
                 {{ t('form.funFacts.help') }}
               </p>
             </div>
@@ -351,12 +394,10 @@ useHead({
             <!-- Style -->
             <div>
               <label
-                class="block text-sm font-medium text-gray-700 mb-3"
+                class="block text-lg font-bold text-red-900 mb-3 font-cinzel"
               >
                 {{ t('form.style.label') }}
-                <span class="text-red-500">{{
-                  t('form.required')
-                }}</span>
+                <span class="text-red-500 ml-1">*</span>
               </label>
               <div class="space-y-2">
                 <label
@@ -377,9 +418,10 @@ useHead({
                     :disabled="isLoading"
                     class="w-4 h-4 text-red-600 focus:ring-red-500"
                   />
-                  <span class="ml-2 text-sm text-gray-700">{{
-                    option.label
-                  }}</span>
+                  <span
+                    class="ml-2 text-base text-red-900 font-medium font-cinzel"
+                    >{{ option.label }}</span
+                  >
                 </label>
               </div>
             </div>
@@ -387,12 +429,10 @@ useHead({
             <!-- Rhyme Scheme -->
             <div>
               <label
-                class="block text-sm font-medium text-gray-700 mb-3"
+                class="block text-lg font-bold text-red-900 mb-3 font-cinzel"
               >
                 {{ t('form.rhymeScheme.label') }}
-                <span class="text-red-500">{{
-                  t('form.required')
-                }}</span>
+                <span class="text-red-500 ml-1">*</span>
               </label>
               <div class="space-y-2">
                 <label
@@ -413,9 +453,10 @@ useHead({
                     :disabled="isLoading"
                     class="w-4 h-4 text-red-600 focus:ring-red-500"
                   />
-                  <span class="ml-2 text-sm text-gray-700">{{
-                    option.label
-                  }}</span>
+                  <span
+                    class="ml-2 text-base text-red-900 font-medium font-cinzel"
+                    >{{ option.label }}</span
+                  >
                 </label>
               </div>
             </div>
@@ -423,12 +464,10 @@ useHead({
             <!-- Language -->
             <div>
               <label
-                class="block text-sm font-medium text-gray-700 mb-3"
+                class="block text-lg font-bold text-red-900 mb-3 font-cinzel"
               >
                 {{ t('form.language.label') }}
-                <span class="text-red-500">{{
-                  t('form.required')
-                }}</span>
+                <span class="text-red-500 ml-1">*</span>
               </label>
               <div class="space-y-2">
                 <label
@@ -449,9 +488,10 @@ useHead({
                     :disabled="isLoading"
                     class="w-4 h-4 text-red-600 focus:ring-red-500"
                   />
-                  <span class="ml-2 text-sm text-gray-700">{{
-                    option.label
-                  }}</span>
+                  <span
+                    class="ml-2 text-base text-red-900 font-medium font-cinzel"
+                    >{{ option.label }}</span
+                  >
                 </label>
               </div>
             </div>
@@ -459,7 +499,7 @@ useHead({
             <!-- Number of Lines Slider -->
             <div>
               <label
-                class="block text-sm font-medium text-gray-700 mb-2"
+                class="block text-lg font-bold text-red-900 mb-2 font-cinzel"
               >
                 {{ t('form.lines.label') }}: {{ formData.lines }}
               </label>
@@ -473,12 +513,15 @@ useHead({
                 :disabled="isLoading"
               />
               <div
-                class="flex justify-between text-xs text-gray-500 mt-1"
+                class="flex justify-between text-xs font-bold text-red-800 mt-1 font-cinzel"
               >
                 <span>{{ sliderMin }} {{ t('form.lines.min') }}</span>
                 <span>{{ sliderMax }} {{ t('form.lines.max') }}</span>
               </div>
-              <p v-if="isLimerick" class="text-xs text-gray-500 mt-2">
+              <p
+                v-if="isLimerick"
+                class="text-xs text-red-800 italic mt-2 font-cinzel"
+              >
                 {{ t('form.lines.limerickNote') }}
               </p>
             </div>
@@ -486,10 +529,14 @@ useHead({
             <!-- Remaining Poems Info -->
             <div
               v-if="!isPaid()"
-              class="bg-blue-50 border border-blue-200 rounded-lg p-3 text-center"
+              class="bg-[#fff3c9] border-2 border-[#F4CD60] rounded-lg p-3 text-center shadow-sm"
             >
-              <p class="text-sm text-blue-800">
-                {{ t('payment.remainingPoems', { count: getRemainingFreePoems() }) }}
+              <p class="text-sm font-bold text-red-900 font-cinzel">
+                {{
+                  t('payment.remainingPoems', {
+                    count: getRemainingFreePoems(),
+                  })
+                }}
               </p>
             </div>
 
@@ -513,16 +560,28 @@ useHead({
         </section>
 
         <!-- Poem Display Section -->
-        <section class="bg-white rounded-2xl shadow-xl p-4 md:p-8">
-          <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-semibold text-gray-800">
+        <section
+          class="bg-[#fffdf0] rounded-2xl shadow-2xl p-6 md:p-8 sint-border relative min-h-[600px] flex flex-col"
+        >
+          <div
+            class="absolute -top-5 -left-5 text-6xl -rotate-12 drop-shadow-lg filter"
+          >
+            🪶
+          </div>
+
+          <div
+            class="flex justify-between items-center mb-6 border-b-2 border-red-100 pb-4"
+          >
+            <h2 class="text-3xl font-bold text-red-900 font-cinzel">
               {{ poemTitle }}
             </h2>
             <UButton
               v-if="poem"
               icon="i-heroicons-clipboard-document"
-              size="sm"
-              :color="copySuccess ? 'success' : 'neutral'"
+              size="md"
+              :color="copySuccess ? 'success' : 'primary'"
+              variant="ghost"
+              class="hover:bg-red-50 text-red-700"
               @click="copyToClipboard"
               data-umami-event="Copy to clipboard"
             >
@@ -531,90 +590,107 @@ useHead({
           </div>
 
           <!-- Loading State -->
-          <div v-if="isLoading" class="prose prose-lg max-w-none">
-            <div class="poem-parchment">
-              <div class="animate-pulse space-y-3">
-                <div
-                  v-for="index in formData.lines"
-                  :key="index"
-                  class="h-3 rounded bg-gray-300"
-                  :class="{
-                    'w-11/12': index % 4 === 1,
-                    'w-10/12': index % 4 === 2,
-                    'w-full': index % 4 === 3,
-                    'w-9/12': index % 4 === 0,
-                    'mb-6': index % 4 === 0,
-                  }"
-                />
-              </div>
+          <div
+            v-if="isLoading"
+            class="prose prose-lg max-w-none flex-grow flex items-center justify-center"
+          >
+            <div class="text-center">
+              <div class="animate-bounce text-6xl mb-4">✍️</div>
+              <p
+                class="text-xl font-cinzel text-red-800 animate-pulse"
+              >
+                {{ t('poem.loading') }}
+              </p>
+              <p class="text-sm text-red-600 mt-2 font-handwriting">
+                De rijmpiet is aan het denken...
+              </p>
             </div>
-            <p class="text-center text-gray-500 mt-4">
-              {{ t('poem.loading') }}
-            </p>
           </div>
 
           <!-- Rate Limit Error State -->
           <div
             v-else-if="isRateLimitError"
-            class="flex flex-col items-center justify-center h-96 text-center"
+            class="flex flex-col items-center justify-center flex-grow text-center py-8"
           >
-            <img
-              src="/sint.png"
-              alt="Sinterklaas"
-              class="w-32 h-32 object-contain mb-6"
-            />
-            <h3 class="text-xl font-semibold text-gray-800 mb-2">
+            <div class="relative">
+              <div
+                class="absolute inset-0 bg-yellow-100 rounded-full opacity-50 blur-xl animate-pulse"
+              ></div>
+              <img
+                src="/sint.png"
+                alt="Sinterklaas"
+                class="w-40 h-40 object-contain mb-6 relative z-10 drop-shadow-xl"
+              />
+            </div>
+
+            <h3
+              class="text-2xl font-bold text-red-900 mb-2 font-cinzel"
+            >
               {{ t('payment.limitReached') }}
             </h3>
-            <p class="text-gray-600 mb-6 max-w-md">
+            <p class="text-gray-700 mb-8 max-w-md font-medium">
               {{ t('payment.description') }}
             </p>
             <UButton
               size="xl"
-              class="bg-red-600 hover:bg-red-700"
+              class="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-400 hover:to-yellow-500 text-red-900 border-2 border-red-900 shadow-lg transform hover:scale-105 transition-all"
               @click="showPaymentModal = true"
             >
-              {{ t('payment.unlimitedAccess') }}
+              <span class="font-bold font-cinzel">{{
+                t('payment.unlimitedAccess')
+              }}</span>
             </UButton>
           </div>
 
           <!-- Error State -->
-          <UAlert
+          <div
             v-else-if="error"
-            color="warning"
-            variant="soft"
-            :title="t('poem.error')"
-            :description="error"
-            icon="i-heroicons-exclamation-triangle"
-          />
+            class="flex items-center justify-center flex-grow"
+          >
+            <UAlert
+              color="error"
+              variant="subtle"
+              :title="t('poem.error')"
+              :description="error"
+              icon="i-heroicons-exclamation-triangle"
+              class="border-2 border-red-200 bg-red-50"
+            />
+          </div>
 
           <!-- Poem Display -->
-          <div v-else-if="poem" class="prose prose-lg max-w-none">
-            <div class="poem-parchment">
-              <pre class="poem-text has-dropcap">{{ poem }}</pre>
+          <div
+            v-else-if="poem"
+            class="prose prose-lg max-w-none relative flex-grow"
+          >
+            <div
+              class="poem-parchment transform rotate-1 transition-transform hover:rotate-0 duration-500"
+            >
+              <div
+                class="absolute top-4 left-1/2 transform -translate-x-1/2 text-red-900/20 text-8xl pointer-events-none select-none"
+              >
+                S
+              </div>
+              <pre class="poem-text has-dropcap relative z-10">{{
+                poem
+              }}</pre>
             </div>
           </div>
 
           <!-- Empty State -->
           <div
             v-else
-            class="flex flex-col items-center justify-center h-96 text-gray-400"
+            class="flex flex-col items-center justify-center flex-grow text-red-300/50"
           >
-            <svg
-              class="w-24 h-24 mb-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+            <div class="text-9xl opacity-30 mb-4">🎁</div>
+            <p
+              class="text-2xl font-cinzel text-red-300 opacity-60 text-center"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
-            </svg>
-            <p class="text-lg">
               {{ t('poem.empty') }}
+            </p>
+            <p
+              class="text-sm font-handwriting text-red-300 opacity-60 mt-2"
+            >
+              Vul het formulier in voor een gedicht
             </p>
           </div>
         </section>
@@ -623,38 +699,38 @@ useHead({
 
     <!-- FAQ Section -->
     <section class="container mx-auto px-6 py-12">
-      <div class="bg-white rounded-2xl shadow-xl p-4 md:p-8 max-w-4xl mx-auto">
-        <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">
+      <div
+        class="bg-[#fffdf0] rounded-2xl shadow-xl p-6 md:p-8 max-w-4xl mx-auto sint-border relative"
+      >
+        <h2
+          class="text-3xl font-bold text-red-900 mb-8 text-center font-cinzel border-b-2 border-red-100 pb-4"
+        >
           {{ t('faq.title') }}
         </h2>
         <div class="space-y-4">
           <details
             v-for="(faq, index) in t('faq.questions')"
             :key="index"
-            class="group border border-gray-200 rounded-lg overflow-hidden"
+            class="group border-2 border-red-100 rounded-xl overflow-hidden bg-white"
           >
             <summary
-              class="flex justify-between items-center cursor-pointer px-6 py-4 hover:bg-gray-50 transition-colors"
+              class="flex justify-between items-center cursor-pointer px-6 py-4 hover:bg-red-50 transition-colors"
             >
-              <h3 class="text-lg font-semibold text-gray-800 pr-4">
+              <h3
+                class="text-lg font-bold text-red-900 pr-4 font-cinzel"
+              >
                 {{ faq.question }}
               </h3>
-              <svg
-                class="w-5 h-5 text-gray-500 transform transition-transform group-open:rotate-180 flex-shrink-0"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+              <span
+                class="w-8 h-8 flex items-center justify-center bg-red-100 rounded-full text-red-600 group-open:rotate-180 transition-transform"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
+                ▼
+              </span>
             </summary>
-            <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
-              <p class="text-gray-700 leading-relaxed">
+            <div
+              class="px-6 py-4 bg-red-50/30 border-t-2 border-red-100"
+            >
+              <p class="text-gray-800 leading-relaxed font-medium">
                 {{ faq.answer }}
               </p>
             </div>
@@ -664,11 +740,25 @@ useHead({
     </section>
 
     <!-- Footer -->
-    <footer class="bg-transparent mt-12">
+    <footer
+      class="bg-red-900 mt-12 border-t-4 border-[#F4CD60] relative"
+    >
       <div
-        class="container mx-auto px-6 py-6 text-center text-gray-400"
+        class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-900 border-4 border-[#F4CD60] rounded-full p-3"
       >
-        <p>
+        <div class="text-2xl">🎁</div>
+      </div>
+      <div
+        class="container mx-auto px-6 py-12 text-center text-[#F4CD60]"
+      >
+        <div
+          class="flex justify-center gap-8 mb-6 text-3xl opacity-80"
+        >
+          <span>🌙</span>
+          <span>🐴</span>
+          <span>🥕</span>
+        </div>
+        <p class="font-cinzel font-bold text-lg">
           {{
             t('footer.copyright').replace(
               '{year}',
@@ -692,48 +782,97 @@ useHead({
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Cinzel&family=Cinzel+Decorative&family=IM+Fell+DW+Pica+SC&family=IM+Fell+DW+Pica:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@400;700;900&family=IM+Fell+DW+Pica+SC&family=IM+Fell+DW+Pica:ital@0;1&display=swap');
+
+.font-cinzel {
+  font-family: 'Cinzel', serif;
+}
+
+.font-handwriting {
+  font-family: 'IM Fell DW Pica', serif;
+}
+
+.bg-sinterklaas-pattern {
+  background-color: #7f1d1d;
+  background-image:
+    radial-gradient(#f4cd60 1px, transparent 1px),
+    radial-gradient(#f4cd60 1px, transparent 1px);
+  background-size: 50px 50px;
+  background-position:
+    0 0,
+    25px 25px;
+  background-attachment: fixed;
+}
+
+.sint-border {
+  border: 4px solid #7f1d1d;
+  outline: 2px solid #f4cd60;
+  outline-offset: -8px;
+}
 
 input[type='range']::-webkit-slider-thumb {
   appearance: none;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   background: #dc2626;
   cursor: pointer;
   border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px #dc2626;
 }
 
 input[type='range']::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   background: #dc2626;
   cursor: pointer;
   border-radius: 50%;
-  border: none;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px #dc2626;
 }
 
 .poem-parchment {
   background-color: #fff3c9;
-  padding: 2rem;
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.15'/%3E%3C/svg%3E");
+  padding: 2.5rem;
+  border-radius: 0.5rem;
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.1),
+    inset 0 0 40px rgba(139, 69, 19, 0.1);
+  border: 1px solid #e6d5a9;
+  position: relative;
+}
+
+.poem-parchment::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 2px dashed #d4c5a0;
+  margin: 8px;
+  pointer-events: none;
+  border-radius: 4px;
 }
 
 .poem-text {
   font-family: 'IM Fell DW Pica', serif;
   white-space: pre-wrap;
-  color: #000000;
+  color: #2d1810;
   line-height: 1.8;
   margin: 0;
-  font-size: 1.25crem;
+  font-size: 1.35rem;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .poem-text.has-dropcap::first-letter {
-  font-family: 'IM Fell DW Pica SC', serif;
+  font-family: 'Cinzel Decorative', serif;
   float: left;
-  font-size: 4rem;
-  line-height: 0.65;
-  margin: 0.1em 0.1em 0.2em 0;
-  color: #8b0000;
+  font-size: 4.5rem;
+  line-height: 0.7;
+  margin: 0.1em 0.15em 0 0;
+  color: #991b1b;
+  text-shadow: 2px 2px 0px rgba(244, 205, 96, 0.3);
 }
 </style>
