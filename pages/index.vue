@@ -59,6 +59,7 @@ const selectedLocale = computed({
 
 const copySuccess = ref(false);
 const showPaymentModal = ref(false);
+const poemSectionRef = ref<HTMLElement | null>(null);
 
 const handleSubmit = async () => {
   // Check if user can generate a poem
@@ -76,6 +77,16 @@ const handleSubmit = async () => {
   // Only increment count if generation was successful (no error and no rate limit)
   if (!error.value && !isRateLimitError.value && poem.value) {
     incrementPoemCount();
+
+    // Scroll to poem on mobile (when stacked layout)
+    setTimeout(() => {
+      if (window.innerWidth < 1024 && poemSectionRef.value) {
+        poemSectionRef.value.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      }
+    }, 100);
   }
 };
 
@@ -577,6 +588,7 @@ useHead({
 
         <!-- Poem Display Section -->
         <section
+          ref="poemSectionRef"
           class="bg-[#fffdf0] rounded-2xl shadow-2xl p-6 md:p-8 sint-border relative min-h-[600px] flex flex-col"
         >
           <div
@@ -712,6 +724,9 @@ useHead({
         </section>
       </div>
     </main>
+
+    <!-- Testimonials Section -->
+    <TestimonialsSection />
 
     <!-- FAQ Section -->
     <section class="container mx-auto px-6 py-12">
