@@ -8,6 +8,18 @@ const STORAGE_KEY = 'sinterklaas-payment';
 const MAX_FREE_POEMS = 3;
 
 export const usePaymentTracking = () => {
+  // Check if user has unlimited access via cookie
+  const hasUnlimitedAccess = (): boolean => {
+    if (import.meta.server) return false;
+
+    // Check for any cookie starting with 'sintgpt-'
+    const allCookies = document.cookie.split(';');
+    return allCookies.some(cookie => {
+      const cookieName = cookie.trim().split('=')[0];
+      return cookieName.startsWith('sintgpt-');
+    });
+  };
+
   const getPaymentState = (): PaymentState => {
     if (import.meta.server) {
       return { poemCount: 0, hasPaid: false };
@@ -36,6 +48,12 @@ export const usePaymentTracking = () => {
   };
 
   const isPaid = (): boolean => {
+    // First check for unlimited access cookie
+    if (hasUnlimitedAccess()) {
+      return true;
+    }
+
+    // Fall back to checking localStorage
     const state = getPaymentState();
     return state.hasPaid;
   };
@@ -44,17 +62,26 @@ export const usePaymentTracking = () => {
     // Skip payment check in development
     if (import.meta.dev) return true;
 
+    // Check for unlimited access cookie first
+    if (hasUnlimitedAccess()) return true;
+
     const state = getPaymentState();
     return state.hasPaid || state.poemCount < MAX_FREE_POEMS;
   };
 
   const getRemainingFreePoems = (): number => {
+    // If user has unlimited access, return Infinity
+    if (hasUnlimitedAccess()) return Infinity;
+
     const state = getPaymentState();
     if (state.hasPaid) return Infinity;
     return Math.max(0, MAX_FREE_POEMS - state.poemCount);
   };
 
   const incrementPoemCount = () => {
+    // Don't increment if user has unlimited access
+    if (hasUnlimitedAccess()) return;
+
     const state = getPaymentState();
     if (!state.hasPaid) {
       state.poemCount += 1;

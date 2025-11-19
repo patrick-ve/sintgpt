@@ -4,10 +4,8 @@ import {
   type CheckoutEvent,
   type CheckoutMode,
 } from 'dodopayments-checkout';
-import { usePaymentTracking } from '@/composables/usePaymentTracking';
 
 const { t } = useI18n();
-const { markAsPaid } = usePaymentTracking();
 
 const props = defineProps<{
   modelValue: boolean;
@@ -18,9 +16,19 @@ const emit = defineEmits<{
   (e: 'paymentSuccess'): void;
 }>();
 
-const isOpen = computed({
-  get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value),
+const isOpen = ref(props.modelValue);
+
+// Watch for external changes to modelValue
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    isOpen.value = newValue;
+  }
+);
+
+// Emit changes when isOpen changes
+watch(isOpen, (newValue) => {
+  emit('update:modelValue', newValue);
 });
 
 const isLoading = ref(false);
@@ -83,12 +91,20 @@ const handlePayment = async () => {
   }
 };
 
-const handlePaymentSuccess = () => {
+const handlePaymentSuccess = async () => {
   console.log('Payment successful!');
   paymentSuccess.value = true;
 
-  // Mark as paid in localStorage
-  markAsPaid(new Date().toISOString());
+  try {
+    // Set the unlimited access cookie
+    await $fetch('/api/payment/set-access-cookie', {
+      method: 'POST',
+    });
+
+    console.log('Access cookie set successfully');
+  } catch (err) {
+    console.error('Error setting access cookie:', err);
+  }
 
   // Notify parent component
   setTimeout(() => {
@@ -106,7 +122,7 @@ const closeModal = () => {
 </script>
 
 <template>
-  <UModal v-model="isOpen" :ui="{ width: 'sm:max-w-md' }">
+  <UModal v-model:open="isOpen" :ui="{ width: 'sm:max-w-md' }">
     <UCard>
       <template #header>
         <div class="flex items-center justify-between">

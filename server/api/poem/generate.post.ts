@@ -68,8 +68,8 @@ function buildPrompt(
     data.present && !data.revealPresent
       ? '\n- BELANGRIJK: Het cadeau in <present_mystery> tags mag NIET letterlijk in het gedicht vermeld worden. Gebruik alleen vage hints, omschrijvingen of raadsels zodat de ontvanger moet raden wat het cadeau is.'
       : data.present
-      ? '\n- Vermeld het cadeau uit de <present> tags in het gedicht.'
-      : '';
+        ? '\n- Vermeld het cadeau uit de <present> tags in het gedicht.'
+        : '';
 
   const prompt = `Je bent een creatieve dichter gespecialiseerd in Sinterklaasgedichten.
 
@@ -185,9 +185,12 @@ export default defineEventHandler(async (event) => {
         // Calculate cost based on Gemini 3 Pro pricing
         // Input: $2.00 per 1M tokens
         // Output (including reasoning tokens): $12.00 per 1M tokens
-        const inputCost = ((usage.inputTokens || 0) / 1_000_000) * 2.0;
-        const outputCost = ((usage.outputTokens || 0) / 1_000_000) * 12.0;
-        const reasoningCost = ((usage.reasoningTokens || 0) / 1_000_000) * 12.0;
+        const inputCost =
+          ((usage.inputTokens || 0) / 1_000_000) * 2.0;
+        const outputCost =
+          ((usage.outputTokens || 0) / 1_000_000) * 12.0;
+        const reasoningCost =
+          ((usage.reasoningTokens || 0) / 1_000_000) * 12.0;
         const totalCost = inputCost + outputCost + reasoningCost;
 
         consola.info(`Total cost: $${totalCost.toFixed(6)}`);
@@ -208,7 +211,9 @@ export default defineEventHandler(async (event) => {
             );
           }
         } else if (hasUnlimited) {
-          consola.info('User has unlimited access via cookie - skipping rate limit');
+          consola.info(
+            'User has unlimited access via cookie - skipping rate limit'
+          );
         }
       },
     });
