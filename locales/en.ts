@@ -194,4 +194,11 @@ export default {
   video: {
     title: 'Sinterklaas talks about sintgpt.com',
   },
+  cookie: {
+    title: 'A sweet treat?',
+    message:
+      'The Saint uses cookies (and gingerbread nuts) to make this website work perfectly for you.',
+    accept: 'Delicious!',
+    decline: 'No thanks, Saint',
+  },
 };

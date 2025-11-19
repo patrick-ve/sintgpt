@@ -196,4 +196,11 @@ export default {
   video: {
     title: 'Sinterklaas over sintgpt.com',
   },
+  cookie: {
+    title: 'Pepernootje erbij?',
+    message:
+      'De Sint gebruikt cookies (en pepernoten) om deze website optimaal voor jou te laten werken.',
+    accept: 'Lekker!',
+    decline: 'Nee bedankt, Sint',
+  },
 };

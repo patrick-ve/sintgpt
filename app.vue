@@ -33,6 +33,9 @@
       </NuxtErrorBoundary>
 
       <NuxtPage />
+      <CookieBanner
+        v-if="Date.now() < new Date('2022-12-01').getTime()"
+      />
     </UApp>
   </div>
 </template>
@@ -58,7 +61,8 @@ function logClientError(error: unknown) {
 
 // Redirect to Rick Astley when devtools are opened
 useDisableDevTools().config.onDetectOpen = () => {
-  window.location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+  window.location.href =
+    'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
 };
 </script>
 
