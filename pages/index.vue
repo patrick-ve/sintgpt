@@ -688,16 +688,11 @@ useHead({
           <!-- Poem Display -->
           <div
             v-else-if="poem"
-            class="prose prose-lg max-w-none relative flex-grow"
+            class="prose prose-lg max-w-none relative flex-grow noselect"
           >
             <div
               class="poem-parchment transform rotate-1 transition-transform hover:rotate-0 duration-500"
             >
-              <div
-                class="absolute top-4 left-1/2 transform -translate-x-1/2 text-red-900/20 text-8xl pointer-events-none select-none"
-              >
-                S
-              </div>
               <pre class="poem-text has-dropcap relative z-10">{{
                 poem
               }}</pre>
@@ -921,5 +916,11 @@ input[type='range']::-moz-range-thumb {
   margin: 0.1em 0.15em 0 0;
   color: #991b1b;
   text-shadow: 2px 2px 0px rgba(244, 205, 96, 0.3);
+}
+
+.noselect {
+  user-select: none; /* Standard */
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* Old IE/Edge */
 }
 </style>
