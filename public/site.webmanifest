@@ -1,0 +1,28 @@
+{
+  "name": "SintGPT - AI Sinterklaas Gedichten Generator",
+  "short_name": "SintGPT",
+  "description": "Genereer gepersonaliseerde sinterklaasgedichten met AI",
+  "icons": [
+    {
+      "src": "/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "theme_color": "#7f1d1d",
+  "background_color": "#7f1d1d",
+  "display": "standalone",
+  "start_url": "/",
+  "scope": "/"
+}

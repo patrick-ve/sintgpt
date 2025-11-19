@@ -13,10 +13,11 @@ export default defineNuxtConfig({
   css: ['@/assets/css/main.css'],
 
   runtimeConfig: {
-    googleApiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+    googleGenerativeAiApiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
     enrichLayerApiKey: process.env.ENRICH_LAYER_API_KEY,
     dodoPaymentsApiKey: process.env.DODO_PAYMENTS_API_KEY,
     dodoProductId: process.env.DODO_PRODUCT_ID,
+    dodoPaymentsWebhookSecret: process.env.DODO_PAYMENTS_WEBHOOK_SECRET,
     public: {},
   },
 
@@ -36,6 +37,11 @@ export default defineNuxtConfig({
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png' },
+        { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' },
+        { rel: 'icon', type: 'image/png', sizes: '192x192', href: '/favicon-192x192.png' },
+        { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
+        { rel: 'manifest', href: '/site.webmanifest' },
         { rel: 'canonical', href: 'https://sintgpt.com' },
         { rel: 'alternate', hreflang: 'nl', href: 'https://sintgpt.com' },
         { rel: 'alternate', hreflang: 'nl-NL', href: 'https://sintgpt.com' },
@@ -48,7 +54,6 @@ export default defineNuxtConfig({
 
   // Configure Nuxt UI module
   ui: {
-    global: true,
     // Icons are handled by @nuxt/icon module
   },
 
