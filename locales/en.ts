@@ -68,6 +68,7 @@ export default {
   },
   footer: {
     copyright: 'Copyright {year} SintGPT. All rights reserved.',
+    contact: 'Contact us',
   },
   error: {
     title: 'Oops! Something went wrong.',

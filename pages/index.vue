@@ -789,6 +789,18 @@ useHead({
           <span>🐴</span>
           <span>🥕</span>
         </div>
+        <div class="mb-6">
+          <UButton
+            as="a"
+            href="mailto:patrick@sintgpt.com"
+            size="lg"
+            variant="outline"
+            class="border-[#F4CD60] text-[#F4CD60] hover:bg-[#F4CD60] hover:text-red-900 transition-all"
+            icon="i-heroicons-envelope"
+          >
+            {{ t('footer.contact') }}
+          </UButton>
+        </div>
         <p class="font-cinzel font-bold text-lg">
           {{
             t('footer.copyright').replace(
