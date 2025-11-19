@@ -1,6 +1,6 @@
 import { consola } from 'consola';
-import { google, createGoogleGenerativeAI } from '@ai-sdk/google';
-import { generateText } from 'ai';
+import { createGoogleGenerativeAI } from '@ai-sdk/google';
+import { streamText } from 'ai';
 import { z } from 'zod';
 
 // Get API keys from runtime config
@@ -151,8 +151,8 @@ export default defineEventHandler(async (event) => {
 
     const model = googleGenerativeAI('gemini-3-pro-preview');
 
-    // Generate the poem using Gemini 2.5 Pro via AI SDK
-    const { text, usage } = await generateText({
+    // Generate the poem using Gemini 3 Pro via AI SDK
+    const result = streamText({
       model,
       prompt,
       temperature: 2,
@@ -165,29 +165,30 @@ export default defineEventHandler(async (event) => {
           },
         },
       },
+      onFinish({ usage }) {
+        consola.info('Poem generated successfully');
+        console.dir(usage, { depth: null });
+
+        // Update rate limit counter on successful generation (skip in development)
+        if (!import.meta.dev) {
+          const ip =
+            getRequestIP(event, { xForwardedFor: true }) || 'unknown';
+          const currentData = rateLimitMap.get(ip);
+          if (currentData) {
+            rateLimitMap.set(ip, {
+              count: currentData.count + 1,
+              resetTime: currentData.resetTime,
+            });
+
+            consola.info(
+              `Rate limit for IP ${ip}: ${currentData.count + 1}/${RATE_LIMIT_MAX_REQUESTS} requests used`
+            );
+          }
+        }
+      },
     });
 
-    consola.info('Poem generated successfully');
-    console.dir(usage, { depth: null });
-
-    // Update rate limit counter on successful generation (skip in development)
-    if (!import.meta.dev) {
-      const ip =
-        getRequestIP(event, { xForwardedFor: true }) || 'unknown';
-      const currentData = rateLimitMap.get(ip)!;
-      rateLimitMap.set(ip, {
-        count: currentData.count + 1,
-        resetTime: currentData.resetTime,
-      });
-
-      consola.info(
-        `Rate limit for IP ${ip}: ${currentData.count + 1}/${RATE_LIMIT_MAX_REQUESTS} requests used`
-      );
-    }
-
-    return {
-      poem: text.trim(),
-    };
+    return result.toUIMessageStreamResponse();
   } catch (error: any) {
     consola.error('Error generating poem:', error);
 

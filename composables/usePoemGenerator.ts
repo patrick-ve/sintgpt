@@ -9,10 +9,6 @@ interface PoemRequest {
   language: 'dutch' | 'english';
 }
 
-interface PoemResponse {
-  poem: string;
-}
-
 export const usePoemGenerator = () => {
   const isLoading = ref(false);
   const error = ref<string | null>(null);
@@ -22,33 +18,88 @@ export const usePoemGenerator = () => {
   const generatePoem = async (request: PoemRequest) => {
     isLoading.value = true;
     error.value = null;
-    poem.value = null;
+    poem.value = '';
     isRateLimitError.value = false;
 
     try {
-      const response = await $fetch<PoemResponse>('/api/poem/generate', {
+      const response = await fetch('/api/poem/generate', {
         method: 'POST',
-        body: request,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(request),
       });
 
-      poem.value = response.poem;
-    } catch (e: any) {
-      // Check if it's a rate limit error (429)
-      const statusCode = e.status || e.statusCode || e.response?.status;
-      if (statusCode === 429) {
+      // Check for rate limit error
+      if (response.status === 429) {
         isRateLimitError.value = true;
-        error.value = null; // Don't set error for rate limit, show modal instead
-      } else {
-        // Handle different types of errors from $fetch
-        if (e.data && e.data.statusMessage) {
-          error.value = e.data.statusMessage;
-        } else if (e.response && e.response._data && e.response._data.statusMessage) {
-          error.value = e.response._data.statusMessage;
-        } else {
-          error.value = e.message || 'Failed to generate poem';
+        error.value = null;
+        poem.value = null;
+        return;
+      }
+
+      // Check for other errors
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        error.value = errorData.statusMessage || `Error: ${response.status}`;
+        poem.value = null;
+        return;
+      }
+
+      // Read the UI message stream
+      const reader = response.body?.getReader();
+      if (!reader) {
+        throw new Error('No response body reader available');
+      }
+
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) {
+          break;
+        }
+
+        // Decode the chunk
+        buffer += decoder.decode(value, { stream: true });
+
+        // Process complete lines (SSE format)
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || ''; // Keep incomplete line in buffer
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            // Extract the JSON part after "data: "
+            const jsonStr = line.substring(6);
+
+            // Skip [DONE] message
+            if (jsonStr === '[DONE]') {
+              continue;
+            }
+
+            try {
+              const parsed = JSON.parse(jsonStr);
+
+              // Only process text-delta events
+              if (parsed.type === 'text-delta' && parsed.delta) {
+                poem.value += parsed.delta;
+              }
+            } catch (e) {
+              console.error('Failed to parse stream data:', e);
+            }
+          }
         }
       }
+
+      // Trim the final poem
+      if (poem.value) {
+        poem.value = poem.value.trim();
+      }
+    } catch (e: any) {
       console.error('Poem generation error:', e);
+      error.value = e.message || 'Failed to generate poem';
       poem.value = null;
     } finally {
       isLoading.value = false;
