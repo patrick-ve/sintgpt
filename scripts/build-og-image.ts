@@ -1,37 +1,40 @@
-import fs from 'node:fs'
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
-import puppeteer from 'puppeteer'
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import puppeteer from 'puppeteer';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 async function generateOgImage() {
-  console.log('Launching browser...')
+  console.log('Launching browser...');
   const browser = await puppeteer.launch({
     headless: true,
-  })
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  });
 
-  const page = await browser.newPage()
+  const page = await browser.newPage();
 
   // Set viewport to OG image dimensions
   await page.setViewport({
     width: 1200,
     height: 630,
     deviceScaleFactor: 2, // For better quality
-  })
+  });
 
   // Read the Sint image and convert to base64
-  const sintImagePath = path.join(__dirname, '../public/sint.png')
-  const sintImageBuffer = fs.readFileSync(sintImagePath)
-  const sintImageBase64 = `data:image/png;base64,${sintImageBuffer.toString('base64')}`
+  const sintImagePath = path.join(__dirname, '../public/sint.png');
+  const sintImageBuffer = fs.readFileSync(sintImagePath);
+  const sintImageBase64 = `data:image/png;base64,${sintImageBuffer.toString('base64')}`;
 
-  // Create HTML content with embedded styles
+  // Create HTML content with embedded styles matching the Vue component
   const html = `
     <!DOCTYPE html>
     <html>
       <head>
         <meta charset="UTF-8">
         <style>
+          @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@400;700;900&family=IM+Fell+DW+Pica+SC&family=IM+Fell+DW+Pica:ital@0;1&display=swap');
+
           * {
             margin: 0;
             padding: 0;
@@ -39,7 +42,6 @@ async function generateOgImage() {
           }
 
           body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             width: 1200px;
             height: 630px;
             overflow: hidden;
@@ -48,9 +50,50 @@ async function generateOgImage() {
           .og-image {
             width: 1200px;
             height: 630px;
-            background: rgb(127, 29, 29);
+            background-color: #7f1d1d; /* Red-900 */
+            background-image:
+              radial-gradient(#f4cd60 1px, transparent 1px),
+              radial-gradient(#f4cd60 1px, transparent 1px);
+            background-size: 50px 50px;
+            background-position:
+              0 0,
+              25px 25px;
             padding: 80px;
             display: flex;
+            position: relative;
+            overflow: hidden;
+            border: 16px solid #f4cd60;
+            box-sizing: border-box;
+          }
+
+          /* Corner Decorations */
+          .corner {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: #f4cd60;
+            transform: rotate(45deg);
+            z-index: 1;
+          }
+
+          .corner-tl {
+            top: -50px;
+            left: -50px;
+          }
+
+          .corner-tr {
+            top: -50px;
+            right: -50px;
+          }
+
+          .corner-bl {
+            bottom: -50px;
+            left: -50px;
+          }
+
+          .corner-br {
+            bottom: -50px;
+            right: -50px;
           }
 
           .content {
@@ -59,6 +102,8 @@ async function generateOgImage() {
             align-items: center;
             justify-content: space-between;
             gap: 60px;
+            position: relative;
+            z-index: 2;
           }
 
           .text-content {
@@ -69,27 +114,45 @@ async function generateOgImage() {
           }
 
           .title {
-            font-size: 96px;
-            font-weight: 700;
-            color: rgb(244, 205, 96);
-            margin: 0 0 40px 0;
-            line-height: 1;
+            font-family: 'Cinzel', serif;
+            font-size: 110px;
+            font-weight: 900;
+            color: #f4cd60;
+            margin: 0 0 30px 0;
+            line-height: 0.9;
+            text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.3);
           }
 
           .description {
-            font-size: 32px;
-            font-weight: 600;
-            color: rgb(244, 205, 96);
-            margin: 0 0 20px 0;
-            line-height: 1.4;
+            font-family: 'Cinzel', serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: #fffdf0;
+            margin: 0 0 30px 0;
+            line-height: 1.3;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.3);
+          }
+
+          .highlight {
+            color: #f4cd60;
+            font-size: 1.2em;
+            text-decoration: underline;
+            text-decoration-color: #f4cd60;
+            text-underline-offset: 8px;
           }
 
           .tagline {
-            font-size: 32px;
+            font-family: 'IM Fell DW Pica', serif;
+            font-size: 38px;
             font-weight: 600;
-            color: rgb(244, 205, 96);
+            color: #fffdf0;
             margin: 0;
             line-height: 1.4;
+            font-style: italic;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 16px 24px;
+            border-radius: 12px;
+            border-left: 6px solid #f4cd60;
           }
 
           .image-container {
@@ -97,28 +160,48 @@ async function generateOgImage() {
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            position: relative;
+          }
+
+          .image-container::before {
+            content: '';
+            position: absolute;
+            inset: -10px;
+            background: #f4cd60;
+            border-radius: 50%;
+            opacity: 0.3;
+            filter: blur(10px);
           }
 
           .sint-image {
-            width: 380px;
-            height: 380px;
+            width: 400px;
+            height: 400px;
             object-fit: cover;
             border-radius: 12px;
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            border: 8px solid #f4cd60;
+            transform: rotate(3deg);
           }
         </style>
       </head>
       <body>
         <div class="og-image">
+          <!-- Decorative corner elements -->
+          <div class="corner corner-tl"></div>
+          <div class="corner corner-tr"></div>
+          <div class="corner corner-bl"></div>
+          <div class="corner corner-br"></div>
+
           <div class="content">
             <div class="text-content">
               <h1 class="title">SintGPT</h1>
               <p class="description">
                 ChatGPT kan geen leuke Sinterklaasgedichten schrijven.
+                <br />
+                <span class="highlight">SintGPT wel!</span>
               </p>
-              <p class="tagline">SintGPT wel!</p>
               <p class="tagline">
-                Snel & makkelijk. Klaar binnen 30 seconden!
+                Snel & makkelijk. <br />Klaar binnen 30 seconden!
               </p>
             </div>
 
@@ -129,14 +212,20 @@ async function generateOgImage() {
         </div>
       </body>
     </html>
-  `
+  `;
 
-  await page.setContent(html, { waitUntil: 'networkidle0' })
+  await page.setContent(html, {
+    waitUntil: 'networkidle0',
+    timeout: 60000, // Increase timeout for fonts
+  });
 
-  console.log('Generating screenshot...')
+  // Wait for fonts to load
+  await page.evaluateHandle('document.fonts.ready');
+
+  console.log('Generating screenshot...');
 
   // Take screenshot
-  const outputPath = path.join(__dirname, '../public/og-image.png')
+  const outputPath = path.join(__dirname, '../public/og-image.png');
   await page.screenshot({
     path: outputPath,
     type: 'png',
@@ -146,11 +235,13 @@ async function generateOgImage() {
       width: 1200,
       height: 630,
     },
-  })
+  });
 
-  await browser.close()
+  await browser.close();
 
-  console.log('✅ OG image generated successfully at public/og-image.png')
+  console.log(
+    '✅ OG image generated successfully at public/og-image.png'
+  );
 }
 
-generateOgImage().catch(console.error)
+generateOgImage().catch(console.error);
