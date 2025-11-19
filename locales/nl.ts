@@ -193,4 +193,7 @@ export default {
       author: 'Lisa',
     },
   },
+  video: {
+    title: 'Sinterklaas over sintgpt.com',
+  },
 };

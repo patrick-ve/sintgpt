@@ -191,4 +191,7 @@ export default {
       author: 'Lisa',
     },
   },
+  video: {
+    title: 'Sinterklaas talks about sintgpt.com',
+  },
 };

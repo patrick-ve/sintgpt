@@ -725,8 +725,14 @@ useHead({
       </div>
     </main>
 
-    <!-- Testimonials Section -->
     <TestimonialsSection />
+
+    <!-- Sinterklaas Video Message -->
+    <section class="container mx-auto px-6 py-12">
+      <SinterklaasVideo />
+    </section>
+
+    <!-- Testimonials Section -->
 
     <!-- FAQ Section -->
     <section class="container mx-auto px-6 py-12">
