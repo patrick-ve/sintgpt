@@ -2,6 +2,7 @@ import { consola } from 'consola';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { streamText } from 'ai';
 import { z } from 'zod';
+import { hasUnlimitedAccess } from '~/server/utils/paymentCookie';
 
 // Get API keys from runtime config
 const runtimeConfig = useRuntimeConfig();
@@ -106,7 +107,8 @@ Schrijf nu het gedicht:`;
 export default defineEventHandler(async (event) => {
   try {
     // Check for unlimited access cookie
-    const hasUnlimited = hasUnlimitedAccess(event);
+    // const hasUnlimited = hasUnlimitedAccess(event);
+    const hasUnlimited = false;
 
     // Rate limiting check (skip in development or if user has unlimited access)
     if (!import.meta.dev && !hasUnlimited) {
