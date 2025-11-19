@@ -105,6 +105,7 @@ function formatTime(seconds: number): string {
         <button
           class="w-20 h-20 md:w-24 md:h-24 bg-red-900 rounded-full flex items-center justify-center border-4 border-[#F4CD60] shadow-lg transform transition-transform hover:scale-110 group-hover:shadow-xl"
           aria-label="Play video"
+          data-umami-event="Play video"
         >
           <span class="ml-2 text-[#F4CD60] text-4xl md:text-5xl"
             >▶</span
