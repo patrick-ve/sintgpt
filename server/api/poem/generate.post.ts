@@ -1,5 +1,6 @@
 import { consola } from 'consola';
-import { GoogleGenAI } from '@google/genai';
+import { google, createGoogleGenerativeAI } from '@ai-sdk/google';
+import { generateText } from 'ai';
 import { z } from 'zod';
 
 // Get API keys from runtime config
@@ -91,52 +92,6 @@ Schrijf nu het gedicht:`;
   return prompt;
 }
 
-async function generatePoemWithRetry(
-  ai: GoogleGenAI,
-  config: any,
-  contents: any[],
-  maxRetries: number = 3
-): Promise<any> {
-  let lastError: any;
-
-  for (let attempt = 1; attempt <= maxRetries; attempt++) {
-    try {
-      consola.info(
-        `Attempt ${attempt} of ${maxRetries} to generate poem...`
-      );
-
-      const response = await ai.models.generateContent({
-        model: 'gemini-3-pro-preview',
-        config,
-        contents,
-      });
-
-      return response;
-    } catch (error: any) {
-      lastError = error;
-
-      // Check if it's a 503 overload error
-      const isOverloadError =
-        error?.error?.code === 503 ||
-        error?.error?.status === 'UNAVAILABLE' ||
-        error?.message?.includes('overloaded');
-
-      if (isOverloadError && attempt < maxRetries) {
-        consola.warn(
-          `Model overloaded, retrying in 5 seconds... (attempt ${attempt}/${maxRetries})`
-        );
-        await new Promise((resolve) => setTimeout(resolve, 5000));
-        continue;
-      }
-
-      // If it's not an overload error or we're out of retries, throw
-      throw error;
-    }
-  }
-
-  throw lastError;
-}
-
 export default defineEventHandler(async (event) => {
   try {
     // Rate limiting check (skip in development)
@@ -190,40 +145,30 @@ export default defineEventHandler(async (event) => {
 
     consola.info('Sending request to Gemini 2.5 Pro...');
 
-    // Initialize the Google GenAI client
-    const ai = new GoogleGenAI({
-      apiKey: 'AIzaSyCc1Ch0F_o-lsp-FiFPIeyf-Hn-MNCk2E8',
+    const googleGenerativeAI = createGoogleGenerativeAI({
+      apiKey: runtimeConfig.googleGenerativeAiApiKey,
     });
 
-    // Configure the model
-    const config = {
+    const model = googleGenerativeAI('gemini-3-pro-preview');
+
+    // Generate the poem using Gemini 2.5 Pro via AI SDK
+    const { text, usage } = await generateText({
+      model,
+      prompt,
       temperature: 2,
-      thinkingConfig: {
-        thinkingBudget: -1,
-      },
-    };
-
-    // Build the contents array for the API
-    const contents = [
-      {
-        role: 'user',
-        parts: [
-          {
-            text: prompt,
+      maxRetries: 3,
+      providerOptions: {
+        google: {
+          thinkingConfig: {
+            thinkingBudget: -1,
+            includeThoughts: true,
           },
-        ],
+        },
       },
-    ];
-
-    // Generate the poem using Gemini 2.5 Pro with retry logic
-    const response = await generatePoemWithRetry(
-      ai,
-      config,
-      contents
-    );
+    });
 
     consola.info('Poem generated successfully');
-    console.dir(response.usageMetadata, { depth: null });
+    console.dir(usage, { depth: null });
 
     // Update rate limit counter on successful generation (skip in development)
     if (!import.meta.dev) {
@@ -241,7 +186,7 @@ export default defineEventHandler(async (event) => {
     }
 
     return {
-      poem: response.text?.trim() || '',
+      poem: text.trim(),
     };
   } catch (error: any) {
     consola.error('Error generating poem:', error);

@@ -11,10 +11,11 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@google/genai": "^1.29.0",
+    "@ai-sdk/google": "^2.0.38",
     "@nuxt/image": "^1.10.0",
     "@nuxt/ui": "^3.1.2",
     "@vueuse/nuxt": "^13.1.0",
+    "ai": "^5.0.95",
     "dodopayments": "^2.5.0",
     "dodopayments-checkout": "^1.3.1",
     "mime": "^4.1.0",
