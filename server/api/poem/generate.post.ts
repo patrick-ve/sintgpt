@@ -167,7 +167,16 @@ export default defineEventHandler(async (event) => {
       },
       onFinish({ usage }) {
         consola.info('Poem generated successfully');
-        console.dir(usage, { depth: null });
+
+        // Calculate cost based on Gemini 3 Pro pricing
+        // Input: $2.00 per 1M tokens
+        // Output (including reasoning tokens): $12.00 per 1M tokens
+        const inputCost = ((usage.inputTokens || 0) / 1_000_000) * 2.0;
+        const outputCost = ((usage.outputTokens || 0) / 1_000_000) * 12.0;
+        const reasoningCost = ((usage.reasoningTokens || 0) / 1_000_000) * 12.0;
+        const totalCost = inputCost + outputCost + reasoningCost;
+
+        consola.info(`Total cost: $${totalCost.toFixed(6)}`);
 
         // Update rate limit counter on successful generation (skip in development)
         if (!import.meta.dev) {
