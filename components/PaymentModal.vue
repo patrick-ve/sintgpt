@@ -12,6 +12,8 @@ const error = ref<string | null>(null);
 watch(isOpen, (newValue) => {
   if (newValue) {
     dialogRef.value?.showModal();
+    // Track analytics event
+    (window as any).umami?.track('Show payment modal');
   } else {
     dialogRef.value?.close();
   }
@@ -33,6 +35,9 @@ const handleBackdropClick = (event: MouseEvent) => {
 const handlePayment = async () => {
   error.value = null;
   isLoading.value = true;
+
+  // Track analytics event
+  (window as any).umami?.track('Proceed to payment');
 
   try {
     // Create checkout session
