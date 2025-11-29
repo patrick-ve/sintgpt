@@ -26,6 +26,18 @@ export default {
         'Tell as much detail as possible about hobbies, work, sports, interests or other anecdotes...',
       help: 'This information is used to make the poem more personal',
     },
+    writtenBy: {
+      label: 'Written by',
+      placeholder:
+        'For example: an 8-year-old child, a colleague, a family member...',
+      help: 'The poem will be written as if created by this person',
+    },
+    writtenForAudience: {
+      label: 'For what audience',
+      placeholder:
+        'For example: elementary school class, adult workplace, family...',
+      help: 'The tone and content will be adjusted for this context',
+    },
     style: {
       label: 'Poem style',
       funny: '😄 Funny',
@@ -81,10 +93,10 @@ export default {
     title:
       'SintGPT - Sinterklaas Poem Generator | Create Funny & Personalized Sinterklaas Poems with AI',
     description:
-      'Create unique Sinterklaas poems with AI in 30 seconds! Funny, classic, or ironic styles. Personalized poems with any rhyme scheme. Try 3 poems free!',
+      'Create unique Sinterklaas poems with AI in 30 seconds! Funny, classic, or ironic styles. Personalized poems with any rhyme scheme. Try your first poem free!',
     ogTitle: 'SintGPT - AI Sinterklaas Poem Generator | Free Trial',
     ogDescription:
-      'Generate personalized Sinterklaas poems in any style. AI poem generator creates perfectly rhyming poems for Sinterklaas 2025. Fast, easy, and personal! 3 free poems!',
+      'Generate personalized Sinterklaas poems in any style. AI poem generator creates perfectly rhyming poems for Sinterklaas 2025. Fast, easy, and personal! First poem free!',
     ogImageAlt:
       'SintGPT - Free AI Sinterklaas Poem Generator for Personalized Poems',
     keywords:
@@ -101,7 +113,7 @@ export default {
       {
         question: 'Is SintGPT free?',
         answer:
-          'Yes! You can generate 3 Sinterklaas poems for free. After that, you can upgrade to unlimited access for just €3, allowing you to create as many poems as you want for the entire Sinterklaas celebration.',
+          'Yes! You can generate 1 Sinterklaas poem for free. After that, you can upgrade to unlimited access for just €3, allowing you to create as many poems as you want for the entire Sinterklaas celebration.',
       },
       {
         question: 'What poem styles are available?',
@@ -137,9 +149,9 @@ export default {
   },
   payment: {
     title: 'Upgrade to unlimited access',
-    description: 'You have used your 3 free poems',
+    description: 'You have used your free poem',
     limitReached:
-      "You've reached your limit of 3 free poems. Upgrade to unlimited access for just €3!",
+      "You've used your free poem. Upgrade to unlimited access for just €3!",
     oneTimePayment: 'One-time payment',
     includesVAT: 'incl. VAT',
     whatYouGet: 'What you get:',
@@ -173,7 +185,10 @@ export default {
       'You now have unlimited access to generate poems!',
     successDescription:
       'You now have unlimited access to the poem generator.',
-    remainingPoems: '{count} free poems remaining',
+    cancelledTitle: 'Payment cancelled',
+    cancelledMessage:
+      'Your payment was cancelled. You can try again anytime.',
+    remainingPoems: '{count} free poem remaining | {count} free poems remaining',
     unlimitedAccess: 'Unlimited access for just €3',
   },
   testimonials: {

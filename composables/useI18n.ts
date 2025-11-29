@@ -38,6 +38,14 @@ export const useI18n = () => {
       return key;
     }
 
+    // Handle pluralization (format: "singular | plural")
+    if (typeof value === 'string' && value.includes(' | ') && params?.count !== undefined) {
+      const forms = value.split(' | ');
+      const count = params.count;
+      // Use singular form for count === 1, plural otherwise
+      value = count === 1 ? forms[0] : forms[1];
+    }
+
     // Handle parameter interpolation for strings
     if (typeof value === 'string' && params) {
       return value.replace(/\{(\w+)\}/g, (match, paramKey) => {

@@ -26,6 +26,18 @@ export default {
         "Vertel zo uitgebreid mogelijk over hobby's, werk, sport, interesses of andere anekdotes...",
       help: 'Deze informatie wordt gebruikt om het gedicht persoonlijker te maken',
     },
+    writtenBy: {
+      label: 'Geschreven door',
+      placeholder:
+        'Bijvoorbeeld: een 8-jarig kind, een collega, een familielid...',
+      help: 'Het gedicht wordt geschreven alsof het door deze persoon is gemaakt',
+    },
+    writtenForAudience: {
+      label: 'Voor welk publiek',
+      placeholder:
+        'Bijvoorbeeld: groep 5/6 van de basisschool, volwassen werkplek, familie...',
+      help: 'De toon en inhoud worden aangepast aan deze context',
+    },
     style: {
       label: 'Gedichtstijl',
       funny: '😄 Grappig',
@@ -81,11 +93,11 @@ export default {
     title:
       'SintGPT - Sinterklaasgedicht Generator | Maak Grappige & Gepersonaliseerde Sinterklaasgedichten met AI',
     description:
-      'Maak unieke sinterklaasgedichten met AI in 30 seconden! Grappig, klassiek of ironisch. Gepersonaliseerde sinterklaasgedichten met elk rijmschema. Probeer 3 gedichten gratis!',
+      'Maak unieke sinterklaasgedichten met AI in 30 seconden! Grappig, klassiek of ironisch. Gepersonaliseerde sinterklaasgedichten met elk rijmschema. Probeer je eerste gedicht gratis!',
     ogTitle:
       'SintGPT - Sinterklaasgedicht Generator met AI | Gratis Proberen',
     ogDescription:
-      'Genereer gepersonaliseerde sinterklaasgedichten in elke stijl. AI-gedichtengenerator maakt perfect rijmende gedichten voor Sinterklaas 2025. Snel, makkelijk en persoonlijk! 3 gratis gedichten!',
+      'Genereer gepersonaliseerde sinterklaasgedichten in elke stijl. AI-gedichtengenerator maakt perfect rijmende gedichten voor Sinterklaas 2025. Snel, makkelijk en persoonlijk! Eerste gedicht gratis!',
     ogImageAlt:
       'SintGPT - Gratis AI Sinterklaasgedicht Generator voor Gepersonaliseerde Gedichten',
     keywords:
@@ -102,7 +114,7 @@ export default {
       {
         question: 'Is SintGPT gratis?',
         answer:
-          'Ja! Je kunt 3 sinterklaasgedichten gratis genereren. Daarna kun je voor slechts €3 upgraden naar onbeperkt toegang, zodat je zoveel gedichten kunt maken als je wilt voor het hele Sinterklaasfeest.',
+          'Ja! Je kunt 1 sinterklaasgedicht gratis genereren. Daarna kun je voor slechts €3 upgraden naar onbeperkt toegang, zodat je zoveel gedichten kunt maken als je wilt voor het hele Sinterklaasfeest.',
       },
       {
         question:
@@ -140,9 +152,9 @@ export default {
   },
   payment: {
     title: 'Upgrade naar onbeperkt toegang',
-    description: 'Je hebt je 3 gratis gedichten gebruikt',
+    description: 'Je hebt je gratis gedicht gebruikt',
     limitReached:
-      'Je hebt je limiet van 3 gratis gedichten bereikt. Upgrade naar onbeperkt toegang voor slechts €3!',
+      'Je hebt je gratis gedicht gebruikt. Upgrade naar onbeperkt toegang voor slechts €3!',
     oneTimePayment: 'Eenmalige betaling',
     includesVAT: 'incl. BTW',
     whatYouGet: 'Wat je krijgt:',
@@ -175,7 +187,10 @@ export default {
       'Je hebt nu onbeperkt toegang om gedichten te genereren!',
     successDescription:
       'Je hebt nu onbeperkt toegang tot de gedichtengenerator.',
-    remainingPoems: '{count} gratis gedichten over',
+    cancelledTitle: 'Betaling geannuleerd',
+    cancelledMessage:
+      'Je betaling is geannuleerd. Je kunt het op elk moment opnieuw proberen.',
+    remainingPoems: '{count} gratis gedicht over | {count} gratis gedichten over',
     unlimitedAccess: 'Onbeperkt toegang voor slechts €3',
   },
   testimonials: {

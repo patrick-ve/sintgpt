@@ -1,6 +1,8 @@
 interface PoemRequest {
   name: string;
   present?: string;
+  writtenBy?: string;
+  writtenForAudience?: string;
   style: 'funny' | 'classic' | 'ironic' | 'old-fashioned';
   rhymeScheme: 'AABB' | 'ABBA' | 'Limerick';
   lines: number;

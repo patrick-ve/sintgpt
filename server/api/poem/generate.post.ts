@@ -21,6 +21,8 @@ const PoemRequestSchema = z.object({
   present: z.string().optional(),
   revealPresent: z.boolean().default(true),
   funFacts: z.string().optional(),
+  writtenBy: z.string().optional(),
+  writtenForAudience: z.string().optional(),
   style: z.enum(['funny', 'classic', 'ironic', 'old-fashioned']),
   rhymeScheme: z.enum(['AABB', 'ABBA', 'Limerick']),
   lines: z.number().int().min(8).max(40),
@@ -65,12 +67,30 @@ function buildPrompt(
     userDataSection += `\n<fun_facts>${data.funFacts}</fun_facts>`;
   }
 
+  if (data.writtenBy && data.writtenBy.trim() !== '') {
+    userDataSection += `\n<written_by>${data.writtenBy}</written_by>`;
+  }
+
+  if (data.writtenForAudience && data.writtenForAudience.trim() !== '') {
+    userDataSection += `\n<written_for_audience>${data.writtenForAudience}</written_for_audience>`;
+  }
+
   const presentInstruction =
     data.present && !data.revealPresent
       ? '\n- BELANGRIJK: Het cadeau in <present_mystery> tags mag NIET letterlijk in het gedicht vermeld worden. Gebruik alleen vage hints, omschrijvingen of raadsels zodat de ontvanger moet raden wat het cadeau is.'
       : data.present
         ? '\n- Vermeld het cadeau uit de <present> tags in het gedicht.'
         : '';
+
+  const writingPerspectiveInstruction =
+    data.writtenBy && data.writtenBy.trim() !== ''
+      ? `\n- BELANGRIJK SCHRIJFPERSPECTIEF: Het gedicht moet geschreven lijken alsof het door "${data.writtenBy}" is geschreven. Pas de taal, woordenschat, schrijfstijl en complexiteit aan zodat het authentiek overkomt alsof deze persoon het heeft geschreven. Bijvoorbeeld: als het door een 8-jarige is, gebruik dan simpele woorden en korte zinnen met typische kindertaal.`
+      : '';
+
+  const audienceInstruction =
+    data.writtenForAudience && data.writtenForAudience.trim() !== ''
+      ? `\n- DOELGROEP: Dit gedicht wordt voorgelezen/gegeven in de context van "${data.writtenForAudience}". Zorg dat de inhoud, toon en humor passend zijn voor deze setting.`
+      : '';
 
   const prompt = `Je bent een creatieve dichter gespecialiseerd in Sinterklaasgedichten.
 
@@ -92,7 +112,7 @@ Maak een Sinterklaasgedicht met de volgende specificaties:
 Belangrijke instructies:
 - Het gedicht moet ${styleDescriptions[data.style]} zijn in toon
 - Volg het ${rhymeSchemeDescriptions[data.rhymeScheme]} strikt
-- Maak het gedicht persoonlijk door te verwijzen naar de informatie uit de XML tags waar gepast${presentInstruction}
+- Maak het gedicht persoonlijk door te verwijzen naar de informatie uit de XML tags waar gepast${presentInstruction}${writingPerspectiveInstruction}${audienceInstruction}
 - Zorg dat het gedicht natuurlijk loopt en vermakelijk is
 - Scheid coupletten met een lege regel (dubbele nieuwe regel)
 - Voeg geen titel of extra tekst toe - geef alleen het gedicht zelf

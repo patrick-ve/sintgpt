@@ -5,9 +5,44 @@ const { t, locale, setLocale } = useI18n();
 const {
   canGeneratePoem,
   incrementPoemCount,
-  getRemainingFreePoems,
+  remainingFreePoems,
   isPaid,
+  refreshAccess,
 } = usePaymentTracking();
+const route = useRoute();
+const router = useRouter();
+
+// Payment status from redirect
+const paymentStatus = ref<'success' | 'cancelled' | null>(null);
+
+// Handle payment redirect query params
+onMounted(async () => {
+  const payment = route.query.payment as string;
+  if (payment === 'success') {
+    paymentStatus.value = 'success';
+    // Set the unlimited access cookie
+    try {
+      await $fetch('/api/payment/set-access-cookie', {
+        method: 'POST',
+      });
+      console.log('Access cookie set successfully');
+      // Refresh access state from server
+      refreshAccess();
+    } catch (err) {
+      console.error('Error setting access cookie:', err);
+    }
+    // Clear the query parameter from URL without reload
+    router.replace({ query: {} });
+  } else if (payment === 'cancelled') {
+    paymentStatus.value = 'cancelled';
+    router.replace({ query: {} });
+  }
+});
+
+// Dismiss payment status notification
+const dismissPaymentStatus = () => {
+  paymentStatus.value = null;
+};
 
 // Form state
 const formData = ref({
@@ -15,6 +50,8 @@ const formData = ref({
   present: '',
   funFacts: '',
   revealPresent: true,
+  writtenBy: '',
+  writtenForAudience: '',
   style: 'funny' as 'funny' | 'classic' | 'ironic' | 'old-fashioned',
   rhymeScheme: 'AABB' as 'AABB' | 'ABBA' | 'Limerick',
   lines: 12,
@@ -63,7 +100,7 @@ const poemSectionRef = ref<HTMLElement | null>(null);
 
 const handleSubmit = async () => {
   // Check if user can generate a poem
-  if (!canGeneratePoem()) {
+  if (!canGeneratePoem.value) {
     showPaymentModal.value = true;
     return;
   }
@@ -92,7 +129,8 @@ const handleSubmit = async () => {
 
 const handlePaymentSuccess = () => {
   showPaymentModal.value = false;
-  // Optionally show a success toast or message
+  // Refresh access state from server after payment
+  refreshAccess();
 };
 
 const copyToClipboard = async () => {
@@ -314,6 +352,100 @@ useHead({
       </div>
     </div>
 
+    <!-- Payment Status Notifications -->
+    <div
+      v-if="paymentStatus"
+      class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-md px-4"
+    >
+      <!-- Success Notification -->
+      <div
+        v-if="paymentStatus === 'success'"
+        class="bg-green-50 border-2 border-green-500 rounded-xl p-4 shadow-xl"
+      >
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg
+              class="w-6 h-6 text-green-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </div>
+          <div class="ml-3 flex-1">
+            <h3 class="text-sm font-bold text-green-800">
+              {{ t('payment.successTitle') }}
+            </h3>
+            <p class="text-sm text-green-700 mt-1">
+              {{ t('payment.successMessage') }}
+            </p>
+          </div>
+          <button
+            @click="dismissPaymentStatus"
+            class="ml-3 text-green-500 hover:text-green-700"
+          >
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                fill-rule="evenodd"
+                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Cancelled Notification -->
+      <div
+        v-if="paymentStatus === 'cancelled'"
+        class="bg-yellow-50 border-2 border-yellow-500 rounded-xl p-4 shadow-xl"
+      >
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg
+              class="w-6 h-6 text-yellow-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              />
+            </svg>
+          </div>
+          <div class="ml-3 flex-1">
+            <h3 class="text-sm font-bold text-yellow-800">
+              {{ t('payment.cancelledTitle') }}
+            </h3>
+            <p class="text-sm text-yellow-700 mt-1">
+              {{ t('payment.cancelledMessage') }}
+            </p>
+          </div>
+          <button
+            @click="dismissPaymentStatus"
+            class="ml-3 text-yellow-500 hover:text-yellow-700"
+          >
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                fill-rule="evenodd"
+                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Main Content -->
     <main class="container mx-auto px-6 pb-12 py-12">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -415,6 +547,50 @@ useHead({
               />
               <p class="text-xs text-red-800 italic mt-1 font-cinzel">
                 {{ t('form.funFacts.help') }}
+              </p>
+            </div>
+
+            <!-- Written By -->
+            <div>
+              <label
+                class="block text-lg font-bold text-red-900 mb-2 font-cinzel"
+              >
+                {{ t('form.writtenBy.label') }}
+              </label>
+              <UInput
+                v-model="formData.writtenBy"
+                :placeholder="t('form.writtenBy.placeholder')"
+                size="xl"
+                :disabled="isLoading"
+                class="w-full font-handwriting"
+                :ui="{
+                  base: 'bg-white',
+                }"
+              />
+              <p class="text-xs text-red-800 italic mt-1 font-cinzel">
+                {{ t('form.writtenBy.help') }}
+              </p>
+            </div>
+
+            <!-- Written For Audience -->
+            <div>
+              <label
+                class="block text-lg font-bold text-red-900 mb-2 font-cinzel"
+              >
+                {{ t('form.writtenForAudience.label') }}
+              </label>
+              <UInput
+                v-model="formData.writtenForAudience"
+                :placeholder="t('form.writtenForAudience.placeholder')"
+                size="xl"
+                :disabled="isLoading"
+                class="w-full font-handwriting"
+                :ui="{
+                  base: 'bg-white',
+                }"
+              />
+              <p class="text-xs text-red-800 italic mt-1 font-cinzel">
+                {{ t('form.writtenForAudience.help') }}
               </p>
             </div>
 
@@ -555,13 +731,13 @@ useHead({
 
             <!-- Remaining Poems Info -->
             <div
-              v-if="!isPaid()"
+              v-if="!isPaid"
               class="bg-[#fff3c9] border-2 border-[#F4CD60] rounded-lg p-3 text-center shadow-sm"
             >
               <p class="text-sm font-bold text-red-900 font-cinzel">
                 {{
                   t('payment.remainingPoems', {
-                    count: getRemainingFreePoems(),
+                    count: remainingFreePoems,
                   })
                 }}
               </p>
@@ -814,12 +990,12 @@ useHead({
     </footer>
 
     <!-- Payment Modal -->
-    <!-- <ClientOnly>
+    <ClientOnly>
       <PaymentModal
         v-model="showPaymentModal"
         @payment-success="handlePaymentSuccess"
       />
-    </ClientOnly> -->
+    </ClientOnly>
   </div>
 </template>
 

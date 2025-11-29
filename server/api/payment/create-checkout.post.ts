@@ -29,8 +29,10 @@ export default defineEventHandler(async (event): Promise<CheckoutResponse> => {
     consola.info('Creating checkout session...');
 
     // Initialize Dodo Payments client
+    // Use test_mode in development, live_mode in production
     const client = new DodoPayments({
       bearerToken: runtimeConfig.dodoPaymentsApiKey,
+      environment: import.meta.dev ? 'test_mode' : 'live_mode',
     });
 
     // Get the base URL for return URL
@@ -47,7 +49,18 @@ export default defineEventHandler(async (event): Promise<CheckoutResponse> => {
           quantity: 1,
         },
       ],
-      return_url: `${baseUrl}?payment=success`,
+      return_url: `${baseUrl}/?payment=success`,
+      cancel_url: `${baseUrl}/?payment=cancelled`,
+      // Configure allowed payment methods (excludes Klarna and other BNPL)
+      allowed_payment_method_types: [
+        'ideal',
+        'credit',
+        'debit',
+        'paypal',
+        'bancontact_card',
+        'apple_pay',
+        'google_pay',
+      ],
     });
 
     consola.success('Checkout session created:', session.checkout_url);

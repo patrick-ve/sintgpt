@@ -5,99 +5,103 @@ interface PaymentState {
 }
 
 const STORAGE_KEY = 'sinterklaas-payment';
-const MAX_FREE_POEMS = 3;
+const MAX_FREE_POEMS = 1;
+
+// Shared reactive state across all composable instances
+const poemCount = ref(0);
+const hasPaid = ref(false);
+const hasUnlimitedAccess = ref(false);
+const isInitialized = ref(false);
 
 export const usePaymentTracking = () => {
-  // Check if user has unlimited access via cookie
-  const hasUnlimitedAccess = (): boolean => {
-    if (import.meta.server) return false;
-
-    // Check for any cookie starting with 'sintgpt-'
-    const allCookies = document.cookie.split(';');
-    return allCookies.some(cookie => {
-      const cookieName = cookie.trim().split('=')[0];
-      return cookieName.startsWith('sintgpt-');
-    });
-  };
-
-  const getPaymentState = (): PaymentState => {
-    if (import.meta.server) {
-      return { poemCount: 0, hasPaid: false };
-    }
+  const loadFromStorage = () => {
+    if (import.meta.server) return;
 
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
-        return JSON.parse(stored);
+        const state: PaymentState = JSON.parse(stored);
+        poemCount.value = state.poemCount;
+        hasPaid.value = state.hasPaid;
       }
     } catch (error) {
       console.error('Error reading payment state:', error);
     }
-
-    return { poemCount: 0, hasPaid: false };
   };
 
-  const savePaymentState = (state: PaymentState) => {
+  const saveToStorage = () => {
     if (import.meta.server) return;
 
     try {
+      const state: PaymentState = {
+        poemCount: poemCount.value,
+        hasPaid: hasPaid.value,
+      };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch (error) {
       console.error('Error saving payment state:', error);
     }
   };
 
-  const isPaid = (): boolean => {
-    // First check for unlimited access cookie
-    if (hasUnlimitedAccess()) {
+  // Check server-side cookie for unlimited access
+  const checkServerAccess = async () => {
+    if (import.meta.server) return;
+
+    try {
+      const response = await $fetch<{ hasAccess: boolean }>('/api/payment/check-access');
+      hasUnlimitedAccess.value = response.hasAccess;
+    } catch (error) {
+      console.error('Error checking access:', error);
+      hasUnlimitedAccess.value = false;
+    }
+  };
+
+  // Initialize on first use (client-side only)
+  if (!isInitialized.value && !import.meta.server) {
+    loadFromStorage();
+    checkServerAccess();
+    isInitialized.value = true;
+  }
+
+  // Computed properties for reactivity
+  const isPaid = computed(() => {
+    if (hasUnlimitedAccess.value) {
       return true;
     }
+    return hasPaid.value;
+  });
 
-    // Fall back to checking localStorage
-    const state = getPaymentState();
-    return state.hasPaid;
-  };
+  const canGeneratePoem = computed(() => {
+    if (hasUnlimitedAccess.value) return true;
+    return hasPaid.value || poemCount.value < MAX_FREE_POEMS;
+  });
 
-  const canGeneratePoem = (): boolean => {
-    // Skip payment check in development
-    if (import.meta.dev) return true;
-
-    // Check for unlimited access cookie first
-    if (hasUnlimitedAccess()) return true;
-
-    const state = getPaymentState();
-    return state.hasPaid || state.poemCount < MAX_FREE_POEMS;
-  };
-
-  const getRemainingFreePoems = (): number => {
-    // If user has unlimited access, return Infinity
-    if (hasUnlimitedAccess()) return Infinity;
-
-    const state = getPaymentState();
-    if (state.hasPaid) return Infinity;
-    return Math.max(0, MAX_FREE_POEMS - state.poemCount);
-  };
+  const remainingFreePoems = computed(() => {
+    if (hasUnlimitedAccess.value) return Infinity;
+    if (hasPaid.value) return Infinity;
+    return Math.max(0, MAX_FREE_POEMS - poemCount.value);
+  });
 
   const incrementPoemCount = () => {
-    // Don't increment if user has unlimited access
-    if (hasUnlimitedAccess()) return;
+    if (hasUnlimitedAccess.value) return;
 
-    const state = getPaymentState();
-    if (!state.hasPaid) {
-      state.poemCount += 1;
-      savePaymentState(state);
+    if (!hasPaid.value) {
+      poemCount.value += 1;
+      saveToStorage();
     }
   };
 
-  const markAsPaid = (paymentToken?: string) => {
-    const state = getPaymentState();
-    state.hasPaid = true;
-    state.paymentToken = paymentToken;
-    savePaymentState(state);
+  const markAsPaid = () => {
+    hasUnlimitedAccess.value = true;
+    hasPaid.value = true;
+    saveToStorage();
   };
 
   const resetPaymentState = () => {
     if (import.meta.server) return;
+    poemCount.value = 0;
+    hasPaid.value = false;
+    hasUnlimitedAccess.value = false;
     try {
       localStorage.removeItem(STORAGE_KEY);
     } catch (error) {
@@ -105,13 +109,19 @@ export const usePaymentTracking = () => {
     }
   };
 
+  // Re-check access (useful after payment)
+  const refreshAccess = () => {
+    checkServerAccess();
+  };
+
   return {
     isPaid,
     canGeneratePoem,
-    getRemainingFreePoems,
+    remainingFreePoems,
     incrementPoemCount,
     markAsPaid,
     resetPaymentState,
+    refreshAccess,
     maxFreePoems: MAX_FREE_POEMS,
   };
 };
