@@ -43,6 +43,13 @@ const handlePayment = async () => {
       }
     );
 
+    // Close the dialog before redirecting to avoid browser navigation issues
+    dialogRef.value?.close();
+    isOpen.value = false;
+
+    // Small delay to ensure dialog is fully closed before redirect
+    await new Promise(resolve => setTimeout(resolve, 500));
+
     // Redirect to checkout page (instead of overlay, to support iDeal and other redirect-based payment methods)
     window.location.href = response.checkoutUrl;
   } catch (err: any) {
