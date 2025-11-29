@@ -1,24 +1,12 @@
 <script setup lang="ts">
-import {
-  DodoPayments,
-  type CheckoutEvent,
-  type CheckoutMode,
-} from 'dodopayments-checkout';
-
 const { t } = useI18n();
 
 const isOpen = defineModel<boolean>({ default: false });
-
-const emit = defineEmits<{
-  (e: 'paymentSuccess'): void;
-}>();
 
 const dialogRef = ref<HTMLDialogElement | null>(null);
 
 const isLoading = ref(false);
 const error = ref<string | null>(null);
-const paymentSuccess = ref(false);
-const checkoutInitialized = ref(false);
 
 // Sync dialog element with isOpen state
 watch(isOpen, (newValue) => {
@@ -33,7 +21,6 @@ watch(isOpen, (newValue) => {
 const handleDialogClose = () => {
   isOpen.value = false;
   error.value = null;
-  paymentSuccess.value = false;
 };
 
 // Handle backdrop click
@@ -42,35 +29,6 @@ const handleBackdropClick = (event: MouseEvent) => {
     closeModal();
   }
 };
-
-// Initialize Dodo Payments SDK when component mounts
-onMounted(() => {
-  if (!checkoutInitialized.value) {
-    try {
-      DodoPayments.Initialize({
-        mode: 'test' as CheckoutMode,
-        onEvent: (event: CheckoutEvent) => {
-          console.log('Checkout event:', event);
-
-          if (event.event_type === 'checkout.payment_completed') {
-            handlePaymentSuccess();
-          } else if (event.event_type === 'checkout.error') {
-            error.value = t('payment.error');
-          } else if (event.event_type === 'checkout.closed') {
-            // User closed the checkout without completing payment
-            if (!paymentSuccess.value) {
-              error.value = null;
-            }
-          }
-        },
-      });
-      checkoutInitialized.value = true;
-    } catch (err) {
-      console.error('Error initializing Dodo Payments:', err);
-      error.value = t('payment.initError');
-    }
-  }
-});
 
 const handlePayment = async () => {
   error.value = null;
@@ -85,49 +43,19 @@ const handlePayment = async () => {
       }
     );
 
-    // Open the checkout overlay
-    DodoPayments.Checkout.open({
-      checkoutUrl: response.checkoutUrl,
-    });
-
-    // Close the payment modal so it doesn't block the Dodo checkout
-    isOpen.value = false;
+    // Redirect to checkout page (instead of overlay, to support iDeal and other redirect-based payment methods)
+    window.location.href = response.checkoutUrl;
   } catch (err: any) {
     console.error('Error creating checkout:', err);
     error.value =
       err.data?.statusMessage || err.message || t('payment.error');
-  } finally {
     isLoading.value = false;
   }
-};
-
-const handlePaymentSuccess = async () => {
-  console.log('Payment successful!');
-  paymentSuccess.value = true;
-
-  try {
-    // Set the unlimited access cookie
-    await $fetch('/api/payment/set-access-cookie', {
-      method: 'POST',
-    });
-
-    console.log('Access cookie set successfully');
-  } catch (err) {
-    console.error('Error setting access cookie:', err);
-  }
-
-  // Notify parent component
-  setTimeout(() => {
-    emit('paymentSuccess');
-    isOpen.value = false;
-    paymentSuccess.value = false;
-  }, 2000);
 };
 
 const closeModal = () => {
   isOpen.value = false;
   error.value = null;
-  paymentSuccess.value = false;
 };
 </script>
 
@@ -157,31 +85,7 @@ const closeModal = () => {
 
       <!-- Body -->
       <div class="modal-body">
-        <div v-if="paymentSuccess" class="text-center py-8">
-          <div class="flex justify-center mb-4">
-            <svg
-              class="w-16 h-16 text-green-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-          </div>
-          <h4 class="text-xl font-semibold text-gray-900 mb-2">
-            {{ t('payment.successTitle') }}
-          </h4>
-          <p class="text-gray-600">
-            {{ t('payment.successMessage') }}
-          </p>
-        </div>
-
-        <div v-else class="space-y-4">
+        <div class="space-y-4">
           <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <div class="flex items-start">
               <svg

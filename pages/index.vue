@@ -127,11 +127,6 @@ const handleSubmit = async () => {
   }
 };
 
-const handlePaymentSuccess = () => {
-  showPaymentModal.value = false;
-  // Refresh access state from server after payment
-  refreshAccess();
-};
 
 const copyToClipboard = async () => {
   if (!poem.value) return;
@@ -991,10 +986,7 @@ useHead({
 
     <!-- Payment Modal -->
     <ClientOnly>
-      <PaymentModal
-        v-model="showPaymentModal"
-        @payment-success="handlePaymentSuccess"
-      />
+      <PaymentModal v-model="showPaymentModal" />
     </ClientOnly>
   </div>
 </template>
