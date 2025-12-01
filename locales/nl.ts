@@ -114,7 +114,7 @@ export default {
       {
         question: 'Is SintGPT gratis?',
         answer:
-          'Ja! Je kunt 1 sinterklaasgedicht gratis genereren. Daarna kun je voor slechts €3 upgraden naar onbeperkt toegang, zodat je zoveel gedichten kunt maken als je wilt voor het hele Sinterklaasfeest.',
+          'Ja! Je kunt 1 sinterklaasgedicht gratis genereren. Daarna kun je voor slechts €1 upgraden naar onbeperkt toegang, zodat je zoveel gedichten kunt maken als je wilt voor het hele Sinterklaasfeest.',
       },
       {
         question:
@@ -154,7 +154,7 @@ export default {
     title: 'Upgrade naar onbeperkt toegang',
     description: 'Je hebt je gratis gedicht gebruikt',
     limitReached:
-      'Je hebt je gratis gedicht gebruikt. Upgrade naar onbeperkt toegang voor slechts €3!',
+      'Je hebt je gratis gedicht gebruikt. Upgrade naar onbeperkt toegang voor slechts €1!',
     oneTimePayment: 'Eenmalige betaling',
     includesVAT: 'incl. BTW',
     whatYouGet: 'Wat je krijgt:',
@@ -168,7 +168,7 @@ export default {
     emailPlaceholder: 'jouw@email.nl',
     emailHelp: 'We sturen je factuur naar dit e-mailadres',
     proceedToPayment: 'Ga naar betaling',
-    payNow: 'Betaal €3 voor onbeperkt toegang',
+    payNow: 'Betaal €1 voor onbeperkt toegang',
     processing: 'Verwerken...',
     securePayment: 'Veilig betalen via Dodo Payments',
     poweredByStripe: 'Powered by Stripe',
@@ -191,7 +191,7 @@ export default {
     cancelledMessage:
       'Je betaling is geannuleerd. Je kunt het op elk moment opnieuw proberen.',
     remainingPoems: '{count} gratis gedicht over | {count} gratis gedichten over',
-    unlimitedAccess: 'Onbeperkt toegang voor slechts €3',
+    unlimitedAccess: 'Onbeperkt toegang voor slechts €1',
   },
   testimonials: {
     title: 'Al meer dan 5000 blije hulpsinterklazen',

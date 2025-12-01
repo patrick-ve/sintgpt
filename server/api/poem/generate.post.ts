@@ -15,6 +15,10 @@ const rateLimitMap = new Map<
 const RATE_LIMIT_MAX_REQUESTS = 3;
 const RATE_LIMIT_WINDOW_MS = 24 * 60 * 60 * 1000; // 24 hours
 
+// Debounce storage - tracks last request time per IP
+const debounceMap = new Map<string, number>();
+const DEBOUNCE_MS = 10_000; // 10 seconds between requests
+
 // Define the request schema for validation
 const PoemRequestSchema = z.object({
   name: z.string().min(1, 'Recipient name is required'),
@@ -130,19 +134,39 @@ export default defineEventHandler(async (event) => {
     // const hasUnlimited = hasUnlimitedAccess(event);
     const hasUnlimited = false;
 
+    const ip =
+      getRequestIP(event, { xForwardedFor: true }) || 'unknown';
+    const now = Date.now();
+
     // Rate limiting check (skip in development or if user has unlimited access)
     if (!import.meta.dev && !hasUnlimited) {
-      const ip =
-        getRequestIP(event, { xForwardedFor: true }) || 'unknown';
-      const now = Date.now();
+      // Debounce check - reject if request came too quickly after previous one
+      const lastRequestTime = debounceMap.get(ip);
+      if (lastRequestTime && now - lastRequestTime < DEBOUNCE_MS) {
+        const waitSeconds = Math.ceil(
+          (DEBOUNCE_MS - (now - lastRequestTime)) / 1000
+        );
+        consola.warn(
+          `Debounce triggered for IP: ${ip} - must wait ${waitSeconds}s`
+        );
+        throw createError({
+          statusCode: 429,
+          statusMessage: `Please wait ${waitSeconds} seconds before generating another poem.`,
+        });
+      }
+
+      // Rate limit check
       const rateLimitData = rateLimitMap.get(ip);
 
       // If no data or reset time has passed, initialize/reset the counter
       if (!rateLimitData || now >= rateLimitData.resetTime) {
         rateLimitMap.set(ip, {
-          count: 0,
+          count: 1, // Start at 1 (this request counts)
           resetTime: now + RATE_LIMIT_WINDOW_MS,
         });
+        consola.info(
+          `Rate limit initialized for IP ${ip}: 1/${RATE_LIMIT_MAX_REQUESTS} requests used`
+        );
       } else if (rateLimitData.count >= RATE_LIMIT_MAX_REQUESTS) {
         // Rate limit exceeded
         const timeRemaining = rateLimitData.resetTime - now;
@@ -156,9 +180,21 @@ export default defineEventHandler(async (event) => {
 
         throw createError({
           statusCode: 429,
-          statusMessage: `You have reached the maximum of ${RATE_LIMIT_MAX_REQUESTS} free poems per 24 hours. Upgrade to unlimited access for just €3!`,
+          statusMessage: `You have reached the maximum of ${RATE_LIMIT_MAX_REQUESTS} free poems per 24 hours. Upgrade to unlimited access for just €1!`,
         });
+      } else {
+        // Increment counter BEFORE generation starts (fixes race condition)
+        rateLimitMap.set(ip, {
+          count: rateLimitData.count + 1,
+          resetTime: rateLimitData.resetTime,
+        });
+        consola.info(
+          `Rate limit for IP ${ip}: ${rateLimitData.count + 1}/${RATE_LIMIT_MAX_REQUESTS} requests used`
+        );
       }
+
+      // Update debounce timestamp
+      debounceMap.set(ip, now);
     }
 
     // Read and parse the request body
@@ -217,22 +253,9 @@ export default defineEventHandler(async (event) => {
 
         consola.info(`Total cost: $${totalCost.toFixed(6)}`);
 
-        // Update rate limit counter on successful generation (skip in development or if user has unlimited access)
-        if (!import.meta.dev && !hasUnlimited) {
-          const ip =
-            getRequestIP(event, { xForwardedFor: true }) || 'unknown';
-          const currentData = rateLimitMap.get(ip);
-          if (currentData) {
-            rateLimitMap.set(ip, {
-              count: currentData.count + 1,
-              resetTime: currentData.resetTime,
-            });
-
-            consola.info(
-              `Rate limit for IP ${ip}: ${currentData.count + 1}/${RATE_LIMIT_MAX_REQUESTS} requests used`
-            );
-          }
-        } else if (hasUnlimited) {
+        // Rate limit counter is now incremented BEFORE generation starts
+        // to prevent race condition with multiple simultaneous requests
+        if (hasUnlimited) {
           consola.info(
             'User has unlimited access via cookie - skipping rate limit'
           );
