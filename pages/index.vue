@@ -99,8 +99,8 @@ const showPaymentModal = ref(false);
 const poemSectionRef = ref<HTMLElement | null>(null);
 
 const handleSubmit = async () => {
-  // Check if user can generate a poem
-  if (!canGeneratePoem.value) {
+  // Check if user can generate a poem (skip in development)
+  if (!import.meta.dev && !canGeneratePoem.value) {
     showPaymentModal.value = true;
     return;
   }

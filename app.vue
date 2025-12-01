@@ -61,6 +61,7 @@ function logClientError(error: unknown) {
 
 // Redirect to Rick Astley when devtools are opened
 useDisableDevTools().config.onDetectOpen = () => {
+  (window as any).umami?.track('Attempted to open devtools');
   window.location.href =
     'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
 };
