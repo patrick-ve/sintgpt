@@ -4,9 +4,6 @@ import { streamText } from 'ai';
 import { z } from 'zod';
 import { hasUnlimitedAccess } from '~/server/utils/paymentCookie';
 
-// Get API keys from runtime config
-const runtimeConfig = useRuntimeConfig();
-
 // Rate limiting storage
 const rateLimitMap = new Map<
   string,
@@ -129,6 +126,9 @@ Schrijf nu het gedicht:`;
 }
 
 export default defineEventHandler(async (event) => {
+  // Get API keys from runtime config inside handler
+  const runtimeConfig = useRuntimeConfig(event);
+
   try {
     // Check for unlimited access cookie
     // const hasUnlimited = hasUnlimitedAccess(event);
