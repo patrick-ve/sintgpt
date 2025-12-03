@@ -8,6 +8,9 @@ const {
   remainingFreePoems,
   isPaid,
   refreshAccess,
+  storedTrialPoem,
+  storedTrialPoemName,
+  saveTrialPoem,
 } = usePaymentTracking();
 const route = useRoute();
 const router = useRouter();
@@ -15,7 +18,7 @@ const router = useRouter();
 // Payment status from redirect
 const paymentStatus = ref<'success' | 'cancelled' | null>(null);
 
-// Handle payment redirect query params
+// Handle payment redirect query params and restore trial poem
 onMounted(async () => {
   const payment = route.query.payment as string;
   if (payment === 'success') {
@@ -36,6 +39,14 @@ onMounted(async () => {
   } else if (payment === 'cancelled') {
     paymentStatus.value = 'cancelled';
     router.replace({ query: {} });
+  }
+
+  // Restore persisted trial poem for unpaid users
+  if (storedTrialPoem.value && !isPaid.value) {
+    poem.value = storedTrialPoem.value;
+    if (storedTrialPoemName.value) {
+      formData.value.name = storedTrialPoemName.value;
+    }
   }
 });
 
@@ -114,6 +125,11 @@ const handleSubmit = async () => {
   // Only increment count if generation was successful (no error and no rate limit)
   if (!error.value && !isRateLimitError.value && poem.value) {
     incrementPoemCount();
+
+    // Save trial poem for unpaid users so it persists across page refreshes
+    if (!isPaid.value) {
+      saveTrialPoem(poem.value, formData.value.name);
+    }
 
     // Scroll to poem on mobile (when stacked layout)
     setTimeout(() => {

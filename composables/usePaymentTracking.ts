@@ -2,6 +2,8 @@ interface PaymentState {
   poemCount: number;
   hasPaid: boolean;
   paymentToken?: string;
+  trialPoem?: string | null;
+  trialPoemName?: string | null;
 }
 
 const STORAGE_KEY = 'sinterklaas-payment';
@@ -12,6 +14,8 @@ const poemCount = ref(0);
 const hasPaid = ref(false);
 const hasUnlimitedAccess = ref(false);
 const isInitialized = ref(false);
+const storedTrialPoem = ref<string | null>(null);
+const storedTrialPoemName = ref<string | null>(null);
 
 export const usePaymentTracking = () => {
   const loadFromStorage = () => {
@@ -23,6 +27,8 @@ export const usePaymentTracking = () => {
         const state: PaymentState = JSON.parse(stored);
         poemCount.value = state.poemCount;
         hasPaid.value = state.hasPaid;
+        storedTrialPoem.value = state.trialPoem ?? null;
+        storedTrialPoemName.value = state.trialPoemName ?? null;
       }
     } catch (error) {
       console.error('Error reading payment state:', error);
@@ -36,6 +42,8 @@ export const usePaymentTracking = () => {
       const state: PaymentState = {
         poemCount: poemCount.value,
         hasPaid: hasPaid.value,
+        trialPoem: storedTrialPoem.value,
+        trialPoemName: storedTrialPoemName.value,
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch (error) {
@@ -94,6 +102,16 @@ export const usePaymentTracking = () => {
   const markAsPaid = () => {
     hasUnlimitedAccess.value = true;
     hasPaid.value = true;
+    // Clear trial poem when user upgrades
+    storedTrialPoem.value = null;
+    storedTrialPoemName.value = null;
+    saveToStorage();
+  };
+
+  const saveTrialPoem = (poem: string, name: string) => {
+    if (import.meta.server) return;
+    storedTrialPoem.value = poem;
+    storedTrialPoemName.value = name;
     saveToStorage();
   };
 
@@ -123,5 +141,8 @@ export const usePaymentTracking = () => {
     resetPaymentState,
     refreshAccess,
     maxFreePoems: MAX_FREE_POEMS,
+    storedTrialPoem,
+    storedTrialPoemName,
+    saveTrialPoem,
   };
 };
