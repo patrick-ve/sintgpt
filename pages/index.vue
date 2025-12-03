@@ -126,6 +126,9 @@ const handleSubmit = async () => {
   if (!error.value && !isRateLimitError.value && poem.value) {
     incrementPoemCount();
 
+    // Track successful poem generation
+    (window as any).umami?.track('Generate poem');
+
     // Save trial poem for unpaid users so it persists across page refreshes
     if (!isPaid.value) {
       saveTrialPoem(poem.value, formData.value.name);
@@ -762,7 +765,6 @@ useHead({
               :disabled="!isFormValid || isLoading"
               :loading="isLoading"
               class="bg-red-600 hover:bg-red-700"
-              data-umami-event="Generate poem"
             >
               {{
                 isLoading
