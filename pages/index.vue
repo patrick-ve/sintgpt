@@ -55,6 +55,15 @@ const dismissPaymentStatus = () => {
   paymentStatus.value = null;
 };
 
+// Detect browser language - default to Dutch if browser is Dutch, otherwise English
+const getDefaultLanguage = (): 'dutch' | 'english' => {
+  if (import.meta.client) {
+    const browserLang = navigator.language || navigator.languages?.[0] || '';
+    return browserLang.toLowerCase().startsWith('nl') ? 'dutch' : 'english';
+  }
+  return 'english';
+};
+
 // Form state
 const formData = ref({
   name: '',
@@ -66,7 +75,7 @@ const formData = ref({
   style: 'funny' as 'funny' | 'classic' | 'ironic' | 'old-fashioned',
   rhymeScheme: 'AABB' as 'AABB' | 'ABBA' | 'Limerick',
   lines: 12,
-  language: 'dutch' as 'dutch' | 'english',
+  language: getDefaultLanguage(),
 });
 
 const styleOptions = computed(() => [
