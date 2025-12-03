@@ -72,8 +72,10 @@ export default {
   poem: {
     title: 'Gedicht voor {name}',
     defaultTitle: 'Jouw gedicht',
-    copy: 'Kopieer',
+    copy: 'Kopieer gedicht',
     copied: 'Gekopieerd!',
+    shareWhatsApp: 'Deel op WhatsApp',
+    shareEmail: 'Verstuur via e-mail',
     loading: 'Jouw gepersonaliseerde gedicht wordt gemaakt...',
     error: 'Fout',
     empty: 'Vul het formulier in om een gedicht te genereren',
@@ -192,6 +194,7 @@ export default {
       'Je betaling is geannuleerd. Je kunt het op elk moment opnieuw proberen.',
     remainingPoems: '{count} gratis gedicht over | {count} gratis gedichten over',
     unlimitedAccess: 'Onbeperkt toegang voor slechts €1',
+    unlimitedUnlocked: 'Onbeperkt gedichten ontgrendeld!',
   },
   testimonials: {
     title: 'Al meer dan 5000 blije hulpsinterklazen',

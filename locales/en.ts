@@ -72,8 +72,10 @@ export default {
   poem: {
     title: 'Poem for {name}',
     defaultTitle: 'Your poem',
-    copy: 'Copy',
+    copy: 'Copy poem',
     copied: 'Copied!',
+    shareWhatsApp: 'Share on WhatsApp',
+    shareEmail: 'Send via email',
     loading: 'Your personalized poem is being created...',
     error: 'Error',
     empty: 'Fill out the form to generate a poem',
@@ -190,6 +192,7 @@ export default {
       'Your payment was cancelled. You can try again anytime.',
     remainingPoems: '{count} free poem remaining | {count} free poems remaining',
     unlimitedAccess: 'Unlimited access for just €1',
+    unlimitedUnlocked: 'Unlimited poems unlocked!',
   },
   testimonials: {
     title: 'Over 5,000 happy assistant Sinterklazen',
