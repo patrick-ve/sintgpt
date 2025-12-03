@@ -325,79 +325,119 @@ useHead({
 </script>
 
 <template>
-  <div class="min-h-screen bg-sinterklaas-pattern">
-    <!-- Header Wrapper with Mobile Banner -->
-    <div class="relative z-20">
-      <header
-        class="bg-red-900 text-white shadow-xl border-b-4 border-[#F4CD60] relative overflow-hidden"
-      >
-        <!-- Decorative corner elements -->
-        <div
-          class="absolute top-0 left-0 w-16 h-16 bg-[#F4CD60] -translate-x-8 -translate-y-8 rotate-45 transform"
-        ></div>
-        <div
-          class="absolute top-0 right-0 w-16 h-16 bg-[#F4CD60] translate-x-8 -translate-y-8 rotate-45 transform"
-        ></div>
+  <div
+    class="min-h-screen bg-festive-pattern relative overflow-hidden"
+  >
+    <!-- Animated Snowflakes -->
+    <ClientOnly>
+      <Snowflakes />
+    </ClientOnly>
 
+    <!-- Header -->
+    <header
+      class="festive-header text-white shadow-2xl relative z-20"
+    >
+      <!-- Decorative top border -->
+      <div
+        class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-[#d4a853] via-[#f4cd60] to-[#d4a853]"
+      ></div>
+
+      <!-- Golden corner accents -->
+      <div class="absolute top-2 left-0 w-24 h-24 overflow-hidden">
         <div
-          class="container mx-auto px-6 pt-8 pb-12 md:py-8 text-[#F4CD60] relative z-10"
+          class="absolute -top-12 -left-12 w-24 h-24 bg-[#d4a853] rotate-45 opacity-20"
+        ></div>
+      </div>
+      <div class="absolute top-2 right-0 w-24 h-24 overflow-hidden">
+        <div
+          class="absolute -top-12 -right-12 w-24 h-24 bg-[#d4a853] rotate-45 opacity-20"
+        ></div>
+      </div>
+
+      <div
+        class="container mx-auto px-6 pt-10 pb-14 md:py-10 relative z-10"
+      >
+        <div
+          class="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-6 md:gap-8"
         >
-          <div
-            class="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-4 md:gap-8"
-          >
-            <!-- Left: Heading -->
-            <div class="flex-shrink-0 flex items-center gap-4">
-              <div class="hidden md:block text-5xl">🎁</div>
+          <!-- Left: Logo and Title -->
+          <div class="flex-shrink-0 flex items-center gap-5">
+            <div
+              class="hidden md:flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-[#f4cd60] to-[#d4a853] shadow-lg animate-float"
+            >
+              <span class="text-4xl">🎁</span>
+            </div>
+            <div class="overflow-visible">
               <h1
-                class="text-4xl md:text-6xl font-bold font-cinzel drop-shadow-md"
+                class="text-4xl md:text-5xl font-bold font-cinzel text-gold-gradient drop-shadow-lg tracking-wide"
               >
                 {{ t('header.title') }}
               </h1>
-            </div>
-
-            <!-- Center: Poem Counter (Desktop) -->
-            <div class="hidden md:block">
-              <PoemCounter
-                class="transform hover:scale-110 transition-transform duration-300"
-              />
-            </div>
-
-            <!-- Right: Paragraphs and Language Switcher -->
-            <div class="flex flex-col md:items-end gap-3">
-              <div class="flex flex-col md:text-right">
-                <p class="font-semibold text-sm md:text-base">
-                  {{ t('header.subtitle1') }}
-                </p>
-
-                <p class="font-semibold text-sm md:text-base">
-                  {{ t('header.subtitle2') }}
-                </p>
+              <div
+                class="hidden md:flex items-center gap-2 mt-1 text-[#f4cd60]/80"
+              >
+                <span class="text-sm">*</span>
+                <span class="text-sm">+</span>
+                <span class="text-sm">*</span>
+                <span
+                  class="text-xs font-cinzel tracking-widest uppercase"
+                  >Magische Gedichten</span
+                >
+                <span class="text-sm">*</span>
+                <span class="text-sm">+</span>
+                <span class="text-sm">*</span>
               </div>
-
-              <!-- Language Switcher -->
-              <USelect
-                v-model="selectedLocale"
-                :items="uiLanguageItems"
-                class="w-44"
-                size="md"
-                :ui="{
-                  base: 'bg-red-900 border-[rgb(244,205,96)] border-1 text-[rgb(244,205,96)] font-bold',
-                  value: 'text-[rgb(244,205,96)]',
-                  trailingIcon: 'text-[rgb(244,205,96)]',
-                }"
-              />
             </div>
           </div>
+
+          <!-- Center: Poem Counter (Desktop) -->
+          <div class="hidden md:block">
+            <PoemCounter
+              class="transform hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+
+          <!-- Right: Subtitles and Language Switcher -->
+          <div class="flex flex-col md:items-end gap-4">
+            <div class="flex flex-col md:text-right text-[#f4cd60]">
+              <p
+                class="font-semibold text-sm md:text-base font-cinzel"
+              >
+                {{ t('header.subtitle1') }}
+              </p>
+              <p
+                class="font-semibold text-sm md:text-base font-cinzel opacity-80"
+              >
+                {{ t('header.subtitle2') }}
+              </p>
+            </div>
+
+            <!-- Language Switcher -->
+            <USelect
+              v-model="selectedLocale"
+              :items="uiLanguageItems"
+              class="w-44"
+              size="md"
+              :ui="{
+                base: 'bg-[#5c0f26] border-[#d4a853] border-2 text-[#f4cd60] font-bold rounded-lg shadow-lg',
+                value: 'text-[#f4cd60]',
+                trailingIcon: 'text-[#f4cd60]',
+              }"
+            />
+          </div>
         </div>
-      </header>
+      </div>
+
+      <!-- Decorative zigzag border -->
+      <div class="header-decoration"></div>
 
       <!-- Mobile Banner (Overlapping Bottom Border) -->
       <div
-        class="md:hidden absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 z-30 filter drop-shadow-lg"
+        class="md:hidden absolute -bottom-8 left-1/2 transform -translate-x-1/2 z-30 filter drop-shadow-xl"
       >
         <PoemCounter />
       </div>
-    </div>
+    </header>
 
     <!-- Payment Status Notifications -->
     <div
@@ -407,12 +447,14 @@ useHead({
       <!-- Success Notification -->
       <div
         v-if="paymentStatus === 'success'"
-        class="bg-green-50 border-2 border-green-500 rounded-xl p-4 shadow-xl"
+        class="bg-gradient-to-r from-green-50 to-emerald-50 border-3 border-green-500 rounded-2xl p-5 shadow-2xl"
       >
         <div class="flex items-start">
-          <div class="flex-shrink-0">
+          <div
+            class="flex-shrink-0 w-10 h-10 bg-green-500 rounded-full flex items-center justify-center"
+          >
             <svg
-              class="w-6 h-6 text-green-500"
+              class="w-6 h-6 text-white"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -421,12 +463,14 @@ useHead({
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                d="M5 13l4 4L19 7"
               />
             </svg>
           </div>
-          <div class="ml-3 flex-1">
-            <h3 class="text-sm font-bold text-green-800">
+          <div class="ml-4 flex-1">
+            <h3
+              class="text-base font-bold text-green-800 font-cinzel"
+            >
               {{ t('payment.successTitle') }}
             </h3>
             <p class="text-sm text-green-700 mt-1">
@@ -435,7 +479,7 @@ useHead({
           </div>
           <button
             @click="dismissPaymentStatus"
-            class="ml-3 text-green-500 hover:text-green-700"
+            class="ml-3 text-green-500 hover:text-green-700 transition-colors"
           >
             <svg
               class="w-5 h-5"
@@ -455,12 +499,14 @@ useHead({
       <!-- Cancelled Notification -->
       <div
         v-if="paymentStatus === 'cancelled'"
-        class="bg-yellow-50 border-2 border-yellow-500 rounded-xl p-4 shadow-xl"
+        class="bg-gradient-to-r from-amber-50 to-yellow-50 border-3 border-amber-500 rounded-2xl p-5 shadow-2xl"
       >
         <div class="flex items-start">
-          <div class="flex-shrink-0">
+          <div
+            class="flex-shrink-0 w-10 h-10 bg-amber-500 rounded-full flex items-center justify-center"
+          >
             <svg
-              class="w-6 h-6 text-yellow-500"
+              class="w-6 h-6 text-white"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -473,17 +519,19 @@ useHead({
               />
             </svg>
           </div>
-          <div class="ml-3 flex-1">
-            <h3 class="text-sm font-bold text-yellow-800">
+          <div class="ml-4 flex-1">
+            <h3
+              class="text-base font-bold text-amber-800 font-cinzel"
+            >
               {{ t('payment.cancelledTitle') }}
             </h3>
-            <p class="text-sm text-yellow-700 mt-1">
+            <p class="text-sm text-amber-700 mt-1">
               {{ t('payment.cancelledMessage') }}
             </p>
           </div>
           <button
             @click="dismissPaymentStatus"
-            class="ml-3 text-yellow-500 hover:text-yellow-700"
+            class="ml-3 text-amber-500 hover:text-amber-700 transition-colors"
           >
             <svg
               class="w-5 h-5"
@@ -502,49 +550,56 @@ useHead({
     </div>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-6 pb-12 py-12">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <main
+      class="container mx-auto px-4 md:px-6 pb-12 pt-16 md:pt-12 relative z-10"
+    >
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
         <!-- Form Section -->
-        <section
-          class="bg-[#fffdf0] rounded-2xl shadow-2xl p-6 md:p-8 sint-border relative"
-        >
+        <section class="sint-card p-6 md:p-8 relative">
+          <!-- Decorative ribbon -->
+          <div class="ribbon-decoration ribbon-corner-tl"></div>
+          <div class="ribbon-decoration ribbon-corner-br"></div>
+
+          <!-- Floating scroll icon -->
           <div
-            class="absolute -top-5 -right-5 text-6xl rotate-12 drop-shadow-lg filter"
+            class="absolute -top-6 -right-4 text-5xl rotate-12 drop-shadow-lg filter animate-float"
+            style="animation-delay: 0.5s"
           >
             📜
           </div>
+
           <h2
-            class="text-3xl font-bold text-red-900 mb-6 font-cinzel border-b-2 border-red-100 pb-2"
+            class="text-2xl md:text-3xl font-bold text-[#8b1538] mb-6 font-cinzel border-b-2 border-[#d4a853]/30 pb-3 flex items-center gap-3"
           >
+            <span class="text-2xl">✨</span>
             {{ t('form.title') }}
           </h2>
 
-          <form @submit.prevent="handleSubmit" class="space-y-6">
+          <form @submit.prevent="handleSubmit" class="space-y-5">
             <!-- Recipient Name -->
-            <div>
+            <div class="form-group">
               <label
-                class="block text-lg font-bold text-red-900 mb-2 font-cinzel"
+                class="block text-base font-bold text-[#8b1538] mb-2 font-cinzel"
               >
                 {{ t('form.name.label')
-                }}<span class="text-red-500 ml-1">*</span>
+                }}<span class="text-[#b91c4a] ml-1">*</span>
               </label>
-
               <UInput
                 v-model="formData.name"
                 :placeholder="t('form.name.placeholder')"
                 size="xl"
                 :disabled="isLoading"
-                class="w-full font-handwriting"
+                class="w-full font-handwriting input-festive"
                 :ui="{
-                  base: 'bg-white',
+                  base: 'bg-white border-2 border-[#d4c5a0] focus:border-[#d4a853] rounded-lg',
                 }"
               />
             </div>
 
             <!-- Present -->
-            <div>
+            <div class="form-group">
               <label
-                class="block text-lg font-bold text-red-900 mb-2 font-cinzel"
+                class="block text-base font-bold text-[#8b1538] mb-2 font-cinzel"
               >
                 {{ t('form.present.label') }}
               </label>
@@ -553,24 +608,24 @@ useHead({
                 :placeholder="t('form.present.placeholder')"
                 size="xl"
                 :disabled="isLoading"
-                class="w-full font-handwriting"
+                class="w-full font-handwriting input-festive"
                 :ui="{
-                  base: 'bg-white',
+                  base: 'bg-white border-2 border-[#d4c5a0] focus:border-[#d4a853] rounded-lg',
                 }"
               />
             </div>
 
             <!-- Reveal Present -->
-            <div>
+            <div class="form-group">
               <label
-                class="block text-lg font-bold text-red-900 mb-2 font-cinzel"
+                class="block text-base font-bold text-[#8b1538] mb-2 font-cinzel"
               >
                 {{ t('form.revealPresent.label') }}
               </label>
               <select
                 v-model="formData.revealPresent"
                 :disabled="isLoading"
-                class="w-full px-3 py-2 text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                class="w-full px-4 py-3 text-base border-2 border-[#d4c5a0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d4a853] focus:border-[#d4a853] bg-white disabled:bg-gray-100 disabled:cursor-not-allowed font-handwriting transition-all"
               >
                 <option
                   v-for="option in revealPresentOptions"
@@ -583,32 +638,34 @@ useHead({
             </div>
 
             <!-- Fun Facts -->
-            <div>
+            <div class="form-group">
               <label
-                class="block text-lg font-bold text-red-900 mb-2 font-cinzel"
+                class="block text-base font-bold text-[#8b1538] mb-2 font-cinzel"
               >
                 {{ t('form.funFacts.label') }}
               </label>
               <UTextarea
                 v-model="formData.funFacts"
                 :placeholder="t('form.funFacts.placeholder')"
-                :rows="5"
+                :rows="4"
                 size="xl"
                 :disabled="isLoading"
-                class="w-full font-handwriting"
+                class="w-full font-handwriting input-festive"
                 :ui="{
-                  base: 'bg-white',
+                  base: 'bg-white border-2 border-[#d4c5a0] focus:border-[#d4a853] rounded-lg',
                 }"
               />
-              <p class="text-xs text-red-800 italic mt-1 font-cinzel">
+              <p
+                class="text-xs text-[#5c0f26] italic mt-1.5 font-cinzel"
+              >
                 {{ t('form.funFacts.help') }}
               </p>
             </div>
 
             <!-- Written By -->
-            <div>
+            <div class="form-group">
               <label
-                class="block text-lg font-bold text-red-900 mb-2 font-cinzel"
+                class="block text-base font-bold text-[#8b1538] mb-2 font-cinzel"
               >
                 {{ t('form.writtenBy.label') }}
               </label>
@@ -617,20 +674,22 @@ useHead({
                 :placeholder="t('form.writtenBy.placeholder')"
                 size="xl"
                 :disabled="isLoading"
-                class="w-full font-handwriting"
+                class="w-full font-handwriting input-festive"
                 :ui="{
-                  base: 'bg-white',
+                  base: 'bg-white border-2 border-[#d4c5a0] focus:border-[#d4a853] rounded-lg',
                 }"
               />
-              <p class="text-xs text-red-800 italic mt-1 font-cinzel">
+              <p
+                class="text-xs text-[#5c0f26] italic mt-1.5 font-cinzel"
+              >
                 {{ t('form.writtenBy.help') }}
               </p>
             </div>
 
             <!-- Written For Audience -->
-            <div>
+            <div class="form-group">
               <label
-                class="block text-lg font-bold text-red-900 mb-2 font-cinzel"
+                class="block text-base font-bold text-[#8b1538] mb-2 font-cinzel"
               >
                 {{ t('form.writtenForAudience.label') }}
               </label>
@@ -641,34 +700,33 @@ useHead({
                 "
                 size="xl"
                 :disabled="isLoading"
-                class="w-full font-handwriting"
+                class="w-full font-handwriting input-festive"
                 :ui="{
-                  base: 'bg-white',
+                  base: 'bg-white border-2 border-[#d4c5a0] focus:border-[#d4a853] rounded-lg',
                 }"
               />
-              <p class="text-xs text-red-800 italic mt-1 font-cinzel">
+              <p
+                class="text-xs text-[#5c0f26] italic mt-1.5 font-cinzel"
+              >
                 {{ t('form.writtenForAudience.help') }}
               </p>
             </div>
 
-            <!-- Style -->
-            <div>
+            <!-- Style Selection -->
+            <div class="form-group">
               <label
-                class="block text-lg font-bold text-red-900 mb-3 font-cinzel"
+                class="block text-base font-bold text-[#8b1538] mb-3 font-cinzel"
               >
                 {{ t('form.style.label') }}
-                <span class="text-red-500 ml-1">*</span>
+                <span class="text-[#b91c4a] ml-1">*</span>
               </label>
-              <div class="space-y-2">
+              <div class="grid grid-cols-2 gap-3">
                 <label
                   v-for="option in styleOptions"
                   :key="option.value"
-                  class="flex items-center p-2 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+                  class="radio-festive flex items-center gap-2 cursor-pointer"
                   :class="{
-                    'border-red-600 bg-red-50':
-                      formData.style === option.value,
-                    'border-gray-300':
-                      formData.style !== option.value,
+                    selected: formData.style === option.value,
                   }"
                 >
                   <input
@@ -676,10 +734,10 @@ useHead({
                     v-model="formData.style"
                     :value="option.value"
                     :disabled="isLoading"
-                    class="w-4 h-4 text-red-600 focus:ring-red-500"
+                    class="sr-only"
                   />
                   <span
-                    class="ml-2 text-base text-red-900 font-medium font-cinzel"
+                    class="text-sm text-[#8b1538] font-bold font-cinzel"
                     >{{ option.label }}</span
                   >
                 </label>
@@ -687,23 +745,20 @@ useHead({
             </div>
 
             <!-- Rhyme Scheme -->
-            <div>
+            <div class="form-group">
               <label
-                class="block text-lg font-bold text-red-900 mb-3 font-cinzel"
+                class="block text-base font-bold text-[#8b1538] mb-3 font-cinzel"
               >
                 {{ t('form.rhymeScheme.label') }}
-                <span class="text-red-500 ml-1">*</span>
+                <span class="text-[#b91c4a] ml-1">*</span>
               </label>
-              <div class="space-y-2">
+              <div class="grid grid-cols-3 gap-3">
                 <label
                   v-for="option in rhymeSchemeOptions"
                   :key="option.value"
-                  class="flex items-center p-2 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+                  class="radio-festive flex items-center justify-center py-3 cursor-pointer text-center"
                   :class="{
-                    'border-red-600 bg-red-50':
-                      formData.rhymeScheme === option.value,
-                    'border-gray-300':
-                      formData.rhymeScheme !== option.value,
+                    selected: formData.rhymeScheme === option.value,
                   }"
                 >
                   <input
@@ -711,10 +766,10 @@ useHead({
                     v-model="formData.rhymeScheme"
                     :value="option.value"
                     :disabled="isLoading"
-                    class="w-4 h-4 text-red-600 focus:ring-red-500"
+                    class="sr-only"
                   />
                   <span
-                    class="ml-2 text-base text-red-900 font-medium font-cinzel"
+                    class="text-xs text-[#8b1538] font-bold font-cinzel"
                     >{{ option.label }}</span
                   >
                 </label>
@@ -722,23 +777,20 @@ useHead({
             </div>
 
             <!-- Language -->
-            <div>
+            <div class="form-group">
               <label
-                class="block text-lg font-bold text-red-900 mb-3 font-cinzel"
+                class="block text-base font-bold text-[#8b1538] mb-3 font-cinzel"
               >
                 {{ t('form.language.label') }}
-                <span class="text-red-500 ml-1">*</span>
+                <span class="text-[#b91c4a] ml-1">*</span>
               </label>
-              <div class="space-y-2">
+              <div class="grid grid-cols-2 gap-3">
                 <label
                   v-for="option in languageOptions"
                   :key="option.value"
-                  class="flex items-center p-2 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+                  class="radio-festive flex items-center justify-center gap-2 py-3 cursor-pointer"
                   :class="{
-                    'border-red-600 bg-red-50':
-                      formData.language === option.value,
-                    'border-gray-300':
-                      formData.language !== option.value,
+                    selected: formData.language === option.value,
                   }"
                 >
                   <input
@@ -746,10 +798,10 @@ useHead({
                     v-model="formData.language"
                     :value="option.value"
                     :disabled="isLoading"
-                    class="w-4 h-4 text-red-600 focus:ring-red-500"
+                    class="sr-only"
                   />
                   <span
-                    class="ml-2 text-base text-red-900 font-medium font-cinzel"
+                    class="text-sm text-[#8b1538] font-bold font-cinzel"
                     >{{ option.label }}</span
                   >
                 </label>
@@ -757,54 +809,67 @@ useHead({
             </div>
 
             <!-- Number of Lines Slider -->
-            <div>
+            <div class="form-group">
               <label
-                class="block text-lg font-bold text-red-900 mb-2 font-cinzel"
+                class="block text-base font-bold text-[#8b1538] mb-3 font-cinzel"
               >
-                {{ t('form.lines.label') }}: {{ formData.lines }}
+                {{ t('form.lines.label') }}:
+                <span class="text-[#d4a853]">{{
+                  formData.lines
+                }}</span>
               </label>
-              <input
-                v-model.number="formData.lines"
-                type="range"
-                :min="sliderMin"
-                :max="sliderMax"
-                :step="sliderStep"
-                class="w-full h-2 bg-red-200 rounded-lg appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                :disabled="isLoading"
-              />
-              <div
-                class="flex justify-between text-xs font-bold text-red-800 mt-1 font-cinzel"
-              >
-                <span>{{ sliderMin }} {{ t('form.lines.min') }}</span>
-                <span>{{ sliderMax }} {{ t('form.lines.max') }}</span>
+              <div class="relative pt-1">
+                <input
+                  v-model.number="formData.lines"
+                  type="range"
+                  :min="sliderMin"
+                  :max="sliderMax"
+                  :step="sliderStep"
+                  class="slider-festive w-full"
+                  :disabled="isLoading"
+                />
+                <div
+                  class="flex justify-between text-xs font-bold text-[#5c0f26] mt-2 font-cinzel"
+                >
+                  <span
+                    >{{ sliderMin }} {{ t('form.lines.min') }}</span
+                  >
+                  <span
+                    >{{ sliderMax }} {{ t('form.lines.max') }}</span
+                  >
+                </div>
               </div>
               <p
                 v-if="isLimerick"
-                class="text-xs text-red-800 italic mt-2 font-cinzel"
+                class="text-xs text-[#5c0f26] italic mt-2 font-cinzel"
               >
                 {{ t('form.lines.limerickNote') }}
               </p>
             </div>
 
-            <!-- Unlimited Access Unlocked -->
+            <!-- Unlimited Access Badge -->
             <div
               v-if="isPaid"
-              class="bg-green-50 border-2 border-green-500 rounded-lg p-3 text-center shadow-sm"
+              class="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-400 rounded-xl p-4 text-center shadow-md"
             >
               <div class="flex items-center justify-center gap-2">
-                <svg
-                  class="w-5 h-5 text-green-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+                <div
+                  class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center"
                 >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
+                  <svg
+                    class="w-5 h-5 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                </div>
                 <p
                   class="text-sm font-bold text-green-800 font-cinzel"
                 >
@@ -816,9 +881,9 @@ useHead({
             <!-- Remaining Poems Info -->
             <div
               v-else
-              class="bg-[#fff3c9] border-2 border-[#F4CD60] rounded-lg p-3 text-center shadow-sm"
+              class="bg-gradient-to-r from-[#fff8e7] to-[#f5e6c8] border-2 border-[#d4a853] rounded-xl p-4 text-center shadow-md"
             >
-              <p class="text-sm font-bold text-red-900 font-cinzel">
+              <p class="text-sm font-bold text-[#8b1538] font-cinzel">
                 {{
                   t('payment.remainingPoems', {
                     count: remainingFreePoems,
@@ -828,47 +893,77 @@ useHead({
             </div>
 
             <!-- Submit Button -->
-            <UButton
+            <button
               type="submit"
-              size="xl"
-              block
               :disabled="!isFormValid || isLoading"
-              :loading="isLoading"
-              class="bg-red-600 hover:bg-red-700"
+              class="btn-festive w-full py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {{
-                isLoading
-                  ? t('form.submit.generating')
-                  : t('form.submit.generate')
-              }}
-            </UButton>
+              <span
+                v-if="isLoading"
+                class="flex items-center justify-center gap-3"
+              >
+                <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                    fill="none"
+                  />
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  />
+                </svg>
+                {{ t('form.submit.generating') }}
+              </span>
+              <span
+                v-else
+                class="flex items-center justify-center gap-2"
+              >
+                <span>✨</span>
+                {{ t('form.submit.generate') }}
+                <span>✨</span>
+              </span>
+            </button>
           </form>
         </section>
 
         <!-- Poem Display Section -->
         <section
           ref="poemSectionRef"
-          class="bg-[#fffdf0] rounded-2xl shadow-2xl p-6 md:p-8 sint-border relative min-h-[600px] flex flex-col"
+          class="sint-card p-6 md:p-8 relative min-h-[600px] flex flex-col"
         >
+          <!-- Decorative ribbon -->
+          <div class="ribbon-decoration ribbon-corner-tl"></div>
+          <div class="ribbon-decoration ribbon-corner-br"></div>
+
+          <!-- Floating quill icon -->
           <div
-            class="absolute -top-5 -left-5 text-6xl -rotate-12 drop-shadow-lg filter"
+            class="absolute -top-6 -left-4 text-5xl -rotate-12 drop-shadow-lg filter animate-float"
           >
             🪶
           </div>
 
-          <div class="mb-6 border-b-2 border-red-100 pb-4">
+          <div class="mb-6 border-b-2 border-[#d4a853]/30 pb-4">
             <h2
-              class="text-3xl font-bold text-red-900 font-cinzel w-full mb-3"
+              class="text-2xl md:text-3xl font-bold text-[#8b1538] font-cinzel w-full mb-4 flex items-center gap-3"
             >
+              <span class="text-2xl">📖</span>
               {{ poemTitle }}
             </h2>
+
+            <!-- Share buttons -->
             <div v-if="poem" class="flex gap-2 flex-wrap w-full">
               <UButton
                 icon="i-heroicons-clipboard-document"
                 size="md"
                 :color="copySuccess ? 'success' : 'primary'"
                 variant="outline"
-                class="border-red-300 hover:bg-red-50 text-red-700 cursor-pointer"
+                class="border-2 border-[#d4a853] hover:bg-[#f4cd60]/20 text-[#8b1538] cursor-pointer rounded-lg font-cinzel"
                 @click="copyToClipboard"
                 data-umami-event="Copy to clipboard"
               >
@@ -878,7 +973,7 @@ useHead({
                 size="md"
                 color="primary"
                 variant="outline"
-                class="border-red-300 hover:bg-red-50 text-red-700 cursor-pointer"
+                class="border-2 border-[#d4a853] hover:bg-[#f4cd60]/20 text-[#8b1538] cursor-pointer rounded-lg font-cinzel"
                 @click="shareViaWhatsApp"
               >
                 <template #leading>
@@ -899,7 +994,7 @@ useHead({
                 size="md"
                 color="primary"
                 variant="outline"
-                class="border-red-300 hover:bg-red-50 text-red-700 cursor-pointer"
+                class="border-2 border-[#d4a853] hover:bg-[#f4cd60]/20 text-[#8b1538] cursor-pointer rounded-lg font-cinzel"
                 @click="shareViaEmail"
               >
                 {{ t('poem.shareEmail') }}
@@ -910,19 +1005,9 @@ useHead({
           <!-- Loading State -->
           <div
             v-if="isLoading"
-            class="prose prose-lg max-w-none flex-grow flex items-center justify-center"
+            class="flex-grow flex items-center justify-center"
           >
-            <div class="text-center">
-              <div class="animate-bounce text-6xl mb-4">✍️</div>
-              <p
-                class="text-xl font-cinzel text-red-800 animate-pulse"
-              >
-                {{ t('poem.loading') }}
-              </p>
-              <p class="text-sm text-red-600 mt-2 font-handwriting">
-                De rijmpiet is aan het denken...
-              </p>
-            </div>
+            <PoemWritingAnimation />
           </div>
 
           <!-- Rate Limit Error State -->
@@ -930,34 +1015,34 @@ useHead({
             v-else-if="isRateLimitError"
             class="flex flex-col items-center justify-center flex-grow text-center py-8"
           >
-            <div class="relative">
+            <div class="relative mb-6">
               <div
-                class="absolute inset-0 bg-yellow-100 rounded-full opacity-50 blur-xl animate-pulse"
+                class="absolute inset-0 bg-[#f4cd60]/40 rounded-full blur-3xl animate-pulse"
               ></div>
               <img
                 src="/sint.png"
                 alt="Sinterklaas"
-                class="w-40 h-40 object-contain mb-6 relative z-10 drop-shadow-xl"
+                class="w-44 h-44 object-contain relative z-10 drop-shadow-2xl"
               />
             </div>
-
             <h3
-              class="text-2xl font-bold text-red-900 mb-2 font-cinzel"
+              class="text-2xl font-bold text-[#8b1538] mb-3 font-cinzel"
             >
               {{ t('payment.limitReached') }}
             </h3>
             <p class="text-gray-700 mb-8 max-w-md font-medium">
               {{ t('payment.description') }}
             </p>
-            <UButton
-              size="xl"
-              class="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-400 hover:to-yellow-500 text-red-900 border-2 border-red-900 shadow-lg transform hover:scale-105 transition-all"
+            <button
+              class="btn-festive px-8 py-4 text-lg animate-glow"
               @click="showPaymentModal = true"
             >
-              <span class="font-bold font-cinzel">{{
-                t('payment.unlimitedAccess')
-              }}</span>
-            </UButton>
+              <span class="flex items-center gap-2">
+                <span>🎁</span>
+                {{ t('payment.unlimitedAccess') }}
+                <span>🎁</span>
+              </span>
+            </button>
           </div>
 
           <!-- Error State -->
@@ -971,37 +1056,37 @@ useHead({
               :title="t('poem.error')"
               :description="error"
               icon="i-heroicons-exclamation-triangle"
-              class="border-2 border-red-200 bg-red-50"
+              class="border-2 border-red-300 bg-red-50/80 rounded-xl"
             />
           </div>
 
           <!-- Poem Display -->
-          <div
-            v-else-if="poem"
-            class="prose prose-lg max-w-none relative flex-grow noselect"
-          >
-            <div
-              class="poem-parchment transform rotate-1 transition-transform hover:rotate-0 duration-500"
-            >
-              <pre class="poem-text has-dropcap relative z-10">{{
-                poem
-              }}</pre>
-            </div>
+          <div v-else-if="poem" class="flex-grow noselect">
+            <PaperScroll :poem="poem" />
           </div>
 
           <!-- Empty State -->
           <div
             v-else
-            class="flex flex-col items-center justify-center flex-grow text-red-300/50"
+            class="flex flex-col items-center justify-center flex-grow"
           >
-            <div class="text-9xl opacity-30 mb-4">🎁</div>
+            <div class="relative">
+              <div
+                class="absolute inset-0 bg-[#d4a853]/10 rounded-full blur-3xl"
+              ></div>
+              <div
+                class="text-9xl opacity-30 mb-6 relative animate-float"
+              >
+                🎁
+              </div>
+            </div>
             <p
-              class="text-2xl font-cinzel text-red-300 opacity-60 text-center"
+              class="text-2xl font-cinzel text-[#8b1538]/40 text-center"
             >
               {{ t('poem.empty') }}
             </p>
             <p
-              class="text-sm font-handwriting text-red-300 opacity-60 mt-2"
+              class="text-sm font-handwriting text-[#8b1538]/30 mt-3"
             >
               Vul het formulier in voor een gedicht
             </p>
@@ -1013,46 +1098,49 @@ useHead({
     <TestimonialsSection />
 
     <!-- Sinterklaas Video Message -->
-    <section class="container mx-auto px-6 py-12">
+    <section class="container mx-auto px-6 py-12 relative z-10">
       <SinterklaasVideo />
     </section>
 
-    <!-- Testimonials Section -->
-
     <!-- FAQ Section -->
-    <section class="container mx-auto px-6 py-12">
-      <div
-        class="bg-[#fffdf0] rounded-2xl shadow-xl p-6 md:p-8 max-w-4xl mx-auto sint-border relative"
-      >
+    <section class="container mx-auto px-6 py-12 relative z-10">
+      <div class="sint-card p-6 md:p-8 max-w-4xl mx-auto relative">
+        <!-- Decorative ribbon -->
+        <div class="ribbon-decoration ribbon-corner-tl"></div>
+        <div class="ribbon-decoration ribbon-corner-br"></div>
+
         <h2
-          class="text-3xl font-bold text-red-900 mb-8 text-center font-cinzel border-b-2 border-red-100 pb-4"
+          class="text-2xl md:text-3xl font-bold text-[#8b1538] mb-8 text-center font-cinzel border-b-2 border-[#d4a853]/30 pb-4 flex items-center justify-center gap-3"
         >
+          <span>❓</span>
           {{ t('faq.title') }}
+          <span>❓</span>
         </h2>
+
         <div class="space-y-4">
           <details
             v-for="(faq, index) in t('faq.questions')"
             :key="index"
-            class="group border-2 border-red-100 rounded-xl overflow-hidden bg-white"
+            class="group border-2 border-[#d4c5a0] rounded-xl overflow-hidden bg-white/80 hover:border-[#d4a853] transition-colors"
           >
             <summary
-              class="flex justify-between items-center cursor-pointer px-6 py-4 hover:bg-red-50 transition-colors"
+              class="flex justify-between items-center cursor-pointer px-6 py-4 hover:bg-[#f4cd60]/10 transition-colors"
             >
               <h3
-                class="text-lg font-bold text-red-900 pr-4 font-cinzel"
+                class="text-base font-bold text-[#8b1538] pr-4 font-cinzel"
               >
                 {{ faq.question }}
               </h3>
               <span
-                class="w-8 h-8 flex items-center justify-center bg-red-100 rounded-full text-red-600 group-open:rotate-180 transition-transform"
+                class="w-8 h-8 flex items-center justify-center bg-[#8b1538] rounded-full text-[#f4cd60] group-open:rotate-180 transition-transform text-sm font-bold"
               >
                 ▼
               </span>
             </summary>
             <div
-              class="px-6 py-4 bg-red-50/30 border-t-2 border-red-100"
+              class="px-6 py-4 bg-gradient-to-r from-[#f4cd60]/5 to-transparent border-t-2 border-[#d4c5a0]"
             >
-              <p class="text-gray-800 leading-relaxed font-medium">
+              <p class="text-gray-700 leading-relaxed">
                 {{ faq.answer }}
               </p>
             </div>
@@ -1062,36 +1150,51 @@ useHead({
     </section>
 
     <!-- Footer -->
-    <footer
-      class="bg-red-900 mt-12 border-t-4 border-[#F4CD60] relative"
-    >
+    <footer class="festive-footer mt-12 relative z-10">
+      <!-- Decorative top medallion -->
       <div
-        class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-900 border-4 border-[#F4CD60] rounded-full p-3"
-      >
-        <div class="text-2xl">🎁</div>
-      </div>
-      <div
-        class="container mx-auto px-6 py-12 text-center text-[#F4CD60]"
+        class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
       >
         <div
-          class="flex justify-center gap-8 mb-6 text-3xl opacity-80"
+          class="w-16 h-16 bg-gradient-to-br from-[#8b1538] to-[#5c0f26] border-4 border-[#d4a853] rounded-full flex items-center justify-center shadow-xl"
         >
-          <span>🌙</span>
-          <span>🐴</span>
-          <span>🥕</span>
+          <span class="text-2xl">🎁</span>
         </div>
-        <div class="mb-6">
+      </div>
+
+      <div
+        class="container mx-auto px-6 py-16 text-center text-[#f4cd60]"
+      >
+        <!-- Decorative icons -->
+        <div
+          class="flex justify-center gap-10 mb-8 text-4xl opacity-80"
+        >
+          <span class="animate-float" style="animation-delay: 0s"
+            >🌙</span
+          >
+          <span class="animate-float" style="animation-delay: 0.3s"
+            >🐴</span
+          >
+          <span class="animate-float" style="animation-delay: 0.6s"
+            >🥕</span
+          >
+        </div>
+
+        <!-- Contact button -->
+        <div class="mb-8">
           <UButton
             as="a"
             href="mailto:patrick@sintgpt.com"
             size="lg"
             variant="outline"
-            class="border-[#F4CD60] text-[#F4CD60] hover:bg-[#F4CD60] hover:text-red-900 transition-all"
+            class="border-2 border-[#d4a853] text-[#f4cd60] hover:bg-[#d4a853] hover:text-[#5c0f26] transition-all rounded-xl font-cinzel"
             icon="i-heroicons-envelope"
           >
             {{ t('footer.contact') }}
           </UButton>
         </div>
+
+        <!-- Copyright -->
         <p class="font-cinzel font-bold text-lg">
           {{
             t('footer.copyright').replace(
@@ -1100,6 +1203,19 @@ useHead({
             )
           }}
         </p>
+
+        <!-- Decorative bottom flourish -->
+        <div
+          class="flex justify-center items-center gap-4 mt-6 text-[#d4a853]/60"
+        >
+          <div
+            class="w-20 h-0.5 bg-gradient-to-r from-transparent to-[#d4a853]/40"
+          ></div>
+          <span class="text-xl">✦</span>
+          <div
+            class="w-20 h-0.5 bg-gradient-to-l from-transparent to-[#d4a853]/40"
+          ></div>
+        </div>
       </div>
     </footer>
 
@@ -1111,8 +1227,6 @@ useHead({
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@400;700;900&family=IM+Fell+DW+Pica+SC&family=IM+Fell+DW+Pica:ital@0;1&display=swap');
-
 .font-cinzel {
   font-family: 'Cinzel', serif;
 }
@@ -1121,77 +1235,67 @@ useHead({
   font-family: 'IM Fell DW Pica', serif;
 }
 
-.bg-sinterklaas-pattern {
-  background-color: #7f1d1d;
-  background-image:
-    radial-gradient(#f4cd60 1px, transparent 1px),
-    radial-gradient(#f4cd60 1px, transparent 1px);
-  background-size: 50px 50px;
-  background-position:
-    0 0,
-    25px 25px;
-  background-attachment: fixed;
+.text-gold-gradient {
+  background: linear-gradient(
+    135deg,
+    #f4cd60 0%,
+    #d4a853 50%,
+    #f4cd60 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  display: inline-block;
+  line-height: 1.4;
 }
 
-.sint-border {
-  border: 4px solid #7f1d1d;
-  outline: 2px solid #f4cd60;
-  outline-offset: -8px;
-}
-
-input[type='range']::-webkit-slider-thumb {
+/* Slider styling */
+.slider-festive {
+  -webkit-appearance: none;
   appearance: none;
-  width: 24px;
-  height: 24px;
-  background: #dc2626;
-  cursor: pointer;
-  border-radius: 50%;
-  border: 2px solid #fff;
-  box-shadow: 0 0 0 2px #dc2626;
-}
-
-input[type='range']::-moz-range-thumb {
-  width: 24px;
-  height: 24px;
-  background: #dc2626;
-  cursor: pointer;
-  border-radius: 50%;
-  border: 2px solid #fff;
-  box-shadow: 0 0 0 2px #dc2626;
-}
-
-.poem-parchment {
-  background-color: #fff3c9;
-  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.15'/%3E%3C/svg%3E");
-  padding: 2.5rem;
-  border-radius: 0.5rem;
-  box-shadow:
-    0 4px 6px rgba(0, 0, 0, 0.1),
-    inset 0 0 40px rgba(139, 69, 19, 0.1);
-  border: 1px solid #e6d5a9;
-  position: relative;
-}
-
-.poem-parchment::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border: 2px dashed #d4c5a0;
-  margin: 8px;
-  pointer-events: none;
+  height: 8px;
+  background: linear-gradient(90deg, #d4c5a0, #d4a853);
   border-radius: 4px;
+  outline: none;
 }
 
+.slider-festive::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, #8b1538 0%, #b91c4a 100%);
+  cursor: pointer;
+  border-radius: 50%;
+  border: 3px solid #f4cd60;
+  box-shadow: 0 4px 10px rgba(139, 21, 56, 0.4);
+  transition: transform 0.2s ease;
+}
+
+.slider-festive::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+}
+
+.slider-festive::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, #8b1538 0%, #b91c4a 100%);
+  cursor: pointer;
+  border-radius: 50%;
+  border: 3px solid #f4cd60;
+  box-shadow: 0 4px 10px rgba(139, 21, 56, 0.4);
+}
+
+/* Poem text styling */
 .poem-text {
   font-family: 'IM Fell DW Pica', serif;
   white-space: pre-wrap;
-  color: #2d1810;
-  line-height: 1.8;
+  color: #3d2914;
+  line-height: 1.9;
   margin: 0;
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
@@ -1201,13 +1305,22 @@ input[type='range']::-moz-range-thumb {
   font-size: 4.5rem;
   line-height: 0.7;
   margin: 0.1em 0.15em 0 0;
-  color: #991b1b;
-  text-shadow: 2px 2px 0px rgba(244, 205, 96, 0.3);
+  color: #8b1538;
+  text-shadow: 2px 2px 0px rgba(212, 168, 83, 0.4);
 }
 
 .noselect {
-  user-select: none; /* Standard */
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* Old IE/Edge */
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Form group animations */
+.form-group {
+  transition: transform 0.2s ease;
+}
+
+.form-group:focus-within {
+  transform: translateX(4px);
 }
 </style>
