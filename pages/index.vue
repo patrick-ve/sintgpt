@@ -23,6 +23,8 @@ onMounted(async () => {
   const payment = route.query.payment as string;
   if (payment === 'success') {
     paymentStatus.value = 'success';
+    // Track payment success
+    (window as any).umami?.track('Payment succeeded');
     // Set the unlimited access cookie
     try {
       await $fetch('/api/payment/set-access-cookie', {
