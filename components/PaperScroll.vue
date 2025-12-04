@@ -234,12 +234,12 @@ defineProps<{
   pointer-events: none;
 }
 
-/* Deckled edges */
+/* Deckled edges - simple gradient approach for iOS compatibility */
 .deckled-edge {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 8px;
+  width: 12px;
   pointer-events: none;
 }
 
@@ -247,22 +247,20 @@ defineProps<{
   left: 0;
   background: linear-gradient(
     90deg,
-    rgba(61, 41, 20, 0.08) 0%,
+    rgba(61, 41, 20, 0.1) 0%,
+    rgba(61, 41, 20, 0.05) 40%,
     transparent 100%
   );
-  mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 8 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8 0 Q4 2 6 5 Q2 8 5 12 Q1 15 4 18 Q0 22 3 25 Q1 28 4 32 Q2 35 5 38 Q0 42 3 45 Q2 48 5 52 Q1 55 4 58 Q0 62 3 65 Q2 68 5 72 Q1 75 4 78 Q0 82 3 85 Q2 88 5 92 Q1 95 4 98 L8 100 L8 0 Z' fill='white'/%3E%3C/svg%3E");
-  mask-size: 8px 100%;
 }
 
 .deckled-edge.right-edge {
   right: 0;
   background: linear-gradient(
     270deg,
-    rgba(61, 41, 20, 0.08) 0%,
+    rgba(61, 41, 20, 0.1) 0%,
+    rgba(61, 41, 20, 0.05) 40%,
     transparent 100%
   );
-  mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 8 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0 Q4 2 2 5 Q6 8 3 12 Q7 15 4 18 Q8 22 5 25 Q7 28 4 32 Q6 35 3 38 Q8 42 5 45 Q6 48 3 52 Q7 55 4 58 Q8 62 5 65 Q6 68 3 72 Q7 75 4 78 Q8 82 5 85 Q6 88 3 92 Q7 95 4 98 L0 100 L0 0 Z' fill='white'/%3E%3C/svg%3E");
-  mask-size: 8px 100%;
 }
 
 /* Wax seal */
