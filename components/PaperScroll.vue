@@ -147,6 +147,16 @@ defineProps<{
   right: -8px;
 }
 
+/* iOS flickering fix - force GPU acceleration */
+.roll-wood-cap,
+.scroll-roll {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
 .roll-wood-cap::before {
   content: '';
   position: absolute;
