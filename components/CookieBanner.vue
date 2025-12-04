@@ -38,14 +38,12 @@
             <button
               @click="declineCookies"
               class="cookie-btn-secondary"
-              data-umami-event="Decline cookies"
             >
               {{ t('cookie.decline') }}
             </button>
             <button
               @click="acceptCookies"
               class="cookie-btn-primary"
-              data-umami-event="Accept cookies"
             >
               {{ t('cookie.accept') }}
             </button>
