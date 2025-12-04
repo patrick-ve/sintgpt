@@ -115,7 +115,7 @@ export default {
       {
         question: 'Is SintGPT free?',
         answer:
-          'Yes! You can generate 1 Sinterklaas poem for free. After that, you can upgrade to unlimited access for just €1, allowing you to create as many poems as you want for the entire Sinterklaas celebration.',
+          'Yes! You can generate 1 Sinterklaas poem for free. After that, you can upgrade to unlimited access for just €1,99 (incl. VAT), allowing you to create as many poems as you want for the entire Sinterklaas celebration.',
       },
       {
         question: 'What poem styles are available?',
@@ -153,7 +153,7 @@ export default {
     title: 'Upgrade to unlimited access',
     description: 'You have used your free poem',
     limitReached:
-      "You've used your free poem. Upgrade to unlimited access for just €1!",
+      "You've used your free poem. Upgrade to unlimited access for just €1,99 (incl. VAT)!",
     oneTimePayment: 'One-time payment',
     includesVAT: 'incl. VAT',
     whatYouGet: 'What you get:',
@@ -167,7 +167,7 @@ export default {
     emailPlaceholder: 'your@email.com',
     emailHelp: 'We will send your invoice to this email address',
     proceedToPayment: 'Proceed to payment',
-    payNow: 'Pay €1 for unlimited access',
+    payNow: 'Pay €1,99 (incl. VAT) for unlimited access',
     processing: 'Processing...',
     securePayment: 'Secure payment via Dodo Payments',
     poweredByStripe: 'Powered by Stripe',
@@ -191,7 +191,7 @@ export default {
     cancelledMessage:
       'Your payment was cancelled. You can try again anytime.',
     remainingPoems: '{count} free poem remaining | {count} free poems remaining',
-    unlimitedAccess: 'Unlimited access for just €1',
+    unlimitedAccess: 'Unlimited access for just €1,99 (incl. VAT)',
     unlimitedUnlocked: 'Unlimited poems unlocked!',
   },
   testimonials: {

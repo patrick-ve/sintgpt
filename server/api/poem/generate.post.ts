@@ -179,7 +179,7 @@ export default defineEventHandler(async (event) => {
 
         throw createError({
           statusCode: 429,
-          statusMessage: `You have reached the maximum of ${RATE_LIMIT_MAX_REQUESTS} free poems per 24 hours. Upgrade to unlimited access for just €1!`,
+          statusMessage: `You have reached the maximum of ${RATE_LIMIT_MAX_REQUESTS} free poems per 24 hours. Upgrade to unlimited access for just €1,99 (incl. VAT)!`,
         });
       } else {
         // Increment counter BEFORE generation starts (fixes race condition)
