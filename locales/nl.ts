@@ -48,6 +48,7 @@ export default {
     rhymeScheme: {
       label: 'Rijmschema',
       aabb: 'AABB (Rijmparen)',
+      abab: 'ABAB (Gekruist)',
       abba: 'ABBA (Omarmend)',
       limerick: 'Limerick',
     },

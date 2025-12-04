@@ -48,6 +48,7 @@ export default {
     rhymeScheme: {
       label: 'Rhyme scheme',
       aabb: 'AABB (Couplets)',
+      abab: 'ABAB (Alternate)',
       abba: 'ABBA (Enclosed)',
       limerick: 'Limerick',
     },

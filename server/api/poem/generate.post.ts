@@ -25,7 +25,7 @@ const PoemRequestSchema = z.object({
   writtenBy: z.string().optional(),
   writtenForAudience: z.string().optional(),
   style: z.enum(['funny', 'classic', 'ironic', 'old-fashioned']),
-  rhymeScheme: z.enum(['AABB', 'ABBA', 'Limerick']),
+  rhymeScheme: z.enum(['AABB', 'ABAB', 'ABBA', 'Limerick']),
   lines: z.number().int().min(8).max(40),
   language: z.enum(['dutch', 'english']),
 });
@@ -48,6 +48,7 @@ function buildPrompt(
 
   const rhymeSchemeDescriptions = {
     AABB: 'AABB rijmschema (rijmparen: eerste regel rijmt met tweede, derde met vierde, etc.)',
+    ABAB: 'ABAB rijmschema (gekruist rijm: eerste en derde regel rijmen, tweede en vierde regel rijmen)',
     ABBA: 'ABBA rijmschema (omarmend rijm: eerste en vierde regel rijmen, tweede en derde regel rijmen)',
     Limerick:
       'Limerick formaat (AABBA rijmschema met een lekkere cadans)',

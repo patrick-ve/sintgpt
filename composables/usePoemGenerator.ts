@@ -4,7 +4,7 @@ interface PoemRequest {
   writtenBy?: string;
   writtenForAudience?: string;
   style: 'funny' | 'classic' | 'ironic' | 'old-fashioned';
-  rhymeScheme: 'AABB' | 'ABBA' | 'Limerick';
+  rhymeScheme: 'AABB' | 'ABAB' | 'ABBA' | 'Limerick';
   lines: number;
   linkedinUrl?: string;
   jobTitle?: string;

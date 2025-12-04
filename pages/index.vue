@@ -69,7 +69,7 @@ const formData = ref({
   writtenBy: '',
   writtenForAudience: '',
   style: 'funny' as 'funny' | 'classic' | 'ironic' | 'old-fashioned',
-  rhymeScheme: 'AABB' as 'AABB' | 'ABBA' | 'Limerick',
+  rhymeScheme: 'AABB' as 'AABB' | 'ABAB' | 'ABBA' | 'Limerick',
   lines: 12,
   language: getDefaultLanguage(),
 });
@@ -83,6 +83,7 @@ const styleOptions = computed(() => [
 
 const rhymeSchemeOptions = computed(() => [
   { value: 'AABB', label: t('form.rhymeScheme.aabb') },
+  { value: 'ABAB', label: t('form.rhymeScheme.abab') },
   { value: 'ABBA', label: t('form.rhymeScheme.abba') },
   { value: 'Limerick', label: t('form.rhymeScheme.limerick') },
 ]);
