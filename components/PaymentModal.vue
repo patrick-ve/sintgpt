@@ -122,7 +122,7 @@ const closeModal = () => {
           <div class="bg-gradient-to-br from-red-50 to-yellow-50 rounded-lg p-6 border border-red-200">
             <div class="text-center">
               <div class="text-4xl font-bold text-red-900 mb-2">
-                €1
+                €1,99
               </div>
               <div class="text-sm text-gray-700 mb-4">
                 {{ t('payment.unlimitedAccess') }}
