@@ -153,6 +153,12 @@ export default {
         answer:
           'No, SintGPT does not store any personal data, prompts, or generated poems. All information you enter is only used to generate the poem and is immediately deleted afterwards. Your privacy is fully protected.',
       },
+      {
+        question:
+          'I need help, something went wrong while creating a poem',
+        answer:
+          'Sorry to hear that! Send an email to patrick@sintgpt.com and we will help you as soon as possible.',
+      },
     ],
   },
   payment: {

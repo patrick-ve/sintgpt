@@ -156,6 +156,12 @@ export default {
         answer:
           'Nee, SintGPT slaat geen persoonlijke gegevens, prompts of gegenereerde gedichten op. Alle informatie die je invoert wordt alleen gebruikt om het gedicht te genereren en wordt daarna direct verwijderd. Je privacy is volledig gewaarborgd.',
       },
+      {
+        question:
+          'Ik heb hulp nodig, want er is iets misgegaan met het maken van een gedicht',
+        answer:
+          'Vervelend om te horen! Stuur een e-mail naar patrick@sintgpt.com en we helpen je zo snel mogelijk verder.',
+      },
     ],
   },
   payment: {
