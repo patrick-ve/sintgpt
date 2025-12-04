@@ -5,7 +5,7 @@ import { useTimestamp } from '@vueuse/core';
 const START_DATE = new Date('2025-11-18T00:00:00').getTime();
 const END_DATE = new Date('2025-12-05T18:00:00').getTime(); // Pakjesavond peak
 const START_COUNT = 5819;
-const END_COUNT = 61944;
+const END_COUNT = 24619;
 
 const timestamp = useTimestamp({ interval: 1000 });
 
