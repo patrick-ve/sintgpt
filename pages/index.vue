@@ -121,6 +121,16 @@ const copySuccess = ref(false);
 const showPaymentModal = ref(false);
 const poemSectionRef = ref<HTMLElement | null>(null);
 
+const scrollToForm = () => {
+  const el = document.getElementById('poem-form');
+  el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
+const scrollToFaq = () => {
+  const el = document.getElementById('faq-section');
+  el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
 const handleSubmit = async () => {
   // Check if user can generate a poem (skip in development)
   if (!import.meta.dev && !canGeneratePoem.value) {
@@ -355,26 +365,46 @@ useHead({
       </div>
 
       <div
-        class="container mx-auto px-6 pt-10 pb-14 md:py-10 relative z-10"
+        class="container mx-auto px-6 pt-6 pb-14 md:pt-10 md:pb-10 relative z-10"
       >
         <div
-          class="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-6 md:gap-8"
+          class="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-4 md:gap-8"
         >
-          <!-- Left: Logo and Title -->
-          <div class="flex-shrink-0 flex items-center gap-5">
+          <!-- Mobile: Title and Language Switcher in one row -->
+          <div class="flex md:hidden items-center justify-between w-full gap-4">
+            <h1
+              class="text-2xl font-bold font-cinzel text-gold-gradient drop-shadow-lg tracking-wide leading-none"
+            >
+              {{ t('header.title') }}
+            </h1>
+            <USelect
+              v-model="selectedLocale"
+              :items="uiLanguageItems"
+              class="w-40 flex-shrink-0"
+              size="sm"
+              :ui="{
+                base: 'bg-[#5c0f26] border-[#d4a853] border-2 text-[#f4cd60] font-bold rounded-lg shadow-lg',
+                value: 'text-[#f4cd60]',
+                trailingIcon: 'text-[#f4cd60]',
+              }"
+            />
+          </div>
+
+          <!-- Desktop: Logo and Title -->
+          <div class="hidden md:flex flex-shrink-0 items-center gap-5">
             <div
-              class="hidden md:flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-[#f4cd60] to-[#d4a853] shadow-lg animate-float"
+              class="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-[#f4cd60] to-[#d4a853] shadow-lg animate-float"
             >
               <span class="text-4xl">🎁</span>
             </div>
             <div class="overflow-visible">
               <h1
-                class="text-4xl md:text-5xl font-bold font-cinzel text-gold-gradient drop-shadow-lg tracking-wide"
+                class="text-5xl font-bold font-cinzel text-gold-gradient drop-shadow-lg tracking-wide"
               >
                 {{ t('header.title') }}
               </h1>
               <div
-                class="hidden md:flex items-center gap-2 mt-1 text-[#f4cd60]/80"
+                class="flex items-center gap-2 mt-1 text-[#f4cd60]/80"
               >
                 <span class="text-sm">*</span>
                 <span class="text-sm">+</span>
@@ -397,16 +427,16 @@ useHead({
             />
           </div>
 
-          <!-- Right: Subtitles and Language Switcher -->
-          <div class="flex flex-col md:items-end gap-4">
-            <div class="flex flex-col md:text-right text-[#f4cd60]">
+          <!-- Right: Subtitles and Language Switcher (Desktop only) -->
+          <div class="hidden md:flex flex-col items-end gap-4">
+            <div class="flex flex-col text-right text-[#f4cd60]">
               <p
-                class="font-semibold text-sm md:text-base font-cinzel"
+                class="font-semibold text-base font-cinzel"
               >
                 {{ t('header.subtitle1') }}
               </p>
               <p
-                class="font-semibold text-sm md:text-base font-cinzel opacity-80"
+                class="font-semibold text-base font-cinzel opacity-80"
               >
                 {{ t('header.subtitle2') }}
               </p>
@@ -549,9 +579,87 @@ useHead({
       </div>
     </div>
 
+    <!-- Hero Section -->
+    <section class="relative z-10 overflow-hidden">
+      <!-- Decorative background layer -->
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#8b1538]/20 to-transparent pointer-events-none"></div>
+
+      <!-- Floating decorative elements -->
+      <div class="absolute top-8 left-[10%] text-4xl opacity-20 animate-float" style="animation-delay: 0s;">🎁</div>
+      <div class="absolute top-16 right-[15%] text-3xl opacity-15 animate-float" style="animation-delay: 1s;">✨</div>
+      <div class="absolute bottom-12 left-[20%] text-2xl opacity-10 animate-float" style="animation-delay: 0.5s;">📜</div>
+      <div class="absolute bottom-8 right-[10%] text-3xl opacity-15 animate-float" style="animation-delay: 1.5s;">🪶</div>
+
+      <div class="container mx-auto px-4 md:px-6 py-12 md:py-20">
+        <div class="max-w-6xl mx-auto text-center">
+          <!-- Main headline with ornate styling -->
+          <div class="relative inline-block mb-8">
+            <!-- Decorative corner flourishes -->
+            <div class="absolute -top-4 -left-6 md:-left-10 text-[#d4a853] text-2xl md:text-3xl opacity-60">❧</div>
+            <div class="absolute -top-4 -right-6 md:-right-10 text-[#d4a853] text-2xl md:text-3xl opacity-60 scale-x-[-1]">❧</div>
+
+            <h2 class="text-xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[3.5rem] leading-snug md:leading-tight font-bold font-cinzel text-white px-2 sm:px-4 md:px-12 lg:px-16 tracking-tight">
+              <span class="block">Wil het rijmen met ChatGPT</span>
+              <span class="block">maar niet lukken?</span>
+              <span class="block mt-3 text-transparent bg-clip-text bg-gradient-to-r from-[#f4cd60] via-[#fff8e7] to-[#f4cd60] drop-shadow-lg">
+                SintGPT schrijft binnen 30 seconden een leuk gedicht!
+              </span>
+            </h2>
+
+            <!-- Decorative bottom flourishes -->
+            <div class="absolute -bottom-4 -left-6 md:-left-10 text-[#d4a853] text-2xl md:text-3xl opacity-60 rotate-180">❧</div>
+            <div class="absolute -bottom-4 -right-6 md:-right-10 text-[#d4a853] text-2xl md:text-3xl opacity-60 rotate-180 scale-x-[-1]">❧</div>
+          </div>
+
+          <!-- Decorative divider -->
+          <div class="flex items-center justify-center gap-4 mb-10">
+            <div class="w-16 md:w-24 h-[2px] bg-gradient-to-r from-transparent via-[#d4a853] to-[#d4a853]"></div>
+            <div class="w-3 h-3 bg-[#d4a853] rotate-45 shadow-[0_0_10px_rgba(212,168,83,0.5)]"></div>
+            <div class="w-16 md:w-24 h-[2px] bg-gradient-to-l from-transparent via-[#d4a853] to-[#d4a853]"></div>
+          </div>
+
+          <!-- CTA Buttons -->
+          <div class="flex flex-row items-center justify-center gap-3 sm:gap-6">
+            <!-- Primary Button - Scroll to form -->
+            <button
+              @click="scrollToForm"
+              data-umami-event="Scroll to poem form"
+              class="group relative px-4 py-2.5 sm:px-8 sm:py-4 bg-gradient-to-r from-[#8b1538] via-[#b91c4a] to-[#8b1538] text-[#f4cd60] font-cinzel font-bold text-sm sm:text-lg rounded-xl border-2 sm:border-3 border-[#d4a853] shadow-[0_4px_20px_rgba(139,21,56,0.5),0_0_30px_rgba(212,168,83,0.2)] hover:shadow-[0_6px_30px_rgba(139,21,56,0.6),0_0_40px_rgba(212,168,83,0.4)] transition-all duration-300 hover:-translate-y-1 overflow-hidden cursor-pointer"
+            >
+              <span class="relative z-10 flex items-center justify-center gap-1 sm:gap-2">
+                <span class="text-base sm:text-xl hidden sm:inline">✨</span>
+                Begin met rijmen
+                <span class="text-base sm:text-xl hidden sm:inline">✨</span>
+              </span>
+              <!-- Shimmer effect -->
+              <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+            </button>
+
+            <!-- Secondary Button - Scroll to FAQ -->
+            <button
+              @click="scrollToFaq"
+              data-umami-event="Scroll to FAQ"
+              class="group px-4 py-2.5 sm:px-8 sm:py-4 bg-transparent text-[#f4cd60] font-cinzel font-bold text-sm sm:text-lg rounded-xl border-2 border-[#d4a853]/60 hover:border-[#d4a853] hover:bg-[#d4a853]/10 transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+            >
+              <span class="flex items-center justify-center gap-1 sm:gap-2">
+                <span class="text-sm sm:text-lg opacity-70 group-hover:opacity-100 transition-opacity hidden sm:inline">❓</span>
+                Meer informatie
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom decorative wave -->
+      <div class="absolute bottom-0 left-0 right-0 h-8 overflow-hidden">
+        <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#8b1538]/50 to-transparent"></div>
+      </div>
+    </section>
+
     <!-- Main Content -->
     <main
-      class="container mx-auto px-4 md:px-6 pb-12 pt-16 md:pt-12 relative z-10"
+      id="poem-form"
+      class="container mx-auto px-4 md:px-6 pb-12 pt-8 md:pt-12 relative z-10"
     >
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
         <!-- Form Section -->
@@ -1103,7 +1211,7 @@ useHead({
     </section>
 
     <!-- FAQ Section -->
-    <section class="container mx-auto px-6 py-12 relative z-10">
+    <section id="faq-section" class="container mx-auto px-6 py-12 relative z-10">
       <div class="sint-card p-6 md:p-8 max-w-4xl mx-auto relative">
         <!-- Decorative ribbon -->
         <div class="ribbon-decoration ribbon-corner-tl"></div>
