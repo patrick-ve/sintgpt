@@ -859,11 +859,11 @@ useHead({
                 {{ t('form.rhymeScheme.label') }}
                 <span class="text-[#b91c4a] ml-1">*</span>
               </label>
-              <div class="grid grid-cols-3 gap-3">
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                 <label
                   v-for="option in rhymeSchemeOptions"
                   :key="option.value"
-                  class="radio-festive flex items-center justify-center py-3 cursor-pointer text-center"
+                  class="radio-festive flex flex-col items-center justify-start py-3 md:py-4 cursor-pointer text-center"
                   :class="{
                     selected: formData.rhymeScheme === option.value,
                   }"
@@ -879,6 +879,48 @@ useHead({
                     class="text-xs text-[#8b1538] font-bold font-cinzel"
                     >{{ option.label }}</span
                   >
+                  <!-- Rhyme scheme example (tablet/desktop only) -->
+                  <div
+                    class="hidden md:flex flex-col items-center mt-2 pt-2 border-t border-[#d4a853]/30 w-full"
+                  >
+                    <div
+                      v-if="option.value === 'AABB'"
+                      class="rhyme-example"
+                    >
+                      <span class="rhyme-line-a">━━━━ A</span>
+                      <span class="rhyme-line-a">━━━━ A</span>
+                      <span class="rhyme-line-b">━━━━ B</span>
+                      <span class="rhyme-line-b">━━━━ B</span>
+                    </div>
+                    <div
+                      v-else-if="option.value === 'ABAB'"
+                      class="rhyme-example"
+                    >
+                      <span class="rhyme-line-a">━━━━ A</span>
+                      <span class="rhyme-line-b">━━━━ B</span>
+                      <span class="rhyme-line-a">━━━━ A</span>
+                      <span class="rhyme-line-b">━━━━ B</span>
+                    </div>
+                    <div
+                      v-else-if="option.value === 'ABBA'"
+                      class="rhyme-example"
+                    >
+                      <span class="rhyme-line-a">━━━━ A</span>
+                      <span class="rhyme-line-b">━━━━ B</span>
+                      <span class="rhyme-line-b">━━━━ B</span>
+                      <span class="rhyme-line-a">━━━━ A</span>
+                    </div>
+                    <div
+                      v-else-if="option.value === 'Limerick'"
+                      class="rhyme-example"
+                    >
+                      <span class="rhyme-line-a">━━━━ A</span>
+                      <span class="rhyme-line-a">━━━━ A</span>
+                      <span class="rhyme-line-b">━━ B</span>
+                      <span class="rhyme-line-b">━━ B</span>
+                      <span class="rhyme-line-a">━━━━ A</span>
+                    </div>
+                  </div>
                 </label>
               </div>
             </div>
@@ -1431,5 +1473,26 @@ useHead({
 
 .form-group:focus-within {
   transform: translateX(4px);
+}
+
+/* Rhyme scheme examples */
+.rhyme-example {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  font-family: 'IM Fell DW Pica', serif;
+  font-size: 0.65rem;
+  line-height: 1.2;
+}
+
+.rhyme-line-a {
+  color: #8b1538;
+  opacity: 0.8;
+}
+
+.rhyme-line-b {
+  color: #d4a853;
+  opacity: 0.9;
 }
 </style>
