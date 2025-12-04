@@ -33,9 +33,9 @@
       </NuxtErrorBoundary>
 
       <NuxtPage />
-      <CookieBanner
-        v-if="Date.now() < new Date('2022-12-01').getTime()"
-      />
+      <ClientOnly>
+        <CookieBanner />
+      </ClientOnly>
     </UApp>
   </div>
 </template>
