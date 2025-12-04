@@ -59,9 +59,9 @@ This is a Sinterklaas Poem Generator built with Nuxt 3 - an AI-powered web appli
 
 **Poem Customization Options**
 - **Styles**: Funny, Classic, Ironic, Old Fashioned
-- **Rhyme Schemes**: AABB (couplets), ABBA (enclosed), Limerick (AABBA)
-- **Lines**: 8-20 lines (configurable via slider)
-- **Languages**: Dutch or English
+- **Rhyme Schemes**: AABB (couplets), ABAB (alternate), ABBA (enclosed), Limerick (AABBA)
+- **Lines**: 8-40 lines for regular schemes, 10-50 for Limerick (configurable via slider)
+- **Languages**: Dutch or English (defaults to Dutch)
 
 ### Coding Conventions (from .cursorrules)
 - Use Composition API with `<script setup>` style
@@ -87,3 +87,18 @@ ENRICH_LAYER_API_KEY=your_enrich_layer_api_key
 - AI API errors are caught and returned with appropriate status codes
 - LinkedIn enrichment failures are logged but don't block poem generation
 - UI displays errors in alert component
+
+### Payment & Analytics
+- Payment flow via Dodo Payments (€1.99 for unlimited access)
+- Umami analytics tracking for key events:
+  - `Generate poem` - when poem is successfully generated
+  - `Payment succeeded` - when user returns from successful payment
+- Payment status tracked via `?payment=success` or `?payment=cancelled` query params
+
+### UI Features
+- Responsive design with mobile-first approach
+- Auto-scroll to poem section on mobile when generating
+- FAQ section with accordion UI (SVG chevron icons)
+- Rhyme scheme visual examples on tablet/desktop
+- Testimonials section with social proof
+- Hero section with video on desktop

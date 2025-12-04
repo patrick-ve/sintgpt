@@ -77,6 +77,7 @@ export default {
     copied: 'Copied!',
     shareWhatsApp: 'Share on WhatsApp',
     shareEmail: 'Send via email',
+    shareFacebook: 'Share on Facebook',
     loading: 'Your personalized poem is being created...',
     error: 'Error',
     empty: 'Fill out the form to generate a poem',

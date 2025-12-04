@@ -77,6 +77,7 @@ export default {
     copied: 'Gekopieerd!',
     shareWhatsApp: 'Deel op WhatsApp',
     shareEmail: 'Verstuur via e-mail',
+    shareFacebook: 'Deel op Facebook',
     loading: 'Jouw gepersonaliseerde gedicht wordt gemaakt...',
     error: 'Fout',
     empty: 'Vul het formulier in om een gedicht te genereren',

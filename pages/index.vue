@@ -198,6 +198,15 @@ const shareViaEmail = () => {
   window.location.href = `mailto:?subject=${subject}&body=${body}`;
 };
 
+const shareViaFacebook = () => {
+  const text = encodeURIComponent(getPoemWithAttribution());
+  (window as any).umami?.track('Shared via Facebook');
+  window.open(
+    `https://www.facebook.com/sharer/sharer.php?quote=${text}`,
+    '_blank'
+  );
+};
+
 const isFormValid = computed(() => {
   return formData.value.name.trim() !== '';
 });
@@ -1111,7 +1120,7 @@ useHead({
             <div v-if="poem" class="flex gap-2 flex-wrap w-full">
               <UButton
                 icon="i-heroicons-clipboard-document"
-                size="md"
+                size="sm"
                 :color="copySuccess ? 'success' : 'primary'"
                 variant="outline"
                 class="border-2 border-[#d4a853] hover:bg-[#f4cd60]/20 text-[#8b1538] cursor-pointer rounded-lg font-cinzel"
@@ -1121,7 +1130,7 @@ useHead({
                 {{ copySuccess ? t('poem.copied') : t('poem.copy') }}
               </UButton>
               <UButton
-                size="md"
+                size="sm"
                 color="primary"
                 variant="outline"
                 class="border-2 border-[#d4a853] hover:bg-[#f4cd60]/20 text-[#8b1538] cursor-pointer rounded-lg font-cinzel"
@@ -1129,7 +1138,7 @@ useHead({
               >
                 <template #leading>
                   <svg
-                    class="w-5 h-5"
+                    class="w-4 h-4"
                     viewBox="0 0 24 24"
                     fill="currentColor"
                   >
@@ -1142,13 +1151,33 @@ useHead({
               </UButton>
               <UButton
                 icon="i-heroicons-envelope"
-                size="md"
+                size="sm"
                 color="primary"
                 variant="outline"
                 class="border-2 border-[#d4a853] hover:bg-[#f4cd60]/20 text-[#8b1538] cursor-pointer rounded-lg font-cinzel"
                 @click="shareViaEmail"
               >
                 {{ t('poem.shareEmail') }}
+              </UButton>
+              <UButton
+                size="sm"
+                color="primary"
+                variant="outline"
+                class="border-2 border-[#d4a853] hover:bg-[#f4cd60]/20 text-[#8b1538] cursor-pointer rounded-lg font-cinzel"
+                @click="shareViaFacebook"
+              >
+                <template #leading>
+                  <svg
+                    class="w-4 h-4"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
+                    />
+                  </svg>
+                </template>
+                {{ t('poem.shareFacebook') }}
               </UButton>
             </div>
           </div>
