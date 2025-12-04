@@ -131,8 +131,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     // Check for unlimited access cookie
-    // const hasUnlimited = hasUnlimitedAccess(event);
-    const hasUnlimited = false;
+    const hasUnlimited = hasUnlimitedAccess(event);
 
     const ip =
       getRequestIP(event, { xForwardedFor: true }) || 'unknown';
