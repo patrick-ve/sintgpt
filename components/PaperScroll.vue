@@ -24,10 +24,6 @@ defineProps<{
       <!-- Edge darkening vignette -->
       <div class="vignette-overlay"></div>
 
-      <!-- Deckled edges effect -->
-      <div class="deckled-edge left-edge"></div>
-      <div class="deckled-edge right-edge"></div>
-
       <!-- Red wax seal -->
       <div class="wax-seal">
         <div class="seal-inner">S</div>
@@ -232,35 +228,6 @@ defineProps<{
     rgba(61, 41, 20, 0.12) 100%
   );
   pointer-events: none;
-}
-
-/* Deckled edges - simple gradient approach for iOS compatibility */
-.deckled-edge {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 12px;
-  pointer-events: none;
-}
-
-.deckled-edge.left-edge {
-  left: 0;
-  background: linear-gradient(
-    90deg,
-    rgba(61, 41, 20, 0.1) 0%,
-    rgba(61, 41, 20, 0.05) 40%,
-    transparent 100%
-  );
-}
-
-.deckled-edge.right-edge {
-  right: 0;
-  background: linear-gradient(
-    270deg,
-    rgba(61, 41, 20, 0.1) 0%,
-    rgba(61, 41, 20, 0.05) 40%,
-    transparent 100%
-  );
 }
 
 /* Wax seal */
