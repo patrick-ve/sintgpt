@@ -148,6 +148,11 @@ export default {
         answer:
           "You can easily copy the generated poem to your clipboard and then edit it in your favorite text editor. If you're not satisfied, you can generate a new poem with different details or style until you have the perfect result!",
       },
+      {
+        question: 'Is my data stored?',
+        answer:
+          'No, SintGPT does not store any personal data, prompts, or generated poems. All information you enter is only used to generate the poem and is immediately deleted afterwards. Your privacy is fully protected.',
+      },
     ],
   },
   payment: {

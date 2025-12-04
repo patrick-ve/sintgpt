@@ -151,6 +151,11 @@ export default {
         answer:
           'Je kunt het gegenereerde gedicht eenvoudig kopiëren naar je klembord en daarna bewerken in je favoriete teksteditor. Als je niet tevreden bent, kun je met andere details of stijl een nieuw gedicht genereren tot je het perfecte resultaat hebt!',
       },
+      {
+        question: 'Worden mijn gegevens opgeslagen?',
+        answer:
+          'Nee, SintGPT slaat geen persoonlijke gegevens, prompts of gegenereerde gedichten op. Alle informatie die je invoert wordt alleen gebruikt om het gedicht te genereren en wordt daarna direct verwijderd. Je privacy is volledig gewaarborgd.',
+      },
     ],
   },
   payment: {

@@ -206,29 +206,44 @@
   opacity: 0.6;
 }
 
-/* Golden ribbon decoration */
+/* Golden ribbon decoration - corner fold style */
 .ribbon-decoration {
   position: absolute;
-  background: linear-gradient(135deg, #f4cd60 0%, #d4a853 50%, #b8923c 100%);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  width: 80px;
+  height: 80px;
+  pointer-events: none;
+}
+
+.ribbon-decoration::before {
+  content: '';
+  position: absolute;
+  width: 100px;
+  height: 24px;
+  background: linear-gradient(90deg, #f4cd60 0%, #d4a853 50%, #f4cd60 100%);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
 .ribbon-corner-tl {
-  top: -8px;
-  left: 30px;
-  width: 60px;
-  height: 24px;
+  top: 0;
+  left: 0;
+}
+
+.ribbon-corner-tl::before {
+  top: 16px;
+  left: -24px;
   transform: rotate(-45deg);
-  border-radius: 4px;
 }
 
 .ribbon-corner-br {
-  bottom: -8px;
-  right: 30px;
-  width: 60px;
-  height: 24px;
+  bottom: 0;
+  right: 0;
+}
+
+.ribbon-corner-br::before {
+  bottom: 16px;
+  right: -24px;
   transform: rotate(-45deg);
-  border-radius: 4px;
 }
 
 /* Mijter (Bishop's hat) shape decorations */

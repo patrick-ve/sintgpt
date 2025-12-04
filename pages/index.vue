@@ -1257,9 +1257,11 @@ useHead({
                 {{ faq.question }}
               </h3>
               <span
-                class="w-8 h-8 flex items-center justify-center bg-[#8b1538] rounded-full text-[#f4cd60] group-open:rotate-180 transition-transform text-sm font-bold"
+                class="w-8 h-8 flex-shrink-0 flex items-center justify-center bg-[#8b1538] rounded-full text-[#f4cd60] group-open:rotate-180 transition-transform"
               >
-                ▼
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7" />
+                </svg>
               </span>
             </summary>
             <div
