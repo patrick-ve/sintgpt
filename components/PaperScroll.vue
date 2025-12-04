@@ -372,7 +372,7 @@ defineProps<{
 /* Responsive */
 @media (max-width: 640px) {
   .parchment-body {
-    padding: 2rem 1.5rem;
+    padding: 2rem 0;
   }
 
   .scroll-roll {

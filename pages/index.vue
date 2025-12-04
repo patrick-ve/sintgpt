@@ -132,6 +132,14 @@ const handleSubmit = async () => {
     return;
   }
 
+  // Scroll to poem section on mobile immediately so user sees loading state
+  if (window.innerWidth < 1024 && poemSectionRef.value) {
+    poemSectionRef.value.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+  }
+
   // Generate the poem
   await generatePoem(formData.value);
 
@@ -149,16 +157,6 @@ const handleSubmit = async () => {
     if (!isPaid.value) {
       saveTrialPoem(poem.value, formData.value.name);
     }
-
-    // Scroll to poem on mobile (when stacked layout)
-    setTimeout(() => {
-      if (window.innerWidth < 1024 && poemSectionRef.value) {
-        poemSectionRef.value.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        });
-      }
-    }, 100);
   }
 };
 
