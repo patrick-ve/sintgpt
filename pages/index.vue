@@ -421,21 +421,8 @@ useHead({
             />
           </div>
 
-          <!-- Right: Subtitles and Language Switcher (Desktop only) -->
+          <!-- Right: Language Switcher (Desktop only) -->
           <div class="hidden md:flex flex-col items-end gap-4">
-            <div class="flex flex-col text-right text-[#f4cd60]">
-              <p
-                class="font-semibold text-base font-cinzel"
-              >
-                {{ t('header.subtitle1') }}
-              </p>
-              <p
-                class="font-semibold text-base font-cinzel opacity-80"
-              >
-                {{ t('header.subtitle2') }}
-              </p>
-            </div>
-
             <!-- Language Switcher -->
             <USelect
               v-model="selectedLocale"
@@ -573,73 +560,109 @@ useHead({
       </div>
     </div>
 
-    <!-- Hero Section -->
+    <!-- Hero Section with Video -->
     <section class="relative z-10 overflow-hidden">
       <!-- Decorative background layer -->
       <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#8b1538]/20 to-transparent pointer-events-none"></div>
 
       <!-- Floating decorative elements -->
-      <div class="absolute top-8 left-[10%] text-4xl opacity-20 animate-float" style="animation-delay: 0s;">🎁</div>
-      <div class="absolute top-16 right-[15%] text-3xl opacity-15 animate-float" style="animation-delay: 1s;">✨</div>
-      <div class="absolute bottom-12 left-[20%] text-2xl opacity-10 animate-float" style="animation-delay: 0.5s;">📜</div>
-      <div class="absolute bottom-8 right-[10%] text-3xl opacity-15 animate-float" style="animation-delay: 1.5s;">🪶</div>
+      <div class="absolute top-8 left-[5%] text-4xl opacity-20 animate-float hidden lg:block" style="animation-delay: 0s;">🎁</div>
+      <div class="absolute top-24 right-[8%] text-3xl opacity-15 animate-float hidden lg:block" style="animation-delay: 1s;">✨</div>
+      <div class="absolute bottom-20 left-[8%] text-2xl opacity-10 animate-float hidden lg:block" style="animation-delay: 0.5s;">📜</div>
+      <div class="absolute bottom-12 right-[5%] text-3xl opacity-15 animate-float hidden lg:block" style="animation-delay: 1.5s;">🪶</div>
 
-      <div class="container mx-auto px-4 md:px-6 py-12 md:py-20">
-        <div class="max-w-6xl mx-auto text-center">
-          <!-- Main headline with ornate styling -->
-          <div class="relative inline-block mb-8">
-            <!-- Decorative corner flourishes -->
-            <div class="absolute -top-4 -left-6 md:-left-10 text-[#d4a853] text-2xl md:text-3xl opacity-60">❧</div>
-            <div class="absolute -top-4 -right-6 md:-right-10 text-[#d4a853] text-2xl md:text-3xl opacity-60 scale-x-[-1]">❧</div>
+      <div class="container mx-auto px-4 md:px-6 py-8 md:py-12 lg:py-16">
+        <div class="max-w-7xl mx-auto">
+          <!-- Two-column layout: Video left, Content right -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-center">
+            <!-- Left: Video (hidden on mobile, shown on desktop) -->
+            <div class="hidden lg:block lg:order-1 relative">
+              <!-- Decorative glow behind video -->
+              <div class="absolute -inset-8 bg-gradient-to-r from-[#d4a853]/10 via-[#8b1538]/20 to-[#d4a853]/10 blur-3xl rounded-full opacity-60 pointer-events-none"></div>
 
-            <h2 class="text-xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[3.5rem] leading-snug md:leading-tight font-bold font-cinzel text-white px-2 sm:px-4 md:px-12 lg:px-16 tracking-tight">
-              <span class="block">Wil het rijmen met ChatGPT</span>
-              <span class="block">maar niet lukken?</span>
-              <span class="block mt-3 text-transparent bg-clip-text bg-gradient-to-r from-[#f4cd60] via-[#fff8e7] to-[#f4cd60] drop-shadow-lg">
-                SintGPT schrijft binnen 30 seconden een leuk gedicht!
-              </span>
-            </h2>
+              <ClientOnly>
+                <HeroVideo />
+              </ClientOnly>
 
-            <!-- Decorative bottom flourishes -->
-            <div class="absolute -bottom-4 -left-6 md:-left-10 text-[#d4a853] text-2xl md:text-3xl opacity-60 rotate-180">❧</div>
-            <div class="absolute -bottom-4 -right-6 md:-right-10 text-[#d4a853] text-2xl md:text-3xl opacity-60 rotate-180 scale-x-[-1]">❧</div>
-          </div>
+              <!-- Video caption -->
+              <p class="text-center mt-4 text-[#f4cd60]/70 text-sm font-cinzel tracking-wide">
+                {{ t('video.title') }}
+              </p>
+            </div>
 
-          <!-- Decorative divider -->
-          <div class="flex items-center justify-center gap-4 mb-10">
-            <div class="w-16 md:w-24 h-[2px] bg-gradient-to-r from-transparent via-[#d4a853] to-[#d4a853]"></div>
-            <div class="w-3 h-3 bg-[#d4a853] rotate-45 shadow-[0_0_10px_rgba(212,168,83,0.5)]"></div>
-            <div class="w-16 md:w-24 h-[2px] bg-gradient-to-l from-transparent via-[#d4a853] to-[#d4a853]"></div>
-          </div>
+            <!-- Right: Title and CTAs -->
+            <div class="lg:order-2 text-center lg:text-left mt-6 lg:mt-0">
+              <!-- Main headline with ornate styling -->
+              <div class="relative mb-8 lg:mb-10">
+                <!-- Decorative corner flourishes -->
+                <div class="absolute -top-4 left-0 lg:-left-6 text-[#d4a853] text-2xl md:text-3xl opacity-60 hidden sm:block">❧</div>
+                <div class="absolute -top-4 right-0 lg:right-auto lg:left-full lg:ml-4 text-[#d4a853] text-2xl md:text-3xl opacity-60 scale-x-[-1] hidden sm:block">❧</div>
 
-          <!-- CTA Buttons -->
-          <div class="flex flex-row items-center justify-center gap-3 sm:gap-6">
-            <!-- Primary Button - Scroll to form -->
-            <button
-              @click="scrollToForm"
-              data-umami-event="Scroll to poem form"
-              class="group relative px-4 py-2.5 sm:px-8 sm:py-4 bg-gradient-to-r from-[#8b1538] via-[#b91c4a] to-[#8b1538] text-[#f4cd60] font-cinzel font-bold text-sm sm:text-lg rounded-xl border-2 sm:border-3 border-[#d4a853] shadow-[0_4px_20px_rgba(139,21,56,0.5),0_0_30px_rgba(212,168,83,0.2)] hover:shadow-[0_6px_30px_rgba(139,21,56,0.6),0_0_40px_rgba(212,168,83,0.4)] transition-all duration-300 hover:-translate-y-1 overflow-hidden cursor-pointer"
-            >
-              <span class="relative z-10 flex items-center justify-center gap-1 sm:gap-2">
-                <span class="text-base sm:text-xl hidden sm:inline">✨</span>
-                Begin met rijmen
-                <span class="text-base sm:text-xl hidden sm:inline">✨</span>
-              </span>
-              <!-- Shimmer effect -->
-              <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-            </button>
+                <h2 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl leading-tight md:leading-none font-bold font-cinzel text-white tracking-tight">
+                  <span class="block">Wil het rijmen met ChatGPT</span>
+                  <span class="block">maar niet lukken?</span>
+                  <span class="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-[#f4cd60] via-[#fff8e7] to-[#f4cd60] drop-shadow-lg">
+                    SintGPT schrijft binnen 30 seconden een leuk gedicht!
+                  </span>
+                </h2>
 
-            <!-- Secondary Button - Scroll to FAQ -->
-            <button
-              @click="scrollToFaq"
-              data-umami-event="Scroll to FAQ"
-              class="group px-4 py-2.5 sm:px-8 sm:py-4 bg-transparent text-[#f4cd60] font-cinzel font-bold text-sm sm:text-lg rounded-xl border-2 border-[#d4a853]/60 hover:border-[#d4a853] hover:bg-[#d4a853]/10 transition-all duration-300 hover:-translate-y-1 cursor-pointer"
-            >
-              <span class="flex items-center justify-center gap-1 sm:gap-2">
-                <span class="text-sm sm:text-lg opacity-70 group-hover:opacity-100 transition-opacity hidden sm:inline">❓</span>
-                Meer informatie
-              </span>
-            </button>
+                <!-- Decorative bottom flourishes -->
+                <div class="absolute -bottom-4 left-0 lg:-left-6 text-[#d4a853] text-2xl md:text-3xl opacity-60 rotate-180 hidden sm:block">❧</div>
+                <div class="absolute -bottom-4 right-0 lg:right-auto lg:left-full lg:ml-4 text-[#d4a853] text-2xl md:text-3xl opacity-60 rotate-180 scale-x-[-1] hidden sm:block">❧</div>
+              </div>
+
+              <!-- Decorative divider -->
+              <div class="flex items-center justify-center lg:justify-start gap-4 mb-8">
+                <div class="w-12 md:w-20 h-[2px] bg-gradient-to-r from-transparent via-[#d4a853] to-[#d4a853]"></div>
+                <div class="w-3 h-3 bg-[#d4a853] rotate-45 shadow-[0_0_10px_rgba(212,168,83,0.5)]"></div>
+                <div class="w-12 md:w-20 h-[2px] bg-gradient-to-l from-transparent via-[#d4a853] to-[#d4a853]"></div>
+              </div>
+
+              <!-- Subtitle text -->
+              <p class="text-[#f4cd60]/90 text-base md:text-lg mb-8 max-w-lg mx-auto lg:mx-0 font-light leading-relaxed">
+                {{ t('header.subtitle1') }} {{ t('header.subtitle2') }}
+              </p>
+
+              <!-- CTA Buttons -->
+              <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                <!-- Primary Button - Scroll to form -->
+                <button
+                  @click="scrollToForm"
+                  data-umami-event="Scroll to poem form"
+                  class="group relative w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-4 bg-gradient-to-r from-[#8b1538] via-[#b91c4a] to-[#8b1538] text-[#f4cd60] font-cinzel font-bold text-base sm:text-lg rounded-xl border-3 border-[#d4a853] shadow-[0_4px_20px_rgba(139,21,56,0.5),0_0_30px_rgba(212,168,83,0.2)] hover:shadow-[0_6px_30px_rgba(139,21,56,0.6),0_0_40px_rgba(212,168,83,0.4)] transition-all duration-300 hover:-translate-y-1 overflow-hidden cursor-pointer"
+                >
+                  <span class="relative z-10 flex items-center justify-center gap-2">
+                    <span class="text-xl">✨</span>
+                    Begin met rijmen
+                    <span class="text-xl">✨</span>
+                  </span>
+                  <!-- Shimmer effect -->
+                  <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                </button>
+
+                <!-- Secondary Button - Scroll to FAQ -->
+                <button
+                  @click="scrollToFaq"
+                  data-umami-event="Scroll to FAQ"
+                  class="group w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-4 bg-transparent text-[#f4cd60] font-cinzel font-bold text-base sm:text-lg rounded-xl border-2 border-[#d4a853]/60 hover:border-[#d4a853] hover:bg-[#d4a853]/10 transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+                >
+                  <span class="flex items-center justify-center gap-2">
+                    <span class="text-lg opacity-70 group-hover:opacity-100 transition-opacity">❓</span>
+                    Meer informatie
+                  </span>
+                </button>
+              </div>
+
+              <!-- Trust badge -->
+              <div class="mt-8 flex items-center justify-center lg:justify-start gap-3 text-[#f4cd60]/60">
+                <div class="flex -space-x-2">
+                  <div class="w-8 h-8 rounded-full bg-gradient-to-br from-[#d4a853] to-[#8b1538] border-2 border-[#f4cd60]/30 flex items-center justify-center text-xs">🎅</div>
+                  <div class="w-8 h-8 rounded-full bg-gradient-to-br from-[#d4a853] to-[#8b1538] border-2 border-[#f4cd60]/30 flex items-center justify-center text-xs">🎁</div>
+                  <div class="w-8 h-8 rounded-full bg-gradient-to-br from-[#d4a853] to-[#8b1538] border-2 border-[#f4cd60]/30 flex items-center justify-center text-xs">📜</div>
+                </div>
+                <span class="text-sm font-cinzel">5000+ blije hulpsinterklazen</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1199,8 +1222,8 @@ useHead({
 
     <TestimonialsSection />
 
-    <!-- Sinterklaas Video Message -->
-    <section class="container mx-auto px-6 py-12 relative z-10">
+    <!-- Sinterklaas Video Message (Mobile only) -->
+    <section class="lg:hidden container mx-auto px-6 py-12 relative z-10">
       <SinterklaasVideo />
     </section>
 
