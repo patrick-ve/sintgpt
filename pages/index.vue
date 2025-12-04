@@ -12,6 +12,7 @@ const {
   storedTrialPoemName,
   saveTrialPoem,
 } = usePaymentTracking();
+const { hasAcceptedCookies, showConsentBanner } = useCookieConsent();
 const route = useRoute();
 const router = useRouter();
 
@@ -128,6 +129,12 @@ const scrollToFaq = () => {
 };
 
 const handleSubmit = async () => {
+  // Check if user has accepted cookies (skip in development)
+  if (!import.meta.dev && !hasAcceptedCookies.value) {
+    showConsentBanner(true);
+    return;
+  }
+
   // Check if user can generate a poem (skip in development)
   if (!import.meta.dev && !canGeneratePoem.value) {
     showPaymentModal.value = true;

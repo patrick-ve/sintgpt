@@ -23,6 +23,11 @@
             {{ t('cookie.title') }}
           </h3>
 
+          <!-- Required message (shown when trying to generate without consent) -->
+          <p v-if="showRequiredMessage" class="cookie-required">
+            {{ t('cookie.required') }}
+          </p>
+
           <!-- Message -->
           <p class="cookie-message">
             {{ t('cookie.message') }}
@@ -53,9 +58,17 @@
 
 <script setup lang="ts">
 const { t } = useI18n();
-const showBanner = ref(false);
+const {
+  showBanner,
+  showRequiredMessage,
+  initConsent,
+  acceptCookies,
+  declineCookies,
+} = useCookieConsent();
 
 onMounted(() => {
+  initConsent();
+
   // Check if user has already given consent
   const consent = localStorage.getItem('cookie_consent');
   if (consent) return;
@@ -73,18 +86,6 @@ onMounted(() => {
     window.removeEventListener('scroll', handleFirstScroll);
   });
 });
-
-function acceptCookies() {
-  localStorage.setItem('cookie_consent', 'accepted');
-  showBanner.value = false;
-  (window as any).umami?.track('Cookie consent accepted');
-}
-
-function declineCookies() {
-  localStorage.setItem('cookie_consent', 'declined');
-  (window as any).umami?.track('Cookie consent declined');
-  window.location.href = 'https://www.youtube.com/watch?v=G3qiXqKaPyI';
-}
 </script>
 
 <style scoped>
@@ -168,6 +169,26 @@ function declineCookies() {
     font-size: 1.125rem;
     margin-bottom: 0.5rem;
     padding-left: 1.5rem;
+  }
+}
+
+.cookie-required {
+  font-family: 'IM Fell DW Pica', serif;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: #8b1538;
+  background: rgba(139, 21, 56, 0.1);
+  border-left: 3px solid #8b1538;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.625rem;
+  border-radius: 0 4px 4px 0;
+}
+
+@media (min-width: 768px) {
+  .cookie-required {
+    font-size: 0.9375rem;
+    padding: 0.625rem 0.875rem;
+    margin-bottom: 0.75rem;
   }
 }
 

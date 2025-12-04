@@ -229,6 +229,8 @@ export default {
     title: 'A sweet treat?',
     message:
       'The Saint uses cookies (and gingerbread nuts) to make this website work perfectly for you.',
+    required:
+      'You must accept cookies to generate a poem.',
     accept: 'Delicious!',
     decline: 'No thanks, Saint',
   },
