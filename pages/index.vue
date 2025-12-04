@@ -55,16 +55,9 @@ const dismissPaymentStatus = () => {
   paymentStatus.value = null;
 };
 
-// Detect browser language - default to Dutch if browser is Dutch, otherwise English
+// Default language is Dutch
 const getDefaultLanguage = (): 'dutch' | 'english' => {
-  if (import.meta.client) {
-    const browserLang =
-      navigator.language || navigator.languages?.[0] || '';
-    return browserLang.toLowerCase().startsWith('nl')
-      ? 'dutch'
-      : 'english';
-  }
-  return 'english';
+  return 'dutch';
 };
 
 // Form state
