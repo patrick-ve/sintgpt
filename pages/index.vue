@@ -389,27 +389,11 @@ useHead({
             >
               <span class="text-4xl">🎁</span>
             </div>
-            <div class="overflow-visible">
-              <h1
-                class="text-5xl font-bold font-cinzel text-gold-gradient drop-shadow-lg tracking-wide"
-              >
-                {{ t('header.title') }}
-              </h1>
-              <div
-                class="flex items-center gap-2 mt-1 text-[#f4cd60]/80"
-              >
-                <span class="text-sm">*</span>
-                <span class="text-sm">+</span>
-                <span class="text-sm">*</span>
-                <span
-                  class="text-xs font-cinzel tracking-widest uppercase"
-                  >Magische Gedichten</span
-                >
-                <span class="text-sm">*</span>
-                <span class="text-sm">+</span>
-                <span class="text-sm">*</span>
-              </div>
-            </div>
+            <h1
+              class="text-5xl font-bold font-cinzel text-gold-gradient drop-shadow-lg tracking-wide leading-none"
+            >
+              {{ t('header.title') }}
+            </h1>
           </div>
 
           <!-- Center: Poem Counter (Desktop) -->
