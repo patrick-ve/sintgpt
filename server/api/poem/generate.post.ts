@@ -24,7 +24,13 @@ const PoemRequestSchema = z.object({
   funFacts: z.string().optional(),
   writtenBy: z.string().optional(),
   writtenForAudience: z.string().optional(),
-  style: z.enum(['funny', 'classic', 'ironic', 'old-fashioned', 'spicy']),
+  style: z.enum([
+    'funny',
+    'classic',
+    'ironic',
+    'old-fashioned',
+    'spicy',
+  ]),
   rhymeScheme: z.enum(['AABB', 'ABAB', 'ABBA', 'Limerick']),
   lines: z.number().int().min(8).max(40),
   language: z.enum(['dutch', 'english']),
@@ -75,7 +81,10 @@ function buildPrompt(
     userDataSection += `\n<written_by>${data.writtenBy}</written_by>`;
   }
 
-  if (data.writtenForAudience && data.writtenForAudience.trim() !== '') {
+  if (
+    data.writtenForAudience &&
+    data.writtenForAudience.trim() !== ''
+  ) {
     userDataSection += `\n<written_for_audience>${data.writtenForAudience}</written_for_audience>`;
   }
 
@@ -223,7 +232,7 @@ export default defineEventHandler(async (event) => {
       apiKey: runtimeConfig.googleGenerativeAiApiKey,
     });
 
-    const model = googleGenerativeAI('gemini-3-pro-preview');
+    const model = googleGenerativeAI('gemini-2.5-pro');
 
     // Generate the poem using Gemini 3 Pro via AI SDK
     const result = streamText({
