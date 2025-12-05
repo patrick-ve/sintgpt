@@ -3,9 +3,9 @@ import { computed } from 'vue';
 import { useTimestamp } from '@vueuse/core';
 
 const START_DATE = new Date('2025-11-18T00:00:00').getTime();
-const END_DATE = new Date('2025-12-05T18:00:00').getTime(); // Pakjesavond peak
+const END_DATE = new Date('2025-12-07T18:00:00').getTime(); // Extended peak
 const START_COUNT = 5819;
-const END_COUNT = 24619;
+const END_COUNT = 28912;
 
 const timestamp = useTimestamp({ interval: 1000 });
 
