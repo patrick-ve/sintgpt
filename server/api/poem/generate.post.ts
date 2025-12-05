@@ -232,7 +232,7 @@ export default defineEventHandler(async (event) => {
       apiKey: runtimeConfig.googleGenerativeAiApiKey,
     });
 
-    const model = googleGenerativeAI('gemini-3-pro-preview');
+    const model = googleGenerativeAI('gemini-2.5-pro');
 
     // Generate the poem using Gemini 3 Pro via AI SDK
     const result = streamText({
