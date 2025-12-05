@@ -71,7 +71,7 @@ const formData = ref({
   revealPresent: true,
   writtenBy: '',
   writtenForAudience: '',
-  style: 'funny' as 'funny' | 'classic' | 'ironic' | 'old-fashioned',
+  style: 'funny' as 'funny' | 'classic' | 'ironic' | 'old-fashioned' | 'spicy',
   rhymeScheme: 'AABB' as 'AABB' | 'ABAB' | 'ABBA' | 'Limerick',
   lines: 12,
   language: getDefaultLanguage(),
@@ -82,6 +82,7 @@ const styleOptions = computed(() => [
   { value: 'classic', label: t('form.style.classic') },
   { value: 'ironic', label: t('form.style.ironic') },
   { value: 'old-fashioned', label: t('form.style.oldFashioned') },
+  { value: 'spicy', label: t('form.style.spicy') },
 ]);
 
 const rhymeSchemeOptions = computed(() => [

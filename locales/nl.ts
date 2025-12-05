@@ -44,6 +44,7 @@ export default {
       classic: '📜 Klassiek',
       ironic: '😏 Ironisch',
       oldFashioned: '🎩 Ouderwets',
+      spicy: '🌶️ Pikant',
     },
     rhymeScheme: {
       label: 'Rijmschema',

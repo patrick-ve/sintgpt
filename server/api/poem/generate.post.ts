@@ -24,7 +24,7 @@ const PoemRequestSchema = z.object({
   funFacts: z.string().optional(),
   writtenBy: z.string().optional(),
   writtenForAudience: z.string().optional(),
-  style: z.enum(['funny', 'classic', 'ironic', 'old-fashioned']),
+  style: z.enum(['funny', 'classic', 'ironic', 'old-fashioned', 'spicy']),
   rhymeScheme: z.enum(['AABB', 'ABAB', 'ABBA', 'Limerick']),
   lines: z.number().int().min(8).max(40),
   language: z.enum(['dutch', 'english']),
@@ -44,6 +44,8 @@ function buildPrompt(
     ironic: 'ironisch, geestig en subtiel sarcastisch',
     'old-fashioned':
       'ouderwets, formeel en traditioneel in taal en toon',
+    spicy:
+      'pikant, met suggestieve dubbelzinnigheden en gewaagde knipogen (maar wel smaakvol en niet expliciet)',
   };
 
   const rhymeSchemeDescriptions = {

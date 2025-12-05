@@ -44,6 +44,7 @@ export default {
       classic: '📜 Classic',
       ironic: '😏 Ironic',
       oldFashioned: '🎩 Old-fashioned',
+      spicy: '🌶️ Spicy',
     },
     rhymeScheme: {
       label: 'Rhyme scheme',
