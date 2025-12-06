@@ -6,7 +6,7 @@ useSeoMeta({
   description: 'Leer hoe je hilarische sinterklaasgedichten schrijft met woordspelingen, humor en creatieve technieken. Inclusief voorbeelden en praktische tips!',
   ogTitle: 'Grappige Sinterklaasgedichten Schrijven - Ultieme Gids',
   ogDescription: 'Ontdek de beste technieken voor humoristische sinterklaasgedichten die gegarandeerd voor een lach zorgen!',
-  ogImage: '/og-image.png',
+  ogImage: '/og-image.jpg',
   keywords: 'grappige sinterklaasgedichten, humoristische gedichten, sinterklaas woordspelingen, grappig gedicht schrijven, leuke sinterklaasgedichten',
   articlePublishedTime: '2025-11-17',
   articleModifiedTime: '2025-11-17',
@@ -25,7 +25,7 @@ useHead({
         '@type': 'Article',
         headline: 'Grappige sinterklaasgedichten: Tips en voorbeelden',
         description: 'Leer hoe je hilarische sinterklaasgedichten schrijft met woordspelingen en humor.',
-        image: 'https://sintgpt.com/og-image.png',
+        image: 'https://sintgpt.com/og-image.jpg',
         datePublished: '2025-11-17',
         dateModified: '2025-11-17',
         author: {

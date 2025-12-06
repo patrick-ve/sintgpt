@@ -267,10 +267,10 @@ useSeoMeta({
   description: computed(() => t('seo.description')),
   ogTitle: computed(() => t('seo.ogTitle')),
   ogDescription: computed(() => t('seo.ogDescription')),
-  ogImage: '/og-image.png',
+  ogImage: '/og-image.jpg',
   ogImageAlt: computed(() => t('seo.ogImageAlt')),
   twitterCard: 'summary_large_image',
-  twitterImage: '/og-image.png',
+  twitterImage: '/og-image.jpg',
   keywords: computed(() => t('seo.keywords')),
   ogLocale: computed(() =>
     locale.value === 'nl' ? 'nl_NL' : 'en_US'

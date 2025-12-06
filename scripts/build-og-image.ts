@@ -18,7 +18,7 @@ async function generateOgImage() {
   await page.setViewport({
     width: 1200,
     height: 630,
-    deviceScaleFactor: 2, // For better quality
+    deviceScaleFactor: 1, // Reduced from 2 to decrease file size
   });
 
   // Read the Sint image and convert to base64
@@ -523,10 +523,11 @@ async function generateOgImage() {
   console.log('Generating screenshot...');
 
   // Take screenshot
-  const outputPath = path.join(__dirname, '../public/og-image.png');
+  const outputPath = path.join(__dirname, '../public/og-image.jpg');
   await page.screenshot({
     path: outputPath,
-    type: 'png',
+    type: 'jpeg',
+    quality: 85, // Good balance between quality and file size
     clip: {
       x: 0,
       y: 0,
@@ -538,7 +539,7 @@ async function generateOgImage() {
   await browser.close();
 
   console.log(
-    '✅ OG image generated successfully at public/og-image.png'
+    '✅ OG image generated successfully at public/og-image.jpg'
   );
 }
 

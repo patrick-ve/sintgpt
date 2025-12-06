@@ -6,7 +6,7 @@ useSeoMeta({
   description: 'Ontdek de rijke geschiedenis en tradities van het Sinterklaasfeest. Alles over gedichten, surprises, pepernoten en meer!',
   ogTitle: 'Sinterklaas Tradities & Geschiedenis | SintGPT',
   ogDescription: 'Een complete gids over de Nederlandse Sinterklaas traditie: van de oorsprong tot moderne gebruiken.',
-  ogImage: '/og-image.png',
+  ogImage: '/og-image.jpg',
   keywords: 'sinterklaas traditie, sinterklaas geschiedenis, sinterklaas gedichten traditie, pakjesavond, surprises sinterklaas, nederlandse tradities',
   articlePublishedTime: '2025-11-17',
   articleModifiedTime: '2025-11-17',
@@ -25,7 +25,7 @@ useHead({
         '@type': 'Article',
         headline: 'Sinterklaas tradities: Van gedichten tot surprises',
         description: 'Een complete gids over de Nederlandse Sinterklaas traditie en haar geschiedenis.',
-        image: 'https://sintgpt.com/og-image.png',
+        image: 'https://sintgpt.com/og-image.jpg',
         datePublished: '2025-11-17',
         dateModified: '2025-11-17',
         author: {
