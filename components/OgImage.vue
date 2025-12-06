@@ -401,8 +401,8 @@
 
 .sint-glow {
   position: absolute;
-  width: 380px;
-  height: 380px;
+  width: 570px;
+  height: 570px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -413,11 +413,11 @@
 
 .sint-frame {
   position: relative;
-  width: 320px;
-  height: 320px;
+  width: 480px;
+  height: 480px;
   background: linear-gradient(135deg, #f4cd60 0%, #d4a853 50%, #b8923c 100%);
   border-radius: 50%;
-  padding: 8px;
+  padding: 12px;
   box-shadow:
     0 10px 40px rgba(0, 0, 0, 0.4),
     0 0 60px rgba(244, 205, 96, 0.3),
@@ -434,9 +434,9 @@
 
 .quill-decoration {
   position: absolute;
-  bottom: -10px;
-  right: -20px;
-  font-size: 64px;
+  bottom: -15px;
+  right: -30px;
+  font-size: 96px;
   transform: rotate(25deg);
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
 }
