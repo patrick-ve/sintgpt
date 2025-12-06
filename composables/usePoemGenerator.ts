@@ -103,6 +103,7 @@ export const usePoemGenerator = () => {
       console.error('Poem generation error:', e);
       error.value = e.message || 'Failed to generate poem';
       poem.value = null;
+      (window as any).umami?.track('Poem generation failed');
     } finally {
       isLoading.value = false;
     }
