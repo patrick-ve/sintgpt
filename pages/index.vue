@@ -773,7 +773,7 @@ useHead({
               <UTextarea
                 v-model="formData.funFacts"
                 :placeholder="t('form.funFacts.placeholder')"
-                :rows="4"
+                :rows="8"
                 size="xl"
                 :disabled="isLoading"
                 class="w-full font-handwriting input-festive"

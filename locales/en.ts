@@ -23,7 +23,7 @@ export default {
     funFacts: {
       label: 'Fun facts about the recipient',
       placeholder:
-        'Tell as much detail as possible about hobbies, work, sports, interests or other anecdotes...',
+        "Tell as much detail as possible about hobbies, work, sports, interests or other anecdotes.\n\nFor example: Sinterklaas is a true horse lover and spends hours with his faithful white horse Amerigo. He loves gingerbread cookies and speculaas, but dislikes licorice. In his spare time, he enjoys reading letters from children and often forgets where he left his bishop's hat...",
       help: 'This information is used to make the poem more personal',
     },
     writtenBy: {

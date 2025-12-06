@@ -23,7 +23,7 @@ export default {
     funFacts: {
       label: 'Leuke weetjes over de ontvanger',
       placeholder:
-        "Vertel zo uitgebreid mogelijk over hobby's, werk, sport, interesses of andere anekdotes...",
+        "Vertel zo uitgebreid mogelijk over hobby's, werk, sport, interesses of andere anekdotes.\n\nBijvoorbeeld: Sinterklaas is een echte paardenliefhebber en brengt uren door met zijn trouwe schimmel Amerigo. Hij houdt van pepernoten en speculaas, maar heeft een hekel aan dropjes. In zijn vrije tijd leest hij graag brieven van kinderen en hij vergeet vaak waar hij zijn mijter heeft neergelegd...",
       help: 'Deze informatie wordt gebruikt om het gedicht persoonlijker te maken',
     },
     writtenBy: {
