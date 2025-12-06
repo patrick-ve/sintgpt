@@ -98,12 +98,12 @@ export default {
     title:
       'SintGPT - Sinterklaas Poem Generator | Create Funny & Personalized Sinterklaas Poems with AI',
     description:
-      'Create unique Sinterklaas poems with AI in 30 seconds! Funny, classic, or ironic styles. Personalized poems with any rhyme scheme. Try your first poem free!',
-    ogTitle: 'SintGPT - AI Sinterklaas Poem Generator | Free Trial',
+      'Generate perfectly rhyming Sinterklaas poems in 30 seconds. Unlike ChatGPT, SintGPT actually rhymes in Dutch!',
+    ogTitle: 'SintGPT - AI Sinterklaas Poem Generator',
     ogDescription:
-      'Generate personalized Sinterklaas poems in any style. AI poem generator creates perfectly rhyming poems for Sinterklaas 2025. Fast, easy, and personal! First poem free!',
+      'Generate perfectly rhyming Sinterklaas poems in 30 seconds. Unlike ChatGPT, SintGPT actually rhymes in Dutch!',
     ogImageAlt:
-      'SintGPT - Free AI Sinterklaas Poem Generator for Personalized Poems',
+      'SintGPT - AI Sinterklaas Poem Generator that actually rhymes in Dutch',
     keywords:
       'sinterklaas poem generator, create sinterklaas poems, funny sinterklaas poems, personalized sinterklaas poem, sinterklaas poem AI, dutch sinterklaas tradition, sinterklaas 2025',
   },

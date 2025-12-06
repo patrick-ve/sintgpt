@@ -98,13 +98,12 @@ export default {
     title:
       'SintGPT - Sinterklaasgedicht Generator | Maak Grappige & Gepersonaliseerde Sinterklaasgedichten met AI',
     description:
-      'Maak unieke sinterklaasgedichten met AI in 30 seconden! Grappig, klassiek of ironisch. Gepersonaliseerde sinterklaasgedichten met elk rijmschema. Probeer je eerste gedicht gratis!',
-    ogTitle:
-      'SintGPT - Sinterklaasgedicht Generator met AI | Gratis Proberen',
+      'Genereer perfect rijmende sinterklaasgedichten in 30 seconden. In tegenstelling tot ChatGPT, rijmt SintGPT wél in het Nederlands!',
+    ogTitle: 'SintGPT - Sinterklaasgedicht Generator met AI',
     ogDescription:
-      'Genereer gepersonaliseerde sinterklaasgedichten in elke stijl. AI-gedichtengenerator maakt perfect rijmende gedichten voor Sinterklaas 2025. Snel, makkelijk en persoonlijk! Eerste gedicht gratis!',
+      'Genereer perfect rijmende sinterklaasgedichten in 30 seconden. In tegenstelling tot ChatGPT, rijmt SintGPT wél in het Nederlands!',
     ogImageAlt:
-      'SintGPT - Gratis AI Sinterklaasgedicht Generator voor Gepersonaliseerde Gedichten',
+      'SintGPT - AI Sinterklaasgedicht Generator die wél rijmt in het Nederlands',
     keywords:
       'sinterklaasgedicht generator, sinterklaasgedichten maken, grappige sinterklaasgedichten, gepersonaliseerd sinterklaasgedicht, sinterklaas gedicht AI, sinterklaasrijm, sinterklaas 2025',
   },
