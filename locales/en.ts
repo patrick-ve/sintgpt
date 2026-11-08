@@ -132,7 +132,7 @@ export default {
       {
         question: 'Is SintGPT free?',
         answer:
-          'Yes! You can generate 1 Sinterklaas poem for free. After that, you can upgrade to unlimited access for just €1,99 (incl. VAT), allowing you to create as many poems as you want for the entire Sinterklaas celebration.',
+          'Yes! You can generate 1 Sinterklaas poem for free. After that, you can upgrade to unlimited access for just €6,99 (incl. VAT), allowing you to create as many poems as you want for the entire Sinterklaas celebration.',
       },
       {
         question: 'What poem styles are available?',
@@ -181,7 +181,7 @@ export default {
     title: 'Upgrade to unlimited access',
     description: 'You have used your free poem',
     limitReached:
-      "You've used your free poem. Upgrade to unlimited access for just €1,99 (incl. VAT)!",
+      "You've used your free poem. Upgrade to unlimited access for just €6,99 (incl. VAT)!",
     oneTimePayment: 'One-time payment',
     includesVAT: 'incl. VAT',
     whatYouGet: 'What you get:',
@@ -195,7 +195,7 @@ export default {
     emailPlaceholder: 'your@email.com',
     emailHelp: 'We will send your invoice to this email address',
     proceedToPayment: 'Proceed to payment',
-    payNow: 'Pay €1,99 (incl. VAT) for unlimited access',
+    payNow: 'Pay €6,99 (incl. VAT) for unlimited access',
     processing: 'Processing...',
     securePayment: 'Secure payment via Dodo Payments',
     poweredByStripe: 'Powered by Stripe',
@@ -215,11 +215,17 @@ export default {
       'You now have unlimited access to generate poems!',
     successDescription:
       'You now have unlimited access to the poem generator.',
+    pendingTitle: 'Checking your payment...',
+    pendingMessage:
+      'We are checking your payment. This can take a moment. Refresh the page if you do not get a confirmation.',
+    failedTitle: 'Payment not completed',
+    failedMessage:
+      'We could not find a successful payment, so nothing was unlocked. Please try again or contact us.',
     cancelledTitle: 'Payment cancelled',
     cancelledMessage:
       'Your payment was cancelled. You can try again anytime.',
     remainingPoems: '{count} free poem remaining | {count} free poems remaining',
-    unlimitedAccess: 'Unlimited access for just €1,99 (incl. VAT)',
+    unlimitedAccess: 'Unlimited access for just €6,99 (incl. VAT)',
     unlimitedUnlocked: 'Unlimited poems unlocked!',
   },
   testimonials: {

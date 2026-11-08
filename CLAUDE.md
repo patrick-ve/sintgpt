@@ -25,8 +25,8 @@ Local Worker preview: `npm run build:cloudflare && npx wrangler --cwd .output de
 ### Stack
 - **Framework**: Nuxt 4 (legacy root layout, no `app/` dir) with TypeScript
 - **UI**: Nuxt UI 4 + Tailwind CSS 4, fonts self-hosted by `@nuxt/fonts`
-- **AI**: AI SDK 7 through **Vercel AI Gateway** (`createGateway` from `ai`). Default model `google/gemini-3.1-pro-preview` (`server/utils/poem.ts`), override with `NUXT_AI_GATEWAY_MODEL`
-- **Payments**: Dodo Payments (€1.99 unlimited access)
+- **AI**: AI SDK 7 through **Vercel AI Gateway** (`createGateway` from `ai`). Default model `google/gemini-3.7-flash` (`server/utils/poem.ts`, picked by a blind test in Nov 2026), override with `NUXT_AI_GATEWAY_MODEL`
+- **Payments**: Dodo Payments (€6.99 unlimited access)
 - **Hosting**: Cloudflare Workers via Nitro `cloudflare_module`
 
 ### Poem generation
@@ -40,6 +40,18 @@ Notes:
 - Client IP for rate limiting: `cf-connecting-ip` first (trusted on Cloudflare), then X-Forwarded-For.
 - Rate-limit state is in memory, so on Workers it is per isolate, not global.
 - HTTP errors raised on purpose (e.g. 429) are re-thrown as-is; the client shows the upgrade offer on 429.
+
+### Payments
+1. `PaymentModal` POSTs to `/api/payment/create-checkout` and redirects to Dodo's hosted checkout.
+2. Dodo returns the buyer to `/?payment_id=...&status=...`. These parameters are only a hint.
+3. `usePaymentTracking.claimPayment` POSTs the ID to `/api/payment/claim-access`. The server retrieves the payment from Dodo and checks status, product, refunds and disputes (`decidePaymentAccess`).
+4. If granted, the server sets the signed, HTTP-only `sintgpt-access` cookie (`server/utils/paymentAccess.ts`). `hasUnlimitedAccess` verifies the signature on each request.
+
+Notes:
+- The browser never decides access. Do not trust query parameters, localStorage or unsigned cookies for it.
+- Refunds after the cookie is set do not revoke it (no database). A refunded payment cannot be claimed again.
+- The free limit is soft: 1 poem in localStorage, 3/day/IP on the server.
+- `/api/webhooks/dodo-payments` verifies signatures and only logs events.
 
 ### Open Graph images
 - Specs in `scripts/og-images.ts`, rendered by `scripts/build-og-image.ts` (Puppeteer + sharp) to `public/og/<name>.jpg`.
@@ -61,10 +73,11 @@ Runtime config is read from `NUXT_*` env vars at runtime (not baked into the bui
 | Variable | Purpose |
 |---|---|
 | `NUXT_AI_GATEWAY_API_KEY` | AI Gateway key (required) |
-| `NUXT_AI_GATEWAY_MODEL` | Optional model override, e.g. `google/gemini-3.7-flash` |
-| `NUXT_DODO_PAYMENTS_API_KEY` | Dodo Payments API key |
+| `NUXT_AI_GATEWAY_MODEL` | Optional model override, e.g. `openai/gpt-6.1-terra` |
+| `NUXT_DODO_PAYMENTS_API_KEY` | Dodo Payments API key. The `dodo_live_` prefix selects live mode, anything else test mode |
 | `NUXT_DODO_PRODUCT_ID` | Dodo product for unlimited access |
-| `NUXT_DODO_PAYMENTS_WEBHOOK_SECRET` | Dodo webhook signing secret |
+| `NUXT_DODO_PAYMENTS_WEBHOOK_SECRET` | Dodo webhook signing secret. Without it the webhook rejects every event |
+| `NUXT_ACCESS_COOKIE_SECRET` | Signs the unlimited-access cookie (`openssl rand -hex 32`). Without it nobody gets unlimited access; changing it logs out all paying customers |
 
 ## Tests
 
@@ -72,4 +85,4 @@ Runtime config is read from `NUXT_*` env vars at runtime (not baked into the bui
 - `tests/e2e/app.test.ts` - builds the app, starts the server and a headless browser: pages, OG tags, rate limiting, the history drawer at phone size, and one **live** poem via AI Gateway (skipped without a key; costs a few cents)
 
 ## Analytics (Umami events)
-`Generate poem`, `Poem generation failed`, `Open poem from history`, `Payment succeeded`, `Shared via WhatsApp/Email/Facebook`, `Copy to clipboard`.
+`Generate poem`, `Poem generation failed`, `Open poem from history`, `Proceed to payment`, `Payment succeeded`, `Shared via WhatsApp/Email/Facebook`, `Copy to clipboard`.

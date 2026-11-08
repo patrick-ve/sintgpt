@@ -9,7 +9,7 @@ const {
   incrementPoemCount,
   remainingFreePoems,
   isPaid,
-  refreshAccess,
+  claimPayment,
   storedTrialPoem,
   storedTrialPoemName,
   saveTrialPoem,
@@ -28,29 +28,25 @@ const displayedRecipient = ref('');
 const router = useRouter();
 
 // Payment status from redirect
-const paymentStatus = ref<'success' | 'cancelled' | null>(null);
+const paymentStatus = ref<'success' | 'pending' | 'failed' | 'cancelled' | null>(null);
 
 // Handle payment redirect query params and restore trial poem
 onMounted(async () => {
-  const payment = route.query.payment as string;
-  if (payment === 'success') {
-    paymentStatus.value = 'success';
-    // Track payment success
-    (window as any).umami?.track('Payment succeeded');
-    // Set the unlimited access cookie
-    try {
-      await $fetch('/api/payment/set-access-cookie', {
-        method: 'POST',
-      });
-      console.log('Access cookie set successfully');
-      // Refresh access state from server
-      refreshAccess();
-    } catch (err) {
-      console.error('Error setting access cookie:', err);
+  const paymentId = route.query.payment_id;
+  if (typeof paymentId === 'string') {
+    paymentStatus.value = 'pending';
+    const claim = await claimPayment(paymentId);
+    if (claim === 'granted') {
+      paymentStatus.value = 'success';
+      (window as any).umami?.track('Payment succeeded');
+    } else {
+      paymentStatus.value = claim === 'pending' ? 'pending' : 'failed';
     }
-    // Clear the query parameter from URL without reload
-    router.replace({ query: {} });
-  } else if (payment === 'cancelled') {
+    // While pending, keep the ID in the URL so a reload checks again.
+    if (claim !== 'pending') {
+      router.replace({ query: {} });
+    }
+  } else if (route.query.payment === 'cancelled') {
     paymentStatus.value = 'cancelled';
     router.replace({ query: {} });
   }
@@ -580,9 +576,9 @@ useHead({
         </div>
       </div>
 
-      <!-- Cancelled Notification -->
+      <!-- Pending, Failed and Cancelled Notification -->
       <div
-        v-if="paymentStatus === 'cancelled'"
+        v-else
         class="bg-gradient-to-r from-amber-50 to-yellow-50 border-3 border-amber-500 rounded-2xl p-5 shadow-2xl"
       >
         <div class="flex items-start">
@@ -607,10 +603,10 @@ useHead({
             <h3
               class="text-base font-bold text-amber-800 font-cinzel"
             >
-              {{ t('payment.cancelledTitle') }}
+              {{ t(`payment.${paymentStatus}Title`) }}
             </h3>
             <p class="text-sm text-amber-700 mt-1">
-              {{ t('payment.cancelledMessage') }}
+              {{ t(`payment.${paymentStatus}Message`) }}
             </p>
           </div>
           <button

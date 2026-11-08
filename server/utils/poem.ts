@@ -1,12 +1,16 @@
 import { z } from 'zod';
 
-// Default AI Gateway model. Override with the AI_GATEWAY_MODEL env var.
-export const DEFAULT_POEM_MODEL = 'google/gemini-3.1-pro-preview';
+// Default AI Gateway model. Override with the NUXT_AI_GATEWAY_MODEL env var.
+// Gemini 3.7 Flash won a blind test against Gemini 3.8 Flash and
+// GPT-6.1 Terra (Nov 2026) and is ~6x cheaper and 2-3x faster than
+// Gemini 3.1 Pro (~15 s and ~$0.008 per poem).
+export const DEFAULT_POEM_MODEL = 'google/gemini-3.7-flash';
 
-// Gemini 3.1 Pro pricing (USD per 1M tokens, prompts <= 200k tokens).
-// Output tokens include reasoning tokens.
-const INPUT_PRICE_PER_M = 2.0;
-const OUTPUT_PRICE_PER_M = 12.0;
+// Gemini 3.7 Flash pricing on AI Gateway (USD per 1M tokens).
+// Output tokens include reasoning tokens. The estimate is only correct
+// for the default model; it is a log hint, not billing.
+const INPUT_PRICE_PER_M = 0.75;
+const OUTPUT_PRICE_PER_M = 3.75;
 
 export function estimateCostUsd(usage: {
   inputTokens?: number;

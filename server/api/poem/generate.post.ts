@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     // Check for unlimited access cookie
-    const hasUnlimited = hasUnlimitedAccess(event);
+    const hasUnlimited = await hasUnlimitedAccess(event);
 
     // On Cloudflare, cf-connecting-ip is set by the edge and cannot be
     // spoofed. The first X-Forwarded-For entry is client-controlled.
@@ -83,7 +83,7 @@ export default defineEventHandler(async (event) => {
 
         throw createError({
           statusCode: 429,
-          statusMessage: `You have reached the maximum of ${RATE_LIMIT_MAX_REQUESTS} free poems per 24 hours. Upgrade to unlimited access for just €1,99 (incl. VAT)!`,
+          statusMessage: `You have reached the maximum of ${RATE_LIMIT_MAX_REQUESTS} free poems per 24 hours. Upgrade to unlimited access for just €6,99 (incl. VAT)!`,
         });
       } else {
         // Increment counter BEFORE generation starts (fixes race condition)

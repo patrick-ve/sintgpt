@@ -132,7 +132,7 @@ export default {
       {
         question: 'Is SintGPT gratis?',
         answer:
-          'Ja! Je kunt 1 sinterklaasgedicht gratis genereren. Daarna kun je voor slechts €1,99 (incl. BTW) upgraden naar onbeperkt toegang, zodat je zoveel gedichten kunt maken als je wilt voor het hele Sinterklaasfeest.',
+          'Ja! Je kunt 1 sinterklaasgedicht gratis genereren. Daarna kun je voor slechts €6,99 (incl. BTW) upgraden naar onbeperkt toegang, zodat je zoveel gedichten kunt maken als je wilt voor het hele Sinterklaasfeest.',
       },
       {
         question:
@@ -183,7 +183,7 @@ export default {
     title: 'Upgrade naar onbeperkt toegang',
     description: 'Je hebt je gratis gedicht gebruikt',
     limitReached:
-      'Je hebt je gratis gedicht gebruikt. Upgrade naar onbeperkt toegang voor slechts €1,99 (incl. BTW)!',
+      'Je hebt je gratis gedicht gebruikt. Upgrade naar onbeperkt toegang voor slechts €6,99 (incl. BTW)!',
     oneTimePayment: 'Eenmalige betaling',
     includesVAT: 'incl. BTW',
     whatYouGet: 'Wat je krijgt:',
@@ -197,7 +197,7 @@ export default {
     emailPlaceholder: 'jouw@email.nl',
     emailHelp: 'We sturen je factuur naar dit e-mailadres',
     proceedToPayment: 'Ga naar betaling',
-    payNow: 'Betaal €1,99 (incl. BTW) voor onbeperkt toegang',
+    payNow: 'Betaal €6,99 (incl. BTW) voor onbeperkt toegang',
     processing: 'Verwerken...',
     securePayment: 'Veilig betalen via Dodo Payments',
     poweredByStripe: 'Powered by Stripe',
@@ -216,11 +216,17 @@ export default {
       'Je hebt nu onbeperkt toegang om gedichten te genereren!',
     successDescription:
       'Je hebt nu onbeperkt toegang tot de gedichtengenerator.',
+    pendingTitle: 'Betaling controleren...',
+    pendingMessage:
+      'We controleren je betaling. Dit kan even duren. Vernieuw de pagina als je geen bevestiging krijgt.',
+    failedTitle: 'Betaling niet gelukt',
+    failedMessage:
+      'We konden geen geslaagde betaling vinden. Er is niets ontgrendeld. Probeer het opnieuw of neem contact met ons op.',
     cancelledTitle: 'Betaling geannuleerd',
     cancelledMessage:
       'Je betaling is geannuleerd. Je kunt het op elk moment opnieuw proberen.',
     remainingPoems: '{count} gratis gedicht over | {count} gratis gedichten over',
-    unlimitedAccess: 'Onbeperkt toegang voor slechts €1,99 (incl. BTW)',
+    unlimitedAccess: 'Onbeperkt toegang voor slechts €6,99 (incl. BTW)',
     unlimitedUnlocked: 'Onbeperkt gedichten ontgrendeld!',
   },
   testimonials: {

@@ -3,6 +3,6 @@ import { hasUnlimitedAccess } from '../../utils/paymentCookie';
 
 export default defineEventHandler(async (event: H3Event) => {
   return {
-    hasAccess: hasUnlimitedAccess(event),
+    hasAccess: await hasUnlimitedAccess(event),
   };
 });

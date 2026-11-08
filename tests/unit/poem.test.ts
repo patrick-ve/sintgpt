@@ -89,13 +89,13 @@ describe('buildPrompt', () => {
 });
 
 describe('model and cost', () => {
-  it('uses a Gemini Pro model through AI Gateway', () => {
-    expect(DEFAULT_POEM_MODEL).toMatch(/^google\/gemini-[\d.]+-pro/);
+  it('uses Gemini 3.7 Flash through AI Gateway', () => {
+    expect(DEFAULT_POEM_MODEL).toBe('google/gemini-3.7-flash');
   });
 
   it('estimates cost from input and output tokens', () => {
-    // 1M input at $2 + 1M output at $12
-    expect(estimateCostUsd({ inputTokens: 1_000_000, outputTokens: 1_000_000 })).toBe(14);
+    // 1M input at $0.75 + 1M output at $3.75
+    expect(estimateCostUsd({ inputTokens: 1_000_000, outputTokens: 1_000_000 })).toBe(4.5);
     expect(estimateCostUsd({})).toBe(0);
   });
 });

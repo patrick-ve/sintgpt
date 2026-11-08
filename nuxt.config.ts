@@ -15,12 +15,13 @@ export default defineNuxtConfig({
   runtimeConfig: {
     // Override at runtime with NUXT_AI_GATEWAY_API_KEY, NUXT_AI_GATEWAY_MODEL,
     // NUXT_DODO_PAYMENTS_API_KEY, NUXT_DODO_PRODUCT_ID and
-    // NUXT_DODO_PAYMENTS_WEBHOOK_SECRET.
+    // NUXT_DODO_PAYMENTS_WEBHOOK_SECRET and NUXT_ACCESS_COOKIE_SECRET.
     aiGatewayApiKey: '',
     aiGatewayModel: '',
     dodoPaymentsApiKey: '',
     dodoProductId: '',
     dodoPaymentsWebhookSecret: '',
+    accessCookieSecret: '',
     public: {},
   },
 

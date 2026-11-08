@@ -1,7 +1,9 @@
 import { fileURLToPath } from 'node:url';
 import { createPage, fetch, setup, url } from '@nuxt/test-utils/e2e';
+import { Webhook } from 'standardwebhooks';
 import { describe, expect, it } from 'vitest';
 import { OG_IMAGES } from '../../scripts/og-images';
+import { signAccessToken } from '../../server/utils/paymentAccess';
 import { readPoemStream } from '../../utils/poemStream';
 
 // Builds the app in production mode, starts the real Nitro server and
@@ -132,6 +134,109 @@ describe('poem history drawer (mobile)', () => {
     expect(overflow).toBeLessThanOrEqual(0);
 
     await page.close();
+  });
+});
+
+describe('paywall', () => {
+  const hasDodoKey = Boolean(process.env.NUXT_DODO_PAYMENTS_API_KEY);
+
+  async function hasAccess(cookie?: string) {
+    const res = await fetch('/api/payment/check-access', {
+      headers: cookie ? { cookie } : {},
+    });
+    return ((await res.json()) as { hasAccess: boolean }).hasAccess;
+  }
+
+  it('gives no access without a cookie', async () => {
+    expect(await hasAccess()).toBe(false);
+  });
+
+  it.each([
+    'sintgpt-abc=true',
+    'sintgpt-access=true',
+    'sintgpt-access=v1.pay_x.9999999999.deadbeef',
+  ])('gives no access with the forged cookie %s', async (cookie) => {
+    expect(await hasAccess(cookie)).toBe(false);
+  });
+
+  it('gives access with a correctly signed cookie', async () => {
+    const token = await signAccessToken('pay_x', 'e2e-access-secret');
+    expect(await hasAccess(`sintgpt-access=${token}`)).toBe(true);
+  });
+
+  it('has removed the open endpoint that handed out access', async () => {
+    const res = await fetch('/api/payment/set-access-cookie', { method: 'POST' });
+    expect(res.status).toBe(404);
+  });
+
+  it('rejects a malformed payment ID', async () => {
+    const res = await fetch('/api/payment/claim-access', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ paymentId: '../../products' }),
+    });
+    // 503 when the environment has no Dodo key.
+    expect(res.status).toBe(hasDodoKey ? 400 : 503);
+  });
+
+  it.skipIf(!hasDodoKey)('denies an unknown payment and sets no cookie', async () => {
+    const res = await fetch('/api/payment/claim-access', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ paymentId: 'pay_doesnotexist' }),
+    });
+    expect(await res.json()).toEqual({ status: 'denied' });
+    expect(res.headers.get('set-cookie')).toBeNull();
+  }, 30_000);
+
+  it('does not unlock the page through the old success URL', async () => {
+    const page = await createPage('/?payment=success&status=succeeded');
+    await page.waitForTimeout(500);
+    const cookies = await page.context().cookies();
+    expect(cookies.filter(c => c.name.startsWith('sintgpt-'))).toEqual([]);
+    await page.close();
+  });
+});
+
+describe('POST /api/webhooks/dodo-payments', () => {
+  const secret = 'whsec_ZTJlLXdlYmhvb2stc2VjcmV0';
+  const body = JSON.stringify({
+    type: 'payment.succeeded',
+    data: { payment_id: 'pay_x' },
+  });
+
+  function postWebhook(signature: string, timestamp: Date) {
+    return fetch('/api/webhooks/dodo-payments', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'webhook-id': 'msg_1',
+        'webhook-timestamp': String(Math.floor(timestamp.getTime() / 1000)),
+        'webhook-signature': signature,
+      },
+      body,
+    });
+  }
+
+  it('rejects an event without signature headers', async () => {
+    const res = await fetch('/api/webhooks/dodo-payments', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body,
+    });
+    expect(res.status).toBe(400);
+  });
+
+  it('rejects an event with a wrong signature', async () => {
+    const res = await postWebhook('v1,d3Jvbmc=', new Date());
+    expect(res.status).toBe(401);
+  });
+
+  it('accepts a correctly signed event', async () => {
+    const now = new Date();
+    const signature = new Webhook(secret).sign('msg_1', now, body);
+    const res = await postWebhook(signature, now);
+    expect(res.status).toBe(200);
   });
 });
 

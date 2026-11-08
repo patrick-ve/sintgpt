@@ -137,7 +137,7 @@ const closeModal = () => {
         <!-- Price display -->
         <div class="price-wrapper">
           <span class="price-currency">€</span>
-          <span class="price-amount">1</span>
+          <span class="price-amount">6</span>
           <span class="price-cents">,99</span>
         </div>
 
