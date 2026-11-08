@@ -2,6 +2,16 @@
 @import '@nuxt/ui';
 
 @theme static {
+  /* Type system. Texturina is a blackletter-inspired serif that recalls
+     Sint's big book and stays readable; Alegreya and Alegreya Sans add a
+     warm, calligraphic voice for reading and interface text.
+     - font-display: headings and primary buttons
+     - font-text: poems and long reading text
+     - font-sans (default): labels, inputs, buttons and other interface text */
+  --font-display: 'Texturina', Georgia, serif;
+  --font-text: 'Alegreya', Georgia, serif;
+  --font-sans: 'Alegreya Sans', 'Segoe UI', system-ui, sans-serif;
+
   /* Sinterklaas festive color palette */
   --color-brand-50: #fef7f0;
   --color-brand-100: #fde8d7;
@@ -29,11 +39,29 @@
   --sint-green-light: #2d5a3d;
 }
 
-/* ===== FESTIVE FONTS =====
-   Cinzel, Cinzel Decorative and IM Fell DW Pica are resolved and
-   self-hosted by @nuxt/fonts at build time. Do not hard-code
-   fonts.gstatic.com URLs here: they are versioned and go stale (the old
-   Cinzel v23 URL returned 404, so Cinzel never loaded). */
+/* ===== BASE TYPOGRAPHY =====
+   Fonts are declared in nuxt.config.ts and self-hosted by @nuxt/fonts.
+   Do not hard-code fonts.gstatic.com URLs: they go stale.
+   Keep this in a layer, so Tailwind font utilities can override it. */
+@layer base {
+  html {
+    font-variant-numeric: lining-nums;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+}
 
 /* ===== ANIMATED SNOWFLAKES ===== */
 @keyframes snowfall {
@@ -349,65 +377,57 @@
 
 /* ===== BUTTON STYLES ===== */
 .btn-festive {
-  background: linear-gradient(135deg, #8b1538 0%, #b91c4a 50%, #8b1538 100%);
-  background-size: 200% auto;
-  color: #f4cd60;
-  border: 3px solid #d4a853;
+  background: #8b1538;
+  color: #fff8e7;
+  border: 2px solid #d4a853;
   border-radius: 12px;
-  font-family: 'Cinzel', serif;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  box-shadow:
-    0 4px 15px rgba(139, 21, 56, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  font-family: var(--font-display);
+  font-weight: 700;
+  cursor: pointer;
+  transition-property: background-color, scale;
+  transition-duration: 150ms;
+  transition-timing-function: ease-out;
+  box-shadow: 0 4px 15px rgba(139, 21, 56, 0.35);
 }
 
-.btn-festive:hover {
-  background-position: right center;
-  transform: translateY(-2px);
-  box-shadow:
-    0 6px 20px rgba(139, 21, 56, 0.5),
-    0 0 30px rgba(212, 168, 83, 0.3);
+.btn-festive:enabled:hover {
+  background: #6e1030;
 }
 
-.btn-festive::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  animation: shimmer 3s infinite;
+.btn-festive:enabled:active {
+  scale: 0.96;
+}
+
+.btn-festive:focus-visible {
+  outline: 2px solid #8b1538;
+  outline-offset: 2px;
 }
 
 /* ===== FORM INPUT STYLES ===== */
 .input-festive {
-  background: rgba(255, 255, 255, 0.95);
-  border: 2px solid #d4c5a0;
   border-radius: 8px;
-  font-family: 'IM Fell DW Pica', serif;
-  transition: all 0.3s ease;
 }
 
-.input-festive:focus {
-  border-color: #d4a853;
-  box-shadow: 0 0 0 3px rgba(212, 168, 83, 0.2), 0 0 20px rgba(212, 168, 83, 0.1);
+.input-festive ::placeholder {
+  color: #6f6250;
 }
 
 /* ===== FESTIVE RADIO BUTTONS ===== */
 .radio-festive {
   position: relative;
   padding: 12px 16px;
-  border: 2px solid #e5d5b0;
+  border: 2px solid #a08850;
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.8);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition-property: background-color, border-color;
+  transition-duration: 150ms;
+}
+
+/* The native radio is visually hidden, so its card shows keyboard focus. */
+.radio-festive:has(input:focus-visible) {
+  outline: 2px solid #8b1538;
+  outline-offset: 2px;
 }
 
 .radio-festive:hover {
@@ -419,6 +439,16 @@
   border-color: #8b1538;
   background: linear-gradient(135deg, rgba(139, 21, 56, 0.1) 0%, rgba(212, 168, 83, 0.15) 100%);
   box-shadow: 0 0 0 2px rgba(139, 21, 56, 0.1);
+}
+
+/* A second cue next to the color, so the selection never relies on color. */
+.radio-festive.selected::after {
+  content: '✓';
+  position: absolute;
+  top: 2px;
+  inset-inline-end: 8px;
+  color: #8b1538;
+  font-weight: 700;
 }
 
 /* ===== FOOTER STYLES ===== */
@@ -535,4 +565,20 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, #f4cd60, #d4a853);
+}
+
+/* ===== REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .snowflakes-wrapper {
+    display: none;
+  }
 }

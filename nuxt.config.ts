@@ -25,6 +25,14 @@ export default defineNuxtConfig({
     public: {},
   },
 
+  fonts: {
+    families: [
+      { name: 'Texturina', weights: [500, 700], global: true },
+      { name: 'Alegreya', weights: [400, 500], styles: ['normal', 'italic'], global: true },
+      { name: 'Alegreya Sans', weights: [400, 500, 700], global: true },
+    ],
+  },
+
   colorMode: {
     preference: 'light',
   },
@@ -70,6 +78,8 @@ export default defineNuxtConfig({
       wrangler: {
         name: 'sintgpt',
         observability: { enabled: true },
+        // Lets the Worker notice a client disconnect and stop poem generation.
+        compatibility_flags: ['enable_request_signal'],
       },
     },
   },

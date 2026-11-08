@@ -1,9 +1,9 @@
 <template>
   <Transition
-    enter-active-class="transition-all duration-700 ease-out"
+    enter-active-class="transition duration-700 ease-out"
     enter-from-class="translate-y-full opacity-0"
     enter-to-class="translate-y-0 opacity-100"
-    leave-active-class="transition-all duration-300 ease-in"
+    leave-active-class="transition duration-300 ease-in"
     leave-from-class="translate-y-0 opacity-100"
     leave-to-class="translate-y-full opacity-0"
   >
@@ -153,7 +153,7 @@ onMounted(() => {
 }
 
 .cookie-title {
-  font-family: 'Cinzel', serif;
+  font-family: var(--font-display);
   font-weight: 700;
   font-size: 1rem;
   color: #8b1538;
@@ -171,7 +171,7 @@ onMounted(() => {
 }
 
 .cookie-required {
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: var(--font-text);
   font-size: 0.875rem;
   line-height: 1.4;
   color: #8b1538;
@@ -191,7 +191,7 @@ onMounted(() => {
 }
 
 .cookie-message {
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: var(--font-text);
   font-size: 0.875rem;
   line-height: 1.5;
   color: #4a3728;
@@ -213,7 +213,7 @@ onMounted(() => {
 }
 
 .cookie-btn-secondary {
-  font-family: 'Cinzel', serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   font-size: 0.75rem;
   color: #5c0f26;
@@ -222,7 +222,8 @@ onMounted(() => {
   border-radius: 8px;
   padding: 0.5rem 0.875rem;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition-property: background-color, border-color, color, box-shadow, transform, opacity;
+  transition-duration: 0.25s;
 }
 
 .cookie-btn-secondary:hover {
@@ -239,7 +240,7 @@ onMounted(() => {
 }
 
 .cookie-btn-primary {
-  font-family: 'Cinzel', serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 0.75rem;
   color: #f4cd60;
@@ -249,7 +250,8 @@ onMounted(() => {
   border-radius: 8px;
   padding: 0.5rem 1rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition-property: background-color, border-color, color, box-shadow, transform, opacity;
+  transition-duration: 0.3s;
   box-shadow:
     0 2px 8px rgba(139, 21, 56, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);

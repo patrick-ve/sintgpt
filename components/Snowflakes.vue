@@ -24,7 +24,7 @@ const sparkles = Array.from({ length: 15 }, (_, i) => ({
 </script>
 
 <template>
-  <div class="snowflakes-wrapper">
+  <div class="snowflakes-wrapper" aria-hidden="true">
     <!-- Snowflakes -->
     <div
       v-for="flake in snowflakes"

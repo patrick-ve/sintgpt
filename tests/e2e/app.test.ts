@@ -137,6 +137,161 @@ describe('poem history drawer (mobile)', () => {
   });
 });
 
+describe('home page UI', () => {
+  it('loads the Sinterklaas font pairing on the right elements', async () => {
+    const page = await createPage('/');
+    const fonts = await page.evaluate(async () => {
+      await document.fonts.ready;
+      const family = (selector: string) =>
+        getComputedStyle(document.querySelector(selector)!).fontFamily.split(',')[0]!.replace(/"/g, '');
+      return {
+        heading: family('h1 span'),
+        label: family('label[for="poem-name"]'),
+        poem: family('.poem-text'),
+        loaded: [
+          document.fonts.check('700 32px Texturina'),
+          document.fonts.check('400 20px Alegreya'),
+          document.fonts.check('700 16px "Alegreya Sans"'),
+        ],
+      };
+    });
+    expect(fonts).toEqual({
+      heading: 'Texturina',
+      label: 'Alegreya Sans',
+      poem: 'Alegreya',
+      loaded: [true, true, true],
+    });
+    await page.close();
+  });
+
+  it('explains an empty name on submit and moves focus to the field', async () => {
+    const page = await createPage('/');
+    await page.evaluate(() => localStorage.setItem('cookie_consent', 'accepted'));
+    await page.locator('#poem-form button[type=submit]').click();
+    await page.locator('#poem-name-error').waitFor();
+    expect(await page.evaluate(() => document.activeElement?.id)).toBe('poem-name');
+    expect(await page.locator('#poem-name').getAttribute('aria-invalid')).toBe('true');
+    await page.close();
+  });
+
+  it('reveals a streamed poem gradually and offers sharing when it is done', async () => {
+    const lines = Array.from({ length: 12 }, (_, i) => `Regel ${i + 1} van het gedicht voor de Sint,`);
+    const poem = lines.join('\n');
+    const words = poem.match(/\S+\s*/g)!;
+    const sse = words
+      .map(delta => `data: ${JSON.stringify({ type: 'text-delta', id: '0', delta })}\n\n`)
+      .join('') + 'data: [DONE]\n\n';
+
+    const page = await createPage();
+    await page.addInitScript(() => localStorage.setItem('cookie_consent', 'accepted'));
+    await page.route('**/api/poem/generate', route =>
+      route.fulfill({ status: 200, contentType: 'text/event-stream', body: sse }));
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+
+    await page.fill('#poem-name', 'Oma Truus');
+    await page.locator('#poem-form button[type=submit]').click();
+
+    // While it streams: partial text, a caret and no share buttons yet.
+    const text = page.locator('.scroll-content .poem-text');
+    await page.locator('.stream-caret').waitFor();
+    const partial = await text.innerText();
+    expect(partial.length).toBeLessThan(poem.length);
+    expect(poem.startsWith(partial)).toBe(true);
+    expect(await page.getByRole('button', { name: 'Kopieer gedicht' }).count()).toBe(0);
+
+    // When it is done: the whole poem, no caret, sharing available.
+    await page.getByRole('button', { name: 'Kopieer gedicht' }).waitFor({ timeout: 15_000 });
+    expect(await page.locator('.stream-caret').count()).toBe(0);
+    expect((await text.innerText()).trim()).toBe(poem);
+    await page.close();
+  }, 30_000);
+
+  it('shows a sample poem before the visitor has one', async () => {
+    const page = await createPage('/');
+    await page.getByText('Voorbeeld: gedicht voor Daan').waitFor();
+    await page.close();
+  });
+});
+
+describe('honest claims', () => {
+  it('shows no invented rating, counter or testimonials and the real price', async () => {
+    const html = await (await fetch('/')).text();
+    expect(html).not.toContain('aggregateRating');
+    expect(html).not.toContain('28.912');
+    expect(html).not.toContain('blije hulpsinterklazen');
+    expect(html).toMatch(/"price":\s*"6\.99"/);
+  });
+});
+
+describe('restoring access', () => {
+  async function openPaymentModal() {
+    const page = await createPage();
+    await page.addInitScript(() => {
+      localStorage.setItem('cookie_consent', 'accepted');
+      localStorage.setItem('sinterklaas-payment', JSON.stringify({ poemCount: 1 }));
+    });
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+    await page.fill('#poem-name', 'Oma Truus');
+    await page.locator('#poem-form button[type=submit]').click();
+    await page.locator('dialog[open] .restore summary').click();
+    return page;
+  }
+
+  it('keeps the pay button reachable on a short phone screen', async () => {
+    const page = await createPage();
+    await page.setViewportSize({ width: 320, height: 568 });
+    await page.addInitScript(() => {
+      localStorage.setItem('cookie_consent', 'accepted');
+      localStorage.setItem('sinterklaas-payment', JSON.stringify({ poemCount: 1 }));
+    });
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+    await page.fill('#poem-name', 'Oma');
+    await page.locator('#poem-form button[type=submit]').click();
+    const button = page.locator('dialog[open] .pay-button');
+    await button.scrollIntoViewIfNeeded();
+    const box = (await button.boundingBox())!;
+    expect(box.y).toBeGreaterThanOrEqual(0);
+    expect(box.y + box.height).toBeLessThanOrEqual(568);
+    await page.close();
+  }, 30_000);
+
+  it('rejects an invalid ID without asking the server', async () => {
+    const page = await openPaymentModal();
+    let calls = 0;
+    await page.route('**/api/payment/claim-access', (route) => {
+      calls++;
+      return route.abort();
+    });
+    await page.fill('#restore-payment-id', 'hallo');
+    await page.locator('.restore-submit').click();
+    await page.locator('.restore-error').waitFor();
+    expect(calls).toBe(0);
+    await page.close();
+  }, 30_000);
+
+  it('explains when the server finds no payment', async () => {
+    const page = await openPaymentModal();
+    await page.route('**/api/payment/claim-access', route =>
+      route.fulfill({ json: { status: 'denied' } }));
+    await page.fill('#restore-payment-id', 'pay_unknown');
+    await page.locator('.restore-submit').click();
+    await page.locator('.restore-error').waitFor();
+    expect(await page.locator('dialog[open]').count()).toBe(1);
+    await page.close();
+  }, 30_000);
+
+  it('closes the window and confirms when the payment is valid', async () => {
+    const page = await openPaymentModal();
+    await page.route('**/api/payment/claim-access', route =>
+      route.fulfill({ json: { status: 'granted' } }));
+    await page.fill('#restore-payment-id', 'pay_valid');
+    await page.locator('.restore-submit').click();
+    await page.getByText('Betaling geslaagd!').waitFor();
+    expect(await page.locator('dialog[open]').count()).toBe(0);
+    await page.close();
+  }, 30_000);
+});
+
 describe('paywall', () => {
   const hasDodoKey = Boolean(process.env.NUXT_DODO_PAYMENTS_API_KEY);
 

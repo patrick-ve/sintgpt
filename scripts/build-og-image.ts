@@ -60,7 +60,7 @@ function html(spec: OgImageSpec, sintDataUrl: string): string {
 <meta charset="utf-8">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Cinzel+Decorative:wght@700&family=IM+Fell+DW+Pica:ital@0;1&display=block" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Texturina:opsz,wght@12..72,500;12..72,700&family=Alegreya:ital,wght@0,400;0,500;1,400&family=Alegreya+Sans:wght@500;700&display=block" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   :root {
@@ -74,7 +74,7 @@ function html(spec: OgImageSpec, sintDataUrl: string): string {
     background:
       radial-gradient(ellipse 70% 90% at 28% 45%, #a01a42 0%, #7d1233 45%, #4f0a20 100%);
     color: var(--cream);
-    font-family: 'IM Fell DW Pica', Georgia, serif;
+    font-family: 'Alegreya', Georgia, serif;
     position: relative;
   }
   /* faint wrapping-paper dots */
@@ -104,7 +104,7 @@ function html(spec: OgImageSpec, sintDataUrl: string): string {
   }
   .brand {
     display: flex; align-items: center; gap: 16px;
-    font-family: 'Cinzel Decorative', serif; font-weight: 700;
+    font-family: 'Texturina', serif; font-weight: 700;
     font-size: 40px; color: var(--gold); letter-spacing: .02em;
   }
   .brand svg {
@@ -113,8 +113,8 @@ function html(spec: OgImageSpec, sintDataUrl: string): string {
     box-shadow: 0 4px 14px rgba(0,0,0,.35);
   }
   .brand em {
-    font-family: 'Cinzel', serif; font-style: normal; font-weight: 600;
-    font-size: .62em; letter-spacing: .18em; color: var(--cream);
+    font-family: 'Alegreya Sans', sans-serif; font-style: normal; font-weight: 700;
+    font-size: .62em; letter-spacing: .05em; color: var(--cream);
     padding-left: 16px; margin-left: 2px; border-left: 2px solid rgba(244,205,96,.5);
   }
   .brand-small { font-size: 34px; }
@@ -125,23 +125,23 @@ function html(spec: OgImageSpec, sintDataUrl: string): string {
     color: var(--cream);
   }
   .headline {
-    margin-top: 6px; font-family: 'Cinzel', serif; font-weight: 900;
-    font-size: 108px; line-height: .98; letter-spacing: -.01em;
+    margin-top: 6px; font-family: 'Texturina', serif; font-weight: 700;
+    font-size: 104px; line-height: .98; letter-spacing: -.01em;
     background: linear-gradient(180deg, #fff1b8 0%, var(--gold) 45%, #c99a3c 100%);
     -webkit-background-clip: text; background-clip: text; color: transparent;
     filter: drop-shadow(0 4px 0 rgba(60,5,20,.55));
   }
   .pill {
     margin-top: 34px; align-self: flex-start;
-    font-family: 'Cinzel', serif; font-weight: 700; font-size: 27px;
+    font-family: 'Alegreya Sans', sans-serif; font-weight: 700; font-size: 29px;
     color: #3d0716; background: linear-gradient(135deg, #fbe08a, var(--gold-deep));
     padding: 12px 28px; border-radius: 999px;
     box-shadow: 0 6px 18px rgba(0,0,0,.3);
   }
 
   .title {
-    margin-top: 38px; font-family: 'Cinzel', serif; font-weight: 700;
-    font-size: 64px; line-height: 1.08; color: var(--cream);
+    margin-top: 38px; font-family: 'Texturina', serif; font-weight: 700;
+    font-size: 62px; line-height: 1.08; color: var(--cream);
     hyphens: manual; overflow-wrap: normal;
     text-shadow: 0 3px 0 rgba(60,5,20,.5);
   }
@@ -216,7 +216,7 @@ async function main() {
       await page.evaluate(() => document.fonts.ready);
 
       const fontsOk = await page.evaluate(() =>
-        ['700 20px Cinzel', '700 20px "Cinzel Decorative"', 'italic 20px "IM Fell DW Pica"']
+        ['700 20px Texturina', 'italic 20px Alegreya', '700 20px "Alegreya Sans"']
           .every(f => document.fonts.check(f)));
       if (!fontsOk) throw new Error('Web fonts did not load (offline?)');
 

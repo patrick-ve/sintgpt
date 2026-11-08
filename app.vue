@@ -67,18 +67,3 @@ useDisableDevTools().config.onDetectOpen = () => {
 };
 </script>
 
-<style>
-* {
-  font-family: 'Funnel Sans', serif;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: 'Ranchers', serif;
-  letter-spacing: 0.1em;
-}
-</style>

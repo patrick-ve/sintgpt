@@ -73,9 +73,8 @@ const clearAll = () => {
       footer: 'border-t-2 border-[#d4a853]/30 pb-[max(1rem,env(safe-area-inset-bottom))]',
     }"
   >
-    <!-- Own markup so the scoped .font-cinzel below applies -->
     <template #title>
-      <span class="font-cinzel">{{ t('history.title') }}</span>
+      <span class="">{{ t('history.title') }}</span>
     </template>
 
     <template #body>
@@ -85,7 +84,7 @@ const clearAll = () => {
         class="flex flex-col items-center justify-center text-center py-16 px-6"
       >
         <span class="text-6xl opacity-40 mb-4" aria-hidden="true">📜</span>
-        <p class="font-cinzel text-lg font-bold text-[#8b1538]/70">
+        <p class="text-lg font-bold text-[#8b1538]/70">
           {{ t('history.empty') }}
         </p>
         <p class="text-sm text-[#8b1538]/60 mt-2">
@@ -109,7 +108,7 @@ const clearAll = () => {
             :aria-current="entry.id === props.activeId ? 'true' : undefined"
             @click="select(entry)"
           >
-            <span class="block font-cinzel font-bold text-[#8b1538] leading-snug break-words">
+            <span class="block font-bold text-[#8b1538] leading-snug break-words">
               {{ t('poem.title', { name: entry.recipient }) }}
             </span>
             <span class="block text-xs text-[#8b1538]/60 mt-1">
@@ -166,8 +165,4 @@ const clearAll = () => {
 <style scoped>
 /* app.vue sets an unlayered `* { font-family }`, which beats Tailwind
    utilities, so each component scopes its own Cinzel rule. */
-.font-cinzel {
-  font-family: 'Cinzel', serif;
-  letter-spacing: 0.02em;
-}
 </style>

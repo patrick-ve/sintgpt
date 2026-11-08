@@ -5,11 +5,20 @@ export default {
       'Create personalized Sinterklaas poems and let AI do the rhyming.',
     subtitle2: 'Fast & easy. Ready in 30 seconds!',
   },
+  hero: {
+    question: "Can't get ChatGPT to rhyme?",
+    answer: 'SintGPT writes a fun poem in 30 seconds!',
+    cta: 'Start rhyming',
+    moreInfo: 'More information',
+    note: 'First poem free, then a one-time €6,99 for unlimited poems.',
+  },
   form: {
     title: 'Poem details',
+    more: 'More options: who writes it and for which audience?',
     name: {
       label: 'Recipient name',
       placeholder: 'Saint Nicholas',
+      required: "Enter the recipient's name.",
     },
     present: {
       label: 'Sinterklaas present',
@@ -81,7 +90,11 @@ export default {
     shareFacebook: 'Share on Facebook',
     loading: 'Your personalized poem is being created...',
     error: 'Error',
-    empty: 'Fill out the form to generate a poem',
+    ready: 'Your poem is ready.',
+    empty: 'Fill in the form. Your own poem appears here.',
+    sampleLabel: 'Example: poem for Mark',
+    sampleText:
+      "There once was a fellow named Mark,\nWho turned every meal pitch-black dark.\nHe'll even burn toast,\nTill it looks like a ghost,\nAnd fills the whole house with a spark.\n\nGood Saint Nick brought a cookbook with dread,\nTo ensure that you actually get fed.\nPlease read every page,\nAnd lower the gauge,\nBefore you burn charcoal instead!",
   },
   history: {
     open: 'My poems',
@@ -119,7 +132,7 @@ export default {
     ogImageAlt:
       'SintGPT - AI Sinterklaas Poem Generator that actually rhymes in Dutch',
     keywords:
-      'sinterklaas poem generator, create sinterklaas poems, funny sinterklaas poems, personalized sinterklaas poem, sinterklaas poem AI, dutch sinterklaas tradition, sinterklaas 2025',
+      'sinterklaas poem generator, create sinterklaas poems, funny sinterklaas poems, personalized sinterklaas poem, sinterklaas poem AI, dutch sinterklaas tradition, sinterklaas 2026',
   },
   faq: {
     title: 'Frequently Asked Questions',
@@ -190,7 +203,7 @@ export default {
     benefit3: 'Instant access after payment',
     feature1: 'Unlimited poem generation',
     feature2: 'All styles and rhyme schemes',
-    feature3: 'One-time payment, lifetime access',
+    feature3: 'One-time payment, one year of access in this browser',
     emailLabel: 'Email address for invoice',
     emailPlaceholder: 'your@email.com',
     emailHelp: 'We will send your invoice to this email address',
@@ -210,6 +223,17 @@ export default {
     confirmError: 'Could not complete payment. Please try again.',
     processingMessage:
       'Your payment is being processed. Please wait...',
+    dismiss: 'Close message',
+    restore: {
+      title: 'Already paid? Restore your access',
+      label: 'Payment ID',
+      submit: 'Restore',
+      checking: 'Checking...',
+      help: 'A payment ID starts with pay_. Cannot find it? Contact us and we will look it up.',
+      invalid: 'This is not a valid payment ID. It starts with pay_.',
+      failed: 'We found no successful payment with this ID. Check the ID or contact us.',
+      pending: 'This payment is not complete yet. Please try again in a few minutes.',
+    },
     successTitle: 'Payment successful!',
     successMessage:
       'You now have unlimited access to generate poems!',
@@ -227,21 +251,6 @@ export default {
     remainingPoems: '{count} free poem remaining | {count} free poems remaining',
     unlimitedAccess: 'Unlimited access for just €6,99 (incl. VAT)',
     unlimitedUnlocked: 'Unlimited poems unlocked!',
-  },
-  testimonials: {
-    title: 'Over 5,000 happy assistant Sinterklazen',
-    card1: {
-      text: 'Amazing! Done in 1 minute, while I usually sweat for hours.',
-      author: 'Anouk',
-    },
-    card2: {
-      text: 'Finally a poem that doesn\'t start with "Saint was thinking".',
-      author: 'Mark',
-    },
-    card3: {
-      text: 'My mother-in-law was crying with laughter. Top!',
-      author: 'Lisa',
-    },
   },
   video: {
     title: 'Sinterklaas talks about sintgpt.com',

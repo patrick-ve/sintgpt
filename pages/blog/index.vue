@@ -3,7 +3,7 @@ const { t, locale } = useI18n();
 
 const blogPosts = computed(() => [
   {
-    title: 'Hoe schrijf je het perfecte sinterklaasgedicht in 2025',
+    title: 'Hoe schrijf je het perfecte sinterklaasgedicht in 2026',
     description: 'Ontdek praktische tips en trucs om een geweldig sinterklaasgedicht te schrijven dat gegarandeerd indruk maakt.',
     slug: 'hoe-schrijf-je-het-perfecte-sinterklaasgedicht',
     date: '2025-11-17',
@@ -60,11 +60,11 @@ useHead({
         <div class="flex items-center justify-between">
           <NuxtLink to="/" class="hover:opacity-80 transition-opacity flex items-center gap-4">
             <div class="hidden md:block text-4xl">🎁</div>
-            <h1 class="text-3xl md:text-5xl font-bold font-cinzel drop-shadow-md">SintGPT Blog</h1>
+            <h1 class="text-3xl md:text-5xl font-bold font-display drop-shadow-md">SintGPT Blog</h1>
           </NuxtLink>
           <NuxtLink
             to="/"
-            class="px-4 py-2 bg-[#F4CD60] text-red-900 rounded-lg font-bold hover:bg-yellow-400 transition-colors font-cinzel border-2 border-red-900 shadow-md"
+            class="px-4 py-2 bg-[#F4CD60] text-red-900 rounded-lg font-bold hover:bg-yellow-400 transition-colors border-2 border-red-900 shadow-md"
           >
             {{ locale === 'nl' ? 'Terug naar Generator' : 'Back to Generator' }}
           </NuxtLink>
@@ -77,7 +77,7 @@ useHead({
       <div class="max-w-4xl mx-auto">
         <div class="text-center mb-12 relative">
            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-12 text-6xl opacity-20 pointer-events-none">✍️</div>
-           <h2 class="text-4xl font-bold text-white mb-4 font-cinzel drop-shadow-lg">
+           <h2 class="text-4xl font-bold text-white mb-4 font-display drop-shadow-lg">
             {{ locale === 'nl' ? 'Tips & Inspiratie voor Sinterklaasgedichten' : 'Tips & Inspiration for Sinterklaas Poems' }}
           </h2>
           <p class="text-xl text-[#F4CD60] font-medium drop-shadow-md">
@@ -92,7 +92,7 @@ useHead({
           <article
             v-for="post in blogPosts"
             :key="post.slug"
-            class="bg-[#fffdf0] rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-1 border-4 border-red-900 relative group"
+            class="bg-[#fffdf0] rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-1 border-4 border-red-900 relative group"
           >
             <div class="absolute top-2 right-2 text-2xl opacity-50 group-hover:opacity-100 transition-opacity">📜</div>
             <NuxtLink :to="`/blog/${post.slug}`" class="block">
@@ -107,7 +107,7 @@ useHead({
                 </div>
                 <div class="p-8 md:w-2/3 flex flex-col justify-between">
                   <div>
-                    <div class="flex items-center gap-4 text-sm text-red-700 mb-3 font-bold font-cinzel">
+                    <div class="flex items-center gap-4 text-sm text-red-700 mb-3 font-bold">
                       <time :datetime="post.date">
                         {{ new Date(post.date).toLocaleDateString(locale === 'nl' ? 'nl-NL' : 'en-US', {
                           year: 'numeric',
@@ -118,14 +118,14 @@ useHead({
                       <span>•</span>
                       <span>{{ post.readTime }}</span>
                     </div>
-                    <h3 class="text-2xl font-bold text-red-900 mb-3 group-hover:text-red-700 transition-colors font-cinzel">
+                    <h3 class="text-2xl font-bold text-red-900 mb-3 group-hover:text-red-700 transition-colors font-display">
                       {{ post.title }}
                     </h3>
                     <p class="text-gray-800 mb-4 leading-relaxed font-medium">
                       {{ post.description }}
                     </p>
                   </div>
-                  <span class="text-red-600 font-bold hover:text-red-800 font-cinzel flex items-center gap-2">
+                  <span class="text-red-600 font-bold hover:text-red-800 flex items-center gap-2">
                     {{ locale === 'nl' ? 'Lees meer' : 'Read more' }} <span class="text-xl">→</span>
                   </span>
                 </div>
@@ -138,7 +138,7 @@ useHead({
         <div class="mt-16 bg-[#fffdf0] rounded-2xl shadow-xl p-8 text-center sint-border relative overflow-hidden">
            <div class="absolute -left-4 -bottom-4 text-6xl opacity-20 rotate-45">🎁</div>
            <div class="absolute -right-4 -top-4 text-6xl opacity-20 -rotate-12">🌙</div>
-          <h3 class="text-3xl font-bold text-red-900 mb-4 font-cinzel">
+          <h3 class="text-3xl font-bold text-red-900 mb-4 font-display">
             {{ locale === 'nl' ? 'Klaar om je eigen gedicht te maken?' : 'Ready to create your own poem?' }}
           </h3>
           <p class="text-gray-800 mb-8 text-lg font-medium max-w-2xl mx-auto">
@@ -148,7 +148,7 @@ useHead({
           </p>
           <NuxtLink
             to="/"
-            class="inline-block px-8 py-4 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-transform transform hover:scale-105 shadow-lg border-2 border-[#F4CD60] font-cinzel text-xl"
+            class="inline-block px-8 py-4 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-transform transform hover:scale-105 shadow-lg border-2 border-[#F4CD60] text-xl"
           >
             {{ locale === 'nl' ? 'Start nu gratis' : 'Start free now' }}
           </NuxtLink>
@@ -169,7 +169,7 @@ useHead({
            <span>🐴</span>
            <span>🥕</span>
         </div>
-        <p class="font-cinzel font-bold text-lg">
+        <p class="font-bold text-lg">
          Copyright {{ new Date().getFullYear() }} SintGPT. {{ locale === 'nl' ? 'Alle rechten voorbehouden.' : 'All rights reserved.' }}
         </p>
       </div>
@@ -178,11 +178,6 @@ useHead({
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@400;700;900&family=IM+Fell+DW+Pica+SC&family=IM+Fell+DW+Pica:ital@0;1&display=swap');
-
-.font-cinzel {
-  font-family: 'Cinzel', serif;
-}
 
 .bg-sinterklaas-pattern {
   background-color: #7f1d1d;

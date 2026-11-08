@@ -2,9 +2,11 @@ import { consola } from 'consola';
 import {
   createGateway,
   createUIMessageStreamResponse,
+  smoothStream,
   streamText,
   toUIMessageStream,
 } from 'ai';
+import { clientDisconnectSignal } from '../../utils/clientDisconnect';
 import { hasUnlimitedAccess } from '../../utils/paymentCookie';
 import {
   buildPrompt,
@@ -135,6 +137,13 @@ export default defineEventHandler(async (event) => {
       // text instead of a poem.
       temperature: 1,
       maxRetries: 3,
+      // Stop paying for tokens when the visitor leaves during generation.
+      abortSignal: clientDisconnectSignal(event),
+      // Models send text in bursts; release it word by word instead.
+      experimental_transform: smoothStream({ delayInMs: 15, chunking: 'word' }),
+      onAbort() {
+        consola.info('Client disconnected - stopped poem generation');
+      },
       onEnd({ usage }) {
         consola.info('Poem generated successfully');
         consola.info(
@@ -152,6 +161,9 @@ export default defineEventHandler(async (event) => {
     });
 
     return createUIMessageStreamResponse({
+      // no-transform keeps Cloudflare from compressing the stream, even if a
+      // Compression Rule on the zone would match it. Compression buffers.
+      headers: { 'cache-control': 'no-cache, no-transform' },
       stream: toUIMessageStream({ stream: result.stream }),
     });
   } catch (error: any) {

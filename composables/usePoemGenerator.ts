@@ -23,6 +23,10 @@ export const usePoemGenerator = () => {
     poem.value = '';
     isRateLimitError.value = false;
 
+    const reveal = createSmoothReveal((text) => {
+      poem.value = text.trimStart();
+    });
+
     try {
       const response = await fetch('/api/poem/generate', {
         method: 'POST',
@@ -53,15 +57,15 @@ export const usePoemGenerator = () => {
         throw new Error('No response body reader available');
       }
 
-      await readPoemStream(response.body, (delta) => {
-        poem.value += delta;
-      });
+      await readPoemStream(response.body, reveal.push);
+      await reveal.finish();
 
       // Trim the final poem
       if (poem.value) {
         poem.value = poem.value.trim();
       }
     } catch (e: any) {
+      reveal.cancel();
       console.error('Poem generation error:', e);
       error.value = e.message || 'Failed to generate poem';
       poem.value = null;

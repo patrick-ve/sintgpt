@@ -1,7 +1,11 @@
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   poem: string;
+  /** True while text is still arriving. */
+  streaming?: boolean;
 }>();
+
+const lines = computed(() => props.poem.split('\n'));
 </script>
 
 <template>
@@ -31,7 +35,7 @@ defineProps<{
 
       <!-- Content area -->
       <div class="scroll-content">
-        <pre class="poem-text has-dropcap">{{ poem }}</pre>
+        <pre class="poem-text has-dropcap" :aria-busy="streaming || undefined"><span v-for="(line, index) in lines" :key="index" class="poem-line">{{ line }}<span v-if="streaming && index === lines.length - 1" class="stream-caret" aria-hidden="true"></span></span></pre>
       </div>
 
       <!-- Decorative corner flourishes -->
@@ -50,6 +54,36 @@ defineProps<{
 </template>
 
 <style scoped>
+/* A wrapped line hangs under its verse line, so each verse stays recognizable. */
+.poem-line {
+  display: block;
+  min-height: 1lh;
+  padding-inline-start: 0.9em;
+  text-indent: -0.9em;
+}
+
+/* The drop cap needs a plain first line. */
+.poem-line:first-child {
+  padding-inline-start: 0;
+  text-indent: 0;
+}
+
+/* Shows that the poem is still being written. */
+.stream-caret {
+  display: inline-block;
+  width: 0.09em;
+  height: 1em;
+  margin-inline-start: 0.08em;
+  vertical-align: -0.12em;
+  background: #8b1538;
+  animation: caret-blink 1s steps(2, jump-none) infinite;
+}
+
+@keyframes caret-blink {
+  from { opacity: 1; }
+  to { opacity: 0.25; }
+}
+
 .scroll-wrapper {
   position: relative;
   max-width: 100%;
@@ -287,7 +321,7 @@ defineProps<{
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-family: 'Cinzel Decorative', 'Cinzel', serif;
+  font-family: var(--font-display);
   font-size: 1.5rem;
   font-weight: bold;
   color: rgba(255, 255, 255, 0.15);
@@ -323,7 +357,7 @@ defineProps<{
 
 /* Poem text styling */
 .poem-text {
-  font-family: 'IM Fell DW Pica', Georgia, serif;
+  font-family: var(--font-text);
   white-space: pre-wrap;
   color: #2d1810;
   line-height: 2;
@@ -333,7 +367,7 @@ defineProps<{
 }
 
 .poem-text.has-dropcap::first-letter {
-  font-family: 'Cinzel Decorative', 'Cinzel', serif;
+  font-family: var(--font-display);
   float: left;
   font-size: 4rem;
   line-height: 0.75;
@@ -346,6 +380,11 @@ defineProps<{
 
 /* Responsive */
 @media (max-width: 640px) {
+  /* The top padding keeps the first line clear of the wax seal. */
+  .scroll-content {
+    padding: 1.5rem 0.75rem 0.5rem;
+  }
+
   .parchment-body {
     padding: 2rem 0;
   }
@@ -381,8 +420,8 @@ defineProps<{
   }
 
   .poem-text {
-    font-size: 1.1rem;
-    line-height: 1.9;
+    font-size: 1rem;
+    line-height: 1.6;
   }
 
   .poem-text.has-dropcap::first-letter {
