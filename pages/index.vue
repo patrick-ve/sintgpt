@@ -298,6 +298,49 @@ const copyShareLink = async () => {
   }, 2000);
 };
 
+const isSavingPdf = ref(false);
+const pdfFailed = ref(false);
+
+const fetchBytes = async (path: string) => {
+  const response = await fetch(path);
+  if (!response.ok) throw new Error(`Could not load ${path}`);
+  return new Uint8Array(await response.arrayBuffer());
+};
+
+const savePoemPdf = async () => {
+  if (!import.meta.client || !poem.value || isSavingPdf.value) return;
+  isSavingPdf.value = true;
+  pdfFailed.value = false;
+  try {
+    const [{ buildPoemPdf, poemPdfFileName }, paper, textFont, capFont] = await Promise.all([
+      import('~/utils/poemPdf'),
+      fetchBytes('/pdf/paper.jpg'),
+      fetchBytes('/pdf/alegreya-400.ttf'),
+      fetchBytes('/pdf/texturina-700.ttf'),
+    ]);
+    const bytes = await buildPoemPdf({
+      poem: poem.value,
+      title: poemTitle.value,
+      attribution: t('poem.pdfAttribution'),
+      paper,
+      textFont,
+      capFont,
+    });
+    const href = URL.createObjectURL(new Blob([bytes as BlobPart], { type: 'application/pdf' }));
+    const link = document.createElement('a');
+    link.href = href;
+    link.download = poemPdfFileName(displayedRecipient.value);
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(href), 60_000);
+    (window as any).umami?.track('Save as PDF');
+  } catch (error) {
+    console.error('Failed to save PDF:', error);
+    pdfFailed.value = true;
+  } finally {
+    isSavingPdf.value = false;
+  }
+};
+
 const getPoemWithAttribution = () => {
   if (!poem.value) return '';
   const attribution =
@@ -1300,6 +1343,9 @@ useHead({
               class="flex gap-2 flex-wrap w-full"
               :class="{ invisible: isLoading }"
             >
+              <p v-if="pdfFailed" role="alert" class="w-full order-last text-sm font-medium text-[#8b1538]">
+                {{ t('poem.pdfError') }}
+              </p>
               <p v-if="shareUrl" class="w-full order-last text-sm text-[#5c0f26]">
                 {{ t('poem.linkPrivacy') }}
               </p>
@@ -1324,6 +1370,17 @@ useHead({
                 data-umami-event="Copy to clipboard"
               >
                 {{ copySuccess ? t('poem.copied') : t('poem.copy') }}
+              </UButton>
+              <UButton
+                icon="i-heroicons-arrow-down-tray"
+                size="sm"
+                color="primary"
+                variant="outline"
+                :loading="isSavingPdf"
+                class="border-2 border-[#d4a853] hover:bg-[#f4cd60]/20 text-[#8b1538] cursor-pointer rounded-lg"
+                @click="savePoemPdf"
+              >
+                {{ t('poem.savePdf') }}
               </UButton>
               <UButton
                 size="sm"

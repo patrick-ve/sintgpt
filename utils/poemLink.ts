@@ -52,6 +52,11 @@ export function extractOpening(poem: string): string {
     .slice(0, MAX_OPENING_CHARS);
 }
 
+/** The bundled fonts have no emoji, and they would render as empty boxes. */
+export function stripEmoji(text: string): string {
+  return text.replace(/[\p{Extended_Pictographic}\u200D\uFE0F]/gu, '').replace(/ {2,}/g, ' ').trim();
+}
+
 export async function poemDigest(poem: string): Promise<string> {
   const hash = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(poem.trim()));
   return bytesToBase64Url(new Uint8Array(hash).slice(0, 16));

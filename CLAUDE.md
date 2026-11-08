@@ -15,6 +15,7 @@ Package manager: **npm** (not yarn).
 - `npm run build:cloudflare` - Build for Cloudflare Workers (`cloudflare_module` preset)
 - `npm run deploy` - Build for Cloudflare and deploy with Wrangler
 - `npm run build:og` - Re-render the Open Graph images into `public/og/`
+- `npm run build:pdf-paper` - Re-render the PDF background from the CSS of `PaperScroll.vue`. Run after changing that component
 - `npx tsx scripts/build-sint-images.ts` - Crop `public/sint.png` to the avatar, favicons and share image. Run `build:og` after it
 - `npm run typecheck` - `vue-tsc --noEmit`
 - `npm test` - All tests (`test:unit`, `test:e2e`)
@@ -73,6 +74,11 @@ Notes:
 - If KV fails or reaches its daily write limit, or in the node-server build the tests use, the browser shares the long link.
 - `/g/<id>` is `noindex` and uses the same `/gedicht/preview.png` share image.
 
+### Poem PDF
+"Opslaan als PDF" builds the file in the browser (`utils/poemPdf.ts`, pdf-lib), so it uses no Worker CPU. It is loaded with a dynamic import, because pdf-lib is large.
+- The background `public/pdf/paper.jpg` is the empty scroll, rendered from the CSS of `PaperScroll.vue`.
+- The text is real text in Alegreya, with a Texturina drop cap (`public/pdf/`, SIL OFL). Long poems get a smaller size, then more pages. Keep the sizes and colours in line with `PaperScroll.vue`.
+
 ### SEO
 - The main address is `https://sintgpt.com`. `server/middleware/canonical-host.ts` redirects `www` to it. Each page sets its own canonical link.
 - English is applied in the browser on the same URLs, so search engines see Dutch only. Do not add `hreflang` tags until English has its own URLs.
@@ -117,4 +123,4 @@ Runtime config is read from `NUXT_*` env vars at runtime (not baked into the bui
 - `tests/e2e/app.test.ts` - builds the app, starts the server and a headless browser: pages, OG tags, rate limiting, the history drawer at phone size, and one **live** poem via AI Gateway (skipped without a key; costs a few cents)
 
 ## Analytics (Umami events)
-`Generate poem`, `Poem generation failed`, `Open poem from history`, `Proceed to payment`, `Payment succeeded`, `Access restored`, `Copy share link`, `Open shared poem`, `Shared via WhatsApp/Email/Facebook`, `Copy to clipboard`.
+`Generate poem`, `Poem generation failed`, `Open poem from history`, `Proceed to payment`, `Payment succeeded`, `Access restored`, `Copy share link`, `Open shared poem`, `Shared via WhatsApp/Email/Facebook`, `Copy to clipboard`, `Save as PDF`.

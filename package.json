@@ -14,11 +14,13 @@
     "typecheck": "vue-tsc --noEmit",
     "build:cloudflare": "NITRO_PRESET=cloudflare_module nuxt build",
     "build:og": "tsx scripts/build-og-image.ts",
+    "build:pdf-paper": "tsx scripts/build-pdf-paper.ts",
     "deploy": "npm run build:cloudflare && wrangler --cwd .output deploy"
   },
   "dependencies": {
     "@nuxt/image": "^2.2.1",
     "@nuxt/ui": "^4.12.0",
+    "@pdf-lib/fontkit": "^1.1.1",
     "@resvg/resvg-wasm": "2.6.2",
     "@vueuse/nuxt": "^15.0.0",
     "ai": "^7.0.165",
@@ -26,6 +28,7 @@
     "dodopayments-checkout": "^2.1.0",
     "mime": "^4.1.2",
     "nuxt": "^4.6.4",
+    "pdf-lib": "^1.17.1",
     "standardwebhooks": "^1.1.1",
     "vue": "^3.5.45",
     "vue-router": "^5.4.0",

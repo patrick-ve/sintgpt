@@ -1,4 +1,7 @@
 // Draws the share image as an SVG. Kept free of WASM so it is easy to test.
+import { stripEmoji } from '../../utils/poemLink';
+
+export { stripEmoji };
 
 export const SHARE_IMAGE_WIDTH = 1200;
 export const SHARE_IMAGE_HEIGHT = 630;
@@ -23,11 +26,6 @@ export function escapeXml(text: string): string {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&apos;');
-}
-
-/** The bundled fonts have no emoji, and they would render as empty boxes. */
-export function stripEmoji(text: string): string {
-  return text.replace(/[\p{Extended_Pictographic}‍️]/gu, '').replace(/ {2,}/g, ' ').trim();
 }
 
 function wrapLine(line: string, maxChars: number): string[] {
