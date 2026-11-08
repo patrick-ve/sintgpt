@@ -5,11 +5,20 @@ export default {
       'Maak gepersonaliseerde Sinterklaasgedichten en laat AI het rijmen doen.',
     subtitle2: 'Snel & makkelijk. Klaar binnen 30 seconden!',
   },
+  hero: {
+    question: 'Wil het rijmen met ChatGPT maar niet lukken?',
+    answer: 'SintGPT schrijft binnen 30 seconden een leuk gedicht!',
+    cta: 'Begin met rijmen',
+    moreInfo: 'Meer informatie',
+    note: 'Eerste gedicht gratis, daarna eenmalig €6,99 voor onbeperkt.',
+  },
   form: {
     title: 'Details voor het gedicht',
+    more: 'Meer opties: wie schrijft het en voor welk publiek?',
     name: {
       label: 'Naam ontvanger',
       placeholder: 'Sint Nicolaas',
+      required: 'Vul de naam van de ontvanger in.',
     },
     present: {
       label: 'Sinterklaascadeau',
@@ -17,7 +26,7 @@ export default {
     },
     revealPresent: {
       label: 'Cadeau vermelden?',
-      yes: 'Ja, vermeldt het cadeau in het gedicht',
+      yes: 'Ja, vermeld het cadeau in het gedicht',
       no: 'Nee, houd het cadeau geheim (vaag omschrijven)',
     },
     funFacts: {
@@ -80,8 +89,26 @@ export default {
     shareEmail: 'Verstuur via e-mail',
     shareFacebook: 'Deel op Facebook',
     loading: 'Jouw gepersonaliseerde gedicht wordt gemaakt...',
+    ready: 'Je gedicht is klaar.',
     error: 'Fout',
-    empty: 'Vul het formulier in om een gedicht te genereren',
+    empty: 'Vul het formulier in. Je eigen gedicht verschijnt hier.',
+    sampleLabel: 'Voorbeeld: gedicht voor Daan (7)',
+    sampleText:
+      'Daan is al zeven en een held in het doel,\nals keeper bij de F-jes houd jij het hoofd koel.\nEn na elke wedstrijd eet jij voor de trek,\neen berg pannenkoeken met stroop tot je nek!\n\nDe Pieten stonden te juichen langs de lijn,\nwant ballen tegenhouden vind jij reuze fijn.\nDaarom brengt de Sint nu iets moois voor op het veld:\neen prachtige voetbal voor deze grote held!',
+  },
+  history: {
+    open: 'Mijn gedichten',
+    title: 'Mijn gedichten',
+    description: 'Alleen opgeslagen op dit apparaat',
+    empty: 'Nog geen gedichten',
+    emptyHint: 'Elk gedicht dat je maakt, verschijnt hier.',
+    deleteAria: 'Verwijder gedicht voor {name}',
+    clearAll: 'Alles wissen',
+    confirmClear: 'Ja, wis alles',
+    cancel: 'Annuleren',
+    lines: '{n} regels',
+    count: '{count} gedicht | {count} gedichten',
+    previous: 'Eerdere gedichten',
   },
   footer: {
     copyright: 'Copyright {year} SintGPT. Alle rechten voorbehouden.',
@@ -105,7 +132,7 @@ export default {
     ogImageAlt:
       'SintGPT - AI Sinterklaasgedicht Generator die wél rijmt in het Nederlands',
     keywords:
-      'sinterklaasgedicht generator, sinterklaasgedichten maken, grappige sinterklaasgedichten, gepersonaliseerd sinterklaasgedicht, sinterklaas gedicht AI, sinterklaasrijm, sinterklaas 2025',
+      'sinterklaasgedicht generator, sinterklaasgedichten maken, grappige sinterklaasgedichten, gepersonaliseerd sinterklaasgedicht, sinterklaas gedicht AI, sinterklaasrijm, sinterklaas 2026',
   },
   faq: {
     title: 'Veelgestelde vragen',
@@ -118,7 +145,7 @@ export default {
       {
         question: 'Is SintGPT gratis?',
         answer:
-          'Ja! Je kunt 1 sinterklaasgedicht gratis genereren. Daarna kun je voor slechts €1,99 (incl. BTW) upgraden naar onbeperkt toegang, zodat je zoveel gedichten kunt maken als je wilt voor het hele Sinterklaasfeest.',
+          'Ja! Je kunt 1 sinterklaasgedicht gratis genereren. Daarna kun je voor slechts €6,99 (incl. BTW) upgraden naar onbeperkt toegang, zodat je zoveel gedichten kunt maken als je wilt voor het hele Sinterklaasfeest.',
       },
       {
         question:
@@ -169,7 +196,7 @@ export default {
     title: 'Upgrade naar onbeperkt toegang',
     description: 'Je hebt je gratis gedicht gebruikt',
     limitReached:
-      'Je hebt je gratis gedicht gebruikt. Upgrade naar onbeperkt toegang voor slechts €1,99 (incl. BTW)!',
+      'Je hebt je gratis gedicht gebruikt. Upgrade naar onbeperkt toegang voor slechts €6,99 (incl. BTW)!',
     oneTimePayment: 'Eenmalige betaling',
     includesVAT: 'incl. BTW',
     whatYouGet: 'Wat je krijgt:',
@@ -178,12 +205,12 @@ export default {
     benefit3: 'Direct toegang na betaling',
     feature1: 'Onbeperkt gedichten genereren',
     feature2: "Alle stijlen en rijmschema's",
-    feature3: 'Eenmalige betaling, levenslange toegang',
+    feature3: 'Eenmalige betaling, een jaar toegang in deze browser',
     emailLabel: 'E-mailadres voor factuur',
     emailPlaceholder: 'jouw@email.nl',
     emailHelp: 'We sturen je factuur naar dit e-mailadres',
     proceedToPayment: 'Ga naar betaling',
-    payNow: 'Betaal €1,99 (incl. BTW) voor onbeperkt toegang',
+    payNow: 'Betaal €6,99 (incl. BTW) voor onbeperkt toegang',
     processing: 'Verwerken...',
     securePayment: 'Veilig betalen via Dodo Payments',
     poweredByStripe: 'Powered by Stripe',
@@ -197,32 +224,34 @@ export default {
     unexpectedError: 'Er ging iets mis. Probeer het opnieuw.',
     confirmError: 'Kon betaling niet voltooien. Probeer het opnieuw.',
     processingMessage: 'Je betaling wordt verwerkt. Even geduld...',
+    dismiss: 'Melding sluiten',
+    restore: {
+      title: 'Al betaald? Herstel je toegang',
+      label: 'Betalings-ID',
+      submit: 'Herstellen',
+      checking: 'Controleren...',
+      help: 'Een betalings-ID begint met pay_. Kun je het niet vinden? Neem contact met ons op, dan zoeken we het op.',
+      invalid: 'Dit is geen geldig betalings-ID. Het begint met pay_.',
+      failed: 'We vonden geen geslaagde betaling met dit ID. Controleer het ID of neem contact met ons op.',
+      pending: 'Deze betaling is nog niet afgerond. Probeer het over een paar minuten opnieuw.',
+    },
     successTitle: 'Betaling geslaagd!',
     successMessage:
       'Je hebt nu onbeperkt toegang om gedichten te genereren!',
     successDescription:
       'Je hebt nu onbeperkt toegang tot de gedichtengenerator.',
+    pendingTitle: 'Betaling controleren...',
+    pendingMessage:
+      'We controleren je betaling. Dit kan even duren. Vernieuw de pagina als je geen bevestiging krijgt.',
+    failedTitle: 'Betaling niet gelukt',
+    failedMessage:
+      'We konden geen geslaagde betaling vinden. Er is niets ontgrendeld. Probeer het opnieuw of neem contact met ons op.',
     cancelledTitle: 'Betaling geannuleerd',
     cancelledMessage:
       'Je betaling is geannuleerd. Je kunt het op elk moment opnieuw proberen.',
     remainingPoems: '{count} gratis gedicht over | {count} gratis gedichten over',
-    unlimitedAccess: 'Onbeperkt toegang voor slechts €1,99 (incl. BTW)',
+    unlimitedAccess: 'Onbeperkt toegang voor slechts €6,99 (incl. BTW)',
     unlimitedUnlocked: 'Onbeperkt gedichten ontgrendeld!',
-  },
-  testimonials: {
-    title: 'Al meer dan 5000 blije hulpsinterklazen',
-    card1: {
-      text: 'Geweldig! In 1 minuut klaar terwijl ik normaal uren zit te zweten.',
-      author: 'Anouk',
-    },
-    card2: {
-      text: 'Eindelijk een gedicht dat niet begint met "Sint zat te denken".',
-      author: 'Mark',
-    },
-    card3: {
-      text: 'Mijn schoonmoeder moest huilen van het lachen. Top!',
-      author: 'Lisa',
-    },
   },
   video: {
     title: 'Sinterklaas over sintgpt.com',

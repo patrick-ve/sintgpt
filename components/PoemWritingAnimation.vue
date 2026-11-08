@@ -390,7 +390,7 @@ const lineWidths = [
 }
 
 .message-text {
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: var(--font-text);
   font-size: 1.1rem;
   color: #8b1538;
   font-style: italic;

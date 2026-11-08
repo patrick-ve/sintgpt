@@ -8,6 +8,36 @@ const dialogRef = ref<HTMLDialogElement | null>(null);
 const isLoading = ref(false);
 const error = ref<string | null>(null);
 
+const emit = defineEmits<{ restored: [] }>();
+const { claimPayment } = usePaymentTracking();
+
+// Buyers on another browser, or with a cookie from before Nov 2026, can get
+// access back with their payment ID. The server verifies it with Dodo.
+const restoreId = ref('');
+const restoreError = ref<string | null>(null);
+const isRestoring = ref(false);
+
+const handleRestore = async () => {
+  const paymentId = restoreId.value.trim();
+  if (!/^pay_[A-Za-z0-9]+$/.test(paymentId)) {
+    restoreError.value = t('payment.restore.invalid');
+    return;
+  }
+
+  restoreError.value = null;
+  isRestoring.value = true;
+  const status = await claimPayment(paymentId);
+  isRestoring.value = false;
+
+  if (status === 'granted') {
+    (window as any).umami?.track('Access restored');
+    isOpen.value = false;
+    emit('restored');
+  } else {
+    restoreError.value = t(`payment.restore.${status === 'pending' ? 'pending' : 'failed'}`);
+  }
+};
+
 // Sync dialog element with isOpen state
 watch(isOpen, (newValue) => {
   if (newValue) {
@@ -137,7 +167,7 @@ const closeModal = () => {
         <!-- Price display -->
         <div class="price-wrapper">
           <span class="price-currency">€</span>
-          <span class="price-amount">1</span>
+          <span class="price-amount">6</span>
           <span class="price-cents">,99</span>
         </div>
 
@@ -208,6 +238,34 @@ const closeModal = () => {
         <div class="button-shimmer"></div>
       </button>
 
+      <!-- Restore access for earlier buyers -->
+      <details class="restore">
+        <summary>{{ t('payment.restore.title') }}</summary>
+        <form novalidate class="restore-form" @submit.prevent="handleRestore">
+          <label for="restore-payment-id" class="restore-label">{{ t('payment.restore.label') }}</label>
+          <div class="restore-row">
+            <input
+              id="restore-payment-id"
+              v-model="restoreId"
+              type="text"
+              class="restore-input"
+              placeholder="pay_…"
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
+              :aria-invalid="restoreError ? true : undefined"
+              aria-describedby="restore-message"
+            />
+            <button type="submit" class="restore-submit" :disabled="isRestoring">
+              {{ isRestoring ? t('payment.restore.checking') : t('payment.restore.submit') }}
+            </button>
+          </div>
+          <p id="restore-message" class="restore-message" :class="{ 'restore-error': restoreError }" aria-live="polite">
+            {{ restoreError || t('payment.restore.help') }}
+          </p>
+        </form>
+      </details>
+
       <!-- Trust footer -->
       <div class="trust-footer">
         <div class="trust-icons">
@@ -233,7 +291,7 @@ const closeModal = () => {
   border-radius: 20px;
   max-width: 420px;
   width: calc(100% - 2rem);
-  max-height: calc(100vh - 2rem);
+  max-height: calc(100dvh - 2rem);
   overflow: visible;
   background: transparent;
   z-index: 1000;
@@ -271,7 +329,11 @@ const closeModal = () => {
     0 0 0 1px rgba(212, 168, 83, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.8),
     inset 0 -2px 10px rgba(139, 21, 56, 0.05);
-  overflow: hidden;
+  /* Scrolls on short screens, so the pay button always stays reachable. */
+  max-height: inherit;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 /* Parchment texture overlay */
@@ -386,7 +448,8 @@ const closeModal = () => {
   border-radius: 50%;
   color: #f4cd60;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition-property: background-color, border-color, color, box-shadow, transform, opacity;
+  transition-duration: 0.3s;
   z-index: 20;
 }
 
@@ -431,7 +494,7 @@ const closeModal = () => {
 }
 
 .modal-title {
-  font-family: 'Cinzel', serif;
+  font-family: var(--font-display);
   font-size: 1.5rem;
   font-weight: 700;
   color: #8b1538;
@@ -485,7 +548,7 @@ const closeModal = () => {
 }
 
 .banner-text {
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: var(--font-text);
   font-size: 0.95rem;
   color: #5c0f26;
   margin: 0;
@@ -528,7 +591,7 @@ const closeModal = () => {
 }
 
 .price-currency {
-  font-family: 'Cinzel', serif;
+  font-family: var(--font-display);
   font-size: 1.5rem;
   font-weight: 700;
   color: #8b1538;
@@ -537,7 +600,7 @@ const closeModal = () => {
 }
 
 .price-amount {
-  font-family: 'Cinzel', serif;
+  font-family: var(--font-display);
   font-size: 4rem;
   font-weight: 900;
   background: linear-gradient(135deg, #8b1538 0%, #b91c4a 50%, #8b1538 100%);
@@ -549,7 +612,7 @@ const closeModal = () => {
 }
 
 .price-cents {
-  font-family: 'Cinzel', serif;
+  font-family: var(--font-display);
   font-size: 1.75rem;
   font-weight: 700;
   color: #8b1538;
@@ -557,7 +620,7 @@ const closeModal = () => {
 }
 
 .price-description {
-  font-family: 'Cinzel', serif;
+  font-family: var(--font-sans);
   font-size: 0.8rem;
   color: #5c0f26;
   margin: 0;
@@ -612,7 +675,7 @@ const closeModal = () => {
 }
 
 .feature-text {
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: var(--font-text);
   font-size: 0.95rem;
   color: #3d2914;
 }
@@ -648,7 +711,7 @@ const closeModal = () => {
 }
 
 .error-title {
-  font-family: 'Cinzel', serif;
+  font-family: var(--font-display);
   font-size: 0.9rem;
   font-weight: 700;
   color: #92400e;
@@ -656,7 +719,7 @@ const closeModal = () => {
 }
 
 .error-message {
-  font-family: 'IM Fell DW Pica', serif;
+  font-family: var(--font-text);
   font-size: 0.875rem;
   color: #a16207;
   margin: 0;
@@ -672,12 +735,13 @@ const closeModal = () => {
   border: 3px solid #d4a853;
   border-radius: 14px;
   color: #f4cd60;
-  font-family: 'Cinzel', serif;
+  font-family: var(--font-sans);
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition-property: background-color, border-color, color, box-shadow, transform, opacity;
+  transition-duration: 0.3s;
   box-shadow:
     0 6px 20px rgba(139, 21, 56, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -750,6 +814,82 @@ const closeModal = () => {
 }
 
 /* Trust footer */
+.restore {
+  margin-top: 1rem;
+  text-align: start;
+}
+
+.restore summary {
+  min-height: 2.75rem;
+  padding-block: 0.625rem;
+  font-weight: 700;
+  color: #8b1538;
+  cursor: pointer;
+}
+
+.restore-label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #5c0f26;
+}
+
+.restore-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.restore-input {
+  flex: 1 1 10rem;
+  min-width: 0;
+  min-height: 2.75rem;
+  padding-inline: 0.75rem;
+  font-size: 1rem;
+  background: #fff;
+  border: 2px solid #a08850;
+  border-radius: 0.5rem;
+}
+
+.restore-input[aria-invalid='true'] {
+  border-color: #8b1538;
+}
+
+.restore-submit {
+  min-height: 2.75rem;
+  padding-inline: 1rem;
+  font-weight: 700;
+  color: #8b1538;
+  background: transparent;
+  border: 2px solid #8b1538;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition-property: background-color;
+  transition-duration: 150ms;
+}
+
+.restore-submit:enabled:hover {
+  background: rgba(139, 21, 56, 0.1);
+}
+
+.restore-submit:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.restore-message {
+  margin-top: 0.375rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: #5c0f26;
+}
+
+.restore-error {
+  font-weight: 700;
+  color: #8b1538;
+}
+
 .trust-footer {
   display: flex;
   flex-direction: column;
@@ -771,7 +911,7 @@ const closeModal = () => {
 }
 
 .trust-text {
-  font-family: 'Cinzel', serif;
+  font-family: var(--font-sans);
   font-size: 0.75rem;
   color: #5c0f26;
   margin: 0;
@@ -781,10 +921,17 @@ const closeModal = () => {
 }
 
 /* Mobile responsive */
+/* Where the window scrolls, this corner ribbon would end up mid-content. */
+@media (max-height: 800px) {
+  .ribbon-br {
+    display: none;
+  }
+}
+
 @media (max-width: 480px) {
   .payment-dialog {
     width: calc(100% - 1.5rem);
-    max-height: calc(100vh - 1.5rem);
+    max-height: calc(100dvh - 1.5rem);
   }
 
   .modal-container {

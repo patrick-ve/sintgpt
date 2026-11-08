@@ -62,7 +62,7 @@ export function useDisableDevTools() {
         const p = new Promise<boolean | null>((_resolveVerdict) => {
           resolveVerdict = _resolveVerdict;
           const wait$ = setTimeout(() => {
-            resolveVerdict(true);
+            _resolveVerdict(true);
           }, config.maxMillisBeforeAckWhenClosed + 1);
         });
         p.then((verdict) => {

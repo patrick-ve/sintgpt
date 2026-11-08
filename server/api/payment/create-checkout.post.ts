@@ -1,5 +1,5 @@
 import { consola } from 'consola';
-import DodoPayments from 'dodopayments';
+import { createDodoClient } from '../../utils/dodo';
 
 interface CheckoutResponse {
   checkoutUrl: string;
@@ -28,12 +28,7 @@ export default defineEventHandler(async (event): Promise<CheckoutResponse> => {
 
     consola.info('Creating checkout session...');
 
-    // Initialize Dodo Payments client
-    // Use test_mode in development, live_mode in production
-    const client = new DodoPayments({
-      bearerToken: runtimeConfig.dodoPaymentsApiKey,
-      environment: import.meta.dev ? 'test_mode' : 'live_mode',
-    });
+    const client = createDodoClient(runtimeConfig.dodoPaymentsApiKey);
 
     // Get the base URL for return URL
     const headers = getHeaders(event);
@@ -49,7 +44,9 @@ export default defineEventHandler(async (event): Promise<CheckoutResponse> => {
           quantity: 1,
         },
       ],
-      return_url: `${baseUrl}/?payment=success`,
+      // Dodo appends payment_id and status. The page sends the ID to
+      // /api/payment/claim-access, which verifies it with Dodo.
+      return_url: `${baseUrl}/`,
       cancel_url: `${baseUrl}/?payment=cancelled`,
       // Configure allowed payment methods (excludes Klarna and other BNPL)
       allowed_payment_method_types: [
@@ -62,6 +59,13 @@ export default defineEventHandler(async (event): Promise<CheckoutResponse> => {
         'google_pay',
       ],
     });
+
+    if (!session.checkout_url) {
+      throw createError({
+        statusCode: 502,
+        statusMessage: 'Payment provider returned no checkout URL',
+      });
+    }
 
     consola.success('Checkout session created:', session.checkout_url);
 

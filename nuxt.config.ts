@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2024-11-01',
+  compatibilityDate: '2026-11-01',
 
   devtools: { enabled: true },
 
@@ -13,12 +13,24 @@ export default defineNuxtConfig({
   css: ['@/assets/css/main.css'],
 
   runtimeConfig: {
-    googleGenerativeAiApiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
-    enrichLayerApiKey: process.env.ENRICH_LAYER_API_KEY,
-    dodoPaymentsApiKey: process.env.DODO_PAYMENTS_API_KEY,
-    dodoProductId: process.env.DODO_PRODUCT_ID,
-    dodoPaymentsWebhookSecret: process.env.DODO_PAYMENTS_WEBHOOK_SECRET,
+    // Override at runtime with NUXT_AI_GATEWAY_API_KEY, NUXT_AI_GATEWAY_MODEL,
+    // NUXT_DODO_PAYMENTS_API_KEY, NUXT_DODO_PRODUCT_ID and
+    // NUXT_DODO_PAYMENTS_WEBHOOK_SECRET and NUXT_ACCESS_COOKIE_SECRET.
+    aiGatewayApiKey: '',
+    aiGatewayModel: '',
+    dodoPaymentsApiKey: '',
+    dodoProductId: '',
+    dodoPaymentsWebhookSecret: '',
+    accessCookieSecret: '',
     public: {},
+  },
+
+  fonts: {
+    families: [
+      { name: 'Texturina', weights: [500, 700], global: true },
+      { name: 'Alegreya', weights: [400, 500], styles: ['normal', 'italic'], global: true },
+      { name: 'Alegreya Sans', weights: [400, 500, 700], global: true },
+    ],
   },
 
   colorMode: {
@@ -57,13 +69,25 @@ export default defineNuxtConfig({
     // Icons are handled by @nuxt/icon module
   },
 
-  vite: {
-    esbuild: {
-      legalComments: 'none',
+  // Used by `npm run build:cloudflare` (NITRO_PRESET=cloudflare_module).
+  // Ignored by the default node-server build that the tests run against.
+  nitro: {
+    cloudflare: {
+      deployConfig: true,
+      nodeCompat: true,
+      wrangler: {
+        name: 'sintgpt',
+        observability: { enabled: true },
+        // Lets the Worker notice a client disconnect and stop poem generation.
+        compatibility_flags: ['enable_request_signal'],
+      },
     },
+  },
+
+  vite: {
     build: {
-      terserOptions: {
-        format: {
+      rolldownOptions: {
+        output: {
           comments: false,
         },
       },

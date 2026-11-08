@@ -2,15 +2,19 @@
 const { locale } = useI18n();
 
 useSeoMeta({
-  title: 'Hoe schrijf je het perfecte sinterklaasgedicht in 2025? Complete gids',
+  title: 'Hoe schrijf je het perfecte sinterklaasgedicht in 2026? Complete gids',
   description: 'Ontdek de beste tips en trucs voor het schrijven van een geweldig sinterklaasgedicht. Van rijmschema\'s tot persoonlijke details - alles wat je moet weten!',
   ogTitle: 'Hoe schrijf je het perfecte sinterklaasgedicht? | SintGPT',
   ogDescription: 'Complete gids met praktische tips voor het schrijven van sinterklaasgedichten die gegarandeerd indruk maken.',
-  ogImage: '/og-image.jpg',
-  keywords: 'sinterklaasgedicht schrijven, sinterklaasgedicht tips, perfect sinterklaasgedicht, rijmschema sinterklaas, gepersonaliseerd gedicht',
   articlePublishedTime: '2025-11-17',
-  articleModifiedTime: '2025-11-17',
+  articleModifiedTime: '2026-11-08',
   ogType: 'article',
+});
+
+useOgImage('blog-hoe-schrijf-je-het-perfecte-sinterklaasgedicht', 'SintGPT Blog: hoe schrijf je het perfecte sinterklaasgedicht?');
+
+useHead({
+  meta: [{ name: 'keywords', content: 'sinterklaasgedicht schrijven, sinterklaasgedicht tips, perfect sinterklaasgedicht, rijmschema sinterklaas, gepersonaliseerd gedicht' }],
 });
 
 useHead({
@@ -23,11 +27,11 @@ useHead({
       innerHTML: JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'Article',
-        headline: 'Hoe schrijf je het perfecte sinterklaasgedicht in 2025',
+        headline: 'Hoe schrijf je het perfecte sinterklaasgedicht in 2026',
         description: 'Ontdek de beste tips en trucs voor het schrijven van een geweldig sinterklaasgedicht.',
-        image: 'https://sintgpt.com/og-image.jpg',
+        image: 'https://sintgpt.com/og/blog-hoe-schrijf-je-het-perfecte-sinterklaasgedicht.jpg',
         datePublished: '2025-11-17',
-        dateModified: '2025-11-17',
+        dateModified: '2026-11-08',
         author: {
           '@type': 'Organization',
           name: 'SintGPT',
@@ -47,10 +51,10 @@ useHead({
       <div class="absolute top-0 right-0 w-16 h-16 bg-[#F4CD60] translate-x-8 -translate-y-8 rotate-45 transform"></div>
 
       <div class="container mx-auto px-6 py-8 text-[#F4CD60] relative z-10">
-        <NuxtLink to="/blog" class="hover:opacity-80 transition-opacity inline-block mb-2 font-cinzel font-bold">
+        <NuxtLink to="/blog" class="hover:opacity-80 transition-opacity inline-block mb-2 font-bold">
           <span class="text-lg">← Terug naar Blog</span>
         </NuxtLink>
-        <h1 class="text-3xl md:text-5xl font-bold font-cinzel drop-shadow-md">SintGPT Blog</h1>
+        <h1 class="text-3xl md:text-5xl font-bold font-display drop-shadow-md">SintGPT Blog</h1>
       </div>
     </header>
 
@@ -61,13 +65,13 @@ useHead({
         
         <!-- Article Header -->
         <header class="mb-8 border-b-2 border-red-100 pb-8">
-          <div class="flex items-center gap-4 text-sm text-red-700 mb-4 font-bold font-cinzel">
+          <div class="flex items-center gap-4 text-sm text-red-700 mb-4 font-bold">
             <time datetime="2025-11-17">17 november 2025</time>
             <span>•</span>
             <span>5 minuten lezen</span>
           </div>
-          <h1 class="text-4xl md:text-5xl font-bold text-red-900 mb-6 leading-tight font-cinzel">
-            Hoe schrijf je het perfecte sinterklaasgedicht in 2025?
+          <h1 class="text-4xl md:text-5xl font-bold text-red-900 mb-6 leading-tight font-display">
+            Hoe schrijf je het perfecte sinterklaasgedicht in 2026?
           </h1>
           <p class="text-xl text-gray-800 leading-relaxed font-medium">
             Het sinterklaasfeest staat voor de deur en dat betekent: tijd voor gedichten! Maar hoe schrijf je een gedicht dat echt indruk maakt? In deze uitgebreide gids delen we alle tips en trucs die je nodig hebt.
@@ -75,14 +79,14 @@ useHead({
         </header>
 
         <!-- Article Body -->
-        <div class="prose prose-lg max-w-none prose-headings:font-cinzel prose-headings:text-red-900 prose-p:text-gray-800 prose-strong:text-red-900">
+        <div class="prose prose-lg max-w-none prose-headings:font-display prose-headings:text-red-900 prose-p:text-gray-800 prose-strong:text-red-900">
           <h2 class="text-3xl font-bold mt-8 mb-4">1. Begin met goede voorbereiding</h2>
           <p class="leading-relaxed mb-4">
             Het geheim van een goed sinterklaasgedicht zit hem in de voorbereiding. Verzamel informatie over de ontvanger: wat zijn hun hobby's, wat doen ze voor werk, hebben ze bijzondere eigenschappen of grappige gewoontes? Hoe meer persoonlijke details je verzamelt, hoe leuker en persoonlijker je gedicht wordt.
           </p>
 
           <div class="bg-red-50 border-l-4 border-red-600 p-6 my-6 rounded-r-lg">
-            <h3 class="text-xl font-bold text-red-900 mb-2 font-cinzel">Pro tip:</h3>
+            <h3 class="text-xl font-bold text-red-900 mb-2 font-display">Pro tip:</h3>
             <p class="text-red-800">Maak een lijstje met minimaal 5 unieke eigenschappen of gebeurtenissen uit het afgelopen jaar van de ontvanger. Dit geeft je genoeg materiaal om mee te werken!</p>
           </div>
 
@@ -125,8 +129,8 @@ useHead({
           </ol>
 
           <div class="bg-[#fff3c9] border-l-4 border-[#F4CD60] p-6 my-6 rounded-r-lg">
-            <h3 class="text-xl font-bold text-red-900 mb-2 font-cinzel">Voorbeeld:</h3>
-            <p class="text-red-900 italic font-handwriting text-lg">
+            <h3 class="text-xl font-bold text-red-900 mb-2 font-display">Voorbeeld:</h3>
+            <p class="text-red-900 italic font-text text-lg">
               "Iets warms en zachts, om mee te knuffelen,<br>
               Daar kun je heerlijk mee verschuffelen..."<br><br>
               Dit houdt de spanning erin, terwijl het wel hints geeft over een kussen of dekentje.
@@ -162,7 +166,7 @@ useHead({
           <h2 class="text-3xl font-bold mt-8 mb-4">Voorbeeldgedicht</h2>
           <div class="bg-[#fff3c9] p-8 rounded-lg my-6 border-2 border-[#e6d5a9] shadow-inner relative overflow-hidden">
              <div class="absolute top-2 right-2 text-2xl opacity-30">🪶</div>
-            <p class="font-handwriting text-xl leading-relaxed text-gray-900">
+            <p class="font-text text-xl leading-relaxed text-gray-900">
               Beste Emma, wat een jaar heb jij gehad,<br>
               Met je nieuwe baan, daar ben je vast blij mee geweest, dat is wat!<br>
               Je werkt nu met cijfers van 's morgens vroeg tot laat,<br>
@@ -186,11 +190,11 @@ useHead({
           </p>
 
           <div class="bg-red-50 border-2 border-red-600 rounded-xl p-8 my-8 text-center shadow-lg">
-            <h3 class="text-2xl font-bold text-red-900 mb-4 font-cinzel">Probeer SintGPT nu gratis!</h3>
+            <h3 class="text-2xl font-bold text-red-900 mb-4 font-display">Probeer SintGPT nu gratis!</h3>
             <p class="text-red-800 mb-6 font-medium">Maak 2 gedichten gratis en ontdek hoe makkelijk het kan zijn.</p>
             <NuxtLink
               to="/"
-              class="inline-block px-8 py-3 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-transform transform hover:scale-105 text-lg font-cinzel border border-[#F4CD60]"
+              class="inline-block px-8 py-3 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-transform transform hover:scale-105 text-lg border border-[#F4CD60]"
             >
               Start nu gratis →
             </NuxtLink>
@@ -214,7 +218,7 @@ useHead({
             Het schrijven van een perfect sinterklaasgedicht is een kunst, maar met de juiste voorbereiding en deze tips kom je al een heel eind. Onthoud: het gaat om de persoonlijke touch en de moeite die je erin steekt. Of je nu zelf schrijft of gebruik maakt van een tool zoals SintGPT, het belangrijkste is dat je gedicht van harte komt en de ontvanger laat zien dat je aan hem of haar gedacht hebt.
           </p>
 
-          <p class="text-red-900 leading-relaxed font-bold font-cinzel text-xl mt-8">
+          <p class="text-red-900 leading-relaxed font-bold text-xl mt-8">
             Veel schrijfplezier en een fijn Sinterklaasfeest!
           </p>
         </div>
@@ -234,7 +238,7 @@ useHead({
            <span>🐴</span>
            <span>🥕</span>
         </div>
-        <p class="font-cinzel font-bold text-lg">
+        <p class="font-bold text-lg">
          Copyright {{ new Date().getFullYear() }} SintGPT. Alle rechten voorbehouden.
         </p>
       </div>
@@ -243,15 +247,6 @@ useHead({
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@400;700;900&family=IM+Fell+DW+Pica+SC&family=IM+Fell+DW+Pica:ital@0;1&display=swap');
-
-.font-cinzel {
-  font-family: 'Cinzel', serif;
-}
-
-.font-handwriting {
-  font-family: 'IM Fell DW Pica', serif;
-}
 
 .bg-sinterklaas-pattern {
   background-color: #7f1d1d;

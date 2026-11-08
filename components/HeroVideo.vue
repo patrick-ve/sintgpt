@@ -123,11 +123,11 @@ function formatTime(seconds: number): string {
       <!-- Big Play Button Overlay -->
       <div
         v-if="!isPlaying"
-        class="absolute inset-0 flex items-center justify-center bg-gradient-to-t from-[#1a0a10]/60 via-transparent to-[#1a0a10]/30 cursor-pointer transition-all duration-300 z-10"
+        class="absolute inset-0 flex items-center justify-center bg-gradient-to-t from-[#1a0a10]/60 via-transparent to-[#1a0a10]/30 cursor-pointer transition duration-300 z-10"
         @click="togglePlay"
       >
         <button
-          class="play-button w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-[#8b1538] to-[#5c0f26] rounded-full flex items-center justify-center border-3 border-[#d4a853] shadow-[0_4px_20px_rgba(139,21,56,0.6),0_0_30px_rgba(212,168,83,0.3)] transform transition-all duration-300 hover:scale-110 hover:shadow-[0_6px_30px_rgba(139,21,56,0.8),0_0_50px_rgba(212,168,83,0.5)]"
+          class="play-button w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-[#8b1538] to-[#5c0f26] rounded-full flex items-center justify-center border-3 border-[#d4a853] shadow-[0_4px_20px_rgba(139,21,56,0.6),0_0_30px_rgba(212,168,83,0.3)] transform transition duration-300 hover:scale-110 hover:shadow-[0_6px_30px_rgba(139,21,56,0.8),0_0_50px_rgba(212,168,83,0.5)]"
           aria-label="Play video"
           data-umami-event="Play hero video"
         >
@@ -145,11 +145,11 @@ function formatTime(seconds: number): string {
       >
         <!-- Progress Bar -->
         <div
-          class="w-full h-1.5 bg-white/20 rounded-full cursor-pointer relative overflow-hidden hover:h-2 transition-all group/progress"
+          class="w-full h-1.5 bg-white/20 rounded-full cursor-pointer relative overflow-hidden hover:h-2 transition group/progress"
           @click="seek"
         >
           <div
-            class="absolute top-0 left-0 h-full bg-gradient-to-r from-[#d4a853] to-[#f4cd60] rounded-full transition-all"
+            class="absolute top-0 left-0 h-full bg-gradient-to-r from-[#d4a853] to-[#f4cd60] rounded-full transition"
             :style="{ width: `${progress}%` }"
           ></div>
           <div

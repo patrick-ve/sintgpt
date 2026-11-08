@@ -6,11 +6,15 @@ useSeoMeta({
   description: 'Ontdek de rijke geschiedenis en tradities van het Sinterklaasfeest. Alles over gedichten, surprises, pepernoten en meer!',
   ogTitle: 'Sinterklaas Tradities & Geschiedenis | SintGPT',
   ogDescription: 'Een complete gids over de Nederlandse Sinterklaas traditie: van de oorsprong tot moderne gebruiken.',
-  ogImage: '/og-image.jpg',
-  keywords: 'sinterklaas traditie, sinterklaas geschiedenis, sinterklaas gedichten traditie, pakjesavond, surprises sinterklaas, nederlandse tradities',
   articlePublishedTime: '2025-11-17',
   articleModifiedTime: '2025-11-17',
   ogType: 'article',
+});
+
+useOgImage('blog-sinterklaas-tradities', 'SintGPT Blog: Sinterklaas tradities en geschiedenis');
+
+useHead({
+  meta: [{ name: 'keywords', content: 'sinterklaas traditie, sinterklaas geschiedenis, sinterklaas gedichten traditie, pakjesavond, surprises sinterklaas, nederlandse tradities' }],
 });
 
 useHead({
@@ -25,7 +29,7 @@ useHead({
         '@type': 'Article',
         headline: 'Sinterklaas tradities: Van gedichten tot surprises',
         description: 'Een complete gids over de Nederlandse Sinterklaas traditie en haar geschiedenis.',
-        image: 'https://sintgpt.com/og-image.jpg',
+        image: 'https://sintgpt.com/og/blog-sinterklaas-tradities.jpg',
         datePublished: '2025-11-17',
         dateModified: '2025-11-17',
         author: {
@@ -47,10 +51,10 @@ useHead({
       <div class="absolute top-0 right-0 w-16 h-16 bg-[#F4CD60] translate-x-8 -translate-y-8 rotate-45 transform"></div>
 
       <div class="container mx-auto px-6 py-8 text-[#F4CD60] relative z-10">
-        <NuxtLink to="/blog" class="hover:opacity-80 transition-opacity inline-block mb-2 font-cinzel font-bold">
+        <NuxtLink to="/blog" class="hover:opacity-80 transition-opacity inline-block mb-2 font-bold">
           <span class="text-lg">← Terug naar Blog</span>
         </NuxtLink>
-        <h1 class="text-3xl md:text-5xl font-bold font-cinzel drop-shadow-md">SintGPT Blog</h1>
+        <h1 class="text-3xl md:text-5xl font-bold font-display drop-shadow-md">SintGPT Blog</h1>
       </div>
     </header>
 
@@ -61,12 +65,12 @@ useHead({
 
         <!-- Article Header -->
         <header class="mb-8 border-b-2 border-red-100 pb-8">
-          <div class="flex items-center gap-4 text-sm text-red-700 mb-4 font-bold font-cinzel">
+          <div class="flex items-center gap-4 text-sm text-red-700 mb-4 font-bold">
             <time datetime="2025-11-17">17 november 2025</time>
             <span>•</span>
             <span>6 minuten lezen</span>
           </div>
-          <h1 class="text-4xl md:text-5xl font-bold text-red-900 mb-6 leading-tight font-cinzel">
+          <h1 class="text-4xl md:text-5xl font-bold text-red-900 mb-6 leading-tight font-display">
             Sinterklaas Tradities: Van Gedichten tot Surprises
           </h1>
           <p class="text-xl text-gray-800 leading-relaxed font-medium">
@@ -75,14 +79,14 @@ useHead({
         </header>
 
         <!-- Article Body -->
-        <div class="prose prose-lg max-w-none prose-headings:font-cinzel prose-headings:text-red-900 prose-p:text-gray-800 prose-strong:text-red-900">
+        <div class="prose prose-lg max-w-none prose-headings:font-display prose-headings:text-red-900 prose-p:text-gray-800 prose-strong:text-red-900">
           <h2 class="text-3xl font-bold mt-8 mb-4">De Oorsprong van Sinterklaas</h2>
           <p class="leading-relaxed mb-4">
             Het Sinterklaasfeest vindt zijn oorsprong in de figuur van Sint-Nicolaas, een bisschop die in de 4e eeuw leefde in het huidige Turkije. Hij stond bekend om zijn gulheid en liefde voor kinderen. De traditie zoals wij die nu kennen, met zijn aankomst uit Spanje en Zwarte Pieten, ontstond pas in de 19e eeuw en is typisch Nederlands en Vlaams.
           </p>
 
           <div class="bg-red-50 border-l-4 border-red-600 p-6 my-6 rounded-r-lg">
-            <h3 class="text-xl font-bold text-red-900 mb-2 font-cinzel">Wist je dat?</h3>
+            <h3 class="text-xl font-bold text-red-900 mb-2 font-display">Wist je dat?</h3>
             <p class="text-red-800">De datum van 5 december is gekozen omdat dit traditioneel gezien de sterfdag van Sint-Nicolaas is. In België wordt Sinterklaas vaak al op 6 december gevierd!</p>
           </div>
 
@@ -114,7 +118,7 @@ useHead({
           </p>
 
           <div class="bg-[#fff3c9] p-6 rounded-lg my-6 border border-[#F4CD60]">
-            <h3 class="text-xl font-bold text-red-900 mb-3 font-cinzel">Populaire Surprise Ideeën:</h3>
+            <h3 class="text-xl font-bold text-red-900 mb-3 font-display">Populaire Surprise Ideeën:</h3>
             <ul class="text-red-800 space-y-2 list-disc pl-4 marker:text-red-600">
               <li>Een boek verpakt als gigantisch boek van karton</li>
               <li>Een sportattribuut verstopt in een zelfgemaakte sportschoen</li>
@@ -165,27 +169,27 @@ useHead({
 
           <div class="grid md:grid-cols-2 gap-4 my-6">
             <div class="bg-[#fff3c9] p-4 rounded-lg border border-[#F4CD60]/50">
-              <h4 class="font-bold text-red-900 mb-2 font-cinzel">Pepernoten</h4>
+              <h4 class="font-bold text-red-900 mb-2 font-display">Pepernoten</h4>
               <p class="text-gray-800 text-sm">Kleine, ronde koekjes met speculaaskruiden. Niet te verwarren met kruidnoten!</p>
             </div>
             <div class="bg-[#fff3c9] p-4 rounded-lg border border-[#F4CD60]/50">
-              <h4 class="font-bold text-red-900 mb-2 font-cinzel">Kruidnoten</h4>
+              <h4 class="font-bold text-red-900 mb-2 font-display">Kruidnoten</h4>
               <p class="text-gray-800 text-sm">De ronde, knapperige koekjes die vaak pepernoten worden genoemd.</p>
             </div>
             <div class="bg-[#fff3c9] p-4 rounded-lg border border-[#F4CD60]/50">
-              <h4 class="font-bold text-red-900 mb-2 font-cinzel">Chocoladeletters</h4>
+              <h4 class="font-bold text-red-900 mb-2 font-display">Chocoladeletters</h4>
               <p class="text-gray-800 text-sm">Chocolade in de vorm van de eerste letter van je naam.</p>
             </div>
             <div class="bg-[#fff3c9] p-4 rounded-lg border border-[#F4CD60]/50">
-              <h4 class="font-bold text-red-900 mb-2 font-cinzel">Marsepein</h4>
+              <h4 class="font-bold text-red-900 mb-2 font-display">Marsepein</h4>
               <p class="text-gray-800 text-sm">Figuren van amandelspijs, vaak in de vorm van fruit of dieren.</p>
             </div>
             <div class="bg-[#fff3c9] p-4 rounded-lg border border-[#F4CD60]/50">
-              <h4 class="font-bold text-red-900 mb-2 font-cinzel">Taai-taai</h4>
+              <h4 class="font-bold text-red-900 mb-2 font-display">Taai-taai</h4>
               <p class="text-gray-800 text-sm">Stevige koek met honing en anijs, vaak in de vorm van een pop.</p>
             </div>
             <div class="bg-[#fff3c9] p-4 rounded-lg border border-[#F4CD60]/50">
-              <h4 class="font-bold text-red-900 mb-2 font-cinzel">Speculaas</h4>
+              <h4 class="font-bold text-red-900 mb-2 font-display">Speculaas</h4>
               <p class="text-gray-800 text-sm">Krokante koekjes met kruiden, vaak met figuren erin gestempeld.</p>
             </div>
           </div>
@@ -209,7 +213,7 @@ useHead({
           </p>
 
           <div class="bg-red-50 border-l-4 border-red-600 p-6 my-6 rounded-r-lg">
-            <h3 class="text-xl font-bold text-red-900 mb-2 font-cinzel">Tips voor Beginners:</h3>
+            <h3 class="text-xl font-bold text-red-900 mb-2 font-display">Tips voor Beginners:</h3>
             <ul class="text-red-800 space-y-2 list-disc pl-4 marker:text-red-600">
               <li>Begin simpel met je gedicht - het hoeft niet perfect te rijmen</li>
               <li>Een surprise hoeft niet ingewikkeld te zijn - creativiteit telt meer dan perfectie</li>
@@ -225,11 +229,11 @@ useHead({
           </p>
 
           <div class="bg-red-50 border-2 border-red-600 rounded-xl p-8 my-8 text-center shadow-lg">
-            <h3 class="text-2xl font-bold text-red-900 mb-4 font-cinzel">Vier Sinterklaas met een Perfect Gedicht</h3>
+            <h3 class="text-2xl font-bold text-red-900 mb-4 font-display">Vier Sinterklaas met een Perfect Gedicht</h3>
             <p class="text-red-800 mb-6 font-medium">Maak je eerste sinterklaasgedicht gratis met SintGPT en ervaar de traditie!</p>
             <NuxtLink
               to="/"
-              class="inline-block px-8 py-3 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-transform transform hover:scale-105 text-lg font-cinzel border border-[#F4CD60]"
+              class="inline-block px-8 py-3 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-transform transform hover:scale-105 text-lg border border-[#F4CD60]"
             >
               Start nu gratis →
             </NuxtLink>
@@ -244,7 +248,7 @@ useHead({
             Het gedicht speelt hierin een centrale rol: het is het moment waarop de aandacht volledig naar de ontvanger gaat, waarbij humor en waardering samenkomen. Deze unieke traditie maakt het Nederlandse Sinterklaasfeest tot een van de meest persoonlijke en hartelijke feesten die er zijn.
           </p>
 
-          <p class="text-red-900 leading-relaxed font-bold font-cinzel text-xl mt-8">
+          <p class="text-red-900 leading-relaxed font-bold text-xl mt-8">
             Fijne Sinterklaas!
           </p>
         </div>
@@ -264,7 +268,7 @@ useHead({
            <span>🐴</span>
            <span>🥕</span>
         </div>
-        <p class="font-cinzel font-bold text-lg">
+        <p class="font-bold text-lg">
          Copyright {{ new Date().getFullYear() }} SintGPT. Alle rechten voorbehouden.
         </p>
       </div>
@@ -273,11 +277,6 @@ useHead({
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@400;700;900&family=IM+Fell+DW+Pica+SC&family=IM+Fell+DW+Pica:ital@0;1&display=swap');
-
-.font-cinzel {
-  font-family: 'Cinzel', serif;
-}
 
 .bg-sinterklaas-pattern {
   background-color: #7f1d1d;

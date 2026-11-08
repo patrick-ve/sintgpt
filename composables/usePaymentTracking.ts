@@ -1,17 +1,16 @@
 interface PaymentState {
   poemCount: number;
-  hasPaid: boolean;
-  paymentToken?: string;
   trialPoem?: string | null;
   trialPoemName?: string | null;
 }
 
 const STORAGE_KEY = 'sinterklaas-payment';
 const MAX_FREE_POEMS = 1;
+const CLAIM_ATTEMPTS = 6;
+const CLAIM_RETRY_MS = 2500;
 
 // Shared reactive state across all composable instances
 const poemCount = ref(0);
-const hasPaid = ref(false);
 const hasUnlimitedAccess = ref(false);
 const isInitialized = ref(false);
 const storedTrialPoem = ref<string | null>(null);
@@ -26,7 +25,6 @@ export const usePaymentTracking = () => {
       if (stored) {
         const state: PaymentState = JSON.parse(stored);
         poemCount.value = state.poemCount;
-        hasPaid.value = state.hasPaid;
         storedTrialPoem.value = state.trialPoem ?? null;
         storedTrialPoemName.value = state.trialPoemName ?? null;
       }
@@ -41,7 +39,6 @@ export const usePaymentTracking = () => {
     try {
       const state: PaymentState = {
         poemCount: poemCount.value,
-        hasPaid: hasPaid.value,
         trialPoem: storedTrialPoem.value,
         trialPoemName: storedTrialPoemName.value,
       };
@@ -72,40 +69,51 @@ export const usePaymentTracking = () => {
   }
 
   // Computed properties for reactivity
-  const isPaid = computed(() => {
-    if (hasUnlimitedAccess.value) {
-      return true;
-    }
-    return hasPaid.value;
-  });
+  const isPaid = computed(() => hasUnlimitedAccess.value);
 
   const canGeneratePoem = computed(() => {
-    if (hasUnlimitedAccess.value) return true;
-    return hasPaid.value || poemCount.value < MAX_FREE_POEMS;
+    return hasUnlimitedAccess.value || poemCount.value < MAX_FREE_POEMS;
   });
 
   const remainingFreePoems = computed(() => {
     if (hasUnlimitedAccess.value) return Infinity;
-    if (hasPaid.value) return Infinity;
     return Math.max(0, MAX_FREE_POEMS - poemCount.value);
   });
 
   const incrementPoemCount = () => {
     if (hasUnlimitedAccess.value) return;
 
-    if (!hasPaid.value) {
-      poemCount.value += 1;
-      saveToStorage();
-    }
+    poemCount.value += 1;
+    saveToStorage();
   };
 
-  const markAsPaid = () => {
-    hasUnlimitedAccess.value = true;
-    hasPaid.value = true;
-    // Clear trial poem when user upgrades
-    storedTrialPoem.value = null;
-    storedTrialPoemName.value = null;
-    saveToStorage();
+  // Ask the server to verify a payment with Dodo. A payment can take a moment
+  // to settle, so keep trying while it is pending or the request fails.
+  const claimPayment = async (
+    paymentId: string,
+  ): Promise<'granted' | 'pending' | 'denied'> => {
+    for (let attempt = 0; attempt < CLAIM_ATTEMPTS; attempt++) {
+      if (attempt > 0) {
+        await new Promise(resolve => setTimeout(resolve, CLAIM_RETRY_MS));
+      }
+      try {
+        const { status } = await $fetch<{ status: 'granted' | 'pending' | 'denied' }>(
+          '/api/payment/claim-access',
+          { method: 'POST', body: { paymentId } },
+        );
+        if (status === 'granted') {
+          hasUnlimitedAccess.value = true;
+          // Clear trial poem when user upgrades
+          storedTrialPoem.value = null;
+          storedTrialPoemName.value = null;
+          saveToStorage();
+        }
+        if (status !== 'pending') return status;
+      } catch (error) {
+        console.error('Error verifying payment:', error);
+      }
+    }
+    return 'pending';
   };
 
   const saveTrialPoem = (poem: string, name: string) => {
@@ -118,7 +126,6 @@ export const usePaymentTracking = () => {
   const resetPaymentState = () => {
     if (import.meta.server) return;
     poemCount.value = 0;
-    hasPaid.value = false;
     hasUnlimitedAccess.value = false;
     try {
       localStorage.removeItem(STORAGE_KEY);
@@ -127,19 +134,13 @@ export const usePaymentTracking = () => {
     }
   };
 
-  // Re-check access (useful after payment)
-  const refreshAccess = () => {
-    checkServerAccess();
-  };
-
   return {
     isPaid,
     canGeneratePoem,
     remainingFreePoems,
     incrementPoemCount,
-    markAsPaid,
+    claimPayment,
     resetPaymentState,
-    refreshAccess,
     maxFreePoems: MAX_FREE_POEMS,
     storedTrialPoem,
     storedTrialPoemName,

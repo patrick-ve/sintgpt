@@ -23,6 +23,10 @@ export const usePoemGenerator = () => {
     poem.value = '';
     isRateLimitError.value = false;
 
+    const reveal = createSmoothReveal((text) => {
+      poem.value = text.trimStart();
+    });
+
     try {
       const response = await fetch('/api/poem/generate', {
         method: 'POST',
@@ -49,57 +53,19 @@ export const usePoemGenerator = () => {
       }
 
       // Read the UI message stream
-      const reader = response.body?.getReader();
-      if (!reader) {
+      if (!response.body) {
         throw new Error('No response body reader available');
       }
 
-      const decoder = new TextDecoder();
-      let buffer = '';
-
-      while (true) {
-        const { done, value } = await reader.read();
-
-        if (done) {
-          break;
-        }
-
-        // Decode the chunk
-        buffer += decoder.decode(value, { stream: true });
-
-        // Process complete lines (SSE format)
-        const lines = buffer.split('\n');
-        buffer = lines.pop() || ''; // Keep incomplete line in buffer
-
-        for (const line of lines) {
-          if (line.startsWith('data: ')) {
-            // Extract the JSON part after "data: "
-            const jsonStr = line.substring(6);
-
-            // Skip [DONE] message
-            if (jsonStr === '[DONE]') {
-              continue;
-            }
-
-            try {
-              const parsed = JSON.parse(jsonStr);
-
-              // Only process text-delta events
-              if (parsed.type === 'text-delta' && parsed.delta) {
-                poem.value += parsed.delta;
-              }
-            } catch (e) {
-              console.error('Failed to parse stream data:', e);
-            }
-          }
-        }
-      }
+      await readPoemStream(response.body, reveal.push);
+      await reveal.finish();
 
       // Trim the final poem
       if (poem.value) {
         poem.value = poem.value.trim();
       }
     } catch (e: any) {
+      reveal.cancel();
       console.error('Poem generation error:', e);
       error.value = e.message || 'Failed to generate poem';
       poem.value = null;

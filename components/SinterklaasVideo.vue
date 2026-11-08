@@ -77,7 +77,7 @@ function formatTime(seconds: number): string {
     class="bg-[#fffdf0] rounded-2xl shadow-xl p-6 md:p-8 max-w-4xl mx-auto sint-border relative"
   >
     <h2
-      class="text-3xl font-bold text-red-900 mb-6 text-center font-cinzel border-b-2 border-red-100 pb-4"
+      class="text-3xl font-bold text-red-900 mb-6 text-center font-display border-b-2 border-red-100 pb-4"
     >
       {{ t('video.title') }}
     </h2>
@@ -120,7 +120,7 @@ function formatTime(seconds: number): string {
       >
         <!-- Progress Bar -->
         <div
-          class="w-full h-2 bg-white/30 rounded-full cursor-pointer relative overflow-hidden hover:h-3 transition-all"
+          class="w-full h-2 bg-white/30 rounded-full cursor-pointer relative overflow-hidden hover:h-3 transition"
           @click="seek"
         >
           <div
@@ -134,7 +134,8 @@ function formatTime(seconds: number): string {
             <!-- Play/Pause Small Button -->
             <button
               @click="togglePlay"
-              class="text-[#F4CD60] hover:text-white transition-colors font-cinzel font-bold text-lg flex items-center gap-2"
+              :aria-label="isPlaying ? 'Pauze' : 'Speel af'"
+              class="text-[#F4CD60] hover:text-white transition-colors font-bold text-lg flex items-center justify-center gap-2 min-w-11 min-h-11"
             >
               <span v-if="isPlaying">⏸</span>
               <span v-else>▶</span>
@@ -153,7 +154,8 @@ function formatTime(seconds: number): string {
           <!-- Mute/Unmute -->
           <button
             @click="toggleMute"
-            class="text-[#F4CD60] hover:text-white transition-colors"
+            :aria-label="isMuted ? 'Geluid aan' : 'Geluid uit'"
+            class="text-[#F4CD60] hover:text-white transition-colors flex items-center justify-center min-w-11 min-h-11"
           >
             <span v-if="isMuted">🔇</span>
             <span v-else>🔊</span>
@@ -165,7 +167,6 @@ function formatTime(seconds: number): string {
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&display=swap');
 
 .sint-border {
   border: 4px solid #7f1d1d;
@@ -173,7 +174,4 @@ function formatTime(seconds: number): string {
   outline-offset: -8px;
 }
 
-.font-cinzel {
-  font-family: 'Cinzel', serif;
-}
 </style>

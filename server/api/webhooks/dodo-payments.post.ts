@@ -1,115 +1,66 @@
 import { consola } from 'consola';
 import { Webhook } from 'standardwebhooks';
 
+// Access is granted by /api/payment/claim-access, which asks the Dodo API
+// directly. This webhook only records payment events in the logs.
 export default defineEventHandler(async (event) => {
-  try {
-    const runtimeConfig = useRuntimeConfig();
+  const webhookSecret = useRuntimeConfig(event).dodoPaymentsWebhookSecret;
 
-    // Get the webhook secret from environment (optional for testing)
-    const webhookSecret = runtimeConfig.dodoPaymentsWebhookSecret;
-
-    // Get raw body and headers
-    const body = await readRawBody(event);
-    if (!body) {
-      throw createError({
-        statusCode: 400,
-        statusMessage: 'No body provided',
-      });
-    }
-
-    let payload: any;
-
-    // If webhook secret is configured, verify the signature
-    if (webhookSecret) {
-      // Get webhook signature headers
-      const headers = getHeaders(event);
-      const signature = headers['webhook-signature'];
-      const timestamp = headers['webhook-timestamp'];
-      const id = headers['webhook-id'];
-
-      if (!signature || !timestamp || !id) {
-        consola.error('Missing webhook headers');
-        throw createError({
-          statusCode: 400,
-          statusMessage: 'Missing webhook headers',
-        });
-      }
-
-      // Verify webhook signature using standardwebhooks
-      const wh = new Webhook(webhookSecret);
-
-      try {
-        payload = wh.verify(body, {
-          'webhook-id': id,
-          'webhook-signature': signature,
-          'webhook-timestamp': timestamp,
-        });
-        consola.info('Webhook verified successfully');
-      } catch (err: any) {
-        consola.error('Webhook verification failed:', err.message);
-        throw createError({
-          statusCode: 401,
-          statusMessage: 'Webhook verification failed',
-        });
-      }
-    } else {
-      // No webhook secret configured - accept webhook without verification (testing only)
-      consola.warn('Webhook secret not configured - accepting webhook without verification');
-      payload = JSON.parse(body);
-    }
-
-    consola.info('Webhook event type:', payload.event_type);
-
-    // Handle different webhook events
-    switch (payload.event_type) {
-      case 'payment.completed':
-        await handlePaymentCompleted(payload);
-        break;
-
-      case 'payment.failed':
-        consola.warn('Payment failed:', payload.data);
-        break;
-
-      case 'payment.refunded':
-        consola.warn('Payment refunded:', payload.data);
-        break;
-
-      default:
-        consola.info('Unhandled webhook event:', payload.event_type);
-    }
-
-    // Return success response
-    return {
-      success: true,
-      message: 'Webhook processed successfully',
-    };
-  } catch (error: any) {
-    consola.error('Error processing webhook:', error);
-
-    // If it's already a createError, rethrow it
-    if (error.statusCode) {
-      throw error;
-    }
-
-    // Generic error
+  // Never process an event we cannot verify.
+  if (!webhookSecret) {
+    consola.error('Webhook secret not configured - rejecting webhook');
     throw createError({
-      statusCode: 500,
-      statusMessage: 'Failed to process webhook',
-      data: { originalError: error.message },
+      statusCode: 503,
+      statusMessage: 'Webhook not configured',
     });
   }
-});
 
-async function handlePaymentCompleted(payload: any) {
-  consola.info('Processing completed payment:', {
+  const body = await readRawBody(event);
+  const id = getHeader(event, 'webhook-id');
+  const signature = getHeader(event, 'webhook-signature');
+  const timestamp = getHeader(event, 'webhook-timestamp');
+
+  if (!body || !id || !signature || !timestamp) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Missing webhook body or headers',
+    });
+  }
+
+  let payload: any;
+  try {
+    payload = new Webhook(webhookSecret).verify(body, {
+      'webhook-id': id,
+      'webhook-signature': signature,
+      'webhook-timestamp': timestamp,
+    });
+  } catch (error: any) {
+    consola.error('Webhook verification failed:', error?.message);
+    throw createError({
+      statusCode: 401,
+      statusMessage: 'Webhook verification failed',
+    });
+  }
+
+  // IDs and amounts only: customer details do not belong in the logs.
+  const details = {
     paymentId: payload.data?.payment_id,
-    customerId: payload.data?.customer_id,
-    amount: payload.data?.amount,
-    email: payload.data?.customer_email,
-  });
+    amount: payload.data?.total_amount,
+    currency: payload.data?.currency,
+  };
 
-  // Payment is tracked via HTTP-only cookie set when payment completes in frontend
-  // This webhook is just for logging and potential future analytics/notifications
+  switch (payload.type) {
+    case 'payment.succeeded':
+      consola.success('Payment succeeded:', details);
+      break;
+    case 'payment.failed':
+    case 'payment.cancelled':
+    case 'refund.succeeded':
+      consola.warn(`${payload.type}:`, details);
+      break;
+    default:
+      consola.info('Unhandled webhook event:', payload.type);
+  }
 
-  consola.success('Payment completed successfully');
-}
+  return { success: true };
+});
