@@ -54,6 +54,7 @@ export default {
       ironic: '😏 Ironic',
       oldFashioned: '🎩 Old-fashioned',
       spicy: '🌶️ Spicy',
+      roast: '🔥 Roast',
     },
     rhymeScheme: {
       label: 'Rhyme scheme',
@@ -156,7 +157,7 @@ export default {
       {
         question: 'What poem styles are available?',
         answer:
-          'SintGPT offers 4 different styles: Funny (with humor and wordplay), Classic (traditional and atmospheric), Ironic (with a wink and sarcasm), and Old-fashioned (in old Dutch style). You can also choose from different rhyme schemes like AABB, ABBA, or Limerick.',
+          'SintGPT offers 6 different styles: Funny (with humor and wordplay), Classic (traditional and atmospheric), Ironic (with a wink and sarcasm), Old-fashioned (in old Dutch style), Spicy (with daring winks), and Roast (tease your friends without mercy). You can also choose from different rhyme schemes like AABB, ABBA, or Limerick.',
       },
       {
         question: 'How personal do the poems get?',

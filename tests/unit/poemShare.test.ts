@@ -131,8 +131,8 @@ describe('share image', () => {
   });
 
   it('uses the language of the poem for its call to action', () => {
-    expect(buildShareSvg('A', 'en', '')).toContain('Make your own poem');
-    expect(buildShareSvg('A', 'nl', '')).toContain('Maak je eigen gedicht');
+    expect(buildShareSvg('A', 'en', '')).toContain('Read the rest of this poem');
+    expect(buildShareSvg('A', 'nl', '')).toContain('Lees dit gedicht verder');
   });
 });
 

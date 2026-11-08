@@ -5,7 +5,7 @@ interface PoemRequest {
   present?: string;
   writtenBy?: string;
   writtenForAudience?: string;
-  style: 'funny' | 'classic' | 'ironic' | 'old-fashioned' | 'spicy';
+  style: 'funny' | 'classic' | 'ironic' | 'old-fashioned' | 'spicy' | 'roast';
   rhymeScheme: 'AABB' | 'ABAB' | 'ABBA' | 'Limerick';
   lines: number;
   linkedinUrl?: string;

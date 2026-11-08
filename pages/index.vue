@@ -81,7 +81,7 @@ const formData = ref({
   revealPresent: true,
   writtenBy: '',
   writtenForAudience: '',
-  style: 'funny' as 'funny' | 'classic' | 'ironic' | 'old-fashioned' | 'spicy',
+  style: 'funny' as 'funny' | 'classic' | 'ironic' | 'old-fashioned' | 'spicy' | 'roast',
   rhymeScheme: 'AABB' as 'AABB' | 'ABAB' | 'ABBA' | 'Limerick',
   lines: 12,
   language: getDefaultLanguage(),
@@ -93,6 +93,7 @@ const styleOptions = computed(() => [
   { value: 'ironic', label: t('form.style.ironic') },
   { value: 'old-fashioned', label: t('form.style.oldFashioned') },
   { value: 'spicy', label: t('form.style.spicy') },
+  { value: 'roast', label: t('form.style.roast') },
 ]);
 
 const rhymeSchemeOptions = computed(() => [
@@ -396,8 +397,8 @@ const structuredData = computed(() => ({
       },
       featureList:
         locale.value === 'nl'
-          ? "Gepersonaliseerde sinterklaasgedichten, Meerdere stijlen (grappig, klassiek, ironisch, ouderwets), AI-gegenereerd, Verschillende rijmschema's"
-          : 'Personalized Sinterklaas poems, Multiple styles (funny, classic, ironic, old-fashioned), AI-generated, Various rhyme schemes',
+          ? "Gepersonaliseerde sinterklaasgedichten, Meerdere stijlen (grappig, klassiek, ironisch, ouderwets, pikant, roast), AI-gegenereerd, Verschillende rijmschema's"
+          : 'Personalized Sinterklaas poems, Multiple styles (funny, classic, ironic, old-fashioned, spicy, roast), AI-generated, Various rhyme schemes',
     },
     {
       '@type': 'FAQPage',
@@ -1357,7 +1358,7 @@ useHead({
                 height="176"
                 loading="lazy"
                 alt="Sinterklaas"
-                class="w-44 h-44 object-contain relative z-10 drop-shadow-2xl"
+                class="w-44 h-44 rounded-full object-cover relative z-10 ring-4 ring-[#f4cd60] drop-shadow-2xl"
               />
             </div>
             <h3

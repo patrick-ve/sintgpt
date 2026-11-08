@@ -54,6 +54,7 @@ export default {
       ironic: '😏 Ironisch',
       oldFashioned: '🎩 Ouderwets',
       spicy: '🌶️ Pikant',
+      roast: '🔥 Roast',
     },
     rhymeScheme: {
       label: 'Rijmschema',
@@ -157,7 +158,7 @@ export default {
         question:
           'Welke stijlen sinterklaasgedichten zijn beschikbaar?',
         answer:
-          "SintGPT biedt 4 verschillende stijlen: Grappig (met humor en woordspelingen), Klassiek (traditioneel en sfeervol), Ironisch (met een knipoog en sarcasme) en Ouderwets (in oude Nederlandse stijl). Je kunt ook kiezen uit verschillende rijmschema's zoals AABB, ABBA of Limerick.",
+          "SintGPT biedt 6 verschillende stijlen: Grappig (met humor en woordspelingen), Klassiek (traditioneel en sfeervol), Ironisch (met een knipoog en sarcasme), Ouderwets (in oude Nederlandse stijl), Pikant (met gewaagde knipogen) en Roast (neem je vrienden flink op de hak). Je kunt ook kiezen uit verschillende rijmschema's zoals AABB, ABBA of Limerick.",
       },
       {
         question: 'Hoe persoonlijk worden de gedichten?',

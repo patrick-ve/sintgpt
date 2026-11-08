@@ -40,6 +40,7 @@ export const PoemRequestSchema = z.object({
     'ironic',
     'old-fashioned',
     'spicy',
+    'roast',
   ]),
   rhymeScheme: z.enum(['AABB', 'ABAB', 'ABBA', 'Limerick']),
   lines: z.number().int().min(8).max(50),
@@ -64,6 +65,8 @@ export function buildPrompt(
       'ouderwets, formeel en traditioneel in taal en toon',
     spicy:
       'pikant, met suggestieve dubbelzinnigheden en gewaagde knipogen (maar wel smaakvol en niet expliciet)',
+    roast:
+      'een genadeloze maar liefdevolle roast, vol scherpe grappen en plagerijen ten koste van de ontvanger',
   };
 
   const rhymeSchemeDescriptions = {
@@ -117,6 +120,15 @@ export function buildPrompt(
       ? `\n- DOELGROEP: Dit gedicht wordt voorgelezen/gegeven in de context van "${data.writtenForAudience}". Zorg dat de inhoud, toon en humor passend zijn voor deze setting.`
       : '';
 
+  const roastInstruction =
+    data.style === 'roast'
+      ? `
+- ROAST: Sinterklaas neemt de ontvanger flink op de hak, zoals een vriend dat doet die alles van de ontvanger weet. Elk couplet bevat minstens één echte punchline.
+- Baseer de grappen op de informatie uit de XML tags: gewoontes, hobby's, werk, keuzes, blunders en eigenaardigheden. Overdrijf ze gerust. Verzin geen beschuldigingen die iemand echt kunnen schaden, zoals misdrijven of vreemdgaan.
+- Grens: maak geen grappen over afkomst, huidskleur, geloof, seksuele geaardheid, gender, handicap, ziekte, lichaam, gewicht, overleden naasten of geldzorgen. Geen seksuele inhoud, scheldwoorden, bedreigingen of vernedering die echt pijn doet. Staat zulke informatie in de XML tags, sla die dan over.
+- Sluit af met een korte, warme knipoog van de Sint, zodat duidelijk is dat alles met liefde is gezegd.`
+      : '';
+
   const prompt = `Je bent een creatieve dichter gespecialiseerd in Sinterklaasgedichten.
 
 ${languageInstruction}
@@ -137,7 +149,7 @@ Maak een Sinterklaasgedicht met de volgende specificaties:
 Belangrijke instructies:
 - Het gedicht moet ${styleDescriptions[data.style]} zijn in toon
 - Volg het ${rhymeSchemeDescriptions[data.rhymeScheme]} strikt
-- Maak het gedicht persoonlijk door te verwijzen naar de informatie uit de XML tags waar gepast${presentInstruction}${writingPerspectiveInstruction}${audienceInstruction}
+- Maak het gedicht persoonlijk door te verwijzen naar de informatie uit de XML tags waar gepast${presentInstruction}${writingPerspectiveInstruction}${audienceInstruction}${roastInstruction}
 - Zorg dat het gedicht natuurlijk loopt en vermakelijk is
 - Scheid coupletten met een lege regel (dubbele nieuwe regel)
 - Voeg geen titel of extra tekst toe - geef alleen het gedicht zelf

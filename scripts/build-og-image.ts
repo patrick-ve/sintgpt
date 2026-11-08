@@ -12,7 +12,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import puppeteer from 'puppeteer';
 import sharp from 'sharp';
-import { OG_IMAGES, type OgImageSpec } from './og-images';
+import { OG_IMAGES, SINT_PORTRAIT, type OgImageSpec } from './og-images';
 
 const WIDTH = 1200;
 const HEIGHT = 630;
@@ -84,7 +84,7 @@ function html(spec: OgImageSpec, sintDataUrl: string): string {
     background-size: 28px 28px;
   }
   .frame {
-    position: absolute; inset: 22px 22px 40px;
+    position: absolute; inset: 22px 432px 40px 22px;
     border: 1.5px solid rgba(244,205,96,.35);
   }
   .frame::before, .frame::after {
@@ -150,26 +150,18 @@ function html(spec: OgImageSpec, sintDataUrl: string): string {
     color: var(--gold);
   }
 
+  /* The photo fills about a third of the width, inside a gold border. */
   .portrait {
-    position: absolute; top: 50%; transform: translateY(-50%);
-    border-radius: 50%; padding: 8px;
-    background: linear-gradient(135deg, #fbe08a, var(--gold-deep) 50%, #9c7128);
-    box-shadow: 0 0 0 6px rgba(244,205,96,.15), 0 20px 50px rgba(0,0,0,.5);
+    position: absolute; top: 22px; right: 22px; bottom: 40px; width: 388px;
+    border: 6px solid var(--gold);
+    box-shadow: 0 12px 34px rgba(0,0,0,.4);
   }
-  .portrait img {
-    display: block; width: 100%; height: 100%;
-    border-radius: 50%; object-fit: cover; object-position: 50% 30%;
-    border: 4px solid #5c0d22;
-  }
-  .home .portrait { right: 72px; width: 400px; height: 400px; margin-top: -10px; }
-  .article .portrait { right: 70px; width: 330px; height: 330px; margin-top: -10px; }
+  .portrait img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
   .sparkle { position: absolute; fill: var(--gold); opacity: .85; }
   .s1 { width: 30px; top: 70px; right: 470px; }
-  .s2 { width: 18px; top: 120px; right: 90px; opacity: .6; }
-  .s3 { width: 22px; bottom: 90px; right: 430px; opacity: .55; }
-  .article .s1 { right: 420px; }
-  .article .s3 { right: 380px; }
+  .s2 { width: 18px; top: 120px; right: 450px; opacity: .6; }
+  .s3 { width: 22px; bottom: 90px; right: 460px; opacity: .55; }
 </style>
 </head>
 <body class="${spec.kind}">
@@ -197,9 +189,9 @@ function html(spec: OgImageSpec, sintDataUrl: string): string {
 }
 
 async function main() {
-  // The source portrait is 5 MB; embed a small copy so rendering stays fast.
+  // Embed a small copy of the photo so rendering stays fast.
   const sint = await sharp(path.join(root, 'public/sint.png'))
-    .resize(820, 820, { fit: 'cover', position: 'north' })
+    .extract(SINT_PORTRAIT)
     .jpeg({ quality: 90 })
     .toBuffer();
   const sintDataUrl = `data:image/jpeg;base64,${sint.toString('base64')}`;

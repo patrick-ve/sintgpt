@@ -2,6 +2,9 @@
 // Pages refer to them by `name` via useOgImage(); `npm run build:og`
 // renders each one to public/og/<name>.jpg.
 
+/** public/sint.png at full height, at the 400:630 ratio of the images' right third. */
+export const SINT_PORTRAIT = { left: 400, top: 0, width: 650, height: 1024 };
+
 export interface OgHomeImage {
   name: string;
   kind: 'home';

@@ -28,6 +28,7 @@ const styleKeys: Record<string, string> = {
   'ironic': 'form.style.ironic',
   'old-fashioned': 'form.style.oldFashioned',
   'spicy': 'form.style.spicy',
+  'roast': 'form.style.roast',
 };
 
 const styleLabel = (style: string) =>

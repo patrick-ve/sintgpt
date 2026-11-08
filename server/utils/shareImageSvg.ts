@@ -3,6 +3,9 @@
 export const SHARE_IMAGE_WIDTH = 1200;
 export const SHARE_IMAGE_HEIGHT = 630;
 
+/** The photo fills about a third of the width, inside a gold border. */
+const PORTRAIT = { x: 790, y: 22, width: 388, height: 568 };
+const PANEL_WIDTH = 746;
 const TEXT_WIDTH = 690;
 const MAX_ROWS = 5;
 /** Alegreya's average character width, on the safe side. */
@@ -76,8 +79,8 @@ export function buildShareSvg(
   const blockHeight = rows.length * lineHeight;
   const top = TEXT_TOP + Math.round((TEXT_HEIGHT - blockHeight) / 2) + fontSize;
   const cta = language === 'nl'
-    ? 'Maak je eigen gedicht op sintgpt.com'
-    : 'Make your own poem at sintgpt.com';
+    ? 'Lees dit gedicht verder op SintGPT.com'
+    : 'Read the rest of this poem at SintGPT.com';
 
   return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${SHARE_IMAGE_WIDTH}" height="${SHARE_IMAGE_HEIGHT}" viewBox="0 0 ${SHARE_IMAGE_WIDTH} ${SHARE_IMAGE_HEIGHT}">
   <defs>
@@ -86,16 +89,15 @@ export function buildShareSvg(
       <stop offset="0.5" stop-color="#7d1233"/>
       <stop offset="1" stop-color="#4f0a20"/>
     </radialGradient>
-    <clipPath id="portrait"><circle cx="1000" cy="300" r="140"/></clipPath>
   </defs>
   <rect width="${SHARE_IMAGE_WIDTH}" height="${SHARE_IMAGE_HEIGHT}" fill="url(#bg)"/>
-  <rect x="22" y="22" width="1156" height="568" fill="none" stroke="#f4cd60" stroke-opacity="0.35" stroke-width="1.5"/>
+  <rect x="22" y="22" width="${PANEL_WIDTH}" height="${PORTRAIT.height}" fill="none" stroke="#f4cd60" stroke-opacity="0.35" stroke-width="1.5"/>
   <rect x="0" y="612" width="${SHARE_IMAGE_WIDTH}" height="18" fill="#f4cd60"/>
   <text x="70" y="118" font-family="Texturina" font-weight="700" font-size="52" fill="#f4cd60">SintGPT</text>
   ${rows.map((row, index) => `<text x="70" y="${top + index * lineHeight}" font-family="Alegreya" font-weight="500" font-size="${fontSize}" fill="#fbf1dc">${escapeXml(row)}</text>`).join('\n  ')}
   <rect x="70" y="496" width="620" height="66" rx="33" fill="#f4cd60"/>
   <text x="380" y="539" text-anchor="middle" font-family="Alegreya Sans" font-weight="700" font-size="32" fill="#3d0716">${escapeXml(cta)}</text>
-  <circle cx="1000" cy="300" r="148" fill="#f4cd60"/>
-  <image x="860" y="160" width="280" height="280" href="${sintDataUrl}" xlink:href="${sintDataUrl}" clip-path="url(#portrait)"/>
+  <image x="${PORTRAIT.x}" y="${PORTRAIT.y}" width="${PORTRAIT.width}" height="${PORTRAIT.height}" preserveAspectRatio="xMidYMid slice" href="${sintDataUrl}" xlink:href="${sintDataUrl}"/>
+  <rect x="${PORTRAIT.x}" y="${PORTRAIT.y}" width="${PORTRAIT.width}" height="${PORTRAIT.height}" fill="none" stroke="#f4cd60" stroke-width="6"/>
 </svg>`;
 }

@@ -15,6 +15,7 @@ Package manager: **npm** (not yarn).
 - `npm run build:cloudflare` - Build for Cloudflare Workers (`cloudflare_module` preset)
 - `npm run deploy` - Build for Cloudflare and deploy with Wrangler
 - `npm run build:og` - Re-render the Open Graph images into `public/og/`
+- `npx tsx scripts/build-sint-images.ts` - Crop `public/sint.png` to the avatar, favicons and share image. Run `build:og` after it
 - `npm run typecheck` - `vue-tsc --noEmit`
 - `npm test` - All tests (`test:unit`, `test:e2e`)
 

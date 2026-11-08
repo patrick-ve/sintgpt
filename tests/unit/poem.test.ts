@@ -14,6 +14,25 @@ const validRequest = {
   language: 'dutch',
 } as const;
 
+describe('roast style', () => {
+  const roast = { ...validRequest, style: 'roast' } as const;
+
+  it('is a valid style', () => {
+    expect(PoemRequestSchema.safeParse(roast).success).toBe(true);
+  });
+
+  it('adds the roast rules and their limits to the prompt', () => {
+    const prompt = buildPrompt(PoemRequestSchema.parse(roast));
+    expect(prompt).toContain('ROAST:');
+    expect(prompt).toContain('Grens:');
+    expect(prompt).toContain('warme knipoog');
+  });
+
+  it('leaves other styles without the roast rules', () => {
+    expect(buildPrompt(PoemRequestSchema.parse(validRequest))).not.toContain('ROAST:');
+  });
+});
+
 describe('PoemRequestSchema', () => {
   it('accepts a minimal valid request and defaults revealPresent', () => {
     const parsed = PoemRequestSchema.parse(validRequest);
