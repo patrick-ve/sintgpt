@@ -392,6 +392,30 @@ describe('poem links', () => {
     await page.getByText('voor mens en voor beest').waitFor();
     await page.close();
   }, 45_000);
+
+  it('saves a generated poem as a PDF', async () => {
+    const chunks = POEM.match(/\S+\s*/g)!.map(delta => ({ type: 'text-delta', id: '0', delta }));
+    const sse = chunks.map(chunk => `data: ${JSON.stringify(chunk)}\n\n`).join('') + 'data: [DONE]\n\n';
+
+    const page = await createPage();
+    await page.addInitScript(() => localStorage.setItem('cookie_consent', 'accepted'));
+    await page.route('**/api/poem/generate', route =>
+      route.fulfill({ status: 200, contentType: 'text/event-stream', body: sse }));
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+    await page.fill('#poem-name', 'Oma Truus');
+    await page.locator('#poem-form button[type=submit]').click();
+
+    const button = page.getByRole('button', { name: 'Opslaan als PDF' });
+    await button.waitFor({ timeout: 15_000 });
+    const [download] = await Promise.all([page.waitForEvent('download'), button.click()]);
+    expect(download.suggestedFilename()).toBe('sinterklaasgedicht-oma-truus.pdf');
+
+    const stream = await download.createReadStream();
+    const chunksRead: Buffer[] = [];
+    for await (const chunk of stream) chunksRead.push(chunk as Buffer);
+    expect(Buffer.concat(chunksRead).subarray(0, 5).toString()).toBe('%PDF-');
+    await page.close();
+  }, 45_000);
 });
 
 describe('short poem links', () => {

@@ -62,6 +62,17 @@ export default defineNuxtConfig({
     // Icons are handled by @nuxt/icon module
   },
 
+  hooks: {
+    // pdf-lib is about 490 KB. Only people who save a poem should download it.
+    'build:manifest': (manifest) => {
+      const pdfEntry = manifest['utils/poemPdf.ts'];
+      if (pdfEntry) {
+        pdfEntry.prefetch = false;
+        pdfEntry.preload = false;
+      }
+    },
+  },
+
   // Used by `npm run build:cloudflare` (NITRO_PRESET=cloudflare_module).
   // Ignored by the default node-server build that the tests run against.
   nitro: {
