@@ -30,6 +30,19 @@ export async function signPoemShare(
   return { s, l: language, d, sig: bytesToBase64Url(new Uint8Array(signature)) };
 }
 
+/**
+ * The cache key for a share image. It holds only the signed values, so extra
+ * query parameters on a valid link cannot force a new render.
+ */
+export function shareImageCacheUrl(requestUrl: URL): string {
+  const { searchParams } = requestUrl;
+  const query = new URLSearchParams();
+  for (const name of ['s', 'l', 'd', 'sig']) {
+    query.set(name, searchParams.get(name) ?? '');
+  }
+  return `${requestUrl.origin}${requestUrl.pathname}?${query}`;
+}
+
 export interface VerifiedShare {
   opening: string;
   language: PoemLanguage;

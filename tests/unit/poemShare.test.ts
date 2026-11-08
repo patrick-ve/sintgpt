@@ -8,7 +8,7 @@ import {
   poemDigest,
 } from '../../utils/poemLink';
 import { parseStreamLine } from '../../utils/poemStream';
-import { signPoemShare, verifyPoemShare } from '../../server/utils/poemShare';
+import { shareImageCacheUrl, signPoemShare, verifyPoemShare } from '../../server/utils/poemShare';
 import { canonicalRedirect } from '../../server/utils/canonicalHost';
 import {
   buildShareSvg,
@@ -165,5 +165,24 @@ describe('input limits', () => {
 
   it('accepts the 50 lines that the form offers for a limerick', () => {
     expect(PoemRequestSchema.safeParse({ ...base, rhymeScheme: 'Limerick', lines: 50 }).success).toBe(true);
+  });
+});
+
+describe('shareImageCacheUrl', () => {
+  const canonical = 'https://sintgpt.com/gedicht/preview.png?s=abc&l=nl&d=def&sig=ghi';
+
+  it('keeps only the signed values', () => {
+    const url = new URL(`${canonical}&x=1&utm_source=whatsapp`);
+    expect(shareImageCacheUrl(url)).toBe(canonical);
+  });
+
+  it('gives one key whatever the parameter order', () => {
+    const url = new URL('https://sintgpt.com/gedicht/preview.png?sig=ghi&d=def&l=nl&s=abc');
+    expect(shareImageCacheUrl(url)).toBe(canonical);
+  });
+
+  it('gives different links different keys', () => {
+    const other = new URL('https://sintgpt.com/gedicht/preview.png?s=xyz&l=nl&d=def&sig=ghi');
+    expect(shareImageCacheUrl(other)).not.toBe(canonical);
   });
 });

@@ -2,7 +2,7 @@ import { initWasm, Resvg } from '@resvg/resvg-wasm';
 // @ts-expect-error unwasm resolves this to a WebAssembly.Module. Cloudflare
 // Workers can only load WASM that is part of the upload, not compile it later.
 import resvgWasm from '@resvg/resvg-wasm/index_bg.wasm?module';
-import { verifyPoemShare } from '../../utils/poemShare';
+import { shareImageCacheUrl, verifyPoemShare } from '../../utils/poemShare';
 import { buildShareSvg } from '../../utils/shareImageSvg';
 
 const YEAR_SECONDS = 60 * 60 * 24 * 365;
@@ -53,7 +53,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const edgeCache = (globalThis as { caches?: { default?: Cache } }).caches?.default;
-  const cacheKey = new Request(getRequestURL(event).toString());
+  const cacheKey = new Request(shareImageCacheUrl(getRequestURL(event)));
   const cached = await edgeCache?.match(cacheKey);
   if (cached) return cached;
 
