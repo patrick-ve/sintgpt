@@ -7,7 +7,7 @@ const blogPosts = computed(() => [
     description: 'Ontdek praktische tips en trucs om een geweldig sinterklaasgedicht te schrijven dat gegarandeerd indruk maakt.',
     slug: 'hoe-schrijf-je-het-perfecte-sinterklaasgedicht',
     date: '2025-11-17',
-    image: '/sint.png',
+    image: '/sint-352.webp',
     readTime: '5 min',
   },
   {
@@ -15,7 +15,7 @@ const blogPosts = computed(() => [
     description: 'Leer hoe je humor toevoegt aan je sinterklaasgedichten met praktische voorbeelden en creatieve technieken.',
     slug: 'grappige-sinterklaasgedichten-tips',
     date: '2025-11-17',
-    image: '/sint.png',
+    image: '/sint-352.webp',
     readTime: '4 min',
   },
   {
@@ -23,7 +23,7 @@ const blogPosts = computed(() => [
     description: 'Een uitgebreide gids over de geschiedenis en betekenis van sinterklaasgedichten in de Nederlandse cultuur.',
     slug: 'sinterklaas-tradities',
     date: '2025-11-17',
-    image: '/sint.png',
+    image: '/sint-352.webp',
     readTime: '3 min',
   },
 ]);
@@ -36,10 +36,6 @@ useSeoMeta({
 });
 
 useOgImage('blog', 'SintGPT Blog: tips en inspiratie voor sinterklaasgedichten');
-
-useHead({
-  meta: [{ name: 'keywords', content: 'sinterklaasgedichten tips, sinterklaas blog, gedichten schrijven, sinterklaas inspiratie, grappige gedichten' }],
-});
 
 useHead({
   link: [

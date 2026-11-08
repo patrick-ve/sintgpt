@@ -1,3 +1,5 @@
+import type { PoemShare } from '~/utils/poemLink';
+
 interface PoemRequest {
   name: string;
   present?: string;
@@ -16,12 +18,14 @@ export const usePoemGenerator = () => {
   const error = ref<string | null>(null);
   const poem = ref<string | null>(null);
   const isRateLimitError = ref(false);
+  const share = ref<PoemShare | null>(null);
 
   const generatePoem = async (request: PoemRequest) => {
     isLoading.value = true;
     error.value = null;
     poem.value = '';
     isRateLimitError.value = false;
+    share.value = null;
 
     const reveal = createSmoothReveal((text) => {
       poem.value = text.trimStart();
@@ -57,7 +61,9 @@ export const usePoemGenerator = () => {
         throw new Error('No response body reader available');
       }
 
-      await readPoemStream(response.body, reveal.push);
+      await readPoemStream(response.body, reveal.push, (signed) => {
+        share.value = signed;
+      });
       await reveal.finish();
 
       // Trim the final poem
@@ -80,6 +86,7 @@ export const usePoemGenerator = () => {
     error,
     poem,
     isRateLimitError,
+    share,
     generatePoem,
   };
 };

@@ -7,7 +7,7 @@ export default {
   },
   hero: {
     question: 'Wil het rijmen met ChatGPT maar niet lukken?',
-    answer: 'SintGPT schrijft binnen 30 seconden een leuk gedicht!',
+    answer: 'SintGPT schrijft binnen 30 seconden een leuk sinterklaasgedicht!',
     cta: 'Begin met rijmen',
     moreInfo: 'Meer informatie',
     note: 'Eerste gedicht gratis, daarna eenmalig €6,99 voor onbeperkt.',
@@ -85,6 +85,9 @@ export default {
     defaultTitle: 'Jouw gedicht',
     copy: 'Kopieer gedicht',
     copied: 'Gekopieerd!',
+    copyLink: 'Kopieer link',
+    linkCopied: 'Link gekopieerd!',
+    linkPrivacy: 'Iedereen met de link kan dit gedicht lezen.',
     shareWhatsApp: 'Deel op WhatsApp',
     shareEmail: 'Verstuur via e-mail',
     shareFacebook: 'Deel op Facebook',
@@ -95,6 +98,11 @@ export default {
     sampleLabel: 'Voorbeeld: gedicht voor Daan (7)',
     sampleText:
       'Daan is al zeven en een held in het doel,\nals keeper bij de F-jes houd jij het hoofd koel.\nEn na elke wedstrijd eet jij voor de trek,\neen berg pannenkoeken met stroop tot je nek!\n\nDe Pieten stonden te juichen langs de lijn,\nwant ballen tegenhouden vind jij reuze fijn.\nDaarom brengt de Sint nu iets moois voor op het veld:\neen prachtige voetbal voor deze grote held!',
+  },
+  share: {
+    heading: 'Iemand deelde dit gedicht met je',
+    partial: 'De rest van dit gedicht kon niet worden gecontroleerd en wordt daarom niet getoond.',
+    cta: 'Maak je eigen gedicht',
   },
   history: {
     open: 'Mijn gedichten',
@@ -113,6 +121,8 @@ export default {
   footer: {
     copyright: 'Copyright {year} SintGPT. Alle rechten voorbehouden.',
     contact: 'Neem contact op',
+    nav: 'Voettekst',
+    blog: 'Blog: tips en inspiratie',
   },
   error: {
     title: 'Oeps! Er ging iets mis.',
@@ -122,17 +132,13 @@ export default {
     retry: 'Probeer opnieuw',
   },
   seo: {
-    title:
-      'SintGPT - Sinterklaasgedicht Generator | Maak Grappige & Gepersonaliseerde Sinterklaasgedichten met AI',
-    description:
-      'Genereer perfect rijmende sinterklaasgedichten in 30 seconden. In tegenstelling tot ChatGPT, rijmt SintGPT wél in het Nederlands!',
+    title: "Sinterklaasgedicht maken met AI | SintGPT",
+    description: "Maak in 30 seconden een persoonlijk sinterklaasgedicht dat echt rijmt. Eerste gedicht gratis. SintGPT rijmt wél in het Nederlands, in tegenstelling tot ChatGPT.",
     ogTitle: 'SintGPT - Sinterklaasgedicht Generator met AI',
     ogDescription:
       'Genereer perfect rijmende sinterklaasgedichten in 30 seconden. In tegenstelling tot ChatGPT, rijmt SintGPT wél in het Nederlands!',
     ogImageAlt:
       'SintGPT - AI Sinterklaasgedicht Generator die wél rijmt in het Nederlands',
-    keywords:
-      'sinterklaasgedicht generator, sinterklaasgedichten maken, grappige sinterklaasgedichten, gepersonaliseerd sinterklaasgedicht, sinterklaas gedicht AI, sinterklaasrijm, sinterklaas 2026',
   },
   faq: {
     title: 'Veelgestelde vragen',
@@ -182,7 +188,7 @@ export default {
       {
         question: 'Worden mijn gegevens opgeslagen?',
         answer:
-          'Nee, SintGPT slaat geen persoonlijke gegevens, prompts of gegenereerde gedichten op. Alle informatie die je invoert wordt alleen gebruikt om het gedicht te genereren en wordt daarna direct verwijderd. Je privacy is volledig gewaarborgd.',
+          "SintGPT bewaart je gedichten niet op een server. Ze staan alleen op je eigen apparaat, onder Mijn gedichten. Om een gedicht te schrijven sturen we wat je invult naar onze AI-diensten (Vercel AI Gateway en het AI-model van Google, of bij een storing dat van OpenAI). Vul dus geen gevoelige gegevens in. Deel je een gedicht met een link, dan kan iedereen met die link het lezen. De eerste twee regels staan leesbaar in de link en kunnen in serverlogs terechtkomen.",
       },
       {
         question:

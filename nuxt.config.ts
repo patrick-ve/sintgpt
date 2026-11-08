@@ -45,7 +45,6 @@ export default defineNuxtConfig({
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { name: 'theme-color', content: '#7f1d1d' },
-        { name: 'robots', content: 'index, follow' },
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
@@ -54,12 +53,6 @@ export default defineNuxtConfig({
         { rel: 'icon', type: 'image/png', sizes: '192x192', href: '/favicon-192x192.png' },
         { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
         { rel: 'manifest', href: '/site.webmanifest' },
-        { rel: 'canonical', href: 'https://sintgpt.com' },
-        { rel: 'alternate', hreflang: 'nl', href: 'https://sintgpt.com' },
-        { rel: 'alternate', hreflang: 'nl-NL', href: 'https://sintgpt.com' },
-        { rel: 'alternate', hreflang: 'nl-BE', href: 'https://sintgpt.com' },
-        { rel: 'alternate', hreflang: 'en', href: 'https://sintgpt.com' },
-        { rel: 'alternate', hreflang: 'x-default', href: 'https://sintgpt.com' },
       ],
     },
   },
@@ -72,6 +65,8 @@ export default defineNuxtConfig({
   // Used by `npm run build:cloudflare` (NITRO_PRESET=cloudflare_module).
   // Ignored by the default node-server build that the tests run against.
   nitro: {
+    // The share image renderer is WebAssembly. Workers load it as a module.
+    experimental: { wasm: true },
     cloudflare: {
       deployConfig: true,
       nodeCompat: true,

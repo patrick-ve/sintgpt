@@ -1,4 +1,5 @@
 import { createSharedComposable, useLocalStorage } from '@vueuse/core';
+import type { PoemShare } from '~/utils/poemLink';
 
 export interface PoemHistoryEntry {
   id: string;
@@ -9,6 +10,8 @@ export interface PoemHistoryEntry {
   rhymeScheme: string;
   language: string;
   lines: number;
+  /** Signature for a share link. Poems from before this feature have none. */
+  share?: PoemShare | null;
 }
 
 export type NewPoemHistoryEntry = Omit<PoemHistoryEntry, 'id' | 'createdAt'>;

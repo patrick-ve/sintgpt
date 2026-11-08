@@ -1,3 +1,5 @@
+import type { PoemShare } from './poemLink';
+
 /**
  * Reads an AI SDK UI message stream (SSE) and calls `onDelta` for every
  * text delta. Lines can arrive split across chunks, so incomplete lines
@@ -8,6 +10,7 @@
 export async function readPoemStream(
   body: ReadableStream<Uint8Array>,
   onDelta: (delta: string) => void,
+  onShare?: (share: PoemShare) => void,
 ): Promise<void> {
   const reader = body.getReader();
   const decoder = new TextDecoder();
@@ -17,7 +20,8 @@ export async function readPoemStream(
     const chunk = parseStreamLine(line);
     if (!chunk) return;
     if (chunk.type === 'error') throw new Error(chunk.errorText);
-    onDelta(chunk.delta);
+    if (chunk.type === 'share') onShare?.(chunk.share);
+    else onDelta(chunk.delta);
   };
 
   while (true) {
@@ -36,7 +40,8 @@ export async function readPoemStream(
 
 export type PoemStreamChunk =
   | { type: 'text-delta'; delta: string }
-  | { type: 'error'; errorText: string };
+  | { type: 'error'; errorText: string }
+  | { type: 'share'; share: PoemShare };
 
 /** Parses one SSE line. Returns null for lines the poem UI does not need. */
 export function parseStreamLine(line: string): PoemStreamChunk | null {
@@ -56,6 +61,9 @@ export function parseStreamLine(line: string): PoemStreamChunk | null {
 
   if (parsed.type === 'text-delta' && typeof parsed.delta === 'string') {
     return { type: 'text-delta', delta: parsed.delta };
+  }
+  if (parsed.type === 'data-share' && parsed.data) {
+    return { type: 'share', share: parsed.data as PoemShare };
   }
   if (parsed.type === 'error') {
     return {

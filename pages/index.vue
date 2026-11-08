@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { buildShareUrl } from '~/utils/poemLink';
+import { POEM_INPUT_LIMITS } from '~/utils/poemLimits';
 import type { PoemHistoryEntry } from '~/composables/usePoemHistory';
 
-const { generatePoem, isLoading, error, poem, isRateLimitError } =
+const { generatePoem, isLoading, error, poem, isRateLimitError, share: generatedShare } =
   usePoemGenerator();
 const { t, locale, setLocale } = useI18n();
 const {
@@ -201,6 +203,7 @@ const handleSubmit = async () => {
       rhymeScheme: formData.value.rhymeScheme,
       language: formData.value.language,
       lines: formData.value.lines,
+      share: generatedShare.value,
     });
     activeHistoryId.value = saved.id;
 
@@ -225,6 +228,30 @@ const copyToClipboard = async () => {
   }
 };
 
+// The signed link for the poem on screen. Older poems have none, and fall back
+// to sharing the text. Built ahead of time, because browsers block pop-ups that
+// open after waiting for something.
+const shareUrl = ref<string | null>(null);
+const linkCopied = ref(false);
+
+watchEffect(async () => {
+  const text = poem.value;
+  const signed = historyEntries.value.find(entry => entry.poem === text)?.share;
+  shareUrl.value = text && signed && !isLoading.value
+    ? await buildShareUrl(window.location.origin, signed, text)
+    : null;
+});
+
+const copyShareLink = async () => {
+  if (!shareUrl.value) return;
+  await navigator.clipboard.writeText(shareUrl.value);
+  linkCopied.value = true;
+  (window as any).umami?.track('Copy share link');
+  setTimeout(() => {
+    linkCopied.value = false;
+  }, 2000);
+};
+
 const getPoemWithAttribution = () => {
   if (!poem.value) return '';
   const attribution =
@@ -235,7 +262,9 @@ const getPoemWithAttribution = () => {
 };
 
 const shareViaWhatsApp = () => {
-  const text = encodeURIComponent(getPoemWithAttribution());
+  const text = encodeURIComponent(
+    shareUrl.value ? `${poemTitle.value}\n${shareUrl.value}` : getPoemWithAttribution(),
+  );
   (window as any).umami?.track('Shared via WhatsApp');
   window.open(`https://wa.me/?text=${text}`, '_blank');
 };
@@ -248,10 +277,10 @@ const shareViaEmail = () => {
 };
 
 const shareViaFacebook = () => {
-  const text = encodeURIComponent(getPoemWithAttribution());
+  const link = encodeURIComponent(shareUrl.value ?? window.location.origin);
   (window as any).umami?.track('Shared via Facebook');
   window.open(
-    `https://www.facebook.com/sharer/sharer.php?quote=${text}`,
+    `https://www.facebook.com/sharer/sharer.php?u=${link}`,
     '_blank'
   );
 };
@@ -342,7 +371,7 @@ useSeoMeta({
 useOgImage('home', () => t('seo.ogImageAlt'));
 
 useHead({
-  meta: [{ name: 'keywords', content: computed(() => t('seo.keywords')) }],
+  link: [{ rel: 'canonical', href: 'https://sintgpt.com/' }],
 });
 
 // Structured data for SEO
@@ -387,7 +416,7 @@ const structuredData = computed(() => ({
       '@type': 'Organization',
       name: 'SintGPT',
       url: 'https://sintgpt.com',
-      logo: 'https://sintgpt.com/sint.png',
+      logo: 'https://sintgpt.com/favicon-192x192.png',
       description: t('seo.description'),
       sameAs: [],
     },
@@ -753,6 +782,7 @@ useHead({
               </label>
               <UInput
                 id="poem-name"
+                :maxlength="POEM_INPUT_LIMITS.name"
                 v-model="formData.name"
                 required
                 autocomplete="off"
@@ -786,6 +816,7 @@ useHead({
               </label>
               <UInput
                 id="poem-present"
+                :maxlength="POEM_INPUT_LIMITS.present"
                 v-model="formData.present"
                 autocomplete="off"
                 :placeholder="t('form.present.placeholder')"
@@ -832,6 +863,7 @@ useHead({
               </label>
               <UTextarea
                 id="poem-facts"
+                :maxlength="POEM_INPUT_LIMITS.funFacts"
                 v-model="formData.funFacts"
                 aria-describedby="poem-facts-help"
                 :placeholder="t('form.funFacts.placeholder')"
@@ -865,6 +897,7 @@ useHead({
               </label>
               <UInput
                 id="poem-written-by"
+                :maxlength="POEM_INPUT_LIMITS.writtenBy"
                 v-model="formData.writtenBy"
                 aria-describedby="poem-written-by-help"
                 :placeholder="t('form.writtenBy.placeholder')"
@@ -893,6 +926,7 @@ useHead({
               </label>
               <UInput
                 id="poem-audience"
+                :maxlength="POEM_INPUT_LIMITS.writtenForAudience"
                 v-model="formData.writtenForAudience"
                 aria-describedby="poem-audience-help"
                 :placeholder="
@@ -1222,6 +1256,20 @@ useHead({
               class="flex gap-2 flex-wrap w-full"
               :class="{ invisible: isLoading }"
             >
+              <p v-if="shareUrl" class="w-full order-last text-sm text-[#5c0f26]">
+                {{ t('poem.linkPrivacy') }}
+              </p>
+              <UButton
+                v-if="shareUrl"
+                icon="i-heroicons-link"
+                size="sm"
+                :color="linkCopied ? 'success' : 'primary'"
+                variant="outline"
+                class="border-2 border-[#d4a853] hover:bg-[#f4cd60]/20 text-[#8b1538] cursor-pointer rounded-lg"
+                @click="copyShareLink"
+              >
+                {{ linkCopied ? t('poem.linkCopied') : t('poem.copyLink') }}
+              </UButton>
               <UButton
                 icon="i-heroicons-clipboard-document"
                 size="sm"
@@ -1304,7 +1352,10 @@ useHead({
                 class="absolute inset-0 bg-[#f4cd60]/40 rounded-full blur-3xl animate-pulse"
               ></div>
               <img
-                src="/sint.png"
+                src="/sint-352.webp"
+                width="176"
+                height="176"
+                loading="lazy"
                 alt="Sinterklaas"
                 class="w-44 h-44 object-contain relative z-10 drop-shadow-2xl"
               />
@@ -1449,7 +1500,13 @@ useHead({
         </div>
 
         <!-- Contact button -->
-        <div class="mb-8">
+        <nav class="mb-8 flex flex-wrap items-center justify-center gap-3" :aria-label="t('footer.nav')">
+          <NuxtLink
+            to="/blog"
+            class="inline-flex items-center min-h-11 px-4 rounded-md border-2 border-[#d4a853] text-[#f4cd60] font-bold hover:bg-[#d4a853]/15"
+          >
+            {{ t('footer.blog') }}
+          </NuxtLink>
           <UButton
             as="a"
             href="mailto:patrick@sintgpt.com"
@@ -1460,7 +1517,7 @@ useHead({
           >
             {{ t('footer.contact') }}
           </UButton>
-        </div>
+        </nav>
 
         <!-- Copyright -->
         <p class="font-bold text-lg">

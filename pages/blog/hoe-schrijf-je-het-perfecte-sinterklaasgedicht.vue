@@ -2,7 +2,7 @@
 const { locale } = useI18n();
 
 useSeoMeta({
-  title: 'Hoe schrijf je het perfecte sinterklaasgedicht in 2026? Complete gids',
+  title: 'Het perfecte sinterklaasgedicht schrijven in 2026 | SintGPT',
   description: 'Ontdek de beste tips en trucs voor het schrijven van een geweldig sinterklaasgedicht. Van rijmschema\'s tot persoonlijke details - alles wat je moet weten!',
   ogTitle: 'Hoe schrijf je het perfecte sinterklaasgedicht? | SintGPT',
   ogDescription: 'Complete gids met praktische tips voor het schrijven van sinterklaasgedichten die gegarandeerd indruk maken.',
@@ -12,10 +12,6 @@ useSeoMeta({
 });
 
 useOgImage('blog-hoe-schrijf-je-het-perfecte-sinterklaasgedicht', 'SintGPT Blog: hoe schrijf je het perfecte sinterklaasgedicht?');
-
-useHead({
-  meta: [{ name: 'keywords', content: 'sinterklaasgedicht schrijven, sinterklaasgedicht tips, perfect sinterklaasgedicht, rijmschema sinterklaas, gepersonaliseerd gedicht' }],
-});
 
 useHead({
   link: [
@@ -35,7 +31,14 @@ useHead({
         author: {
           '@type': 'Organization',
           name: 'SintGPT',
+          url: 'https://sintgpt.com',
         },
+        publisher: {
+          '@type': 'Organization',
+          name: 'SintGPT',
+          logo: { '@type': 'ImageObject', url: 'https://sintgpt.com/favicon-192x192.png' },
+        },
+        mainEntityOfPage: 'https://sintgpt.com/blog/hoe-schrijf-je-het-perfecte-sinterklaasgedicht',
       }),
     },
   ],
@@ -54,7 +57,7 @@ useHead({
         <NuxtLink to="/blog" class="hover:opacity-80 transition-opacity inline-block mb-2 font-bold">
           <span class="text-lg">← Terug naar Blog</span>
         </NuxtLink>
-        <h1 class="text-3xl md:text-5xl font-bold font-display drop-shadow-md">SintGPT Blog</h1>
+        <p class="text-3xl md:text-5xl font-bold font-display drop-shadow-md">SintGPT Blog</p>
       </div>
     </header>
 

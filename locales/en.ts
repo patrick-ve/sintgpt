@@ -7,7 +7,7 @@ export default {
   },
   hero: {
     question: "Can't get ChatGPT to rhyme?",
-    answer: 'SintGPT writes a fun poem in 30 seconds!',
+    answer: 'SintGPT writes a fun Sinterklaas poem in 30 seconds!',
     cta: 'Start rhyming',
     moreInfo: 'More information',
     note: 'First poem free, then a one-time €6,99 for unlimited poems.',
@@ -85,6 +85,9 @@ export default {
     defaultTitle: 'Your poem',
     copy: 'Copy poem',
     copied: 'Copied!',
+    copyLink: 'Copy link',
+    linkCopied: 'Link copied!',
+    linkPrivacy: 'Anyone with the link can read this poem.',
     shareWhatsApp: 'Share on WhatsApp',
     shareEmail: 'Send via email',
     shareFacebook: 'Share on Facebook',
@@ -95,6 +98,11 @@ export default {
     sampleLabel: 'Example: poem for Mark',
     sampleText:
       "There once was a fellow named Mark,\nWho turned every meal pitch-black dark.\nHe'll even burn toast,\nTill it looks like a ghost,\nAnd fills the whole house with a spark.\n\nGood Saint Nick brought a cookbook with dread,\nTo ensure that you actually get fed.\nPlease read every page,\nAnd lower the gauge,\nBefore you burn charcoal instead!",
+  },
+  share: {
+    heading: 'Someone shared this poem with you',
+    partial: 'The rest of this poem could not be verified, so it is not shown.',
+    cta: 'Make your own poem',
   },
   history: {
     open: 'My poems',
@@ -113,6 +121,8 @@ export default {
   footer: {
     copyright: 'Copyright {year} SintGPT. All rights reserved.',
     contact: 'Contact us',
+    nav: 'Footer',
+    blog: 'Blog: tips and inspiration',
   },
   error: {
     title: 'Oops! Something went wrong.',
@@ -122,17 +132,13 @@ export default {
     retry: 'Try again',
   },
   seo: {
-    title:
-      'SintGPT - Sinterklaas Poem Generator | Create Funny & Personalized Sinterklaas Poems with AI',
-    description:
-      'Generate perfectly rhyming Sinterklaas poems in 30 seconds. Unlike ChatGPT, SintGPT actually rhymes in Dutch!',
+    title: "Sinterklaas poem generator with AI | SintGPT",
+    description: "Create a personal Sinterklaas poem that really rhymes in 30 seconds. First poem free. Unlike ChatGPT, SintGPT rhymes properly in Dutch and English.",
     ogTitle: 'SintGPT - AI Sinterklaas Poem Generator',
     ogDescription:
       'Generate perfectly rhyming Sinterklaas poems in 30 seconds. Unlike ChatGPT, SintGPT actually rhymes in Dutch!',
     ogImageAlt:
       'SintGPT - AI Sinterklaas Poem Generator that actually rhymes in Dutch',
-    keywords:
-      'sinterklaas poem generator, create sinterklaas poems, funny sinterklaas poems, personalized sinterklaas poem, sinterklaas poem AI, dutch sinterklaas tradition, sinterklaas 2026',
   },
   faq: {
     title: 'Frequently Asked Questions',
@@ -180,7 +186,7 @@ export default {
       {
         question: 'Is my data stored?',
         answer:
-          'No, SintGPT does not store any personal data, prompts, or generated poems. All information you enter is only used to generate the poem and is immediately deleted afterwards. Your privacy is fully protected.',
+          "SintGPT does not keep your poems on a server. They stay on your own device, under My poems. To write a poem we send what you enter to our AI services (Vercel AI Gateway and Google's AI model, or OpenAI's during an outage). So do not enter sensitive details. If you share a poem with a link, anyone with that link can read it. The first two lines are readable in the link and can end up in server logs.",
       },
       {
         question:

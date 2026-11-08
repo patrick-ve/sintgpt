@@ -25,7 +25,7 @@ describe('PoemRequestSchema', () => {
     ['unknown style', { style: 'rap' }],
     ['unknown rhyme scheme', { rhymeScheme: 'AAAA' }],
     ['too few lines', { lines: 7 }],
-    ['too many lines', { lines: 41 }],
+    ['too many lines', { lines: 51 }],
     ['fractional lines', { lines: 10.5 }],
     ['unknown language', { language: 'german' }],
   ])('rejects %s', (_label, override) => {

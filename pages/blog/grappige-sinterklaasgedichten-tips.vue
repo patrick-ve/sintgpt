@@ -14,10 +14,6 @@ useSeoMeta({
 useOgImage('blog-grappige-sinterklaasgedichten-tips', 'SintGPT Blog: grappige sinterklaasgedichten schrijven');
 
 useHead({
-  meta: [{ name: 'keywords', content: 'grappige sinterklaasgedichten, humoristische gedichten, sinterklaas woordspelingen, grappig gedicht schrijven, leuke sinterklaasgedichten' }],
-});
-
-useHead({
   link: [
     { rel: 'canonical', href: 'https://sintgpt.com/blog/grappige-sinterklaasgedichten-tips' },
   ],
@@ -35,7 +31,14 @@ useHead({
         author: {
           '@type': 'Organization',
           name: 'SintGPT',
+          url: 'https://sintgpt.com',
         },
+        publisher: {
+          '@type': 'Organization',
+          name: 'SintGPT',
+          logo: { '@type': 'ImageObject', url: 'https://sintgpt.com/favicon-192x192.png' },
+        },
+        mainEntityOfPage: 'https://sintgpt.com/blog/grappige-sinterklaasgedichten-tips',
       }),
     },
   ],
@@ -54,7 +57,7 @@ useHead({
         <NuxtLink to="/blog" class="hover:opacity-80 transition-opacity inline-block mb-2 font-bold">
           <span class="text-lg">← Terug naar Blog</span>
         </NuxtLink>
-        <h1 class="text-3xl md:text-5xl font-bold font-display drop-shadow-md">SintGPT Blog</h1>
+        <p class="text-3xl md:text-5xl font-bold font-display drop-shadow-md">SintGPT Blog</p>
       </div>
     </header>
 
