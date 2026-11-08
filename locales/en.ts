@@ -88,7 +88,7 @@ export default {
     copied: 'Copied!',
     copyLink: 'Copy link',
     linkCopied: 'Link copied!',
-    linkPrivacy: 'Anyone with the link can read this poem.',
+    linkPrivacy: 'Anyone with the link can read this poem. We keep it for 90 days for this.',
     shareWhatsApp: 'Share on WhatsApp',
     shareEmail: 'Send via email',
     shareFacebook: 'Share on Facebook',
@@ -187,7 +187,7 @@ export default {
       {
         question: 'Is my data stored?',
         answer:
-          "SintGPT does not keep your poems on a server. They stay on your own device, under My poems. To write a poem we send what you enter to our AI services (Vercel AI Gateway and Google's AI model, or OpenAI's during an outage). So do not enter sensitive details. If you share a poem with a link, anyone with that link can read it. The first two lines are readable in the link and can end up in server logs.",
+          "SintGPT does not keep your poems on a server unless you share them. They stay on your own device, under My poems. To write a poem we send what you enter to our AI services (Vercel AI Gateway and Google's AI model, or OpenAI's during an outage). So do not enter sensitive details. If you share a poem with a link, we keep it for 90 days at Cloudflare, and then it disappears by itself. Anyone with that link can read it. The first two lines can end up in server logs.",
       },
       {
         question:

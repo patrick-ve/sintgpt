@@ -381,7 +381,9 @@ describe('poem links', () => {
     await page.fill('#poem-name', 'Oma Truus');
     await page.locator('#poem-form button[type=submit]').click();
 
+    // This build has no KV, so the browser falls back to the long link.
     await page.getByRole('button', { name: 'Kopieer link' }).click({ timeout: 15_000 });
+    await page.getByRole('button', { name: 'Link gekopieerd!' }).waitFor();
     const copied = await page.evaluate(() => navigator.clipboard.readText());
     expect(copied).toContain('/gedicht?s=');
     expect(copied).toContain('#d');
@@ -390,6 +392,22 @@ describe('poem links', () => {
     await page.getByText('voor mens en voor beest').waitFor();
     await page.close();
   }, 45_000);
+});
+
+describe('short poem links', () => {
+  it('answers 404 for an unknown link', async () => {
+    const res = await fetch('/g/abcdefghij');
+    expect(res.status).toBe(404);
+  });
+
+  it('reports that storage is not available in this build', async () => {
+    const res = await fetch('/api/share/links', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ share: {}, poem: 'x' }),
+    });
+    expect(res.status).toBe(503);
+  });
 });
 
 describe('paywall', () => {

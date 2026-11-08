@@ -243,9 +243,54 @@ watchEffect(async () => {
     : null;
 });
 
+// Stores the poem only now that someone shares it. The long link needs no
+// storage, so it takes over when the short link is not available.
+const shortLinks = new Map<string, string>();
+
+const resolveShareLink = async (): Promise<string | null> => {
+  const text = poem.value;
+  const longLink = shareUrl.value;
+  const signed = historyEntries.value.find(entry => entry.poem === text)?.share;
+  if (!text || !longLink || !signed) return longLink;
+
+  const known = shortLinks.get(text);
+  if (known) return known;
+  try {
+    const { id } = await $fetch<{ id: string }>('/api/share/links', {
+      method: 'POST',
+      body: { share: signed, poem: text },
+      timeout: 4000,
+    });
+    const link = `${window.location.origin}/g/${id}`;
+    shortLinks.set(text, link);
+    return link;
+  } catch {
+    return longLink;
+  }
+};
+
+// Browsers block a new window that opens after waiting, so open it first.
+const openWithShareLink = async (buildTarget: (link: string | null) => string) => {
+  const opened = window.open('', '_blank');
+  if (opened) opened.opener = null;
+  const target = buildTarget(await resolveShareLink());
+  if (opened) opened.location.href = target;
+  else window.location.href = target;
+};
+
 const copyShareLink = async () => {
   if (!shareUrl.value) return;
-  await navigator.clipboard.writeText(shareUrl.value);
+  const link = resolveShareLink();
+  try {
+    // Safari only allows copying during the click, so hand it a pending value.
+    await navigator.clipboard.write([
+      new ClipboardItem({
+        'text/plain': link.then(url => new Blob([url ?? ''], { type: 'text/plain' })),
+      }),
+    ]);
+  } catch {
+    await navigator.clipboard.writeText((await link) ?? '');
+  }
   linkCopied.value = true;
   (window as any).umami?.track('Copy share link');
   setTimeout(() => {
@@ -263,11 +308,11 @@ const getPoemWithAttribution = () => {
 };
 
 const shareViaWhatsApp = () => {
-  const text = encodeURIComponent(
-    shareUrl.value ? `${poemTitle.value}\n${shareUrl.value}` : getPoemWithAttribution(),
-  );
   (window as any).umami?.track('Shared via WhatsApp');
-  window.open(`https://wa.me/?text=${text}`, '_blank');
+  openWithShareLink((link) => {
+    const text = link ? `${poemTitle.value}\n${link}` : getPoemWithAttribution();
+    return `https://wa.me/?text=${encodeURIComponent(text)}`;
+  });
 };
 
 const shareViaEmail = () => {
@@ -278,11 +323,9 @@ const shareViaEmail = () => {
 };
 
 const shareViaFacebook = () => {
-  const link = encodeURIComponent(shareUrl.value ?? window.location.origin);
   (window as any).umami?.track('Shared via Facebook');
-  window.open(
-    `https://www.facebook.com/sharer/sharer.php?u=${link}`,
-    '_blank'
+  openWithShareLink(link =>
+    `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link ?? window.location.origin)}`,
   );
 };
 

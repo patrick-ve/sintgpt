@@ -22,7 +22,7 @@ useHead({
   title: pageTitle,
 });
 
-const handleError = () => clearError({ redirect: '/app' });
+const handleError = () => clearError({ redirect: '/' });
 </script>
 
 <template>
