@@ -65,6 +65,14 @@ Notes:
 - `NUXT_ACCESS_COOKIE_SECRET` also signs these links. Changing it breaks existing links.
 - `/gedicht` is `noindex`. Do not add it to the sitemap.
 
+### Short poem links (Workers KV)
+`/g/<id>` is what people share. The long link above stays as the fallback, and old links keep working.
+- When someone shares a poem, `POST /api/share/links` checks the signature and the digest, so only poems from SintGPT are stored (`server/utils/poemShortLink.ts`). Nothing is stored before that moment.
+- The poem sits in the `POEM_LINKS` KV namespace (`nuxt.config.ts`) and removes itself after 90 days. The privacy text in the locales says this, so keep them in line.
+- The ID comes from an HMAC over the signature: the same poem gets the same link, and IDs cannot be worked out. It is 10 characters.
+- If KV fails or reaches its daily write limit, or in the node-server build the tests use, the browser shares the long link.
+- `/g/<id>` is `noindex` and uses the same `/gedicht/preview.png` share image.
+
 ### SEO
 - The main address is `https://sintgpt.com`. `server/middleware/canonical-host.ts` redirects `www` to it. Each page sets its own canonical link.
 - English is applied in the browser on the same URLs, so search engines see Dutch only. Do not add `hreflang` tags until English has its own URLs.

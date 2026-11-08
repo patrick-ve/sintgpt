@@ -75,6 +75,8 @@ export default defineNuxtConfig({
         observability: { enabled: true },
         // Lets the Worker notice a client disconnect and stop poem generation.
         compatibility_flags: ['enable_request_signal'],
+        // Stores poems that people share with a short link.
+        kv_namespaces: [{ binding: 'POEM_LINKS', id: 'bc2a7dcb97274e6b82a18989e89fd04c' }],
       },
     },
   },

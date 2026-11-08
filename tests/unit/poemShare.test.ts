@@ -9,6 +9,12 @@ import {
 } from '../../utils/poemLink';
 import { parseStreamLine } from '../../utils/poemStream';
 import { shareImageCacheUrl, signPoemShare, verifyPoemShare } from '../../server/utils/poemShare';
+import {
+  createShortLink,
+  readShortLink,
+  SHORT_LINK_TTL_SECONDS,
+  type ShortLinkStore,
+} from '../../server/utils/poemShortLink';
 import { canonicalRedirect } from '../../server/utils/canonicalHost';
 import {
   buildShareSvg,
@@ -184,5 +190,87 @@ describe('shareImageCacheUrl', () => {
   it('gives different links different keys', () => {
     const other = new URL('https://sintgpt.com/gedicht/preview.png?s=xyz&l=nl&d=def&sig=ghi');
     expect(shareImageCacheUrl(other)).not.toBe(canonical);
+  });
+});
+
+describe('short poem links', () => {
+  function fakeStore() {
+    const values = new Map<string, string>();
+    const puts: { key: string; ttl: number }[] = [];
+    const store: ShortLinkStore = {
+      get: async key => values.get(key) ?? null,
+      put: async (key, value, { expirationTtl }) => {
+        values.set(key, value);
+        puts.push({ key, ttl: expirationTtl });
+      },
+    };
+    return { store, puts, values };
+  }
+
+  it('stores a signed poem and reads it back', async () => {
+    const { store, puts } = fakeStore();
+    const share = await signPoemShare(POEM, 'nl', SECRET);
+    const id = await createShortLink(store, share, POEM, SECRET);
+
+    expect(id).toMatch(/^[A-Za-z0-9_-]{10}$/);
+    expect(puts[0]!.ttl).toBe(SHORT_LINK_TTL_SECONDS);
+    const stored = await readShortLink(store, id!, SECRET);
+    expect(stored?.poem).toBe(POEM);
+    expect(stored?.language).toBe('nl');
+    expect(stored?.share).toEqual(share);
+  });
+
+  it('gives the same poem the same link, and writes it once', async () => {
+    const { store, puts } = fakeStore();
+    const share = await signPoemShare(POEM, 'nl', SECRET);
+    const first = await createShortLink(store, share, POEM, SECRET);
+    const second = await createShortLink(store, share, POEM, SECRET);
+
+    expect(second).toBe(first);
+    expect(puts).toHaveLength(1);
+  });
+
+  it('gives different poems different links', async () => {
+    const { store } = fakeStore();
+    const other = `${POEM}\nEn nog een regel.`;
+    const first = await createShortLink(store, await signPoemShare(POEM, 'nl', SECRET), POEM, SECRET);
+    const second = await createShortLink(store, await signPoemShare(other, 'nl', SECRET), other, SECRET);
+    expect(second).not.toBe(first);
+  });
+
+  it('refuses other text under a valid signature', async () => {
+    const { store, puts } = fakeStore();
+    const share = await signPoemShare(POEM, 'nl', SECRET);
+    expect(await createShortLink(store, share, 'Koop nu goedkope pillen', SECRET)).toBeNull();
+    expect(puts).toHaveLength(0);
+  });
+
+  it('refuses a forged signature', async () => {
+    const { store, puts } = fakeStore();
+    const share = await signPoemShare(POEM, 'nl', 'another-secret');
+    expect(await createShortLink(store, share, POEM, SECRET)).toBeNull();
+    expect(puts).toHaveLength(0);
+  });
+
+  it.each([
+    ['not text', 42],
+    ['too long', 'x'.repeat(16 * 1024 + 1)],
+  ])('refuses a poem that is %s', async (_label, poem) => {
+    const { store } = fakeStore();
+    const share = await signPoemShare(POEM, 'nl', SECRET);
+    expect(await createShortLink(store, share, poem, SECRET)).toBeNull();
+  });
+
+  it('does not read unknown or malformed IDs', async () => {
+    const { store } = fakeStore();
+    expect(await readShortLink(store, 'abcdefghij', SECRET)).toBeNull();
+    expect(await readShortLink(store, '../secret', SECRET)).toBeNull();
+  });
+
+  it('stops serving links when the secret changes', async () => {
+    const { store } = fakeStore();
+    const share = await signPoemShare(POEM, 'nl', SECRET);
+    const id = await createShortLink(store, share, POEM, SECRET);
+    expect(await readShortLink(store, id!, 'new-secret')).toBeNull();
   });
 });
