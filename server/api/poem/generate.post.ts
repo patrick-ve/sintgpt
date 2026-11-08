@@ -1,6 +1,7 @@
 import { consola } from 'consola';
 import {
   createGateway,
+  createUIMessageStream,
   createUIMessageStreamResponse,
   smoothStream,
   streamText,
@@ -8,9 +9,11 @@ import {
 } from 'ai';
 import { clientDisconnectSignal } from '../../utils/clientDisconnect';
 import { hasUnlimitedAccess } from '../../utils/paymentCookie';
+import { signPoemShare } from '../../utils/poemShare';
 import {
   buildPrompt,
   DEFAULT_POEM_MODEL,
+  FALLBACK_POEM_MODEL,
   estimateCostUsd,
   PoemRequestSchema,
 } from '../../utils/poem';
@@ -109,12 +112,11 @@ export default defineEventHandler(async (event) => {
     const validatedData = PoemRequestSchema.parse(body);
 
     consola.info('Generating poem with parameters:', {
-      name: validatedData.name,
       style: validatedData.style,
       rhymeScheme: validatedData.rhymeScheme,
       lines: validatedData.lines,
       language: validatedData.language,
-      hasFunFacts: !!validatedData.funFacts,
+      // Never log what visitors type: names and details are personal.
     });
 
     // Build the prompt
@@ -137,6 +139,8 @@ export default defineEventHandler(async (event) => {
       // text instead of a poem.
       temperature: 1,
       maxRetries: 3,
+      // AI Gateway switches to this model if the primary one fails.
+      providerOptions: { gateway: { models: [FALLBACK_POEM_MODEL] } },
       // Stop paying for tokens when the visitor leaves during generation.
       abortSignal: clientDisconnectSignal(event),
       // Models send text in bursts; release it word by word instead.
@@ -164,7 +168,30 @@ export default defineEventHandler(async (event) => {
       // no-transform keeps Cloudflare from compressing the stream, even if a
       // Compression Rule on the zone would match it. Compression buffers.
       headers: { 'cache-control': 'no-cache, no-transform' },
-      stream: toUIMessageStream({ stream: result.stream }),
+      stream: createUIMessageStream({
+        async execute({ writer }) {
+          writer.merge(toUIMessageStream({ stream: result.stream }));
+
+          // Sign the finished poem, so the visitor can share it as a link.
+          // Without a secret the app still works, only without poem links.
+          const secret = runtimeConfig.accessCookieSecret;
+          if (!secret) return;
+          try {
+            const text = (await result.text).trim();
+            if (!text) return;
+            writer.write({
+              type: 'data-share',
+              data: await signPoemShare(
+                text,
+                validatedData.language === 'dutch' ? 'nl' : 'en',
+                secret,
+              ),
+            });
+          } catch {
+            // The stream failed or the visitor left. The stream reports errors.
+          }
+        },
+      }),
     });
   } catch (error: any) {
     // Pass through HTTP errors we raised on purpose (e.g. 429 rate limit),
@@ -173,7 +200,8 @@ export default defineEventHandler(async (event) => {
       throw error;
     }
 
-    consola.error('Error generating poem:', error);
+    // The message only: AI SDK errors can carry the whole prompt.
+    consola.error('Error generating poem:', error?.message);
 
     // Handle validation errors
     if (error.name === 'ZodError') {

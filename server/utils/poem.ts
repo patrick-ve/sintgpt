@@ -1,10 +1,14 @@
 import { z } from 'zod';
+import { POEM_INPUT_LIMITS } from '../../utils/poemLimits';
 
 // Default AI Gateway model. Override with the NUXT_AI_GATEWAY_MODEL env var.
 // Gemini 3.7 Flash won a blind test against Gemini 3.8 Flash and
 // GPT-6.1 Terra (Nov 2026) and is ~6x cheaper and 2-3x faster than
 // Gemini 3.1 Pro (~15 s and ~$0.008 per poem).
 export const DEFAULT_POEM_MODEL = 'google/gemini-3.7-flash';
+
+// A different provider, so poems still work during a Google outage.
+export const FALLBACK_POEM_MODEL = 'openai/gpt-6.1-terra';
 
 // Gemini 3.7 Flash pricing on AI Gateway (USD per 1M tokens).
 // Output tokens include reasoning tokens. The estimate is only correct
@@ -24,12 +28,12 @@ export function estimateCostUsd(usage: {
 
 // Define the request schema for validation
 export const PoemRequestSchema = z.object({
-  name: z.string().min(1, 'Recipient name is required'),
-  present: z.string().optional(),
+  name: z.string().min(1, 'Recipient name is required').max(POEM_INPUT_LIMITS.name),
+  present: z.string().max(POEM_INPUT_LIMITS.present).optional(),
   revealPresent: z.boolean().default(true),
-  funFacts: z.string().optional(),
-  writtenBy: z.string().optional(),
-  writtenForAudience: z.string().optional(),
+  funFacts: z.string().max(POEM_INPUT_LIMITS.funFacts).optional(),
+  writtenBy: z.string().max(POEM_INPUT_LIMITS.writtenBy).optional(),
+  writtenForAudience: z.string().max(POEM_INPUT_LIMITS.writtenForAudience).optional(),
   style: z.enum([
     'funny',
     'classic',
@@ -38,7 +42,7 @@ export const PoemRequestSchema = z.object({
     'spicy',
   ]),
   rhymeScheme: z.enum(['AABB', 'ABAB', 'ABBA', 'Limerick']),
-  lines: z.number().int().min(8).max(40),
+  lines: z.number().int().min(8).max(50),
   language: z.enum(['dutch', 'english']),
 });
 

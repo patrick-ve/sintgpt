@@ -56,6 +56,18 @@ Notes:
 - The free limit is soft: 1 poem in localStorage, 3/day/IP on the server.
 - `/api/webhooks/dodo-payments` verifies signatures and only logs events.
 
+### Poem links (no database)
+`/gedicht?s=<opening>&l=<lang>&d=<digest>&sig=<signature>#<whole poem>`
+- When a poem finishes, `generate.post.ts` adds a signed `data-share` chunk to the stream (`server/utils/poemShare.ts`). It is kept with the poem in the on-device history.
+- Only the opening lines reach the server. The whole poem sits after the `#`, which browsers do not send (`utils/poemLink.ts`). The page shows it only if it matches the signed digest, so nobody can put other text on sintgpt.com through a link.
+- `/gedicht/preview.png` draws the share image with resvg (WASM) from an SVG (`server/utils/shareImageSvg.ts`), and keeps it in Cloudflare's edge cache. It takes more CPU than the Workers Free plan allows. Fonts in `server/assets/share/` are SIL OFL.
+- `NUXT_ACCESS_COOKIE_SECRET` also signs these links. Changing it breaks existing links.
+- `/gedicht` is `noindex`. Do not add it to the sitemap.
+
+### SEO
+- The main address is `https://sintgpt.com`. `server/middleware/canonical-host.ts` redirects `www` to it. Each page sets its own canonical link.
+- English is applied in the browser on the same URLs, so search engines see Dutch only. Do not add `hreflang` tags until English has its own URLs.
+
 ### Social proof
 Only show numbers, reviews and ratings that come from real data. This includes the JSON-LD on the home page. Keep its offer in line with the real price and free limit.
 
@@ -88,7 +100,7 @@ Runtime config is read from `NUXT_*` env vars at runtime (not baked into the bui
 | `NUXT_DODO_PAYMENTS_API_KEY` | Dodo Payments API key. The `dodo_live_` prefix selects live mode, anything else test mode |
 | `NUXT_DODO_PRODUCT_ID` | Dodo product for unlimited access |
 | `NUXT_DODO_PAYMENTS_WEBHOOK_SECRET` | Dodo webhook signing secret. Without it the webhook rejects every event |
-| `NUXT_ACCESS_COOKIE_SECRET` | Signs the unlimited-access cookie (`openssl rand -hex 32`). Without it nobody gets unlimited access; changing it logs out all paying customers |
+| `NUXT_ACCESS_COOKIE_SECRET` | Signs the unlimited-access cookie and poem links (`openssl rand -hex 32`). Without it nobody gets unlimited access and poem links are off; changing it logs out all paying customers and breaks shared links |
 
 ## Tests
 
@@ -96,4 +108,4 @@ Runtime config is read from `NUXT_*` env vars at runtime (not baked into the bui
 - `tests/e2e/app.test.ts` - builds the app, starts the server and a headless browser: pages, OG tags, rate limiting, the history drawer at phone size, and one **live** poem via AI Gateway (skipped without a key; costs a few cents)
 
 ## Analytics (Umami events)
-`Generate poem`, `Poem generation failed`, `Open poem from history`, `Proceed to payment`, `Payment succeeded`, `Access restored`, `Shared via WhatsApp/Email/Facebook`, `Copy to clipboard`.
+`Generate poem`, `Poem generation failed`, `Open poem from history`, `Proceed to payment`, `Payment succeeded`, `Access restored`, `Copy share link`, `Open shared poem`, `Shared via WhatsApp/Email/Facebook`, `Copy to clipboard`.

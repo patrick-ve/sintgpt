@@ -36,7 +36,7 @@ export function decidePaymentAccess(
   return 'denied';
 }
 
-function hmacKey(secret: string) {
+export function hmacKey(secret: string) {
   return crypto.subtle.importKey(
     'raw',
     new TextEncoder().encode(secret),

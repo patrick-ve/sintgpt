@@ -2,7 +2,7 @@
 const { locale } = useI18n();
 
 useSeoMeta({
-  title: 'Sinterklaas Tradities: Van Gedichten tot Surprises - Complete Gids',
+  title: 'Sinterklaas tradities: van gedichten tot surprises | SintGPT',
   description: 'Ontdek de rijke geschiedenis en tradities van het Sinterklaasfeest. Alles over gedichten, surprises, pepernoten en meer!',
   ogTitle: 'Sinterklaas Tradities & Geschiedenis | SintGPT',
   ogDescription: 'Een complete gids over de Nederlandse Sinterklaas traditie: van de oorsprong tot moderne gebruiken.',
@@ -12,10 +12,6 @@ useSeoMeta({
 });
 
 useOgImage('blog-sinterklaas-tradities', 'SintGPT Blog: Sinterklaas tradities en geschiedenis');
-
-useHead({
-  meta: [{ name: 'keywords', content: 'sinterklaas traditie, sinterklaas geschiedenis, sinterklaas gedichten traditie, pakjesavond, surprises sinterklaas, nederlandse tradities' }],
-});
 
 useHead({
   link: [
@@ -35,7 +31,14 @@ useHead({
         author: {
           '@type': 'Organization',
           name: 'SintGPT',
+          url: 'https://sintgpt.com',
         },
+        publisher: {
+          '@type': 'Organization',
+          name: 'SintGPT',
+          logo: { '@type': 'ImageObject', url: 'https://sintgpt.com/favicon-192x192.png' },
+        },
+        mainEntityOfPage: 'https://sintgpt.com/blog/sinterklaas-tradities',
       }),
     },
   ],
@@ -54,7 +57,7 @@ useHead({
         <NuxtLink to="/blog" class="hover:opacity-80 transition-opacity inline-block mb-2 font-bold">
           <span class="text-lg">← Terug naar Blog</span>
         </NuxtLink>
-        <h1 class="text-3xl md:text-5xl font-bold font-display drop-shadow-md">SintGPT Blog</h1>
+        <p class="text-3xl md:text-5xl font-bold font-display drop-shadow-md">SintGPT Blog</p>
       </div>
     </header>
 

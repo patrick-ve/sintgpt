@@ -4,6 +4,8 @@ import { Webhook } from 'standardwebhooks';
 import { describe, expect, it } from 'vitest';
 import { OG_IMAGES } from '../../scripts/og-images';
 import { signAccessToken } from '../../server/utils/paymentAccess';
+import { signPoemShare } from '../../server/utils/poemShare';
+import { encodePoem, encodeText } from '../../utils/poemLink';
 import { readPoemStream } from '../../utils/poemStream';
 
 // Builds the app in production mode, starts the real Nitro server and
@@ -34,7 +36,7 @@ describe('pages', () => {
     expect(res.status).toBe(200);
     const html = await res.text();
     expect(html).toContain('SintGPT');
-    expect(html).toMatch(/<meta name="keywords" content="[^"]+"/);
+    expect(html).toMatch(/<meta name="description" content="[^"]+"/);
   });
 
   it.each([
@@ -290,6 +292,104 @@ describe('restoring access', () => {
     expect(await page.locator('dialog[open]').count()).toBe(0);
     await page.close();
   }, 30_000);
+});
+
+describe('SEO', () => {
+  it('gives the home page one canonical address, a short title and one h1', async () => {
+    const html = await (await fetch('/')).text();
+    expect(html.match(/rel="canonical"/g)).toHaveLength(1);
+    expect(html).toContain('<link rel="canonical" href="https://sintgpt.com/"');
+    expect(html).not.toContain('hreflang');
+    expect(html).not.toContain('name="keywords"');
+    const title = html.match(/<title>([^<]*)<\/title>/)![1]!;
+    expect(title.length).toBeLessThanOrEqual(60);
+    expect(html.match(/<h1[\s>]/g)).toHaveLength(1);
+    expect(html).toContain('href="/blog"');
+  });
+
+  it.each([
+    'hoe-schrijf-je-het-perfecte-sinterklaasgedicht',
+    'grappige-sinterklaasgedichten-tips',
+    'sinterklaas-tradities',
+  ])('gives the article %s one h1 and its own canonical address', async (slug) => {
+    const html = await (await fetch(`/blog/${slug}`)).text();
+    expect(html.match(/<h1[\s>]/g)).toHaveLength(1);
+    expect(html).toContain(`<link rel="canonical" href="https://sintgpt.com/blog/${slug}"`);
+    expect(html.match(/rel="canonical"/g)).toHaveLength(1);
+  });
+});
+
+describe('poem links', () => {
+  const POEM = 'Sint zag oma Truus, zo lief en zo fijn,\nzij bakt elke zondag, heel klein.\n\nHaar taart is een feest,\nvoor mens en voor beest.';
+
+  async function shareQuery() {
+    const share = await signPoemShare(POEM, 'nl', 'e2e-access-secret');
+    return new URLSearchParams({ s: share.s, l: share.l, d: share.d, sig: share.sig }).toString();
+  }
+
+  it('sends apps a preview with the opening lines, without any JavaScript', async () => {
+    const res = await fetch(`/gedicht?${await shareQuery()}`);
+    expect(res.status).toBe(200);
+    const html = await res.text();
+    expect(html).toMatch(/property="og:image" content="[^"]*\/gedicht\/preview\.png\?/);
+    expect(html).toContain('Sint zag oma Truus');
+    expect(html).toContain('noindex');
+  });
+
+  it('draws the share image', async () => {
+    const res = await fetch(`/gedicht/preview.png?${await shareQuery()}`);
+    expect(res.status).toBe(200);
+    expect(res.headers.get('content-type')).toBe('image/png');
+    const bytes = new Uint8Array(await res.arrayBuffer());
+    expect([...bytes.slice(0, 4)]).toEqual([0x89, 0x50, 0x4e, 0x47]);
+    expect(bytes.length).toBeLessThan(600 * 1024);
+  }, 30_000);
+
+  it('refuses a forged link and a forged image', async () => {
+    const query = (await shareQuery()).replace(/s=[^&]+/, `s=${encodeText('Lelijke tekst')}`);
+    expect((await fetch(`/gedicht?${query}`)).status).toBe(404);
+    expect((await fetch(`/gedicht/preview.png?${query}`)).status).toBe(404);
+  });
+
+  it('shows the whole poem from the link', async () => {
+    const page = await createPage();
+    await page.goto(url(`/gedicht?${await shareQuery()}#${await encodePoem(POEM)}`), { waitUntil: 'networkidle' });
+    await page.getByText('voor mens en voor beest').waitFor();
+    await page.close();
+  }, 30_000);
+
+  it('hides text that does not match the signed poem', async () => {
+    const page = await createPage();
+    await page.goto(url(`/gedicht?${await shareQuery()}#${await encodePoem('Koop nu op evil.example')}`), { waitUntil: 'networkidle' });
+    await page.getByText('niet worden gecontroleerd').waitFor();
+    expect(await page.getByText('evil.example').count()).toBe(0);
+    await page.close();
+  }, 30_000);
+
+  it('offers a link for a generated poem and sharing still works without one', async () => {
+    const share = await signPoemShare(POEM, 'nl', 'e2e-access-secret');
+    const chunks = POEM.match(/\S+\s*/g)!.map(delta => ({ type: 'text-delta', id: '0', delta }));
+    const sse = [...chunks, { type: 'data-share', data: share }]
+      .map(chunk => `data: ${JSON.stringify(chunk)}\n\n`).join('') + 'data: [DONE]\n\n';
+
+    const page = await createPage();
+    await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
+    await page.addInitScript(() => localStorage.setItem('cookie_consent', 'accepted'));
+    await page.route('**/api/poem/generate', route =>
+      route.fulfill({ status: 200, contentType: 'text/event-stream', body: sse }));
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+    await page.fill('#poem-name', 'Oma Truus');
+    await page.locator('#poem-form button[type=submit]').click();
+
+    await page.getByRole('button', { name: 'Kopieer link' }).click({ timeout: 15_000 });
+    const copied = await page.evaluate(() => navigator.clipboard.readText());
+    expect(copied).toContain('/gedicht?s=');
+    expect(copied).toContain('#d');
+
+    await page.goto(copied, { waitUntil: 'networkidle' });
+    await page.getByText('voor mens en voor beest').waitFor();
+    await page.close();
+  }, 45_000);
 });
 
 describe('paywall', () => {
