@@ -33,8 +33,12 @@ useSeoMeta({
   description: 'Ontdek tips, trucs en inspiratie voor het schrijven van sinterklaasgedichten. Van grappige gedichten tot klassieke rijmschema\'s.',
   ogTitle: 'SintGPT Blog - Sinterklaasgedichten Tips & Inspiratie',
   ogDescription: 'Alles wat je moet weten over sinterklaasgedichten: tips, voorbeelden, en creatieve ideeën voor het perfecte gedicht.',
-  ogImage: '/og-image.jpg',
-  keywords: 'sinterklaasgedichten tips, sinterklaas blog, gedichten schrijven, sinterklaas inspiratie, grappige gedichten',
+});
+
+useOgImage('blog', 'SintGPT Blog: tips en inspiratie voor sinterklaasgedichten');
+
+useHead({
+  meta: [{ name: 'keywords', content: 'sinterklaasgedichten tips, sinterklaas blog, gedichten schrijven, sinterklaas inspiratie, grappige gedichten' }],
 });
 
 useHead({

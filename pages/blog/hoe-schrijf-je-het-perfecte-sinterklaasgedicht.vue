@@ -6,11 +6,15 @@ useSeoMeta({
   description: 'Ontdek de beste tips en trucs voor het schrijven van een geweldig sinterklaasgedicht. Van rijmschema\'s tot persoonlijke details - alles wat je moet weten!',
   ogTitle: 'Hoe schrijf je het perfecte sinterklaasgedicht? | SintGPT',
   ogDescription: 'Complete gids met praktische tips voor het schrijven van sinterklaasgedichten die gegarandeerd indruk maken.',
-  ogImage: '/og-image.jpg',
-  keywords: 'sinterklaasgedicht schrijven, sinterklaasgedicht tips, perfect sinterklaasgedicht, rijmschema sinterklaas, gepersonaliseerd gedicht',
   articlePublishedTime: '2025-11-17',
   articleModifiedTime: '2025-11-17',
   ogType: 'article',
+});
+
+useOgImage('blog-hoe-schrijf-je-het-perfecte-sinterklaasgedicht', 'SintGPT Blog: hoe schrijf je het perfecte sinterklaasgedicht?');
+
+useHead({
+  meta: [{ name: 'keywords', content: 'sinterklaasgedicht schrijven, sinterklaasgedicht tips, perfect sinterklaasgedicht, rijmschema sinterklaas, gepersonaliseerd gedicht' }],
 });
 
 useHead({
@@ -25,7 +29,7 @@ useHead({
         '@type': 'Article',
         headline: 'Hoe schrijf je het perfecte sinterklaasgedicht in 2025',
         description: 'Ontdek de beste tips en trucs voor het schrijven van een geweldig sinterklaasgedicht.',
-        image: 'https://sintgpt.com/og-image.jpg',
+        image: 'https://sintgpt.com/og/blog-hoe-schrijf-je-het-perfecte-sinterklaasgedicht.jpg',
         datePublished: '2025-11-17',
         dateModified: '2025-11-17',
         author: {

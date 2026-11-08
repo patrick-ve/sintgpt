@@ -49,7 +49,7 @@ const closeModal = () => {
 </script>
 
 <template>
-  <UModal v-model:open="isOpen" :ui="{ width: 'sm:max-w-md' }">
+  <UModal v-model:open="isOpen" :ui="{ content: 'sm:max-w-md' }">
     <UCard>
       <template #header>
         <div class="flex items-center justify-between">

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { PoemHistoryEntry } from '~/composables/usePoemHistory';
+
 const { generatePoem, isLoading, error, poem, isRateLimitError } =
   usePoemGenerator();
 const { t, locale, setLocale } = useI18n();
@@ -13,7 +15,16 @@ const {
   saveTrialPoem,
 } = usePaymentTracking();
 const { hasAcceptedCookies, showConsentBanner } = useCookieConsent();
+const poemHistory = usePoemHistory();
+const historyEntries = poemHistory.entries;
 const route = useRoute();
+
+// Poem history drawer. `displayedRecipient` is who the poem on screen is
+// for, so the title stays right while the form is edited or an older poem
+// is opened.
+const showHistory = ref(false);
+const activeHistoryId = ref<string | null>(null);
+const displayedRecipient = ref('');
 const router = useRouter();
 
 // Payment status from redirect
@@ -49,6 +60,7 @@ onMounted(async () => {
     poem.value = storedTrialPoem.value;
     if (storedTrialPoemName.value) {
       formData.value.name = storedTrialPoemName.value;
+      displayedRecipient.value = storedTrialPoemName.value;
     }
   }
 });
@@ -110,6 +122,12 @@ const uiLanguageItems = [
   { value: 'en', label: '🇬🇧 English' },
 ];
 
+// Compact labels for the narrow mobile header
+const uiLanguageItemsShort = [
+  { value: 'nl', label: '🇳🇱 NL' },
+  { value: 'en', label: '🇬🇧 EN' },
+];
+
 const selectedLocale = computed({
   get: () => locale.value,
   set: (value) => setLocale(value),
@@ -151,6 +169,8 @@ const handleSubmit = async () => {
   }
 
   // Generate the poem
+  displayedRecipient.value = formData.value.name.trim();
+  activeHistoryId.value = null;
   await generatePoem(formData.value);
 
   // If rate limit was hit, it will be displayed in the UI with upgrade button
@@ -162,6 +182,17 @@ const handleSubmit = async () => {
 
     // Track successful poem generation
     (window as any).umami?.track('Generate poem');
+
+    // Keep it in the on-device history drawer
+    const saved = poemHistory.add({
+      recipient: displayedRecipient.value,
+      poem: poem.value,
+      style: formData.value.style,
+      rhymeScheme: formData.value.rhymeScheme,
+      language: formData.value.language,
+      lines: formData.value.lines,
+    });
+    activeHistoryId.value = saved.id;
 
     // Save trial poem for unpaid users so it persists across page refreshes
     if (!isPaid.value) {
@@ -220,10 +251,23 @@ const isFormValid = computed(() => {
 });
 
 const poemTitle = computed(() => {
-  return formData.value.name.trim() !== ''
-    ? t('poem.title').replace('{name}', formData.value.name)
-    : t('poem.defaultTitle');
+  const name = (poem.value || isLoading.value)
+    ? displayedRecipient.value
+    : formData.value.name.trim();
+  return name ? t('poem.title', { name }) : t('poem.defaultTitle');
 });
+
+const openPoemFromHistory = (entry: PoemHistoryEntry) => {
+  poem.value = entry.poem;
+  error.value = null;
+  isRateLimitError.value = false;
+  displayedRecipient.value = entry.recipient;
+  activeHistoryId.value = entry.id;
+  (window as any).umami?.track('Open poem from history');
+  nextTick(() => {
+    poemSectionRef.value?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+};
 
 const isLimerick = computed(
   () => formData.value.rhymeScheme === 'Limerick'
@@ -267,16 +311,17 @@ useSeoMeta({
   description: computed(() => t('seo.description')),
   ogTitle: computed(() => t('seo.ogTitle')),
   ogDescription: computed(() => t('seo.ogDescription')),
-  ogImage: '/og-image.jpg',
-  ogImageAlt: computed(() => t('seo.ogImageAlt')),
-  twitterCard: 'summary_large_image',
-  twitterImage: '/og-image.jpg',
-  keywords: computed(() => t('seo.keywords')),
   ogLocale: computed(() =>
     locale.value === 'nl' ? 'nl_NL' : 'en_US'
   ),
   ogType: 'website',
   ogSiteName: 'SintGPT',
+});
+
+useOgImage('home', () => t('seo.ogImageAlt'));
+
+useHead({
+  meta: [{ name: 'keywords', content: computed(() => t('seo.keywords')) }],
 });
 
 // Structured data for SEO
@@ -381,24 +426,39 @@ useHead({
         <div
           class="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-4 md:gap-8"
         >
-          <!-- Mobile: Title and Language Switcher in one row -->
-          <div class="flex md:hidden items-center justify-between w-full gap-4">
+          <!-- Mobile: Title, history and language in one row -->
+          <div class="flex md:hidden items-center justify-between w-full gap-3">
             <h1
               class="text-2xl font-bold font-cinzel text-gold-gradient drop-shadow-lg tracking-wide leading-none"
             >
               {{ t('header.title') }}
             </h1>
-            <USelect
-              v-model="selectedLocale"
-              :items="uiLanguageItems"
-              class="w-40 flex-shrink-0"
-              size="sm"
-              :ui="{
-                base: 'bg-[#5c0f26] border-[#d4a853] border-2 text-[#f4cd60] font-bold rounded-lg shadow-lg',
-                value: 'text-[#f4cd60]',
-                trailingIcon: 'text-[#f4cd60]',
-              }"
-            />
+            <div class="flex items-center gap-2 flex-shrink-0">
+              <button
+                type="button"
+                class="history-trigger size-11 justify-center"
+                :aria-label="t('history.open')"
+                @click="showHistory = true"
+              >
+                <UIcon name="i-heroicons-book-open" class="size-5" />
+                <span
+                  v-if="historyEntries.length"
+                  class="history-badge"
+                >{{ historyEntries.length }}</span>
+              </button>
+              <USelect
+                v-model="selectedLocale"
+                :items="uiLanguageItemsShort"
+                class="w-[6.5rem]"
+                size="lg"
+                :aria-label="'Taal / Language'"
+                :ui="{
+                  base: 'h-11 bg-[#5c0f26] border-[#d4a853] border-2 text-[#f4cd60] font-bold rounded-lg shadow-lg',
+                  value: 'text-[#f4cd60]',
+                  trailingIcon: 'text-[#f4cd60]',
+                }"
+              />
+            </div>
           </div>
 
           <!-- Desktop: Logo and Title -->
@@ -422,8 +482,20 @@ useHead({
             />
           </div>
 
-          <!-- Right: Language Switcher (Desktop only) -->
-          <div class="hidden md:flex flex-col items-end gap-4">
+          <!-- Right: History + Language Switcher (Desktop only) -->
+          <div class="hidden md:flex items-center gap-3">
+            <button
+              type="button"
+              class="history-trigger h-10 px-4"
+              @click="showHistory = true"
+            >
+              <UIcon name="i-heroicons-book-open" class="size-5" />
+              <span>{{ t('history.open') }}</span>
+              <span
+                v-if="historyEntries.length"
+                class="history-badge"
+              >{{ historyEntries.length }}</span>
+            </button>
             <!-- Language Switcher -->
             <USelect
               v-model="selectedLocale"
@@ -969,7 +1041,7 @@ useHead({
                     class="sr-only"
                   />
                   <span
-                    class="text-sm text-[#8b1538] font-bold font-cinzel"
+                    class="text-sm text-[#8b1538] font-bold font-cinzel whitespace-nowrap"
                     >{{ option.label }}</span
                   >
                 </label>
@@ -1103,7 +1175,7 @@ useHead({
         <!-- Poem Display Section -->
         <section
           ref="poemSectionRef"
-          class="sint-card p-6 md:p-8 relative min-h-[600px] flex flex-col"
+          class="sint-card p-5 md:p-8 relative min-h-[420px] md:min-h-[600px] flex flex-col scroll-mt-4"
         >
           <!-- Decorative ribbon -->
           <div class="ribbon-decoration ribbon-corner-tl"></div>
@@ -1118,11 +1190,22 @@ useHead({
 
           <div class="mb-6 border-b-2 border-[#d4a853]/30 pb-4">
             <h2
-              class="text-2xl md:text-3xl font-bold text-[#8b1538] font-cinzel w-full mb-4 flex items-center gap-3"
+              class="text-2xl md:text-3xl font-bold text-[#8b1538] font-cinzel w-full mb-3 flex items-center gap-3 break-words"
             >
-              <span class="text-2xl">📖</span>
-              {{ poemTitle }}
+              <span class="text-2xl" aria-hidden="true">📖</span>
+              <span class="min-w-0">{{ poemTitle }}</span>
             </h2>
+
+            <!-- Earlier poems (on-device history) -->
+            <button
+              v-if="historyEntries.length"
+              type="button"
+              class="mb-4 -ml-1 inline-flex items-center gap-1.5 min-h-11 px-1 text-sm font-bold font-cinzel text-[#8b1538]/80 hover:text-[#8b1538] underline decoration-[#d4a853] underline-offset-4 cursor-pointer"
+              @click="showHistory = true"
+            >
+              <UIcon name="i-heroicons-book-open" class="size-4" />
+              {{ t('history.previous') }} ({{ historyEntries.length }})
+            </button>
 
             <!-- Share buttons -->
             <div v-if="poem" class="flex gap-2 flex-wrap w-full">
@@ -1413,12 +1496,63 @@ useHead({
     <ClientOnly>
       <PaymentModal v-model="showPaymentModal" />
     </ClientOnly>
+
+    <!-- Earlier poems, stored on this device -->
+    <ClientOnly>
+      <PoemHistoryDrawer
+        v-model:open="showHistory"
+        :active-id="activeHistoryId"
+        @select="openPoemFromHistory"
+      />
+    </ClientOnly>
   </div>
 </template>
 
 <style scoped>
 .font-cinzel {
   font-family: 'Cinzel', serif;
+}
+
+/* Header button that opens the poem history drawer */
+.history-trigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0.5rem;
+  border: 2px solid #d4a853;
+  background: #5c0f26;
+  color: #f4cd60;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.25);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.history-trigger:hover {
+  background: #7a1533;
+}
+.history-trigger:focus-visible {
+  outline: 2px solid #f4cd60;
+  outline-offset: 2px;
+}
+.history-badge {
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 0.3rem;
+  border-radius: 9999px;
+  background: #f4cd60;
+  color: #5c0f26;
+  font-size: 0.7rem;
+  line-height: 1.25rem;
+  text-align: center;
+}
+/* On the icon-only mobile button, pin the badge to the corner */
+.history-trigger.size-11 .history-badge {
+  position: absolute;
+  top: -0.4rem;
+  right: -0.4rem;
 }
 
 .font-handwriting {

@@ -63,6 +63,13 @@ export default defineEventHandler(async (event): Promise<CheckoutResponse> => {
       ],
     });
 
+    if (!session.checkout_url) {
+      throw createError({
+        statusCode: 502,
+        statusMessage: 'Payment provider returned no checkout URL',
+      });
+    }
+
     consola.success('Checkout session created:', session.checkout_url);
 
     return {

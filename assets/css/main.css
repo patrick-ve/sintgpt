@@ -29,30 +29,11 @@
   --sint-green-light: #2d5a3d;
 }
 
-/* ===== FESTIVE FONTS ===== */
-@font-face {
-  font-family: 'Cinzel';
-  font-style: normal;
-  font-weight: 400 900;
-  font-display: swap;
-  src: url('https://fonts.gstatic.com/s/cinzel/v23/8vIU7ww63mVu7gtR-kwKxNvkNOjw-tbnTYrvDE5ZdqU.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Cinzel Decorative';
-  font-style: normal;
-  font-weight: 400 900;
-  font-display: swap;
-  src: url('https://fonts.gstatic.com/s/cinzeldecorative/v16/daaCSScvJGqLYhG8nNt8KPPswUAPnh7URs1LaCyC.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'IM Fell DW Pica';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('https://fonts.gstatic.com/s/imfelldwpica/v16/2sDGZGRQotv9nbn2qSl0TxXVYNw9ZA.woff2') format('woff2');
-}
+/* ===== FESTIVE FONTS =====
+   Cinzel, Cinzel Decorative and IM Fell DW Pica are resolved and
+   self-hosted by @nuxt/fonts at build time. Do not hard-code
+   fonts.gstatic.com URLs here: they are versioned and go stale (the old
+   Cinzel v23 URL returned 404, so Cinzel never loaded). */
 
 /* ===== ANIMATED SNOWFLAKES ===== */
 @keyframes snowfall {

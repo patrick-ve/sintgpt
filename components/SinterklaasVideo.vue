@@ -134,7 +134,8 @@ function formatTime(seconds: number): string {
             <!-- Play/Pause Small Button -->
             <button
               @click="togglePlay"
-              class="text-[#F4CD60] hover:text-white transition-colors font-cinzel font-bold text-lg flex items-center gap-2"
+              :aria-label="isPlaying ? 'Pauze' : 'Speel af'"
+              class="text-[#F4CD60] hover:text-white transition-colors font-cinzel font-bold text-lg flex items-center justify-center gap-2 min-w-11 min-h-11"
             >
               <span v-if="isPlaying">⏸</span>
               <span v-else>▶</span>
@@ -153,7 +154,8 @@ function formatTime(seconds: number): string {
           <!-- Mute/Unmute -->
           <button
             @click="toggleMute"
-            class="text-[#F4CD60] hover:text-white transition-colors"
+            :aria-label="isMuted ? 'Geluid aan' : 'Geluid uit'"
+            class="text-[#F4CD60] hover:text-white transition-colors flex items-center justify-center min-w-11 min-h-11"
           >
             <span v-if="isMuted">🔇</span>
             <span v-else>🔊</span>

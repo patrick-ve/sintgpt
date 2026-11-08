@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2024-11-01',
+  compatibilityDate: '2026-11-01',
 
   devtools: { enabled: true },
 
@@ -13,11 +13,14 @@ export default defineNuxtConfig({
   css: ['@/assets/css/main.css'],
 
   runtimeConfig: {
-    googleGenerativeAiApiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
-    enrichLayerApiKey: process.env.ENRICH_LAYER_API_KEY,
-    dodoPaymentsApiKey: process.env.DODO_PAYMENTS_API_KEY,
-    dodoProductId: process.env.DODO_PRODUCT_ID,
-    dodoPaymentsWebhookSecret: process.env.DODO_PAYMENTS_WEBHOOK_SECRET,
+    // Override at runtime with NUXT_AI_GATEWAY_API_KEY, NUXT_AI_GATEWAY_MODEL,
+    // NUXT_DODO_PAYMENTS_API_KEY, NUXT_DODO_PRODUCT_ID and
+    // NUXT_DODO_PAYMENTS_WEBHOOK_SECRET.
+    aiGatewayApiKey: '',
+    aiGatewayModel: '',
+    dodoPaymentsApiKey: '',
+    dodoProductId: '',
+    dodoPaymentsWebhookSecret: '',
     public: {},
   },
 
@@ -57,13 +60,23 @@ export default defineNuxtConfig({
     // Icons are handled by @nuxt/icon module
   },
 
-  vite: {
-    esbuild: {
-      legalComments: 'none',
+  // Used by `npm run build:cloudflare` (NITRO_PRESET=cloudflare_module).
+  // Ignored by the default node-server build that the tests run against.
+  nitro: {
+    cloudflare: {
+      deployConfig: true,
+      nodeCompat: true,
+      wrangler: {
+        name: 'sintgpt',
+        observability: { enabled: true },
+      },
     },
+  },
+
+  vite: {
     build: {
-      terserOptions: {
-        format: {
+      rolldownOptions: {
+        output: {
           comments: false,
         },
       },
