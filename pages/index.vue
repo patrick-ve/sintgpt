@@ -657,7 +657,7 @@ useHead({
 
     <!-- Header -->
     <header class="site-header relative z-20 bg-[#3d0716] border-t-[6px] border-[#d4a853]">
-      <div class="mx-auto max-w-[1240px] px-4 sm:px-6 py-5 flex items-center justify-between gap-3">
+      <div class="mx-auto max-w-[1240px] px-4 sm:px-6 py-5 md:py-3.5 flex items-center justify-between gap-3">
         <p class="font-display font-bold text-3xl md:text-[2rem] leading-none text-[#f4cd60]">
           {{ t('header.title') }}
         </p>
@@ -838,18 +838,18 @@ useHead({
     <main>
     <!-- Hero -->
     <section aria-labelledby="hero-title" class="relative z-10 bg-[#3d0716] text-[#fbf1dc]">
-      <div class="mx-auto max-w-[1240px] px-4 sm:px-6 pt-4 pb-16 md:pt-6 md:pb-20 flex flex-wrap items-center gap-10 lg:gap-14">
-        <div class="flex-[1_1_520px] min-w-0 flex flex-col gap-6">
+      <div class="mx-auto max-w-[1240px] px-4 sm:px-6 pt-4 pb-16 md:pt-2 md:pb-10 flex flex-wrap lg:flex-nowrap items-center gap-10 lg:gap-12">
+        <div class="flex-[1_1_520px] lg:flex-[1_1_0%] min-w-0 flex flex-col gap-6 lg:gap-5">
           <p v-if="countdown" class="countdown self-start">
             <span class="countdown-days">🎁 {{ countdownText }}</span>
             <span v-if="countdown.hurry" class="block text-[#f7e6c0] font-normal">{{ t('countdown.hint') }}</span>
           </p>
           <h1
             id="hero-title"
-            class="font-display font-bold text-[2.25rem] sm:text-5xl xl:text-6xl leading-[1.08] tracking-[-0.01em] text-balance"
+            class="font-display font-bold text-[2.25rem] sm:text-5xl lg:text-[clamp(2.5rem,3.6vw,3.25rem)] leading-[1.08] tracking-[-0.01em] text-balance"
           >
             <span class="block">{{ t('hero.question') }}</span>
-            <span class="block mt-3 text-[#f4cd60]">{{ t('hero.answer') }}</span>
+            <span class="block mt-3 lg:mt-2 text-[#f4cd60]">{{ t('hero.answer') }}</span>
           </h1>
 
           <p class="text-lg md:text-xl leading-normal text-[#f7e6c0] max-w-[32em] text-pretty">
@@ -878,7 +878,7 @@ useHead({
           </p>
         </div>
 
-        <figure class="flex-[1_1_400px] min-w-0 max-w-[300px] sm:max-w-[500px] mx-auto flex flex-col gap-3">
+        <figure class="flex-[1_1_400px] lg:flex-none min-w-0 max-w-[300px] sm:max-w-[500px] lg:max-w-none mx-auto flex flex-col gap-3 lg:gap-2">
           <img
             src="/sint-hero-800.webp"
             srcset="/sint-hero-400.webp 400w, /sint-hero-800.webp 800w"
@@ -887,7 +887,7 @@ useHead({
             height="1000"
             fetchpriority="high"
             :alt="t('hero.photoAlt')"
-            class="block w-full h-auto aspect-[4/5] object-cover rounded-[260px_260px_24px_24px] border-4 border-[#d4a853]"
+            class="block w-full h-auto lg:w-auto lg:h-[clamp(360px,calc(100svh-300px),520px)] aspect-[4/5] object-cover rounded-[260px_260px_24px_24px] border-4 border-[#d4a853]"
           />
           <figcaption class="text-center text-[0.9375rem] text-[#f7e6c0]">
             {{ t('hero.photoCaption') }}
@@ -900,9 +900,9 @@ useHead({
     <section
       id="poem-form"
       aria-labelledby="form-title"
-      class="relative z-10 bg-[#fbf3e2] text-[#3d0716] px-4 sm:px-6 pt-12 pb-16 md:pt-16 md:pb-20"
+      class="relative z-10 bg-[#fbf3e2] text-[#3d0716] pt-12 pb-16 md:pt-10 md:pb-20"
     >
-      <div class="mx-auto max-w-[1240px] flex flex-col gap-9">
+      <div class="mx-auto max-w-[1240px] px-4 sm:px-6 flex flex-col gap-9">
         <h2
           id="form-title"
           class="font-display font-bold text-[1.75rem] md:text-[2.5rem] leading-tight text-[#8b1538]"
