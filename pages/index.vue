@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { buildShareUrl } from '~/utils/poemLink';
 import { POEM_INPUT_LIMITS } from '~/utils/poemLimits';
+import { saveFormDraft, takeFormDraft } from '~/utils/formDraft';
+import { pakjesavondCountdown } from '~/utils/pakjesavond';
 import type { PoemHistoryEntry } from '~/composables/usePoemHistory';
 
 const { generatePoem, isLoading, error, poem, isRateLimitError, share: generatedShare } =
@@ -33,9 +35,30 @@ const router = useRouter();
 // Payment status from redirect
 const paymentStatus = ref<'success' | 'pending' | 'failed' | 'cancelled' | null>(null);
 
+// True when the visitor came back from the payment page and the form they
+// filled in before paying is back in place.
+const restoredDraft = ref(false);
+
 // Handle payment redirect query params and restore trial poem
 onMounted(async () => {
+  // Restore persisted trial poem for unpaid users. Before the payment check,
+  // because a successful payment clears it, and the poem should stay on screen.
+  if (storedTrialPoem.value && !isPaid.value) {
+    poem.value = storedTrialPoem.value;
+    if (storedTrialPoemName.value) {
+      formData.value.name = storedTrialPoemName.value;
+      displayedRecipient.value = storedTrialPoemName.value;
+    }
+  }
+
+  // Always take the draft, so an old one does not linger; use it only when
+  // the visitor comes back from the payment page.
+  const draft = takeFormDraft<Partial<PoemFormData>>(localStorage);
   const paymentId = route.query.payment_id;
+  if (draft && (typeof paymentId === 'string' || route.query.payment === 'cancelled')) {
+    restoreForm(draft);
+  }
+
   if (typeof paymentId === 'string') {
     paymentStatus.value = 'pending';
     const claim = await claimPayment(paymentId);
@@ -53,21 +76,46 @@ onMounted(async () => {
     paymentStatus.value = 'cancelled';
     router.replace({ query: {} });
   }
-
-  // Restore persisted trial poem for unpaid users
-  if (storedTrialPoem.value && !isPaid.value) {
-    poem.value = storedTrialPoem.value;
-    if (storedTrialPoemName.value) {
-      formData.value.name = storedTrialPoemName.value;
-      displayedRecipient.value = storedTrialPoemName.value;
-    }
-  }
 });
 
 // Dismiss payment status notification
 const dismissPaymentStatus = () => {
   paymentStatus.value = null;
 };
+
+// Keeps the form while the visitor pays, so they continue where they were.
+const saveFormForCheckout = () => {
+  saveFormDraft(localStorage, { ...formData.value });
+};
+
+// Copies only fields the form knows, with the right type.
+const restoreForm = (draft: Partial<PoemFormData>) => {
+  const form = formData.value as Record<string, unknown>;
+  for (const [key, value] of Object.entries(draft)) {
+    if (key in form && typeof value === typeof form[key]) form[key] = value;
+  }
+  restoredDraft.value = true;
+};
+
+// The next step after paying: write the poem from the restored form.
+const continueAfterPayment = async () => {
+  dismissPaymentStatus();
+  scrollToForm();
+  await handleSubmit();
+};
+
+// Days until pakjesavond. Worked out on the server too, so the hero does not
+// jump when the page loads; the browser updates it for its own date.
+const countdown = useState('pakjesavond-countdown', () => pakjesavondCountdown(new Date()));
+onMounted(() => {
+  countdown.value = pakjesavondCountdown(new Date());
+});
+const countdownText = computed(() => {
+  if (!countdown.value) return '';
+  if (countdown.value.days === 0) return t('countdown.today');
+  if (countdown.value.days === 1) return t('countdown.tomorrow');
+  return t('countdown.days', { count: countdown.value.days });
+});
 
 // Default language is Dutch
 const getDefaultLanguage = (): 'dutch' | 'english' => {
@@ -503,13 +551,13 @@ const structuredData = computed(() => ({
         priceCurrency: 'EUR',
         description:
           locale.value === 'nl'
-            ? 'Onbeperkt toegang na 1 gratis gedicht'
-            : 'Unlimited access after 1 free poem',
+            ? 'Gedichten voor het hele gezin, na 1 gratis gedicht'
+            : 'Poems for the whole family, after 1 free poem',
       },
       featureList:
         locale.value === 'nl'
-          ? "Gepersonaliseerde sinterklaasgedichten, Meerdere stijlen (grappig, klassiek, ironisch, ouderwets, pikant, roast), AI-gegenereerd, Verschillende rijmschema's"
-          : 'Personalized Sinterklaas poems, Multiple styles (funny, classic, ironic, old-fashioned, spicy, roast), AI-generated, Various rhyme schemes',
+          ? "Persoonlijke sinterklaasgedichten, Zes stijlen (grappig, klassiek, ironisch, ouderwets, pikant, roast), Nederlands en Engels, Verschillende rijmschema's"
+          : 'Personal Sinterklaas poems, Six styles (funny, classic, ironic, old-fashioned, spicy, roast), Dutch and English, Various rhyme schemes',
     },
     {
       '@type': 'FAQPage',
@@ -647,8 +695,16 @@ useHead({
               {{ t('payment.successTitle') }}
             </h3>
             <p class="text-sm text-green-700 mt-1">
-              {{ t('payment.successMessage') }}
+              {{ restoredDraft ? t('payment.successDraft') : t('payment.successMessage') }}
             </p>
+            <button
+              v-if="restoredDraft && formData.name.trim()"
+              type="button"
+              class="btn-festive mt-3 min-h-11 px-5 text-base"
+              @click="continueAfterPayment"
+            >
+              {{ t('payment.successNext') }}
+            </button>
           </div>
           <button
             type="button"
@@ -731,6 +787,10 @@ useHead({
     <section aria-labelledby="hero-title" class="relative z-10 bg-[#3d0716] text-[#fbf1dc]">
       <div class="mx-auto max-w-[1240px] px-4 sm:px-6 pt-4 pb-16 md:pt-6 md:pb-20 flex flex-wrap items-center gap-10 lg:gap-14">
         <div class="flex-[1_1_520px] min-w-0 flex flex-col gap-6">
+          <p v-if="countdown" class="countdown self-start">
+            <span class="countdown-days">🎁 {{ countdownText }}</span>
+            <span v-if="countdown.hurry" class="block text-[#f7e6c0] font-normal">{{ t('countdown.hint') }}</span>
+          </p>
           <h1
             id="hero-title"
             class="font-display font-bold text-[2.25rem] sm:text-5xl xl:text-6xl leading-[1.08] tracking-[-0.01em] text-balance"
@@ -1255,6 +1315,12 @@ useHead({
               </button>
             </div>
 
+            <p
+              v-if="poem && !isLoading && !error && !isRateLimitError && !isPaid && !paymentsUnavailable && remainingFreePoems === 0"
+              class="text-sm text-[#5c0f26]"
+            >
+              {{ t('poem.freeComplete') }}
+            </p>
             <p v-if="pdfFailed" role="alert" class="text-sm font-medium text-[#8b1538]">
               {{ t('poem.pdfError') }}
             </p>
@@ -1276,6 +1342,9 @@ useHead({
         </div>
       </div>
     </section>
+
+    <!-- Example poems in every style -->
+    <ExamplePoems @start="scrollToForm" />
 
     <!-- Sinterklaas video message -->
     <section class="container mx-auto px-6 py-12 relative z-10">
@@ -1371,6 +1440,18 @@ useHead({
             {{ t('footer.blog') }}
           </NuxtLink>
           <NuxtLink
+            to="/voorbeelden"
+            class="inline-flex items-center min-h-11 px-4 rounded-md border-2 border-[#d4a853] text-[#f4cd60] font-bold hover:bg-[#d4a853]/15"
+          >
+            {{ t('footer.examples') }}
+          </NuxtLink>
+          <NuxtLink
+            to="/lootjes"
+            class="inline-flex items-center min-h-11 px-4 rounded-md border-2 border-[#d4a853] text-[#f4cd60] font-bold hover:bg-[#d4a853]/15"
+          >
+            {{ t('footer.lootjes') }}
+          </NuxtLink>
+          <NuxtLink
             to="/privacy"
             class="inline-flex items-center min-h-11 px-4 rounded-md border-2 border-[#d4a853] text-[#f4cd60] font-bold hover:bg-[#d4a853]/15"
           >
@@ -1421,7 +1502,7 @@ useHead({
 
     <!-- Payment Modal -->
     <ClientOnly>
-      <PaymentModal v-model="showPaymentModal" @restored="paymentStatus = 'success'" />
+      <PaymentModal v-model="showPaymentModal" @restored="paymentStatus = 'success'" @checkout="saveFormForCheckout" />
     </ClientOnly>
 
     <!-- Earlier poems, stored on this device -->
@@ -1800,6 +1881,18 @@ useHead({
   user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
+}
+
+/* Days until pakjesavond, above the hero title */
+.countdown {
+  padding: 0.5rem 1rem;
+  border: 2px solid #d4a853;
+  border-radius: 12px;
+  background: rgb(212 168 83 / 0.12);
+  color: #f4cd60;
+  font-weight: 700;
+  font-size: 1.0625rem;
+  line-height: 1.4;
 }
 
 /* Hero buttons */

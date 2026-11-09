@@ -3,6 +3,46 @@ const { t, locale } = useI18n();
 
 const blogPosts = computed(() => [
   {
+    title: 'Rijm en ritme: zo klinkt je sinterklaasgedicht als een echt gedicht',
+    description: 'Heffingen tellen, staand en slepend rijm, en de vier rijmschema\'s met voorbeelden. Zo leest je gedicht lekker voor.',
+    slug: 'rijm-en-ritme-sinterklaasgedicht',
+    date: '2026-11-09',
+    image: '/sint-352.webp',
+    readTime: '7 min',
+  },
+  {
+    title: 'Lootjes trekken: zo organiseer je het eerlijk en zonder gedoe',
+    description: 'Eerlijk trekken zonder dat iemand zichzelf trekt, en de afspraken over budget, gedicht en surprise die ruzie voorkomen.',
+    slug: 'lootjes-trekken-tips',
+    date: '2026-11-09',
+    image: '/sint-352.webp',
+    readTime: '6 min',
+  },
+  {
+    title: 'Een surprise maken: materialen, technieken en ideeën per persoon',
+    description: 'Van het idee tot papier-maché: zo maak je een surprise die bij de ontvanger en bij je gedicht past.',
+    slug: 'surprise-maken-ideeen',
+    date: '2026-11-09',
+    image: '/sint-352.webp',
+    readTime: '7 min',
+  },
+  {
+    title: 'Een roast-gedicht schrijven zonder iemand te kwetsen',
+    description: 'Stevig plagen met liefde: waar je wel en geen grappen over maakt, de check vooraf en een warm slot.',
+    slug: 'roast-sinterklaasgedicht-zonder-te-kwetsen',
+    date: '2026-11-09',
+    image: '/sint-352.webp',
+    readTime: '6 min',
+  },
+  {
+    title: 'Sinterklaas op het werk: lootjes, gedichten en een feest voor iedereen',
+    description: 'Vrijwillig meedoen, een eerlijk budget en gedichten over collega\'s die leuk blijven, ook op maandag.',
+    slug: 'sinterklaas-op-het-werk',
+    date: '2026-11-09',
+    image: '/sint-352.webp',
+    readTime: '6 min',
+  },
+  {
     title: 'Hoe schrijf je het perfecte sinterklaasgedicht in 2026',
     description: 'Ontdek praktische tips en trucs om een geweldig sinterklaasgedicht te schrijven dat gegarandeerd indruk maakt.',
     slug: 'hoe-schrijf-je-het-perfecte-sinterklaasgedicht',
@@ -62,7 +102,7 @@ useHead({
             to="/"
             class="px-4 py-2 bg-[#F4CD60] text-red-900 rounded-lg font-bold hover:bg-yellow-400 transition-colors border-2 border-red-900 shadow-md"
           >
-            {{ locale === 'nl' ? 'Terug naar Generator' : 'Back to Generator' }}
+            {{ locale === 'nl' ? 'Terug naar SintGPT' : 'Back to SintGPT' }}
           </NuxtLink>
         </div>
       </div>
@@ -135,18 +175,18 @@ useHead({
            <div class="absolute -left-4 -bottom-4 text-6xl opacity-20 rotate-45">🎁</div>
            <div class="absolute -right-4 -top-4 text-6xl opacity-20 -rotate-12">🌙</div>
           <h3 class="text-3xl font-bold text-red-900 mb-4 font-display">
-            {{ locale === 'nl' ? 'Klaar om je eigen gedicht te maken?' : 'Ready to create your own poem?' }}
+            {{ locale === 'nl' ? 'Zin in je eigen gedicht?' : 'Ready for your own poem?' }}
           </h3>
           <p class="text-gray-800 mb-8 text-lg font-medium max-w-2xl mx-auto">
             {{ locale === 'nl'
-              ? 'Gebruik SintGPT om binnen 30 seconden een gepersonaliseerd sinterklaasgedicht te genereren!'
-              : 'Use SintGPT to generate a personalized Sinterklaas poem in 30 seconds!' }}
+              ? 'SintGPT schrijft binnen 30 seconden een persoonlijk sinterklaasgedicht. Je eerste gedicht is gratis.'
+              : 'SintGPT writes a personal Sinterklaas poem in 30 seconds. Your first poem is free.' }}
           </p>
           <NuxtLink
             to="/"
             class="inline-block px-8 py-4 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-transform transform hover:scale-105 shadow-lg border-2 border-[#F4CD60] text-xl"
           >
-            {{ locale === 'nl' ? 'Start nu gratis' : 'Start free now' }}
+            {{ locale === 'nl' ? 'Schrijf je eerste gedicht gratis' : 'Write your first poem for free' }}
           </NuxtLink>
         </div>
       </div>

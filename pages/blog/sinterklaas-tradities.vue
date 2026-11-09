@@ -148,7 +148,7 @@ useHead({
 
           <h3 class="text-2xl font-bold mt-6 mb-3">Het Grote Boek</h3>
           <p class="leading-relaxed mb-4">
-            Volgens de traditie houdt Sinterklaas in zijn grote boek bij of kinderen zoet of stout zijn geweest. Dit creëert een speelse spanning en stimuleert goed gedrag (hoewel tegenwoordig elk kind natuurlijk cadeaus krijgt!).
+            Volgens de traditie houdt Sinterklaas in zijn grote boek bij of kinderen zoet of stout zijn geweest. Dit zorgt voor een speelse spanning en stimuleert goed gedrag (hoewel tegenwoordig elk kind natuurlijk cadeaus krijgt!).
           </p>
 
           <h2 class="text-3xl font-bold mt-8 mb-4">Pakjesavond: Het Hoogtepunt</h2>
@@ -205,14 +205,14 @@ useHead({
           <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
             <li><strong>Duurzaamheid:</strong> Meer aandacht voor milieuvriendelijke surprises en verpakkingen</li>
             <li><strong>Inclusiviteit:</strong> Aanpassingen in de traditionele representatie om meer inclusief te zijn</li>
-            <li><strong>Digitale hulpmiddelen:</strong> Apps en websites (zoals SintGPT!) om het organiseren makkelijker te maken</li>
+            <li><strong>Hulp van internet:</strong> websites (zoals SintGPT!) die helpen met lootjes trekken en gedichten schrijven</li>
             <li><strong>Kleinere vieringen:</strong> Aanpassing aan moderne gezinsstructuren en drukke agenda's</li>
             <li><strong>Internationale invloeden:</strong> Nederlandse expats die de traditie wereldwijd verspreiden</li>
           </ul>
 
           <h2 class="text-3xl font-bold mt-8 mb-4">Sinterklaas voor Internationals</h2>
           <p class="leading-relaxed mb-4">
-            Voor mensen die niet in Nederland of België zijn opgegroeid, kan Sinterklaas een bijzondere ervaring zijn. De combinatie van gedichten, surprises en de hele ceremonie rondom het uitpakken is uniek en creëert een warme, persoonlijke sfeer die verschilt van andere feestdagen.
+            Voor mensen die niet in Nederland of België zijn opgegroeid, kan Sinterklaas een bijzondere ervaring zijn. De combinatie van gedichten, surprises en de hele ceremonie rondom het uitpakken is uniek en zorgt voor een warme, persoonlijke sfeer die verschilt van andere feestdagen.
           </p>
 
           <div class="bg-red-50 border-l-4 border-red-600 p-6 my-6 rounded-r-lg">
@@ -228,7 +228,7 @@ useHead({
 
           <h2 class="text-3xl font-bold mt-8 mb-4">Geen Tijd voor een Gedicht?</h2>
           <p class="leading-relaxed mb-4">
-            Het schrijven van een goed sinterklaasgedicht hoort bij de traditie, maar niet iedereen heeft de tijd of inspiratie. Gelukkig helpt <strong>SintGPT</strong> je om in 30 seconden een perfect, gepersonaliseerd gedicht te creëren dat past bij de Nederlandse traditie!
+            Het schrijven van een goed sinterklaasgedicht hoort bij de traditie, maar niet iedereen heeft de tijd of inspiratie. Gelukkig schrijft <strong>SintGPT</strong> in 30 seconden een persoonlijk gedicht dat past bij de Nederlandse traditie.
           </p>
 
           <div class="bg-red-50 border-2 border-red-600 rounded-xl p-8 my-8 text-center shadow-lg">
@@ -238,7 +238,7 @@ useHead({
               to="/"
               class="inline-block px-8 py-3 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-transform transform hover:scale-105 text-lg border border-[#F4CD60]"
             >
-              Start nu gratis →
+              Schrijf je eerste gedicht gratis →
             </NuxtLink>
           </div>
 

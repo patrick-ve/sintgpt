@@ -189,7 +189,7 @@ useHead({
 
           <h2 class="text-3xl font-bold mt-8 mb-4">Te lui om zelf te schrijven?</h2>
           <p class="leading-relaxed mb-4">
-            Het schrijven van een goed sinterklaasgedicht kost tijd en moeite. Geen tijd of inspiratie? Met <strong>SintGPT</strong> genereer je binnen 30 seconden een volledig gepersonaliseerd sinterklaasgedicht. Vul gewoon de details in, kies je stijl en rijmschema, en onze AI doet de rest!
+            Het schrijven van een goed sinterklaasgedicht kost tijd en moeite. Geen tijd of inspiratie? Met <strong>SintGPT</strong> heb je binnen 30 seconden een persoonlijk sinterklaasgedicht. Vertel wie het krijgt, kies de stijl en het rijmschema, en de Sint schrijft de rest.
           </p>
 
           <div class="bg-red-50 border-2 border-red-600 rounded-xl p-8 my-8 text-center shadow-lg">
@@ -199,7 +199,7 @@ useHead({
               to="/"
               class="inline-block px-8 py-3 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-transform transform hover:scale-105 text-lg border border-[#F4CD60]"
             >
-              Start nu gratis →
+              Schrijf je eerste gedicht gratis →
             </NuxtLink>
           </div>
 

@@ -85,7 +85,7 @@ useHead({
         <div class="prose prose-lg max-w-none prose-headings:font-display prose-headings:text-red-900 prose-p:text-gray-800 prose-strong:text-red-900">
           <h2 class="text-3xl font-bold mt-8 mb-4">Waarom grappige gedichten zo leuk zijn</h2>
           <p class="leading-relaxed mb-4">
-            Een grappig sinterklaasgedicht doorbreekt de spanning en zorgt voor een onvergetelijk moment. Het toont dat je niet alleen aan de persoon hebt gedacht, maar ook de moeite hebt genomen om iets origineels en vermakelijks te creëren. Plus: lachen verbindt mensen!
+            Een grappig sinterklaasgedicht doorbreekt de spanning en zorgt voor een onvergetelijk moment. Het toont dat je niet alleen aan de persoon hebt gedacht, maar ook de moeite hebt genomen om iets origineels en grappigs te maken. Plus: lachen verbindt mensen!
           </p>
 
           <h2 class="text-3xl font-bold mt-8 mb-4">1. Gebruik woordspelingen en woordgrappen</h2>
@@ -219,17 +219,17 @@ useHead({
 
           <h2 class="text-3xl font-bold mt-8 mb-4">Geen tijd voor zelf schrijven?</h2>
           <p class="leading-relaxed mb-4">
-            Het bedenken van grappige woordspelingen en originele grappen kost tijd en creativiteit. Met <strong>SintGPT</strong> genereer je binnen 30 seconden een hilarisch sinterklaasgedicht dat perfect bij de ontvanger past. Kies gewoon voor de "grappige" stijl en laat de AI de rest doen!
+            Het bedenken van grappige woordspelingen en originele grappen kost tijd en creativiteit. Met <strong>SintGPT</strong> heb je binnen 30 seconden een grappig sinterklaasgedicht dat bij de ontvanger past. Kies de stijl "grappig" en de Sint schrijft de rest.
           </p>
 
           <div class="bg-red-50 border-2 border-red-600 rounded-xl p-8 my-8 text-center shadow-lg">
             <h3 class="text-2xl font-bold text-red-900 mb-4 font-display">Maak nu je grappige gedicht!</h3>
-            <p class="text-red-800 mb-6 font-medium">Probeer SintGPT gratis en creëer binnen seconden een uniek, grappig sinterklaasgedicht.</p>
+            <p class="text-red-800 mb-6 font-medium">Je eerste gedicht is gratis. Binnen 30 seconden heb je een grappig gedicht dat bij de ontvanger past.</p>
             <NuxtLink
               to="/"
               class="inline-block px-8 py-3 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-transform transform hover:scale-105 text-lg border border-[#F4CD60]"
             >
-              Start nu gratis →
+              Schrijf je eerste gedicht gratis →
             </NuxtLink>
           </div>
 
@@ -260,7 +260,7 @@ useHead({
 
           <h2 class="text-3xl font-bold mt-8 mb-4">Conclusie</h2>
           <p class="leading-relaxed mb-4">
-            Een grappig sinterklaasgedicht schrijven is een kunst die je kunt leren. Met de juiste balans tussen humor, persoonlijke details en goede woordspelingen, creëer je een gedicht dat nog lang zal worden herinnerd. Vergeet niet: het belangrijkste is dat het van harte komt en dat iedereen - vooral de ontvanger - kan genieten van de humor.
+            Een grappig sinterklaasgedicht schrijven is een kunst die je kunt leren. Met de juiste balans tussen humor, persoonlijke details en goede woordspelingen, schrijf je een gedicht dat nog lang zal worden herinnerd. Vergeet niet: het belangrijkste is dat het van harte komt en dat iedereen - vooral de ontvanger - kan genieten van de humor.
           </p>
 
           <p class="text-red-900 leading-relaxed font-bold text-xl mt-8">
