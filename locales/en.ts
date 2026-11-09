@@ -300,6 +300,9 @@ export default {
       expired: 'This payment has expired. Choose above how you want to keep writing.',
     },
     successTitle: 'Done! You can keep writing',
+    giftTitle: 'You received Whole family as a gift',
+    giftFailedTitle: 'This gift link does not work',
+    giftFailedMessage: 'The link has expired or is incomplete. Ask the person who sent it for a new one.',
     successMessage: 'Write as many poems as you like, for the whole family.',
     successMessageDrie: 'You can write 3 more poems, until pakjesavond.',
     successMessageFamilie: 'Write as many poems as you like, next year too. With every poem you can ask for surprise ideas.',
@@ -434,7 +437,7 @@ export default {
           heading: 'Payments',
           body: [
             'You pay Dodo Payments. Dodo is the seller (merchant of record) and processes your name, email address and payment details under its own privacy policy. SintGPT only sees the payment ID, the status and the product of your payment.',
-            'After a successful payment we set the cookie "sintgpt-access" in your browser. It holds your payment ID and a signature, so we know you have paid. It also holds what you bought and until when it is valid, and it then expires (after 400 days at most). It is necessary for the service you bought.',
+            'After a successful payment, or when you open a gift link, we set the cookie "sintgpt-access" in your browser. It holds your payment ID and a signature, so we know you have paid. It also holds what you bought and until when it is valid, and it then expires (after 400 days at most). It is necessary for the service you bought.',
             'Legal basis: performing the agreement.',
           ],
         },
@@ -449,7 +452,7 @@ export default {
         {
           heading: 'Cookies',
           body: [
-            'SintGPT uses no tracking or advertising cookies. The only cookie is "sintgpt-access", after a payment. That is why we show no cookie notice.',
+            'SintGPT uses no tracking or advertising cookies. The only cookie is "sintgpt-access", after a payment or a gift link. That is why we show no cookie notice.',
           ],
         },
         {

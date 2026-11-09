@@ -162,3 +162,30 @@ describe('dodoEnvironment', () => {
     expect(dodoEnvironment('anything-else')).toBe('test_mode');
   });
 });
+
+describe('gift links', async () => {
+  const { claimGiftCode, giftId, giftStillValid, isGiftId, parseGiftCodes } = await import('../../server/utils/giftAccess');
+  const CODE = '0123456789abcdef0123';
+  const SECRET = ` ${CODE}, short, another-code-0123456789 `;
+
+  it('reads the codes and ignores short ones', () => {
+    expect(parseGiftCodes(SECRET)).toEqual([CODE, 'another-code-0123456789']);
+    expect(parseGiftCodes(undefined)).toEqual([]);
+  });
+
+  it('accepts a known code and refuses anything else', async () => {
+    expect(await claimGiftCode(CODE, SECRET)).toBe(await giftId(CODE));
+    expect(await claimGiftCode('short', SECRET)).toBeNull();
+    expect(await claimGiftCode(`${CODE}x`, SECRET)).toBeNull();
+    expect(await claimGiftCode(CODE, '')).toBeNull();
+    expect(await claimGiftCode({ code: CODE }, SECRET)).toBeNull();
+  });
+
+  it('keeps no code in the ID, and ends when the code leaves the secret', async () => {
+    const id = await giftId(CODE);
+    expect(isGiftId(id)).toBe(true);
+    expect(id).not.toContain(CODE);
+    expect(await giftStillValid(id, SECRET)).toBe(true);
+    expect(await giftStillValid(id, 'another-code-0123456789')).toBe(false);
+  });
+});

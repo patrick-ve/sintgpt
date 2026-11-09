@@ -302,6 +302,9 @@ export default {
       expired: 'Deze betaling is verlopen. Kies hierboven opnieuw hoe je verder schrijft.',
     },
     successTitle: 'Gelukt! Je kunt verder schrijven',
+    giftTitle: 'Je hebt Hele familie cadeau gekregen',
+    giftFailedTitle: 'Deze cadeaulink werkt niet',
+    giftFailedMessage: 'De link is verlopen of niet compleet. Vraag degene die hem stuurde om een nieuwe.',
     successMessage: 'Schrijf zoveel gedichten als je wilt, voor het hele gezin.',
     successMessageDrie: 'Je kunt nog 3 gedichten schrijven, tot en met pakjesavond.',
     successMessageFamilie: 'Schrijf zoveel gedichten als je wilt, ook volgend jaar. Bij elk gedicht kun je surprise-ideeën vragen.',
@@ -436,7 +439,7 @@ export default {
           heading: 'Betalen',
           body: [
             'Je betaalt bij Dodo Payments. Dodo is de verkoper (merchant of record) en verwerkt je naam, e-mailadres en betaalgegevens volgens zijn eigen privacybeleid. SintGPT krijgt alleen het betalings-ID, de status en het product van je betaling te zien.',
-            'Na een geslaagde betaling zetten we het cookie "sintgpt-access" in je browser. Het bevat je betalings-ID en een handtekening, zodat we weten dat je betaald hebt. Het bevat ook wat je kocht en tot wanneer het geldt, en het verloopt dan (na hooguit 400 dagen). Het is nodig voor de dienst die je kocht.',
+            'Na een geslaagde betaling, of als je een cadeaulink opent, zetten we het cookie "sintgpt-access" in je browser. Het bevat je betalings-ID en een handtekening, zodat we weten dat je betaald hebt. Het bevat ook wat je kocht en tot wanneer het geldt, en het verloopt dan (na hooguit 400 dagen). Het is nodig voor de dienst die je kocht.',
             'Grondslag: het uitvoeren van de overeenkomst.',
           ],
         },
@@ -451,7 +454,7 @@ export default {
         {
           heading: 'Cookies',
           body: [
-            'SintGPT gebruikt geen tracking- of advertentiecookies. Het enige cookie is "sintgpt-access", na een betaling. Daarom tonen we geen cookiemelding.',
+            'SintGPT gebruikt geen tracking- of advertentiecookies. Het enige cookie is "sintgpt-access", na een betaling of een cadeaulink. Daarom tonen we geen cookiemelding.',
           ],
         },
         {

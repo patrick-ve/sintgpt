@@ -187,6 +187,28 @@ export const usePaymentTracking = () => {
     return 'pending';
   };
 
+  // A gift link (?cadeau=<code>). The server checks the code and sets the
+  // same cookie as for a buyer.
+  const claimGift = async (code: string): Promise<boolean> => {
+    try {
+      const claim = await $fetch<{ status: 'granted' | 'denied'; tier?: TierId; expiresAt?: number }>(
+        '/api/payment/claim-gift',
+        { method: 'POST', body: { code } },
+      );
+      if (claim.status !== 'granted' || !claim.tier) return false;
+      tier.value = claim.tier;
+      expiresAt.value = claim.expiresAt ?? null;
+      poemsLeft.value = TIERS[claim.tier].poems;
+      storedTrialPoem.value = null;
+      storedTrialPoemName.value = null;
+      saveToStorage();
+      return true;
+    } catch (error) {
+      console.error('Error claiming gift:', error);
+      return false;
+    }
+  };
+
   const saveTrialPoem = (poem: string, name: string) => {
     if (import.meta.server) return;
     storedTrialPoem.value = poem;
@@ -221,6 +243,7 @@ export const usePaymentTracking = () => {
     remainingFreePoems,
     incrementPoemCount,
     claimPayment,
+    claimGift,
     resetPaymentState,
     maxFreePoems: MAX_FREE_POEMS,
     paymentsUnavailable,

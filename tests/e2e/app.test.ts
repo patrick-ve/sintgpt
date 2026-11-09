@@ -1535,3 +1535,24 @@ describe('pricing tiers', () => {
     expect([400, 503]).toContain(res.status);
   });
 });
+
+describe('gift links', () => {
+  it('gives Hele familie through ?cadeau= and removes the code from the address', async () => {
+    const page = await createPage();
+    await page.goto(url('/?cadeau=e2e-gift-code-0123456789'), { waitUntil: 'networkidle' });
+    await page.getByText('Je hebt Hele familie cadeau gekregen').waitFor();
+    expect(page.url()).not.toContain('cadeau');
+    const access = await page.evaluate(() => window.fetch('/api/payment/check-access').then(res => res.json()));
+    expect(access).toMatchObject({ hasAccess: true, tier: 'familie' });
+    await page.close();
+  }, 30_000);
+
+  it('explains a wrong code and gives no access', async () => {
+    const page = await createPage();
+    await page.goto(url('/?cadeau=not-the-right-code-123'), { waitUntil: 'networkidle' });
+    await page.getByText('Deze cadeaulink werkt niet').waitFor();
+    const access = await page.evaluate(() => window.fetch('/api/payment/check-access').then(res => res.json()));
+    expect(access).toMatchObject({ hasAccess: false });
+    await page.close();
+  }, 30_000);
+});

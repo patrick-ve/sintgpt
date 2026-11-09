@@ -14,6 +14,7 @@ export const SERVER_EVENTS = [
   'Payment webhook',
   'Surprise ideas',
   'Surprise ideas failed',
+  'Gift claimed',
 ] as const;
 
 export const CLIENT_EVENTS = [

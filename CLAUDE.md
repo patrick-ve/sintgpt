@@ -58,7 +58,7 @@ Notes:
 4. If granted, the server sets the signed, HTTP-only `sintgpt-access` cookie (`server/utils/paymentAccess.ts`, token `v2.<payment>.<tier>.<expiry>.<sig>`, max-age until the access ends, at most 400 days). `paidAccess` verifies it on each request and returns the payment ID, tier and end. `v1` tokens from before the tiers still work and mean Gezin. `GET /api/payment/check-access` tells the page the tier and, for Drie, the poems left.
 
 ### Pricing tiers
-`utils/pricingTiers.ts` is the one source for the tiers; the payment window, server, JSON-LD, terms and tests follow it. Open Dodo and Cloudflare setup steps for the tiers (test key, live products, Worker secrets): `docs/dodo-payments-todo.md`.
+`utils/pricingTiers.ts` is the one source for the tiers; the payment window, server, JSON-LD, terms and tests follow it. Open Dodo and Cloudflare setup steps for the tiers (test key, live products, Worker secrets): `docs/dodo-payments-todo.md`. Decisions and test results: `docs/pricing-tiers.md`.
 
 | Tier | Price | Poems | Valid | Extras |
 |---|---|---|---|---|
@@ -69,6 +69,7 @@ Notes:
 - Each tier is its own Dodo product: `NUXT_DODO_PRODUCT_ID` (Gezin, the product from before the tiers), `NUXT_DODO_PRODUCT_ID_DRIE`, `NUXT_DODO_PRODUCT_ID_FAMILIE`. A tier without a product is not on sale: `/api/payment/status` lists the tiers on sale and the window shows only those. The browser sends a tier name, never a product ID.
 - The payment window selects Gezin (or the next tier above what the buyer has). Tiers at or below the buyer's tier show "Dit heb je al". There is no upgrade discount: a buyer pays the full price of the higher tier; the terms say so.
 - Surprise ideas: `POST /api/poem/surprise` (Hele familie only, 403 `tier` otherwise) returns 3 ideas as structured output from `DEFAULT_POEM_MODEL` (`server/utils/surprise.ts`, same prompt-injection rules as the poem). It counts towards the 100/day cap. Others see the button with a lock; it opens the payment window with Hele familie selected.
+- Gift links: `https://sintgpt.com/?cadeau=<code>` gives Hele familie without a payment (`server/utils/giftAccess.ts`, `POST /api/payment/claim-gift`). Codes live in the Worker secret `NUXT_GIFT_CODES` (comma-separated, at least 16 characters, `openssl rand -hex 16`); never put a code in git or chat. The cookie holds `gift_<hash>`, not the code. Removing a code ends its access at once (`paidAccess` checks the list). The page removes the code from the address bar. Analytics: `Gift claimed` (granted/denied).
 - The extra PDF designs are a soft lock: the PDF is built in the browser, so the page offers Hele familie instead of building a locked design.
 
 When Dodo refuses a checkout with 401 or 403 (for example "Live payments not enabled"), `create-checkout` stores a flag in KV for 15 minutes (`server/utils/paymentsStatus.ts`, key `status:payments-unavailable` in `POEM_LINKS`) and returns 503 with `data.code = 'payments_unavailable'`, never Dodo's text. `GET /api/payment/status` reads the flag. While it is set, the page does not offer payment: the client lifts its 1-poem limit, so only the server's 3/day applies, and the payment window explains the problem.
@@ -168,6 +169,7 @@ Runtime config is read from `NUXT_*` env vars at runtime (not baked into the bui
 | `NUXT_DODO_PRODUCT_ID_FAMILIE` | Dodo product for Hele familie (€12.99). Optional: without it the tier is not offered |
 | `NUXT_DODO_PAYMENTS_WEBHOOK_SECRET` | Dodo webhook signing secret. Without it the webhook rejects every event |
 | `NUXT_ACCESS_COOKIE_SECRET` | Signs the unlimited-access cookie and poem links (`openssl rand -hex 32`). Without it nobody gets unlimited access and poem links are off; changing it logs out all paying customers and breaks shared links |
+| `NUXT_GIFT_CODES` | Optional. Comma-separated codes for gift links (`/?cadeau=<code>`, Hele familie). Remove a code to end its access |
 
 ## No comments in the deploy
 The deployed files hold no comments. Source files keep theirs.

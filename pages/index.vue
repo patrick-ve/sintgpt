@@ -17,6 +17,7 @@ const {
   remainingFreePoems,
   isPaid,
   claimPayment,
+  claimGift,
   storedTrialPoem,
   storedTrialPoemName,
   saveTrialPoem,
@@ -41,7 +42,9 @@ const displayedRecipient = ref('');
 const router = useRouter();
 
 // Payment status from redirect
-const paymentStatus = ref<'success' | 'pending' | 'failed' | 'cancelled' | null>(null);
+const paymentStatus = ref<'success' | 'pending' | 'failed' | 'cancelled' | 'giftFailed' | null>(null);
+// True when access came from a gift link, not a payment.
+const giftReceived = ref(false);
 
 // True when the visitor came back from the payment page and the form they
 // filled in before paying is back in place.
@@ -65,6 +68,19 @@ onMounted(async () => {
   const paymentId = route.query.payment_id;
   if (draft && (typeof paymentId === 'string' || route.query.payment === 'cancelled')) {
     restoreForm(draft);
+  }
+
+  // A gift link: claim it, then take the code out of the address bar.
+  const giftCode = route.query.cadeau;
+  if (typeof giftCode === 'string') {
+    router.replace({ query: {} });
+    if (await claimGift(giftCode)) {
+      giftReceived.value = true;
+      paymentStatus.value = 'success';
+    } else {
+      paymentStatus.value = 'giftFailed';
+    }
+    return;
   }
 
   if (typeof paymentId === 'string') {
@@ -817,7 +833,7 @@ useHead({
             <h3
               class="text-base font-bold text-green-800 font-display"
             >
-              {{ t('payment.successTitle') }}
+              {{ giftReceived ? t('payment.giftTitle') : t('payment.successTitle') }}
             </h3>
             <p class="text-sm text-green-700 mt-1">
               {{ successMessage }}

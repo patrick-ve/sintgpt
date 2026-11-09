@@ -42,6 +42,8 @@ export default defineNuxtConfig({
     dodoProductIdFamilie: '',
     dodoPaymentsWebhookSecret: '',
     accessCookieSecret: '',
+    // Gift links (?cadeau=<code>), comma-separated. See server/utils/giftAccess.ts.
+    giftCodes: '',
     public: {},
   },
 
