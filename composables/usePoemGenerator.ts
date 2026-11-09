@@ -16,6 +16,7 @@ interface PoemRequest {
 }
 
 export const usePoemGenerator = () => {
+  const { t } = useI18n();
   const isLoading = ref(false);
   const error = ref<string | null>(null);
   const poem = ref<string | null>(null);
@@ -42,11 +43,19 @@ export const usePoemGenerator = () => {
         body: JSON.stringify(request),
       });
 
-      // Check for rate limit error
+      // The free limit shows the upgrade offer. A short wait, or the cap for
+      // buyers, is a message.
       if (response.status === 429) {
-        isRateLimitError.value = true;
-        error.value = null;
+        const { data } = await response.json().catch(() => ({}));
         poem.value = null;
+        if (data?.reason === 'debounce') {
+          error.value = t('poem.wait', { seconds: data.retryAfterSeconds ?? 10 });
+        } else if (data?.reason === 'fair-use') {
+          error.value = t('poem.fairUse');
+        } else {
+          isRateLimitError.value = true;
+          error.value = null;
+        }
         return;
       }
 

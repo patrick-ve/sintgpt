@@ -1,26 +1,90 @@
 /**
- * The free limit for poem generation, per client IP: a short wait between
- * requests and a maximum per day. State is in memory, so on Workers it is per
- * isolate, not global. Visitors with unlimited access skip it.
+ * Limits for poem generation: a short wait between requests and a maximum per
+ * day. `applyRateLimit` is the rule itself. On Cloudflare it runs inside a
+ * Durable Object, so the count is global (see server/durable/RateLimitCounter.ts).
+ * `createRateLimiter` keeps the same counts in memory, for the Node build and
+ * as a fallback when the Durable Object cannot be reached.
  */
 
 export type RateLimitVerdict =
   | { ok: true }
   | { ok: false; reason: 'debounce' | 'limit'; retryAfterSeconds: number };
 
-export interface RateLimiterOptions {
-  maxRequests?: number;
-  windowMs?: number;
-  debounceMs?: number;
-  /** Above this many tracked IPs, expired entries are removed. */
-  maxTracked?: number;
+export interface RateLimitRule {
+  maxRequests: number;
+  windowMs: number;
+  debounceMs: number;
 }
 
+/** The state for one IP or one buyer. */
+export interface RateLimitEntry {
+  count: number;
+  /** End of the current window, in ms since the epoch. */
+  resetTime: number;
+  /** Time of the last allowed request. */
+  last: number;
+}
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+/** Free visitors, per IP. */
 export const POEM_RATE_LIMIT = {
   maxRequests: 3,
-  windowMs: 24 * 60 * 60 * 1000,
+  windowMs: DAY_MS,
   debounceMs: 10_000,
-} as const;
+} as const satisfies RateLimitRule;
+
+/**
+ * Buyers with unlimited access, per payment. High enough that no family
+ * notices it, low enough that a leaked cookie or a script cannot run up the
+ * AI Gateway bill.
+ */
+export const BUYER_RATE_LIMIT = {
+  maxRequests: 100,
+  windowMs: DAY_MS,
+  debounceMs: 10_000,
+} as const satisfies RateLimitRule;
+
+/**
+ * Decides one request. Returns the new entry when the request is allowed, and
+ * no entry when it is refused, because a refused request does not count.
+ */
+export function applyRateLimit(
+  entry: RateLimitEntry | undefined,
+  now: number,
+  rule: RateLimitRule,
+): { verdict: RateLimitVerdict; entry?: RateLimitEntry } {
+  if (entry && now - entry.last < rule.debounceMs) {
+    return {
+      verdict: {
+        ok: false,
+        reason: 'debounce',
+        retryAfterSeconds: Math.ceil((rule.debounceMs - (now - entry.last)) / 1000),
+      },
+    };
+  }
+
+  if (!entry || now >= entry.resetTime) {
+    return { verdict: { ok: true }, entry: { count: 1, resetTime: now + rule.windowMs, last: now } };
+  }
+
+  if (entry.count >= rule.maxRequests) {
+    return {
+      verdict: {
+        ok: false,
+        reason: 'limit',
+        retryAfterSeconds: Math.ceil((entry.resetTime - now) / 1000),
+      },
+    };
+  }
+
+  return { verdict: { ok: true }, entry: { ...entry, count: entry.count + 1, last: now } };
+}
+
+export interface RateLimiterOptions extends Partial<RateLimitRule> {
+  /** Above this many tracked keys, expired entries are removed. */
+  maxTracked?: number;
+}
 
 export function createRateLimiter(options: RateLimiterOptions = {}) {
   const {
@@ -29,21 +93,15 @@ export function createRateLimiter(options: RateLimiterOptions = {}) {
     debounceMs = POEM_RATE_LIMIT.debounceMs,
     maxTracked = 10_000,
   } = options;
+  const rule = { maxRequests, windowMs, debounceMs };
 
-  const usage = new Map<string, { count: number; resetTime: number }>();
-  const lastRequest = new Map<string, number>();
+  const entries = new Map<string, RateLimitEntry>();
 
-  // Keeps memory bounded when many different IPs pass by.
+  // Keeps memory bounded when many different keys pass by.
   const prune = (now: number) => {
-    if (usage.size > maxTracked) {
-      for (const [ip, entry] of usage) {
-        if (now >= entry.resetTime) usage.delete(ip);
-      }
-    }
-    if (lastRequest.size > maxTracked) {
-      for (const [ip, time] of lastRequest) {
-        if (now - time >= debounceMs) lastRequest.delete(ip);
-      }
+    if (entries.size <= maxTracked) return;
+    for (const [key, entry] of entries) {
+      if (now >= entry.resetTime && now - entry.last >= debounceMs) entries.delete(key);
     }
   };
 
@@ -51,37 +109,18 @@ export function createRateLimiter(options: RateLimiterOptions = {}) {
    * Counts the request when it is allowed. A request counts before the body is
    * validated, so invalid requests use up the limit too.
    */
-  const check = (ip: string, now = Date.now()): RateLimitVerdict => {
-    const last = lastRequest.get(ip);
-    if (last !== undefined && now - last < debounceMs) {
-      return {
-        ok: false,
-        reason: 'debounce',
-        retryAfterSeconds: Math.ceil((debounceMs - (now - last)) / 1000),
-      };
+  const check = (key: string, now = Date.now()): RateLimitVerdict => {
+    const { verdict, entry } = applyRateLimit(entries.get(key), now, rule);
+    if (entry) {
+      entries.set(key, entry);
+      prune(now);
     }
-
-    const entry = usage.get(ip);
-    if (!entry || now >= entry.resetTime) {
-      usage.set(ip, { count: 1, resetTime: now + windowMs });
-    } else if (entry.count >= maxRequests) {
-      return {
-        ok: false,
-        reason: 'limit',
-        retryAfterSeconds: Math.ceil((entry.resetTime - now) / 1000),
-      };
-    } else {
-      entry.count += 1;
-    }
-
-    lastRequest.set(ip, now);
-    prune(now);
-    return { ok: true };
+    return verdict;
   };
 
   return {
     check,
-    /** Number of IPs with a counter, for tests. */
-    trackedCount: () => usage.size,
+    /** Number of keys with a counter, for tests. */
+    trackedCount: () => entries.size,
   };
 }

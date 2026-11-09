@@ -47,6 +47,13 @@ function poemStream(poem: string): string {
     .join('') + 'data: [DONE]\n\n';
 }
 
+type TestPage = Awaited<ReturnType<typeof createPage>>;
+
+/** Payments work in the browser, whatever Dodo key this environment has. */
+function paymentsWork(page: TestPage, available = true) {
+  return page.route('**/api/payment/status', route => route.fulfill({ json: { available } }));
+}
+
 // The endpoint rate-limits per client IP, so each case uses its own IP.
 function postPoem(body: unknown, ip: string) {
   return fetch('/api/poem/generate', {
@@ -55,6 +62,46 @@ function postPoem(body: unknown, ip: string) {
     body: JSON.stringify(body),
   });
 }
+
+describe('privacy and terms', () => {
+  it.each([
+    ['/privacy', 'Privacyverklaring'],
+    ['/voorwaarden', 'Voorwaarden'],
+  ])('renders %s with its own canonical address', async (path, title) => {
+    const res = await fetch(path);
+    expect(res.status).toBe(200);
+    const html = await res.text();
+    expect(html).toContain(`<link rel="canonical" href="https://sintgpt.com${path}"`);
+    expect(html).toMatch(new RegExp(`<h1[^>]*>\\s*${title}\\s*</h1>`));
+  });
+
+  it('states the same limits and storage times as the code', async () => {
+    const privacy = await (await fetch('/privacy')).text();
+    const terms = await (await fetch('/voorwaarden')).text();
+    expect(privacy).toContain('90 dagen');
+    expect(privacy).toContain('24 uur');
+    expect(privacy).toContain('100 gedichten per dag');
+    expect(terms).toContain('3 gratis gedichten per 24 uur');
+    expect(terms).toContain('100 gedichten per 24 uur');
+    expect(terms).toContain('€6,99');
+  });
+
+  it('links to both from the home page and the blog', async () => {
+    for (const path of ['/', '/blog']) {
+      const html = await (await fetch(path)).text();
+      expect(html, path).toContain('href="/privacy"');
+      expect(html, path).toContain('href="/voorwaarden"');
+    }
+  });
+
+  it('shows no cookie notice, because the site sets no tracking cookies', async () => {
+    const page = await createPage('/');
+    await page.mouse.wheel(0, 800);
+    await page.waitForTimeout(500);
+    expect(await page.getByText('Pepernootje erbij?').count()).toBe(0);
+    await page.close();
+  }, 30_000);
+});
 
 describe('pages', () => {
   it('renders the home page with SEO meta', async () => {
@@ -117,7 +164,6 @@ describe('poem history drawer (mobile)', () => {
 
     // Seed two poems plus one corrupt entry that must be ignored.
     await page.evaluate(() => {
-      localStorage.setItem('cookie_consent', 'accepted');
       localStorage.setItem('sintgpt-poem-history', JSON.stringify([
         {
           id: 'a', recipient: 'Sanne', createdAt: Date.now(),
@@ -194,7 +240,6 @@ describe('home page UI', () => {
 
   it('explains an empty name on submit and moves focus to the field', async () => {
     const page = await createPage('/');
-    await page.evaluate(() => localStorage.setItem('cookie_consent', 'accepted'));
     await page.locator('#poem-form button[type=submit]').click();
     await page.locator('#poem-name-error').waitFor();
     expect(await page.evaluate(() => document.activeElement?.id)).toBe('poem-name');
@@ -211,7 +256,6 @@ describe('home page UI', () => {
       .join('') + 'data: [DONE]\n\n';
 
     const page = await createPage();
-    await page.addInitScript(() => localStorage.setItem('cookie_consent', 'accepted'));
     await page.route('**/api/poem/generate', route =>
       route.fulfill({ status: 200, contentType: 'text/event-stream', body: sse }));
     await page.goto(url('/'), { waitUntil: 'networkidle' });
@@ -250,7 +294,6 @@ describe('home page UI', () => {
 describe('poem form', () => {
   it('sends every detail from the three steps', async () => {
     const page = await createPage();
-    await page.addInitScript(() => localStorage.setItem('cookie_consent', 'accepted'));
     let sent: Record<string, unknown> | undefined;
     await page.route('**/api/poem/generate', (route) => {
       sent = route.request().postDataJSON();
@@ -327,7 +370,6 @@ describe('poem form', () => {
 describe('poem area states', () => {
   async function submitWith(response: { status: number; json?: unknown; body?: string }) {
     const page = await createPage();
-    await page.addInitScript(() => localStorage.setItem('cookie_consent', 'accepted'));
     await page.route('**/api/poem/generate', route => route.fulfill(
       response.json
         ? { status: response.status, json: response.json }
@@ -345,6 +387,26 @@ describe('poem area states', () => {
     await page.getByRole('button', { name: /Onbeperkt toegang/ }).click();
     await page.locator('dialog[open]').waitFor();
     expect(await page.getByRole('button', { name: 'Herschrijf dit gedicht' }).count()).toBe(0);
+    await page.close();
+  }, 30_000);
+
+  it('asks to wait after a quick repeat, without the upgrade offer', async () => {
+    const page = await submitWith({
+      status: 429,
+      json: { statusCode: 429, data: { reason: 'debounce', retryAfterSeconds: 7 } },
+    });
+    await page.getByText('over 7 seconden').waitFor();
+    expect(await page.getByRole('heading', { name: /gratis gedicht gebruikt/ }).count()).toBe(0);
+    await page.close();
+  }, 30_000);
+
+  it('tells a buyer about the daily maximum, without the upgrade offer', async () => {
+    const page = await submitWith({
+      status: 429,
+      json: { statusCode: 429, data: { reason: 'fair-use', retryAfterSeconds: 3600 } },
+    });
+    await page.getByText('100 gedichten gemaakt').waitFor();
+    expect(await page.getByRole('button', { name: /Onbeperkt toegang/ }).count()).toBe(0);
     await page.close();
   }, 30_000);
 
@@ -386,7 +448,6 @@ describe('Herschrijf dit gedicht', () => {
     const page = await createPage();
     const token = await signAccessToken('pay_x', 'e2e-access-secret');
     await page.context().addCookies([{ name: 'sintgpt-access', value: token, url: url('/') }]);
-    await page.addInitScript(() => localStorage.setItem('cookie_consent', 'accepted'));
     return page;
   }
 
@@ -429,7 +490,7 @@ describe('Herschrijf dit gedicht', () => {
 
   it('opens the payment window after the free poem, without asking the server', async () => {
     const page = await createPage();
-    await page.addInitScript(() => localStorage.setItem('cookie_consent', 'accepted'));
+    await paymentsWork(page);
     let calls = 0;
     await page.route('**/api/poem/generate', (route) => {
       calls++;
@@ -449,7 +510,6 @@ describe('Herschrijf dit gedicht', () => {
   it('is not offered for a poem from the history, which has no details', async () => {
     const page = await createPage();
     await page.addInitScript(() => {
-      localStorage.setItem('cookie_consent', 'accepted');
       localStorage.setItem('sintgpt-poem-history', JSON.stringify([{
         id: 'a', recipient: 'Sanne', createdAt: Date.now(),
         poem: 'Lieve Sanne, hier is je gedicht.',
@@ -536,8 +596,8 @@ describe('honest claims', () => {
 describe('restoring access', () => {
   async function openPaymentModal() {
     const page = await createPage();
+    await paymentsWork(page);
     await page.addInitScript(() => {
-      localStorage.setItem('cookie_consent', 'accepted');
       localStorage.setItem('sinterklaas-payment', JSON.stringify({ poemCount: 1 }));
     });
     await page.goto(url('/'), { waitUntil: 'networkidle' });
@@ -550,8 +610,8 @@ describe('restoring access', () => {
   it('keeps the pay button reachable on a short phone screen', async () => {
     const page = await createPage();
     await page.setViewportSize({ width: 320, height: 568 });
+    await paymentsWork(page);
     await page.addInitScript(() => {
-      localStorage.setItem('cookie_consent', 'accepted');
       localStorage.setItem('sinterklaas-payment', JSON.stringify({ poemCount: 1 }));
     });
     await page.goto(url('/'), { waitUntil: 'networkidle' });
@@ -600,6 +660,73 @@ describe('restoring access', () => {
     expect(await page.locator('dialog[open]').count()).toBe(0);
     await page.close();
   }, 30_000);
+});
+
+describe('when payments do not work', () => {
+  async function pageAfterFreePoem(available: boolean) {
+    const page = await createPage();
+    await paymentsWork(page, available);
+    await page.addInitScript(() =>
+      localStorage.setItem('sinterklaas-payment', JSON.stringify({ poemCount: 1 })));
+    return page;
+  }
+
+  it('shows a clear message instead of a payment error', async () => {
+    const page = await pageAfterFreePoem(true);
+    await page.route('**/api/payment/create-checkout', route => route.fulfill({
+      status: 503,
+      json: { statusCode: 503, statusMessage: 'Payments are not available right now', data: { code: 'payments_unavailable' } },
+    }));
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+    await page.fill('#poem-name', 'Oma Truus');
+    await page.locator('#poem-form button[type=submit]').click();
+    await page.locator('dialog[open] .pay-button').click();
+
+    await page.locator('dialog[open] .unavailable-title').getByText('Betalen lukt nu even niet').waitFor();
+    expect(await page.locator('.error-banner').count()).toBe(0);
+    expect(await page.getByText(/Payment API|403/).count()).toBe(0);
+
+    // The visitor can go on with a free poem.
+    await page.getByRole('button', { name: 'Verder met een gratis gedicht' }).click();
+    await page.locator('dialog[open]').waitFor({ state: 'detached' });
+    await page.close();
+  }, 30_000);
+
+  it('lets visitors make free poems up to the daily limit', async () => {
+    const page = await pageAfterFreePoem(false);
+    await page.route('**/api/poem/generate', route => route.fulfill({
+      status: 200, contentType: 'text/event-stream', body: poemStream('Nog een gratis gedicht.'),
+    }));
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+    await page.fill('#poem-name', 'Oma Truus');
+    await page.locator('#poem-form button[type=submit]').click();
+
+    await page.getByText('Nog een gratis gedicht.').waitFor({ timeout: 15_000 });
+    expect(await page.locator('dialog[open]').count()).toBe(0);
+    await page.locator('#poem-form').getByText('vandaag tot 3 gedichten gratis maken').waitFor();
+    await page.close();
+  }, 30_000);
+
+  it('does not offer payment at the daily limit', async () => {
+    const page = await pageAfterFreePoem(false);
+    await page.route('**/api/poem/generate', route => route.fulfill({
+      status: 429, json: { statusCode: 429, data: { reason: 'limit', retryAfterSeconds: 3600 } },
+    }));
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+    await page.fill('#poem-name', 'Oma Truus');
+    await page.locator('#poem-form button[type=submit]').click();
+
+    await page.getByRole('heading', { name: 'Je hebt de gratis gedichten van vandaag gebruikt' }).waitFor();
+    expect(await page.getByRole('button', { name: /Onbeperkt toegang/ }).count()).toBe(0);
+    await page.close();
+  }, 30_000);
+
+  it('reports whether a checkout can work, without caching', async () => {
+    const res = await fetch('/api/payment/status');
+    expect(res.status).toBe(200);
+    expect(res.headers.get('cache-control')).toBe('no-store');
+    expect(typeof ((await res.json()) as { available: unknown }).available).toBe('boolean');
+  });
 });
 
 describe('SEO', () => {
@@ -682,7 +809,6 @@ describe('poem links', () => {
 
     const page = await createPage();
     await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
-    await page.addInitScript(() => localStorage.setItem('cookie_consent', 'accepted'));
     await page.route('**/api/poem/generate', route =>
       route.fulfill({ status: 200, contentType: 'text/event-stream', body: sse }));
     await page.goto(url('/'), { waitUntil: 'networkidle' });
@@ -706,7 +832,6 @@ describe('poem links', () => {
     const sse = chunks.map(chunk => `data: ${JSON.stringify(chunk)}\n\n`).join('') + 'data: [DONE]\n\n';
 
     const page = await createPage();
-    await page.addInitScript(() => localStorage.setItem('cookie_consent', 'accepted'));
     await page.route('**/api/poem/generate', route =>
       route.fulfill({ status: 200, contentType: 'text/event-stream', body: sse }));
     await page.goto(url('/'), { waitUntil: 'networkidle' });
@@ -855,6 +980,7 @@ describe('POST /api/poem/generate', () => {
     await postPoem({ name: '' }, '10.0.0.2');
     const res = await postPoem({ name: '' }, '10.0.0.2');
     expect(res.status).toBe(429);
+    expect(((await res.json()) as { data: { reason: string } }).data.reason).toBe('debounce');
     const retryAfter = Number(res.headers.get('retry-after'));
     expect(retryAfter).toBeGreaterThan(0);
     expect(retryAfter).toBeLessThanOrEqual(10);
@@ -865,11 +991,23 @@ describe('POST /api/poem/generate', () => {
     // for free. The debounce is 10 s, so these use different IPs per step.
     const ip = '10.0.0.9';
     const statuses: number[] = [];
+    let last: Response | undefined;
     for (let i = 0; i < 4; i++) {
-      statuses.push((await postPoem({ name: '' }, ip)).status);
+      last = await postPoem({ name: '' }, ip);
+      statuses.push(last.status);
       if (i < 3) await new Promise(resolve => setTimeout(resolve, 10_100));
     }
     expect(statuses).toEqual([400, 400, 400, 429]);
+    expect(((await last!.json()) as { data: { reason: string } }).data.reason).toBe('limit');
+
+    // A buyer on the same connection counts per payment, not per IP.
+    const token = await signAccessToken('pay_same_ip', 'e2e-access-secret');
+    const buyer = await fetch('/api/poem/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Forwarded-For': ip, cookie: `sintgpt-access=${token}` },
+      body: JSON.stringify({ name: '' }),
+    });
+    expect(buyer.status).toBe(400);
   }, 60_000);
 
   it('rejects a regenerate flag that is not a boolean', async () => {
@@ -877,22 +1015,24 @@ describe('POST /api/poem/generate', () => {
     expect(res.status).toBe(400);
   });
 
-  it('skips the limit for a visitor with unlimited access', async () => {
-    const token = await signAccessToken('pay_x', 'e2e-access-secret');
-    const statuses: number[] = [];
-    for (let i = 0; i < 5; i++) {
-      const res = await fetch('/api/poem/generate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Forwarded-For': '10.0.0.5',
-          cookie: `sintgpt-access=${token}`,
-        },
-        body: JSON.stringify({ name: '' }),
-      });
-      statuses.push(res.status);
-    }
-    expect(statuses).toEqual([400, 400, 400, 400, 400]);
+  it('counts a buyer per payment, separately from other buyers on the same IP', async () => {
+    const asBuyer = async (paymentId: string) => fetch('/api/poem/generate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Forwarded-For': '10.0.0.5',
+        cookie: `sintgpt-access=${await signAccessToken(paymentId, 'e2e-access-secret')}`,
+      },
+      body: JSON.stringify({ name: '' }),
+    });
+    expect((await asBuyer('pay_x')).status).toBe(400);
+    // A fast repeat waits, like for everyone.
+    const repeat = await asBuyer('pay_x');
+    expect(repeat.status).toBe(429);
+    expect(((await repeat.json()) as { data: { reason: string } }).data.reason).toBe('debounce');
+    // Another buyer, and a free visitor, on the same IP are not affected.
+    expect((await asBuyer('pay_y')).status).toBe(400);
+    expect((await postPoem({ name: '' }, '10.0.0.5')).status).toBe(400);
   });
 
   it.skipIf(!hasGatewayKey)(

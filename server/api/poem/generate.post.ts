@@ -8,9 +8,10 @@ import {
   toUIMessageStream,
 } from 'ai';
 import { clientDisconnectSignal } from '../../utils/clientDisconnect';
-import { hasUnlimitedAccess } from '../../utils/paymentCookie';
+import { unlimitedAccessPaymentId } from '../../utils/paymentCookie';
+import { checkPoemRateLimit, rateLimitIp } from '../../utils/poemRateLimit';
 import { signPoemShare } from '../../utils/poemShare';
-import { createRateLimiter, POEM_RATE_LIMIT } from '../../utils/rateLimit';
+import { BUYER_RATE_LIMIT, POEM_RATE_LIMIT } from '../../utils/rateLimit';
 import {
   buildPrompt,
   DEFAULT_POEM_MODEL,
@@ -20,15 +21,14 @@ import {
   REGENERATE_POEM_MODEL,
 } from '../../utils/poem';
 
-const rateLimiter = createRateLimiter();
-
 export default defineEventHandler(async (event) => {
   // Get API keys from runtime config inside handler
   const runtimeConfig = useRuntimeConfig(event);
 
   try {
-    // Check for unlimited access cookie
-    const hasUnlimited = await hasUnlimitedAccess(event);
+    // Buyers have a high daily cap per payment, free visitors a low one per IP.
+    const buyerPaymentId = await unlimitedAccessPaymentId(event);
+    const hasUnlimited = buyerPaymentId !== null;
 
     // On Cloudflare, cf-connecting-ip is set by the edge and cannot be
     // spoofed. The first X-Forwarded-For entry is client-controlled.
@@ -36,19 +36,29 @@ export default defineEventHandler(async (event) => {
       getHeader(event, 'cf-connecting-ip')
       || getRequestIP(event, { xForwardedFor: true })
       || 'unknown';
-    const now = Date.now();
 
-    // Rate limiting check (skip in development or if user has unlimited access)
-    if (!import.meta.dev && !hasUnlimited) {
-      const verdict = rateLimiter.check(ip, now);
+    if (!import.meta.dev) {
+      const verdict = await checkPoemRateLimit(
+        event,
+        hasUnlimited
+          ? { kind: 'buyer', id: buyerPaymentId }
+          : { kind: 'ip', id: rateLimitIp(ip) },
+      );
       if (!verdict.ok) {
-        consola.warn(`Rate limit (${verdict.reason}) for IP ${ip}`);
+        // The client shows the upgrade offer only for `limit`. A buyer who
+        // reaches the cap gets `fair-use` and a message instead.
+        const reason = verdict.reason === 'limit' && hasUnlimited ? 'fair-use' : verdict.reason;
+        // No IP in the log: the reason is enough to see abuse.
+        consola.warn(`Rate limit: ${reason}`);
         setResponseHeader(event, 'retry-after', verdict.retryAfterSeconds);
         throw createError({
           statusCode: 429,
-          statusMessage: verdict.reason === 'debounce'
-            ? `Please wait ${verdict.retryAfterSeconds} seconds before generating another poem.`
-            : `You have reached the maximum of ${POEM_RATE_LIMIT.maxRequests} free poems per 24 hours. Upgrade to unlimited access for just €6,99 (incl. VAT)!`,
+          statusMessage: {
+            debounce: `Please wait ${verdict.retryAfterSeconds} seconds before generating another poem.`,
+            limit: `You have reached the maximum of ${POEM_RATE_LIMIT.maxRequests} free poems per 24 hours. Upgrade to unlimited access for just €6,99 (incl. VAT)!`,
+            'fair-use': `You have made ${BUYER_RATE_LIMIT.maxRequests} poems in 24 hours. Please try again later.`,
+          }[reason],
+          data: { reason, retryAfterSeconds: verdict.retryAfterSeconds },
         });
       }
     }
@@ -107,12 +117,6 @@ export default defineEventHandler(async (event) => {
           + `(${usage.outputTokenDetails.reasoningTokens ?? 0} reasoning). `
           + `Estimated cost: $${estimateCostUsd(usage, modelId).toFixed(6)}`,
         );
-
-        if (hasUnlimited) {
-          consola.info(
-            'User has unlimited access via cookie - skipping rate limit'
-          );
-        }
       },
     });
 

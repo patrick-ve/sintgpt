@@ -9,7 +9,7 @@ const isLoading = ref(false);
 const error = ref<string | null>(null);
 
 const emit = defineEmits<{ restored: [] }>();
-const { claimPayment } = usePaymentTracking();
+const { claimPayment, paymentsUnavailable, refreshPaymentsStatus } = usePaymentTracking();
 
 // Buyers on another browser, or with a cookie from before Nov 2026, can get
 // access back with their payment ID. The server verifies it with Dodo.
@@ -44,6 +44,8 @@ watch(isOpen, (newValue) => {
     dialogRef.value?.showModal();
     // Track analytics event
     (window as any).umami?.track('Show payment modal');
+    // Payments may have stopped or started working since the page loaded.
+    refreshPaymentsStatus();
   } else {
     dialogRef.value?.close();
   }
@@ -96,10 +98,20 @@ const handlePayment = async () => {
     window.location.href = response.checkoutUrl;
   } catch (err: any) {
     console.error('Error creating checkout:', err);
-    error.value =
-      err.data?.statusMessage || err.message || t('payment.error');
     isLoading.value = false;
+    if (err.data?.data?.code === 'payments_unavailable') {
+      paymentsUnavailable.value = true;
+      (window as any).umami?.track('Payments unavailable');
+      return;
+    }
+    error.value = t('payment.error');
   }
+};
+
+// While payments do not work, the visitor can go on with free poems.
+const continueFree = () => {
+  closeModal();
+  document.getElementById('poem-form')?.scrollIntoView({ block: 'start' });
 };
 
 const closeModal = () => {
@@ -215,8 +227,18 @@ const closeModal = () => {
         </div>
       </div>
 
+      <!-- Payments do not work right now: say so, and offer free poems -->
+      <div v-if="paymentsUnavailable" class="unavailable" role="status">
+        <p class="unavailable-title">{{ t('payment.unavailable.title') }}</p>
+        <p class="unavailable-message">{{ t('payment.unavailable.message') }}</p>
+        <button type="button" class="pay-button" @click="continueFree">
+          <span class="button-content">{{ t('payment.unavailable.continue') }}</span>
+        </button>
+      </div>
+
       <!-- CTA Button -->
       <button
+        v-else
         type="button"
         class="pay-button"
         :disabled="isLoading"
@@ -266,6 +288,13 @@ const closeModal = () => {
         </form>
       </details>
 
+      <p v-if="!paymentsUnavailable" class="legal-note">
+        {{ t('payment.legal.before') }}
+        <NuxtLink to="/voorwaarden" target="_blank">{{ t('payment.legal.terms') }}</NuxtLink>
+        {{ t('payment.legal.middle') }}
+        <NuxtLink to="/privacy" target="_blank">{{ t('payment.legal.privacy') }}</NuxtLink>{{ t('payment.legal.after') }}
+      </p>
+
       <!-- Trust footer -->
       <div class="trust-footer">
         <div class="trust-icons">
@@ -279,6 +308,44 @@ const closeModal = () => {
 </template>
 
 <style scoped>
+.unavailable {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 2px solid #d4a853;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.6);
+  text-align: center;
+}
+
+.unavailable-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: #8b1538;
+  margin-bottom: 0.375rem;
+}
+
+.unavailable-message {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: #4a3728;
+  margin-bottom: 0.875rem;
+}
+
+.legal-note {
+  margin-top: 0.75rem;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: #5c4a3a;
+  text-align: center;
+}
+
+.legal-note a {
+  color: #8b1538;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 /* Dialog base */
 .payment-dialog {
   position: fixed;

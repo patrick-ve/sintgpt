@@ -1,42 +1,46 @@
 import { consola } from 'consola';
 import { createDodoClient } from '../../utils/dodo';
+import {
+  markPaymentsUnavailable,
+  paymentsAvailable,
+  paymentsConfigured,
+} from '../../utils/paymentsStatus';
 
 interface CheckoutResponse {
   checkoutUrl: string;
 }
 
+/** The page shows a friendly message for this code, never Dodo's own text. */
+function paymentsUnavailableError() {
+  return createError({
+    statusCode: 503,
+    statusMessage: 'Payments are not available right now',
+    data: { code: 'payments_unavailable' },
+  });
+}
+
 export default defineEventHandler(async (event): Promise<CheckoutResponse> => {
+  const runtimeConfig = useRuntimeConfig(event);
+
+  if (!paymentsConfigured(event)) {
+    consola.error('Dodo Payments API key or product ID not configured');
+    throw paymentsUnavailableError();
+  }
+
+  // Dodo refused a checkout a few minutes ago. Do not ask again yet.
+  if (!(await paymentsAvailable(event))) {
+    throw paymentsUnavailableError();
+  }
+
+  const client = createDodoClient(runtimeConfig.dodoPaymentsApiKey);
+
+  // Get the base URL for return URL
+  const host = getHeader(event, 'host') || 'localhost:3000';
+  const protocol = host.includes('localhost') ? 'http' : 'https';
+  const baseUrl = `${protocol}://${host}`;
+
+  let checkoutUrl: string | null | undefined;
   try {
-    const runtimeConfig = useRuntimeConfig();
-
-    // Check if Dodo Payments is configured
-    if (!runtimeConfig.dodoPaymentsApiKey) {
-      consola.error('Dodo Payments API key not configured');
-      throw createError({
-        statusCode: 500,
-        statusMessage: 'Payment system not configured',
-      });
-    }
-
-    if (!runtimeConfig.dodoProductId) {
-      consola.error('Dodo Payments product ID not configured');
-      throw createError({
-        statusCode: 500,
-        statusMessage: 'Payment product not configured',
-      });
-    }
-
-    consola.info('Creating checkout session...');
-
-    const client = createDodoClient(runtimeConfig.dodoPaymentsApiKey);
-
-    // Get the base URL for return URL
-    const headers = getHeaders(event);
-    const host = headers.host || 'localhost:3000';
-    const protocol = host.includes('localhost') ? 'http' : 'https';
-    const baseUrl = `${protocol}://${host}`;
-
-    // Create checkout session
     const session = await client.checkoutSessions.create({
       product_cart: [
         {
@@ -59,35 +63,22 @@ export default defineEventHandler(async (event): Promise<CheckoutResponse> => {
         'google_pay',
       ],
     });
-
-    if (!session.checkout_url) {
-      throw createError({
-        statusCode: 502,
-        statusMessage: 'Payment provider returned no checkout URL',
-      });
-    }
-
-    consola.success('Checkout session created:', session.checkout_url);
-
-    return {
-      checkoutUrl: session.checkout_url,
-    };
+    checkoutUrl = session.checkout_url;
   } catch (error: any) {
-    consola.error('Error creating checkout session:', error);
-
-    // Handle Dodo Payments API errors
-    if (error.status) {
-      throw createError({
-        statusCode: error.status,
-        statusMessage: `Payment API Error: ${error.message}`,
-      });
+    consola.error(`Dodo refused the checkout (${error?.status ?? 'no status'}):`, error?.message);
+    // 401 and 403 do not go away by trying again: a wrong key, or live
+    // payments that Dodo has not enabled yet. Remember that for a while.
+    if (error?.status === 401 || error?.status === 403) {
+      await markPaymentsUnavailable(event);
     }
-
-    // Generic error
-    throw createError({
-      statusCode: 500,
-      statusMessage: 'Failed to create checkout session',
-      data: { originalError: error.message },
-    });
+    throw paymentsUnavailableError();
   }
+
+  if (!checkoutUrl) {
+    consola.error('Dodo returned no checkout URL');
+    throw paymentsUnavailableError();
+  }
+
+  consola.success('Checkout session created');
+  return { checkoutUrl };
 });

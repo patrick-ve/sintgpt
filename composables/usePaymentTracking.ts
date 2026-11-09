@@ -15,6 +15,9 @@ const hasUnlimitedAccess = ref(false);
 const isInitialized = ref(false);
 const storedTrialPoem = ref<string | null>(null);
 const storedTrialPoemName = ref<string | null>(null);
+// True while Dodo refuses checkouts. Then the page does not offer payment and
+// only the server's daily limit applies.
+const paymentsUnavailable = ref(false);
 
 export const usePaymentTracking = () => {
   const loadFromStorage = () => {
@@ -72,8 +75,22 @@ export const usePaymentTracking = () => {
   const isPaid = computed(() => hasUnlimitedAccess.value);
 
   const canGeneratePoem = computed(() => {
-    return hasUnlimitedAccess.value || poemCount.value < MAX_FREE_POEMS;
+    return hasUnlimitedAccess.value
+      || paymentsUnavailable.value
+      || poemCount.value < MAX_FREE_POEMS;
   });
+
+  /** Asks the server whether a checkout can work now. */
+  const refreshPaymentsStatus = async (): Promise<boolean> => {
+    try {
+      const { available } = await $fetch<{ available: boolean }>('/api/payment/status');
+      paymentsUnavailable.value = !available;
+    } catch {
+      // Unknown: offer payment, and let the checkout give the answer.
+      paymentsUnavailable.value = false;
+    }
+    return !paymentsUnavailable.value;
+  };
 
   const remainingFreePoems = computed(() => {
     if (hasUnlimitedAccess.value) return Infinity;
@@ -142,6 +159,8 @@ export const usePaymentTracking = () => {
     claimPayment,
     resetPaymentState,
     maxFreePoems: MAX_FREE_POEMS,
+    paymentsUnavailable,
+    refreshPaymentsStatus,
     storedTrialPoem,
     storedTrialPoemName,
     saveTrialPoem,

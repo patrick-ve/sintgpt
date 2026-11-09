@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { createRateLimiter, POEM_RATE_LIMIT } from '../../server/utils/rateLimit';
+import {
+  applyRateLimit,
+  BUYER_RATE_LIMIT,
+  createRateLimiter,
+  POEM_RATE_LIMIT,
+} from '../../server/utils/rateLimit';
 
 const HOUR = 60 * 60 * 1000;
 const T0 = 1_800_000_000_000;
@@ -68,5 +73,41 @@ describe('createRateLimiter', () => {
     for (let i = 0; i < 20; i++) limiter.check(`10.0.0.${i}`, T0 + i);
     expect(limiter.trackedCount()).toBe(20);
     expect(limiter.check('10.0.0.0', T0 + 30_000)).toEqual({ ok: true });
+  });
+});
+
+describe('applyRateLimit', () => {
+  it('starts a window on the first request', () => {
+    expect(applyRateLimit(undefined, T0, POEM_RATE_LIMIT)).toEqual({
+      verdict: { ok: true },
+      entry: { count: 1, resetTime: T0 + 24 * HOUR, last: T0 },
+    });
+  });
+
+  it('returns no entry for a refused request, so it is not stored', () => {
+    const entry = { count: 3, resetTime: T0 + HOUR, last: T0 };
+    const result = applyRateLimit(entry, T0 + 60_000, POEM_RATE_LIMIT);
+    expect(result.verdict).toMatchObject({ ok: false, reason: 'limit' });
+    expect(result.entry).toBeUndefined();
+  });
+
+  it('does not change the entry it gets', () => {
+    const entry = { count: 1, resetTime: T0 + HOUR, last: T0 };
+    applyRateLimit(entry, T0 + 60_000, POEM_RATE_LIMIT);
+    expect(entry).toEqual({ count: 1, resetTime: T0 + HOUR, last: T0 });
+  });
+});
+
+describe('BUYER_RATE_LIMIT', () => {
+  it('allows 100 poems a day per payment, 10 s apart', () => {
+    expect(BUYER_RATE_LIMIT).toEqual({ maxRequests: 100, windowMs: 24 * HOUR, debounceMs: 10_000 });
+  });
+
+  it('refuses the 101st poem in a day', () => {
+    const limiter = createRateLimiter(BUYER_RATE_LIMIT);
+    for (let i = 0; i < 100; i++) {
+      expect(limiter.check('pay_1', T0 + i * 10_000).ok).toBe(true);
+    }
+    expect(limiter.check('pay_1', T0 + 100 * 10_000)).toMatchObject({ ok: false, reason: 'limit' });
   });
 });
