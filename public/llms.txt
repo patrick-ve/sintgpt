@@ -1,0 +1,46 @@
+# SintGPT
+
+> SintGPT (https://sintgpt.com) schrijft in 30 seconden een persoonlijk sinterklaasgedicht dat echt rijmt, in het Nederlands of het Engels. Je vult in voor wie het gedicht is, wat die persoon bijzonder maakt en hoe het moet klinken. Het eerste gedicht is gratis.
+
+De website is Nederlandstalig en kan ook in het Engels worden getoond. Je hebt geen account nodig. Gedichten blijven op je eigen apparaat bewaard ("Mijn gedichten").
+
+Wat je kiest bij een gedicht:
+
+- Stijl: Grappig, Klassiek, Ironisch, Ouderwets, Pikant of Roast.
+- Rijmschema: AABB, ABAB, ABBA of de limerick (altijd 5 regels, AABBA).
+- Lengte in regels, en de taal: Nederlands of Engels.
+
+Wat je met een gedicht kunt doen: delen via een korte link (90 dagen geldig), WhatsApp, e-mail of Facebook, kopiëren, of opslaan als PDF in een van de ontwerpen.
+
+Prijzen (eenmalig, inclusief btw, geen abonnement):
+
+- Het eerste gedicht is gratis, met delen, kopiëren en opslaan als PDF. Per internetaansluiting is dat 1 gratis gedicht per 24 uur.
+- 3 gedichten: €3,99, geldig tot en met pakjesavond.
+- Gezin: €6,99, een jaar lang zoveel gedichten als je redelijkerwijs nodig hebt (hooguit 100 per 24 uur), ook gedichten herschrijven.
+- Hele familie: €12,99, alles van Gezin tot en met pakjesavond volgend jaar, plus 2 extra PDF-ontwerpen en surprise-ideeën bij je gedicht.
+
+Wat de site actueel aanbiedt, staat in het betaalvenster en in de voorwaarden. Betalingen lopen via Dodo Payments.
+
+## Pagina's
+
+- [Gedicht maken](https://sintgpt.com/): het formulier, voorbeelden en veelgestelde vragen
+- [Voorbeelden](https://sintgpt.com/voorbeelden): voorbeeldgedichten in zes stijlen, elk naast wat er werd ingevuld (de personen zijn verzonnen)
+- [Lootjes trekken](https://sintgpt.com/lootjes): gratis lootjes trekken op één telefoon; niemand trekt zichzelf en er gaat niets naar de server
+
+## Blog
+
+- [Het perfecte sinterklaasgedicht schrijven](https://sintgpt.com/blog/hoe-schrijf-je-het-perfecte-sinterklaasgedicht): tips van rijmschema tot persoonlijke details
+- [Rijm en ritme](https://sintgpt.com/blog/rijm-en-ritme-sinterklaasgedicht): heffingen tellen, staand en slepend rijm, AABB, ABAB, ABBA en de limerick
+- [Grappige sinterklaasgedichten](https://sintgpt.com/blog/grappige-sinterklaasgedichten-tips): woordspelingen, humor en voorbeelden
+- [Een roast-gedicht zonder te kwetsen](https://sintgpt.com/blog/roast-sinterklaasgedicht-zonder-te-kwetsen): stevig plagen met een warm slot
+- [Een surprise maken](https://sintgpt.com/blog/surprise-maken-ideeen): materialen, technieken en ideeën per persoon
+- [Lootjes trekken](https://sintgpt.com/blog/lootjes-trekken-tips): eerlijk trekken, budget, deadline en groepen op afstand
+- [Sinterklaas op het werk](https://sintgpt.com/blog/sinterklaas-op-het-werk): lootjes, gedichten en een feest voor collega's
+- [Sinterklaastradities](https://sintgpt.com/blog/sinterklaas-tradities): de geschiedenis van gedichten, surprises en pepernoten
+
+## Optional
+
+- [Alle blogartikelen](https://sintgpt.com/blog)
+- [Privacyverklaring](https://sintgpt.com/privacy): welke gegevens de site gebruikt en hoe lang
+- [Voorwaarden](https://sintgpt.com/voorwaarden): prijzen, gratis gebruik, herroepingsrecht
+- Contact: patrick@sintgpt.com

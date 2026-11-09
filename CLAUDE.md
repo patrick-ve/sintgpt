@@ -36,7 +36,7 @@ Local Worker preview: `npm run build:cloudflare && npx wrangler --cwd .output de
 
 ### Poem generation
 1. Form in `pages/index.vue` → `usePoemGenerator` POSTs to `/api/poem/generate`.
-2. `server/api/poem/generate.post.ts`: rate limit (free: 3/day per IP; buyers: 100/day per payment; both with a 10 s debounce), Zod validation, prompt from `server/utils/poem.ts`, `streamText` via AI Gateway.
+2. `server/api/poem/generate.post.ts`: rate limit (free: 1/day per IP, 3/day while payments do not work; buyers: 100/day per payment; both with a 10 s debounce), Zod validation, prompt from `server/utils/poem.ts`, `streamText` via AI Gateway.
 3. Response is an AI SDK UI message stream (SSE), released word by word by `smoothStream`. The client parses it with `utils/poemStream.ts` (`text-delta` events; an `error` event throws so gateway failures show an error instead of an empty poem).
 4. `utils/smoothReveal.ts` shows the text at a steady pace with `requestAnimationFrame`, whatever way the chunks arrive. Reduced motion and hidden tabs show it at once. The writing animation is visible until the first text arrives, while the model reasons.
 5. The finished poem is saved to the on-device history (`usePoemHistory`, localStorage key `sintgpt-poem-history`, max 50) and shown in `PoemHistoryDrawer.vue`.
@@ -74,7 +74,7 @@ Notes:
 - Gift links: `https://sintgpt.com/?cadeau=<code>` gives Hele familie without a payment (`server/utils/giftAccess.ts`, `POST /api/payment/claim-gift`). Codes live in the Worker secret `NUXT_GIFT_CODES` (comma-separated, at least 16 characters, `openssl rand -hex 16`); never put a code in git or chat. The cookie holds `gift_<hash>`, not the code. Removing a code ends its access at once (`paidAccess` checks the list). The page removes the code from the address bar. Analytics: `Gift claimed` (granted/denied).
 - The extra PDF designs are a soft lock: the PDF is built in the browser, so the page offers Hele familie instead of building a locked design.
 
-When Dodo refuses a checkout with 401 or 403 (for example "Live payments not enabled"), `create-checkout` stores a flag in KV for 15 minutes (`server/utils/paymentsStatus.ts`, key `status:payments-unavailable` in `POEM_LINKS`) and returns 503 with `data.code = 'payments_unavailable'`, never Dodo's text. `GET /api/payment/status` reads the flag. While it is set, the page does not offer payment: the client lifts its 1-poem limit, so only the server's 3/day applies, and the payment window explains the problem.
+When Dodo refuses a checkout with 401 or 403 (for example "Live payments not enabled"), `create-checkout` stores a flag in KV for 15 minutes (`server/utils/paymentsStatus.ts`, key `status:payments-unavailable` in `POEM_LINKS`) and returns 503 with `data.code = 'payments_unavailable'`, never Dodo's text. `GET /api/payment/status` reads the flag. While it is set, the page does not offer payment: the client lifts its 1-poem limit and the server allows 3/day per IP instead of 1 (`freeRateLimit` in `server/utils/rateLimit.ts`), and the payment window explains the problem.
 
 Keeping the form during payment: just before the redirect, `PaymentModal` emits `checkout` and the home page saves the form in localStorage (`utils/formDraft.ts`, key `sintgpt-form-draft`, 2 hours). On the next load of `/` the draft is always removed; it fills the form only when the visitor comes back from Dodo (`payment_id` or `payment=cancelled`). After a successful payment, the notice offers "Schrijf het gedicht". The payment window never shows the recipient's name.
 
@@ -82,7 +82,7 @@ Notes:
 - Buyers can restore access in `PaymentModal` with their payment ID, or through a `/?payment_id=pay_...` link. This uses the same server check. Anyone who has a valid ID can use it.
 - The browser never decides access. Do not trust query parameters, localStorage or unsigned cookies for it.
 - Refunds after the cookie is set do not revoke it (no database). A refunded payment cannot be claimed again.
-- The free limit is soft: 1 poem in localStorage, 3/day/IP on the server.
+- The free limit: 1 poem in localStorage, and 1/day per IP on the server (`POEM_RATE_LIMIT`), so a private window or cleared site data gets no extra poem. A new IP does (another network, a VPN, a phone that reconnects); IPv6 counts per /64. A refused visitor sees "Het gratis gedicht is al gebruikt" with the payment offer.
 - The payment window says that the buyer pays Dodo (merchant of record) and that the right of withdrawal ends at once, with links to `/voorwaarden` and `/privacy`.
 - `/api/webhooks/dodo-payments` verifies signatures and only logs events.
 
@@ -126,13 +126,14 @@ Notes:
 `/lootjes` draws names in the browser (`utils/lootjes.ts`, Sattolo's shuffle: one circle, nobody draws themselves). One phone goes round; each person taps their name to see their lootje. The draw stays in localStorage (`sintgpt-lootjes`) until "Nieuwe trekking". Nothing goes to the server. The blog post `/blog/lootjes-trekken-tips` describes this behaviour, so change both together.
 
 ### Blog
-New posts use `components/BlogPost.vue` (layout, SEO meta, OG image, canonical, Article JSON-LD). Add each post to `pages/blog/index.vue`, `public/sitemap.xml` and `scripts/og-images.ts`, then run `npm run build:og`. Give the link to the poem form `data-cta="blog:<slug>"`, so analytics sees which post brings writers.
+New posts use `components/BlogPost.vue` (layout, SEO meta, OG image, canonical, Article JSON-LD). Add each post to `pages/blog/index.vue`, `public/sitemap.xml`, `public/llms.txt` and `scripts/og-images.ts`, then run `npm run build:og`. Give the link to the poem form `data-cta="blog:<slug>"`, so analytics sees which post brings writers.
 
 ### Privacy and terms
-`/privacy` and `/voorwaarden` render `components/LegalPage.vue` from `legal.*` in the locales. They state the limits (3/day, 100/day for buyers), the 90-day storage of short links, the 24-hour counters and the €6.99 price. Change them when the code changes; an e2e test checks the numbers.
+`/privacy` and `/voorwaarden` render `components/LegalPage.vue` from `legal.*` in the locales. They state the limits (1/day, 3/day while payments do not work, 100/day for buyers), the 90-day storage of short links, the 24-hour counters and the €6.99 price. Change them when the code changes; an e2e test checks the numbers.
 - There is no cookie banner. The site sets only the functional `sintgpt-access` cookie after payment, analytics uses no cookies (Workers Analytics Engine, written by the server) and the rest is localStorage for features the visitor uses. Do not add tracking cookies or third-party embeds without consent handling.
 
 ### SEO
+- `public/llms.txt` (llmstxt.org format) describes the site, prices and pages for language models. It states prices, the free limit and features, so change it with them (same rules as Persuasion: no model name, no claims without data).
 - The main address is `https://sintgpt.com`. `server/middleware/canonical-host.ts` redirects `www` to it. Each page sets its own canonical link.
 - English is applied in the browser on the same URLs, so search engines see Dutch only. Do not add `hreflang` tags until English has its own URLs.
 
