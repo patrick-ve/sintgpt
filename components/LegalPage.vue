@@ -2,6 +2,7 @@
 const props = defineProps<{ page: 'privacy' | 'terms'; path: string }>();
 
 const { t } = useI18n();
+const { track } = useAnalytics();
 
 interface LegalSection {
   heading: string;
@@ -54,7 +55,7 @@ useHead({
       </section>
 
       <p class="mt-12">
-        <a href="mailto:patrick@sintgpt.com" class="back-link">patrick@sintgpt.com</a>
+        <a href="mailto:patrick@sintgpt.com" class="back-link" @click="track('Contact')">patrick@sintgpt.com</a>
       </p>
     </main>
   </div>

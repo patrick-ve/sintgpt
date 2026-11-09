@@ -103,11 +103,11 @@ Notes:
 `/lootjes` draws names in the browser (`utils/lootjes.ts`, Sattolo's shuffle: one circle, nobody draws themselves). One phone goes round; each person taps their name to see their lootje. The draw stays in localStorage (`sintgpt-lootjes`) until "Nieuwe trekking". Nothing goes to the server. The blog post `/blog/lootjes-trekken-tips` describes this behaviour, so change both together.
 
 ### Blog
-New posts use `components/BlogPost.vue` (layout, SEO meta, OG image, canonical, Article JSON-LD). Add each post to `pages/blog/index.vue`, `public/sitemap.xml` and `scripts/og-images.ts`, then run `npm run build:og`.
+New posts use `components/BlogPost.vue` (layout, SEO meta, OG image, canonical, Article JSON-LD). Add each post to `pages/blog/index.vue`, `public/sitemap.xml` and `scripts/og-images.ts`, then run `npm run build:og`. Give the link to the poem form `data-cta="blog:<slug>"`, so analytics sees which post brings writers.
 
 ### Privacy and terms
 `/privacy` and `/voorwaarden` render `components/LegalPage.vue` from `legal.*` in the locales. They state the limits (3/day, 100/day for buyers), the 90-day storage of short links, the 24-hour counters and the €6.99 price. Change them when the code changes; an e2e test checks the numbers.
-- There is no cookie banner. The site sets only the functional `sintgpt-access` cookie after payment, Umami is cookieless and the rest is localStorage for features the visitor uses. Do not add tracking cookies or third-party embeds without consent handling.
+- There is no cookie banner. The site sets only the functional `sintgpt-access` cookie after payment, analytics uses no cookies (Workers Analytics Engine, written by the server) and the rest is localStorage for features the visitor uses. Do not add tracking cookies or third-party embeds without consent handling.
 
 ### SEO
 - The main address is `https://sintgpt.com`. `server/middleware/canonical-host.ts` redirects `www` to it. Each page sets its own canonical link.
@@ -158,5 +158,18 @@ The deployed files hold no comments. Source files keep theirs.
 - `tests/unit/` - prompt/schema/cost, prompt injection, rate limit, stream parser, comment stripping, countdown, lootjes, form draft, example poems (fast, no network)
 - `tests/e2e/app.test.ts` - builds the app, starts the server and a headless browser: pages, OG tags, rate limiting, the history drawer at phone size, and one **live** poem via AI Gateway (skipped without a key; costs a few cents)
 
-## Analytics (Umami events)
-`Generate poem`, `Poem generation failed`, `Open poem from history`, `Proceed to payment`, `Payment succeeded`, `Access restored`, `Copy share link`, `Open shared poem`, `Shared via WhatsApp/Email/Facebook`, `Copy to clipboard`, `Save as PDF`, `Regenerate poem`, `Payments unavailable`, `Draw lootjes` (with the number of people).
+## Analytics (Workers Analytics Engine)
+No third-party script. Events go to the dataset `sintgpt_events` (binding `ANALYTICS`), which Cloudflare keeps for 3 months.
+- **Server events** (`trackServerEvent` in `server/utils/analytics.ts`):
+  - `Generate poem` / `Regenerate poem` when the stream ends: style, rhyme scheme, language, lines, plan, model (`detail`), tokens, estimated cost, seconds to the first text and in total, and coarse form use (`formFacts`: fun facts empty/short/long, present none/named/secret, written by and audience yes/no).
+  - `Poem aborted` (the visitor left; `detail` before/during text, seconds), `Poem generation failed`, `Rate limited` (reason).
+  - `Proceed to payment`, `Payments unavailable` (cause), `Payment verified` (in `claim-access`; `detail` return/restore), `Payment webhook` (event type in `detail`, amount in `value`, no country).
+- **Browser events** (`useAnalytics().track`, sent with `sendBeacon` to `POST /api/events`):
+  - Funnel: `Page view` (first one: referring domain in `detail`, utm tags in source/medium/campaign), `Form started`, `Form refused`, `Poem ready` (`detail` new/rewrite, `value` = poems on this device), `Show payment modal` (`detail` submit/rewrite/limit), `Close payment modal` (button/backdrop/escape/continue free), `Payment returned` (cancelled/failed/pending), `Payment succeeded`, `Continue after payment`, `Access restored`, `Restore failed` (invalid/denied/pending).
+  - Engagement: `Copy share link`, `Copy to clipboard`, `Save as PDF`, `Shared via WhatsApp/Email/Facebook`, `Open shared poem`, `Shared poem to form`, `Open history`, `Open poem from history`, `Delete poem`, `Clear history`, `Switch language`, `Show example` (style), `Draw lootjes` (people), `Play video`, `Contact`.
+  - Sources: `Scroll to poem form` (hero/examples) and `Go to poem form` (any link with `data-cta="<where>"`, tracked by `plugins/analytics.client.ts`; blog posts use `blog:<slug>`).
+  - Problems: `Poem stream failed` (network/stream), `PDF failed`, `Copy failed`.
+- The endpoint accepts only the names in `utils/analyticsEvents.ts`, short `detail` values and a number. The `EVENTS_BURST` Rate Limiting binding allows 60 events a minute per IP (keyed hash). Add a new event to that list first.
+- Columns are positional; the order is documented at the top of `server/utils/analytics.ts`. Never reorder them, only append. Never put names, poem text, payment IDs or IP addresses in an event. Paths drop the query and hash, and `/g/<id>` becomes `/g/:id`. The privacy page lists what is kept: change it with the columns.
+- Without the binding (Node build, tests) nothing is written.
+- Reports: `CLOUDFLARE_ACCOUNT_ID=... CLOUDFLARE_ANALYTICS_TOKEN=... npx tsx scripts/analytics-report.ts [days]`. The token needs **Account Analytics Read**. Weight counts with `_sample_interval`: `SUM(_sample_interval)`, not `COUNT()`.

@@ -236,6 +236,7 @@ useHead({
             <p class="text-red-800 mb-6 font-medium">Maak je eerste sinterklaasgedicht gratis met SintGPT en ervaar de traditie!</p>
             <NuxtLink
               to="/"
+        data-cta="blog:sinterklaas-tradities"
               class="inline-block px-8 py-3 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-transform transform hover:scale-105 text-lg border border-[#F4CD60]"
             >
               Schrijf je eerste gedicht gratis →

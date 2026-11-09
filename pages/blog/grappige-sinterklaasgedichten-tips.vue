@@ -227,6 +227,7 @@ useHead({
             <p class="text-red-800 mb-6 font-medium">Je eerste gedicht is gratis. Binnen 30 seconden heb je een grappig gedicht dat bij de ontvanger past.</p>
             <NuxtLink
               to="/"
+        data-cta="blog:grappige-sinterklaasgedichten-tips"
               class="inline-block px-8 py-3 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-transform transform hover:scale-105 text-lg border border-[#F4CD60]"
             >
               Schrijf je eerste gedicht gratis →

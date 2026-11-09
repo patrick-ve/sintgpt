@@ -123,12 +123,17 @@ export default defineNuxtConfig({
           bindings: [{ name: 'RATE_LIMITER', class_name: 'RateLimitCounter' }],
         },
         migrations: [{ tag: 'v1', new_sqlite_classes: ['RateLimitCounter'] }],
-        // A cheap first check per Cloudflare location against fast repeats,
-        // before the Durable Object is asked (server/utils/poemRateLimit.ts).
+        // Analytics events (server/utils/analytics.ts). Cloudflare creates the
+        // dataset on the first write.
+        analytics_engine_datasets: [{ binding: 'ANALYTICS', dataset: 'sintgpt_events' }],
+        // POEM_BURST: a cheap first check per Cloudflare location against fast
+        // repeats, before the Durable Object is asked (server/utils/poemRateLimit.ts).
+        // EVENTS_BURST: stops one client from flooding /api/events.
         // Nitro's Wrangler types predate `ratelimits`; Nitro writes it as given.
         ...({
           ratelimits: [
             { name: 'POEM_BURST', namespace_id: '1001', simple: { limit: 1, period: 10 } },
+            { name: 'EVENTS_BURST', namespace_id: '1002', simple: { limit: 60, period: 60 } },
           ],
         } as Record<string, unknown>),
         // The Worker serves the domain itself. www redirects to the apex in

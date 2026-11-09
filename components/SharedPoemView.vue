@@ -5,9 +5,10 @@ defineProps<{
 }>();
 
 const { t } = useI18n();
+const { track } = useAnalytics();
 
 onMounted(() => {
-  (window as any).umami?.track('Open shared poem');
+  track('Open shared poem');
 });
 </script>
 
@@ -37,7 +38,7 @@ onMounted(() => {
       <div class="mt-8 text-center">
         <NuxtLink
           to="/"
-          data-umami-event="Shared poem to form"
+          @click="track('Shared poem to form')"
           class="share-cta inline-flex items-center justify-center min-h-12 px-8 bg-[#f4cd60] text-[#5c0f26] font-display font-bold text-xl rounded-xl shadow-lg hover:bg-[#ffe08a]"
         >
           {{ t('share.cta') }}

@@ -40,7 +40,7 @@ useHead({
 
       <div class="mt-12 flex flex-col items-start gap-4 rounded-xl border-2 border-[#d4a853] bg-white/70 p-6">
         <p class="font-text text-lg">{{ t('examples.ctaText') }}</p>
-        <NuxtLink to="/#poem-form" class="btn-festive inline-flex items-center min-h-12 px-6 text-lg">
+        <NuxtLink to="/#poem-form" data-cta="voorbeelden" class="btn-festive inline-flex items-center min-h-12 px-6 text-lg">
           {{ t('examples.cta') }}
         </NuxtLink>
       </div>

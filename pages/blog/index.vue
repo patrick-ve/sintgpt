@@ -184,6 +184,7 @@ useHead({
           </p>
           <NuxtLink
             to="/"
+            data-cta="blog:index"
             class="inline-block px-8 py-4 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-transform transform hover:scale-105 shadow-lg border-2 border-[#F4CD60] text-xl"
           >
             {{ locale === 'nl' ? 'Schrijf je eerste gedicht gratis' : 'Write your first poem for free' }}

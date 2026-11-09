@@ -1,4 +1,5 @@
 import { consola } from 'consola';
+import { trackServerEvent } from '../../utils/analytics';
 import { createDodoClient } from '../../utils/dodo';
 import { decidePaymentAccess } from '../../utils/paymentAccess';
 import { setAccessCookie } from '../../utils/paymentCookie';
@@ -22,7 +23,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const body = await readBody<{ paymentId?: unknown }>(event).catch(() => null);
+  const body = await readBody<{ paymentId?: unknown; source?: unknown }>(event).catch(() => null);
   const paymentId = body?.paymentId;
   if (typeof paymentId !== 'string' || !PAYMENT_ID.test(paymentId)) {
     throw createError({ statusCode: 400, statusMessage: 'Invalid payment ID' });
@@ -43,6 +44,11 @@ export default defineEventHandler(async (event) => {
   const status = decidePaymentAccess(payment, config.dodoProductId);
   if (status === 'granted') {
     await setAccessCookie(event, paymentId, config.accessCookieSecret);
+    // Counted here, not in the browser, so blocked scripts do not hide a sale.
+    // `return` is a buyer back from Dodo, `restore` someone entering an ID.
+    trackServerEvent(event, 'Payment verified', {
+      detail: body?.source === 'restore' ? 'restore' : 'return',
+    });
   }
   consola.info(`Payment ${paymentId}: ${payment.status} -> ${status}`);
   return { status };

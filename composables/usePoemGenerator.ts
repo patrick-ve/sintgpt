@@ -16,6 +16,7 @@ interface PoemRequest {
 }
 
 export const usePoemGenerator = () => {
+  const { track } = useAnalytics();
   const { t } = useI18n();
   const isLoading = ref(false);
   const error = ref<string | null>(null);
@@ -84,9 +85,10 @@ export const usePoemGenerator = () => {
     } catch (e: any) {
       reveal.cancel();
       console.error('Poem generation error:', e);
+      // A dropped connection never reaches the server's own failure event.
+      track('Poem stream failed', { detail: e?.name === 'TypeError' ? 'network' : 'stream' });
       error.value = e.message || 'Failed to generate poem';
       poem.value = null;
-      (window as any).umami?.track('Poem generation failed');
     } finally {
       isLoading.value = false;
     }

@@ -1,5 +1,6 @@
 import { consola } from 'consola';
 import { Webhook } from 'standardwebhooks';
+import { trackServerEvent } from '../../utils/analytics';
 
 // Access is granted by /api/payment/claim-access, which asks the Dodo API
 // directly. This webhook only records payment events in the logs.
@@ -48,6 +49,13 @@ export default defineEventHandler(async (event) => {
     amount: payload.data?.total_amount,
     currency: payload.data?.currency,
   };
+
+  // The amount in major units (6.99), for revenue and refunds per day.
+  const amount = typeof details.amount === 'number' ? details.amount / 100 : 0;
+  if (typeof payload.type === 'string' && /^(payment|refund|dispute)\./.test(payload.type)) {
+    // The request comes from Dodo, so its country says nothing about the buyer.
+    trackServerEvent(event, 'Payment webhook', { detail: payload.type, value: amount, country: '' });
+  }
 
   switch (payload.type) {
     case 'payment.succeeded':

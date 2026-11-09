@@ -1261,3 +1261,110 @@ describe('blog', () => {
     }
   });
 });
+
+describe('analytics', () => {
+  it('loads no third-party analytics script', async () => {
+    const html = await (await fetch('/')).text();
+    expect(html).not.toMatch(/umami/i);
+  });
+
+  it('accepts a known browser event and refuses anything else', async () => {
+    const send = (body: unknown) => fetch('/api/events', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    expect((await send({ name: 'Save as PDF', path: '/', locale: 'nl' })).status).toBe(204);
+    expect((await send({ name: 'Generate poem' })).status).toBe(400);
+    expect((await send({ name: 'Show example', detail: 'Lieve Sanne, je bent een schat!' })).status).toBe(400);
+    expect((await send('not json')).status).toBe(400);
+  });
+
+  it('sends a page view and a lootjes event from the browser', async () => {
+    const page = await createPage();
+    const events: Record<string, unknown>[] = [];
+    // Chromium shows a beacon's body only to a routed request.
+    await page.route('**/api/events', route => route.continue());
+    page.on('request', (request) => {
+      if (request.url().endsWith('/api/events')) events.push(JSON.parse(request.postData() ?? '{}'));
+    });
+    await page.goto(url('/lootjes'), { waitUntil: 'networkidle' });
+    await page.fill('#lootjes-names', 'Sanne\nDaan\nOpa Kees');
+    await page.getByRole('button', { name: 'Trek lootjes' }).click();
+    await expect.poll(() => events.map(event => event.name)).toEqual(
+      expect.arrayContaining(['Page view', 'Draw lootjes']),
+    );
+    expect(events.find(event => event.name === 'Page view')).toMatchObject({ path: '/lootjes', locale: 'nl' });
+    expect(events.find(event => event.name === 'Draw lootjes')).toMatchObject({ value: 3 });
+    // Names never leave the device, also not as analytics.
+    expect(JSON.stringify(events)).not.toContain('Opa Kees');
+    await page.close();
+  }, 30_000);
+});
+
+describe('analytics funnel events', () => {
+  async function collectEvents(page: TestPage) {
+    const events: Record<string, unknown>[] = [];
+    // Chromium shows a beacon's body only to a routed request.
+    await page.route('**/api/events', route => route.continue());
+    page.on('request', (request) => {
+      if (request.url().endsWith('/api/events')) events.push(JSON.parse(request.postData() ?? '{}'));
+    });
+    return events;
+  }
+  const named = (events: Record<string, unknown>[], name: string) => events.filter(event => event.name === name);
+
+  it('reports why the payment window opened and how it was closed', async () => {
+    const page = await createPage();
+    await paymentsWork(page);
+    await page.addInitScript(() => {
+      localStorage.setItem('sinterklaas-payment', JSON.stringify({ poemCount: 1 }));
+    });
+    const events = await collectEvents(page);
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+    await page.fill('#poem-name', 'Oma Truus');
+    await page.locator('#poem-form button[type=submit]').click();
+    await page.locator('dialog[open]').waitFor();
+    await page.keyboard.press('Escape');
+    await page.locator('dialog[open]').waitFor({ state: 'detached' });
+
+    await expect.poll(() => named(events, 'Close payment modal')).toHaveLength(1);
+    expect(named(events, 'Form started')).toHaveLength(1);
+    expect(named(events, 'Show payment modal')[0]).toMatchObject({ detail: 'submit' });
+    expect(named(events, 'Close payment modal')[0]).toMatchObject({ detail: 'escape' });
+    expect(JSON.stringify(events)).not.toContain('Oma Truus');
+    await page.close();
+  }, 30_000);
+
+  it('counts a finished poem and where the writer came from', async () => {
+    const page = await createPage();
+    await page.route('**/api/poem/generate', route =>
+      route.fulfill({ status: 200, contentType: 'text/event-stream', body: poemStream('Een gedicht.') }));
+    const events = await collectEvents(page);
+    await page.goto(url('/?utm_source=Newsletter&utm_campaign=sint-2026&utm_medium=<b>'), { waitUntil: 'networkidle' });
+    await page.getByRole('button', { name: 'Begin met rijmen' }).click();
+    await page.fill('#poem-name', 'Sanne');
+    await page.locator('#poem-form button[type=submit]').click();
+    await page.getByText('Een gedicht.').waitFor({ timeout: 15_000 });
+
+    await expect.poll(() => named(events, 'Poem ready')).toHaveLength(1);
+    // Tags in lower case; one that is not a tag is dropped.
+    expect(named(events, 'Page view')[0]).toMatchObject({ path: '/', source: 'newsletter', campaign: 'sint-2026' });
+    expect(named(events, 'Page view')[0]).not.toHaveProperty('medium');
+    expect(named(events, 'Scroll to poem form')[0]).toMatchObject({ detail: 'hero' });
+    expect(named(events, 'Poem ready')[0]).toMatchObject({ detail: 'new', value: 1 });
+    await page.close();
+  }, 30_000);
+
+  it('records which blog post sends a writer to the form', async () => {
+    const page = await createPage();
+    const events = await collectEvents(page);
+    await page.goto(url('/blog/lootjes-trekken-tips'), { waitUntil: 'networkidle' });
+    await page.locator('[data-cta="blog:lootjes-trekken-tips"]').click();
+    await page.waitForURL(url('/'));
+    await expect.poll(() => named(events, 'Go to poem form')).toEqual([
+      expect.objectContaining({ detail: 'blog:lootjes-trekken-tips' }),
+    ]);
+    await page.close();
+  }, 30_000);
+});

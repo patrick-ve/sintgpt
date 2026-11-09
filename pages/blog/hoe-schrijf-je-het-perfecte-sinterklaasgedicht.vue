@@ -197,6 +197,7 @@ useHead({
             <p class="text-red-800 mb-6 font-medium">Maak 2 gedichten gratis en ontdek hoe makkelijk het kan zijn.</p>
             <NuxtLink
               to="/"
+        data-cta="blog:hoe-schrijf-je-het-perfecte-sinterklaasgedicht"
               class="inline-block px-8 py-3 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-transform transform hover:scale-105 text-lg border border-[#F4CD60]"
             >
               Schrijf je eerste gedicht gratis →

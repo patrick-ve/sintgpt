@@ -3,6 +3,10 @@ const { t } = useI18n();
 
 const isOpen = defineModel<boolean>({ default: false });
 
+// Why the window opened, for analytics: the second poem, a rewrite, or the
+// server's daily limit.
+const props = defineProps<{ trigger?: 'submit' | 'rewrite' | 'limit' }>();
+
 const dialogRef = ref<HTMLDialogElement | null>(null);
 
 const isLoading = ref(false);
@@ -11,6 +15,7 @@ const error = ref<string | null>(null);
 // `checkout` fires just before the page leaves for Dodo, so the form can be kept.
 const emit = defineEmits<{ restored: []; checkout: [] }>();
 const { claimPayment, paymentsUnavailable, refreshPaymentsStatus } = usePaymentTracking();
+const { track } = useAnalytics();
 
 // Buyers on another browser, or with a cookie from before Nov 2026, can get
 // access back with their payment ID. The server verifies it with Dodo.
@@ -22,20 +27,22 @@ const handleRestore = async () => {
   const paymentId = restoreId.value.trim();
   if (!/^pay_[A-Za-z0-9]+$/.test(paymentId)) {
     restoreError.value = t('payment.restore.invalid');
+    track('Restore failed', { detail: 'invalid' });
     return;
   }
 
   restoreError.value = null;
   isRestoring.value = true;
-  const status = await claimPayment(paymentId);
+  const status = await claimPayment(paymentId, 'restore');
   isRestoring.value = false;
 
   if (status === 'granted') {
-    (window as any).umami?.track('Access restored');
+    track('Access restored');
     isOpen.value = false;
     emit('restored');
   } else {
     restoreError.value = t(`payment.restore.${status === 'pending' ? 'pending' : 'failed'}`);
+    track('Restore failed', { detail: status });
   }
 };
 
@@ -43,8 +50,7 @@ const handleRestore = async () => {
 watch(isOpen, (newValue) => {
   if (newValue) {
     dialogRef.value?.showModal();
-    // Track analytics event
-    (window as any).umami?.track('Show payment modal');
+    track('Show payment modal', { detail: props.trigger });
     // Payments may have stopped or started working since the page loaded.
     refreshPaymentsStatus();
   } else {
@@ -68,17 +74,20 @@ const handleDialogClose = () => {
 // Handle backdrop click
 const handleBackdropClick = (event: MouseEvent) => {
   if (event.target === dialogRef.value) {
-    closeModal();
+    closeModal('backdrop');
   }
+};
+
+// Escape fires `cancel` before the dialog closes itself.
+const handleCancel = () => {
+  track('Close payment modal', { detail: 'escape' });
 };
 
 const handlePayment = async () => {
   error.value = null;
   isLoading.value = true;
 
-  // Track analytics event
-  (window as any).umami?.track('Proceed to payment');
-
+  // The server records "Proceed to payment" when Dodo gives a checkout.
   try {
     // Create checkout session
     const response = await $fetch<{ checkoutUrl: string }>(
@@ -103,8 +112,8 @@ const handlePayment = async () => {
     console.error('Error creating checkout:', err);
     isLoading.value = false;
     if (err.data?.data?.code === 'payments_unavailable') {
+      // The server records "Payments unavailable".
       paymentsUnavailable.value = true;
-      (window as any).umami?.track('Payments unavailable');
       return;
     }
     error.value = t('payment.error');
@@ -113,11 +122,12 @@ const handlePayment = async () => {
 
 // While payments do not work, the visitor can go on with free poems.
 const continueFree = () => {
-  closeModal();
+  closeModal('continue free');
   document.getElementById('poem-form')?.scrollIntoView({ block: 'start' });
 };
 
-const closeModal = () => {
+const closeModal = (how: 'button' | 'backdrop' | 'continue free') => {
+  track('Close payment modal', { detail: how });
   isOpen.value = false;
   error.value = null;
 };
@@ -128,6 +138,7 @@ const closeModal = () => {
     ref="dialogRef"
     class="payment-dialog"
     @close="handleDialogClose"
+    @cancel="handleCancel"
     @click="handleBackdropClick"
   >
     <div class="modal-container" @click.stop>
@@ -143,7 +154,7 @@ const closeModal = () => {
       <button
         type="button"
         class="close-btn"
-        @click="closeModal"
+        @click="closeModal('button')"
         aria-label="Sluiten"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

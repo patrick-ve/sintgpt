@@ -106,8 +106,11 @@ export const usePaymentTracking = () => {
 
   // Ask the server to verify a payment with Dodo. A payment can take a moment
   // to settle, so keep trying while it is pending or the request fails.
+  // `source` tells analytics whether a buyer came back from Dodo or typed
+  // their payment ID to restore access.
   const claimPayment = async (
     paymentId: string,
+    source: 'return' | 'restore' = 'return',
   ): Promise<'granted' | 'pending' | 'denied'> => {
     for (let attempt = 0; attempt < CLAIM_ATTEMPTS; attempt++) {
       if (attempt > 0) {
@@ -116,7 +119,7 @@ export const usePaymentTracking = () => {
       try {
         const { status } = await $fetch<{ status: 'granted' | 'pending' | 'denied' }>(
           '/api/payment/claim-access',
-          { method: 'POST', body: { paymentId } },
+          { method: 'POST', body: { paymentId, source } },
         );
         if (status === 'granted') {
           hasUnlimitedAccess.value = true;

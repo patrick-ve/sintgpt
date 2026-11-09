@@ -4,6 +4,12 @@ import type { PoemHistoryEntry } from '~/composables/usePoemHistory';
 const open = defineModel<boolean>('open', { default: false });
 const props = defineProps<{ activeId?: string | null }>();
 const emit = defineEmits<{ select: [entry: PoemHistoryEntry] }>();
+const { track } = useAnalytics();
+
+const removeEntry = (id: string) => {
+  track('Delete poem');
+  remove(id);
+};
 
 const { t, locale } = useI18n();
 const { entries, remove, clear } = usePoemHistory();
@@ -53,6 +59,7 @@ const onAfterLeave = () => {
 };
 
 const clearAll = () => {
+  track('Clear history', { value: entries.value.length });
   clear();
   confirmingClear.value = false;
 };
@@ -128,7 +135,7 @@ const clearAll = () => {
             size="lg"
             class="absolute top-1.5 right-1.5 size-11 justify-center text-[#8b1538]/50 hover:text-[#b91c4a] hover:bg-[#b91c4a]/10"
             :aria-label="t('history.deleteAria', { name: entry.recipient })"
-            @click="remove(entry.id)"
+            @click="removeEntry(entry.id)"
           />
         </li>
       </ul>

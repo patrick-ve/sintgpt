@@ -129,7 +129,6 @@ function formatTime(seconds: number): string {
         <button
           class="play-button w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-[#8b1538] to-[#5c0f26] rounded-full flex items-center justify-center border-3 border-[#d4a853] shadow-[0_4px_20px_rgba(139,21,56,0.6),0_0_30px_rgba(212,168,83,0.3)] transform transition duration-300 hover:scale-110 hover:shadow-[0_6px_30px_rgba(139,21,56,0.8),0_0_50px_rgba(212,168,83,0.5)]"
           aria-label="Play video"
-          data-umami-event="Play hero video"
         >
           <span class="ml-1.5 text-[#f4cd60] text-2xl md:text-3xl drop-shadow-lg">▶</span>
         </button>
