@@ -3,7 +3,7 @@
     slug="sinterklaas-op-het-werk"
     title="Sinterklaas op het werk: lootjes, gedichten en een feest voor iedereen"
     lead="Een sinterklaasviering op het werk brengt collega's dichter bij elkaar. Maar collega's zijn geen familie. Met goede afspraken en een gedicht dat plaagt zonder te prikken, wordt het een feest waar iedereen graag aan meedoet."
-    published="2026-11-09"
+    published="2026-10-27"
     :read-minutes="6"
     seo-title="Sinterklaas op het werk: tips voor collega's | SintGPT"
     seo-description="Sinterklaas vieren met collega's: vrijwillig meedoen, lootjes trekken, budget, een inclusieve toon en gedichten over collega's die leuk blijven."

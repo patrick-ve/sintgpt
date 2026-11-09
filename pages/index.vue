@@ -1944,6 +1944,11 @@ useHead({
   border-radius: 0.75rem;
   font-weight: 700;
   cursor: pointer;
+  /* The two buttons use different fonts, which sit at different heights in
+     their line box. Centre on the capitals instead, so both labels look
+     centred and their baselines line up. Browsers without text-box keep the
+     old look. */
+  text-box: trim-both cap alphabetic;
   transition-property: background-color, scale;
   transition-duration: 150ms;
   transition-timing-function: ease-out;

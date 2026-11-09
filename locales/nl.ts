@@ -288,7 +288,7 @@ export default {
   },
   examples: {
     title: 'Zo klinkt een gedicht van SintGPT',
-    intro: 'Echte gedichten van SintGPT, voor verzonnen mensen. Kies een stijl.',
+    intro: 'Echte gedichten gemaakt met SintGPT. Kies een stijl.',
     styleLabel: 'Kies een stijl',
     for: 'Voor',
     present: 'Cadeau',

@@ -286,7 +286,7 @@ export default {
   },
   examples: {
     title: 'This is how a SintGPT poem sounds',
-    intro: 'Real poems by SintGPT, for made-up people. Choose a style.',
+    intro: 'Real poems made with SintGPT. Choose a style.',
     styleLabel: 'Choose a style',
     for: 'For',
     present: 'Present',

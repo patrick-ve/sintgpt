@@ -3,7 +3,7 @@
     slug="rijm-en-ritme-sinterklaasgedicht"
     title="Rijm en ritme: zo klinkt je sinterklaasgedicht als een echt gedicht"
     lead="Een sinterklaasgedicht staat of valt met hoe het klinkt als je het voorleest. Met een paar regels over ritme en rijm hoor je zelf waar het hapert, en weet je hoe je het oplost."
-    published="2026-11-09"
+    published="2026-09-30"
     :read-minutes="7"
     seo-title="Rijm en ritme in een sinterklaasgedicht | SintGPT"
     seo-description="Heffingen tellen, staand en slepend rijm, AABB, ABAB, ABBA en de limerick: zo krijgt je sinterklaasgedicht een ritme dat lekker voorleest."

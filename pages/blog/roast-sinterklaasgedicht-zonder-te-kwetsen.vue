@@ -3,7 +3,7 @@
     slug="roast-sinterklaasgedicht-zonder-te-kwetsen"
     title="Een roast-gedicht schrijven zonder iemand te kwetsen"
     lead="Een sinterklaasgedicht dat iemand flink op de hak neemt, levert de grootste lach van de avond op. Mits de ontvanger zelf het hardst lacht. Zo plaag je stevig, maar met liefde."
-    published="2026-11-09"
+    published="2026-10-18"
     :read-minutes="6"
     seo-title="Roast-sinterklaasgedicht zonder te kwetsen | SintGPT"
     seo-description="Hoe je in een sinterklaasgedicht iemand stevig plaagt zonder te kwetsen: waar je wel en niet grappen over maakt, de check vooraf en een warm slot."
