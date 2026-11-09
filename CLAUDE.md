@@ -13,7 +13,7 @@ Package manager: **npm** (not yarn).
 - `npm run dev` - Development server (with `--host`)
 - `npm run build` - Production build (node-server preset; used by the tests)
 - `npm run build:cloudflare` - Build for Cloudflare Workers (`cloudflare_module` preset), then remove every comment from `.output` (`scripts/strip-comments.ts`; fails if one is left)
-- `npm run deploy` - Build for Cloudflare and deploy with Wrangler
+- `npm run deploy` - Build for Cloudflare and deploy with Wrangler. Claude does not run it: the `/deploy` skill (`.claude/skills/deploy/SKILL.md`) tests, builds and runs `node scripts/predeploy-check.mjs` (no `.env` or `.env.analytics` value in `.output`, no live Dodo key in `.env`), then the user runs `! npx wrangler --cwd .output deploy`, then `bash scripts/smoke-test.sh` checks the live site (read-only)
 - `npm run build:og` - Re-render the Open Graph images into `public/og/`
 - `npm run build:pdf-paper` - Re-render the PDF background from the CSS of `PaperScroll.vue`. Run after changing that component
 - `npx tsx scripts/build-sint-images.ts` - Crop `public/sint.png` to the avatar, favicons and share image. Run `build:og` after it
