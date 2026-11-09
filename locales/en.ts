@@ -223,7 +223,7 @@ export default {
       {
         question: 'Is my data stored?',
         answer:
-          "SintGPT does not keep your poems on a server unless you share them. They stay on your own device, under My poems. To write a poem we send what you enter to our AI services (Vercel AI Gateway and Google's AI model, or OpenAI's during an outage). So do not enter sensitive details. If you share a poem with a link, we keep it for 90 days at Cloudflare, and then it disappears by itself. Anyone with that link can read it. The first two lines can end up in server logs.",
+          'SintGPT does not keep your poems unless you share them. They stay on your own device, under My poems. To write a poem we send what you enter to the partners that write the poems for us. So do not enter sensitive details. If you share a poem with a link, we keep it for 90 days, and then it disappears by itself. Anyone with that link can read it. The first two lines can end up in our logs. The privacy statement lists these partners.',
       },
       {
         question:

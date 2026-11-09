@@ -225,7 +225,7 @@ export default {
       {
         question: 'Worden mijn gegevens opgeslagen?',
         answer:
-          "SintGPT bewaart je gedichten niet op een server, tenzij je ze deelt. Ze staan op je eigen apparaat, onder Mijn gedichten. Om een gedicht te schrijven sturen we wat je invult naar onze AI-diensten (Vercel AI Gateway en het AI-model van Google, of bij een storing dat van OpenAI). Vul dus geen gevoelige gegevens in. Deel je een gedicht met een link, dan bewaren we het 90 dagen bij Cloudflare, en daarna verdwijnt het vanzelf. Iedereen met die link kan het lezen. De eerste twee regels kunnen in serverlogs terechtkomen.",
+          'SintGPT bewaart je gedichten niet, tenzij je ze deelt. Ze staan op je eigen apparaat, onder Mijn gedichten. Om een gedicht te schrijven sturen we wat je invult naar de partijen die de gedichten voor ons schrijven. Vul dus geen gevoelige gegevens in. Deel je een gedicht met een link, dan bewaren we het 90 dagen, en daarna verdwijnt het vanzelf. Iedereen met die link kan het lezen. De eerste twee regels kunnen in onze logboeken terechtkomen. In de privacyverklaring lees je welke partijen dat zijn.',
       },
       {
         question:
