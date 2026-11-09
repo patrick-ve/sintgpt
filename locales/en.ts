@@ -111,6 +111,8 @@ export default {
     sampleTitle: 'Poem for Mark',
     sampleSignature: 'Sinterklaas and Pete',
     regenerate: 'Rewrite this poem',
+    wait: 'One moment: you can make a new poem in {seconds} seconds.',
+    fairUse: 'You have made 100 poems in the last 24 hours. That is the daily maximum. Please try again later.',
     sampleText:
       "There once was a fellow named Mark,\nWho turned every meal pitch-black dark.\nHe'll even burn toast,\nTill it looks like a ghost,\nAnd fills the whole house with a spark.\n\nGood Saint Nick brought a cookbook with dread,\nTo ensure that you actually get fed.\nPlease read every page,\nAnd lower the gauge,\nBefore you burn charcoal instead!",
   },
@@ -138,6 +140,8 @@ export default {
     contact: 'Contact us',
     nav: 'Footer',
     blog: 'Blog: tips and inspiration',
+    privacy: 'Privacy',
+    terms: 'Terms',
   },
   error: {
     title: 'Oops! Something went wrong.',
@@ -272,17 +276,165 @@ export default {
     remainingPoems: '{count} free poem remaining | {count} free poems remaining',
     unlimitedAccess: 'Unlimited access for just €6,99 (incl. VAT)',
     unlimitedUnlocked: 'Unlimited poems unlocked!',
+    unavailable: {
+      title: 'Payments are not working right now',
+      message: 'Our payment page does not work at the moment. Until it does, you can make up to 3 free poems today.',
+      continue: 'Continue with a free poem',
+      hint: 'Payments are not working right now, so you can make up to 3 free poems today.',
+      limitTitle: 'You have used the free poems for today',
+      limitMessage: 'Payments are not working right now. Tomorrow you can make free poems again. Problems? Email patrick@sintgpt.com.',
+    },
+    legal: {
+      before: 'You pay Dodo Payments. You get access at once, so the right of withdrawal ends when you have paid. Read the',
+      terms: 'terms',
+      middle: 'and the',
+      privacy: 'privacy statement',
+      after: '.',
+    },
   },
   video: {
     title: 'Sinterklaas talks about sintgpt.com',
   },
-  cookie: {
-    title: 'A sweet treat?',
-    message:
-      'The Saint uses cookies (and gingerbread nuts) to make this website work perfectly for you.',
-    required:
-      'You must accept cookies to generate a poem.',
-    accept: 'Delicious!',
-    decline: 'No thanks, Saint',
+  legal: {
+    back: 'Back to SintGPT',
+    updated: 'Last updated: 9 November 2026',
+    privacy: {
+      title: 'Privacy statement',
+      seoTitle: 'Privacy statement | SintGPT',
+      description: 'Which data SintGPT uses to write your Sinterklaas poem, where it goes and how long we keep it.',
+      intro: 'SintGPT writes Sinterklaas poems with AI. We use as little data as we can. This page says which data, what for and for how long.',
+      sections: [
+        {
+          heading: 'Who we are',
+          body: [
+            'SintGPT (sintgpt.com) is responsible for the data in this statement. You can reach us at patrick@sintgpt.com.',
+          ],
+        },
+        {
+          heading: 'What you fill in for a poem',
+          body: [
+            'To write a poem, we send what you fill in (such as the name, the present and the fun facts) to our AI services: Vercel AI Gateway and Google\'s AI model. During an outage we use OpenAI\'s model. These services can process the data outside the European Union.',
+            'SintGPT does not keep what you fill in on a server. We also do not write it to our logs. Do not fill in sensitive data, such as health, religion or addresses.',
+            'Legal basis: providing the service you ask for.',
+          ],
+        },
+        {
+          heading: 'On your own device',
+          body: [
+            'Your poems, your language choice and the number of free poems you used are kept in your browser\'s storage (localStorage). They do not leave your device. You delete them with "Clear all" under My poems, or by clearing the site data in your browser.',
+          ],
+        },
+        {
+          heading: 'Shared poems',
+          body: [
+            'When you share a poem with a short link, we keep the poem at Cloudflare (Workers KV) for 90 days. After that it removes itself. Anyone with the link can read it. With a long link, the poem is in the link itself. Its first lines can then end up in server logs.',
+          ],
+        },
+        {
+          heading: 'Your IP address',
+          body: [
+            'Free users can make 3 poems a day. To count them, we use your IP address. We do not keep it ourselves: Cloudflare keeps only a keyed hash and a counter. Both are deleted after 24 hours at most. For paying users we count per payment in the same way, with a maximum of 100 poems a day.',
+            'Cloudflare hosts the website and keeps technical logs, such as the time and the address of a request. We keep those logs for 7 days at most, to find outages and abuse.',
+            'Legal basis: our legitimate interest in keeping the service affordable, safe and available.',
+          ],
+        },
+        {
+          heading: 'Payments',
+          body: [
+            'You buy unlimited access from Dodo Payments. Dodo is the seller (merchant of record) and processes your name, email address and payment details under its own privacy policy. SintGPT only sees the payment ID, the status and the product of your payment.',
+            'After a successful payment we set the cookie "sintgpt-access" in your browser. It holds your payment ID and a signature, so we know you have paid. It is valid for one year and is necessary for the service you bought.',
+            'Legal basis: performing the agreement.',
+          ],
+        },
+        {
+          heading: 'Statistics',
+          body: [
+            'We count visits and a few actions (such as "poem made") with Umami. Umami uses no cookies and does not follow you across other websites. We see no names and no text you fill in.',
+            'Legal basis: our legitimate interest in improving the website.',
+          ],
+        },
+        {
+          heading: 'Cookies',
+          body: [
+            'SintGPT uses no tracking or advertising cookies. The only cookie is "sintgpt-access", after a payment. That is why we show no cookie notice.',
+          ],
+        },
+        {
+          heading: 'Email',
+          body: [
+            'When you email us, we use your email address and your message only to help you. We delete the email when we no longer need it.',
+          ],
+        },
+        {
+          heading: 'Your rights',
+          body: [
+            'You can ask us which data we have about you, and ask us to correct or delete it. You can also object to how we use it. Email patrick@sintgpt.com. We reply within one month.',
+            'If you disagree with how we handle your data, you can file a complaint with the Dutch Data Protection Authority (Autoriteit Persoonsgegevens).',
+          ],
+        },
+      ],
+    },
+    terms: {
+      title: 'Terms',
+      seoTitle: 'Terms | SintGPT',
+      description: 'The terms for using SintGPT and for unlimited access.',
+      intro: 'These terms apply when you use SintGPT. They are short, and we wrote them as clearly as we could.',
+      sections: [
+        {
+          heading: 'The service',
+          body: [
+            'SintGPT uses AI to write Sinterklaas poems from what you fill in. You can copy and share the poems and save them as a PDF.',
+          ],
+        },
+        {
+          heading: 'Free use',
+          body: [
+            'Your first poem is free. Each internet connection can make at most 3 free poems per 24 hours.',
+          ],
+        },
+        {
+          heading: 'Unlimited access',
+          body: [
+            'Unlimited access costs a one-time €6.99, including VAT. You get one year of access in the browser you paid with. In another browser, you restore your access with your payment ID.',
+            'Unlimited means: as many poems as you reasonably need, with a maximum of 100 poems per 24 hours. This keeps the service affordable.',
+            'You pay Dodo Payments. Dodo is the seller (merchant of record) and sends you the invoice. Dodo\'s terms also apply to the payment.',
+          ],
+        },
+        {
+          heading: 'Right of withdrawal',
+          body: [
+            'Unlimited access is a digital service that starts right after payment. When you pay, you ask for that immediate delivery. Because of this, your 14-day right of withdrawal ends once you have access.',
+            'Is something not working as it should? Email patrick@sintgpt.com and we will find a solution together.',
+          ],
+        },
+        {
+          heading: 'Poems by AI',
+          body: [
+            'The poems are written by AI. They can contain mistakes, rhyme badly or not suit the recipient. Always read a poem before you use it.',
+            'You are responsible for what you fill in and for what you do with a poem. Keep it fun, also with Roast and Spicy: do not use SintGPT to hurt, threaten or discriminate against anyone.',
+            'Only fill in details about other people if you know they are fine with it, and never fill in sensitive data.',
+          ],
+        },
+        {
+          heading: 'Using the poems',
+          body: [
+            'You may freely use, change and share the poems you make. The website itself, with its texts, images and code, remains SintGPT\'s.',
+          ],
+        },
+        {
+          heading: 'Availability and liability',
+          body: [
+            'We do our best to keep SintGPT working, but we cannot promise it. We can change the service or pause it, for example for maintenance or an outage at an AI service.',
+            'Our liability is limited to the amount you paid for unlimited access, except in case of intent or gross negligence.',
+          ],
+        },
+        {
+          heading: 'Other',
+          body: [
+            'Dutch law applies to these terms. We can change the terms. The date at the top shows when we last did. Questions? Email patrick@sintgpt.com.',
+          ],
+        },
+      ],
+    },
   },
 };

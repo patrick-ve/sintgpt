@@ -80,20 +80,30 @@ export async function verifyAccessToken(
   secret: string,
   nowMs = Date.now(),
 ): Promise<boolean> {
+  return (await readAccessToken(token, secret, nowMs)) !== null;
+}
+
+/** The payment ID in a valid, unexpired token, or null. */
+export async function readAccessToken(
+  token: string,
+  secret: string,
+  nowMs = Date.now(),
+): Promise<string | null> {
   const [version, paymentId, expiry, signature, ...rest] = token.split('.');
   if (version !== TOKEN_VERSION || !paymentId || !expiry || !signature || rest.length) {
-    return false;
+    return null;
   }
-  if (!(Number(expiry) * 1000 > nowMs)) return false;
+  if (!(Number(expiry) * 1000 > nowMs)) return null;
 
   const signatureBytes = fromHex(signature);
-  if (!signatureBytes) return false;
+  if (!signatureBytes) return null;
 
   // crypto.subtle.verify compares in constant time.
-  return crypto.subtle.verify(
+  const valid = await crypto.subtle.verify(
     'HMAC',
     await hmacKey(secret),
     signatureBytes,
     new TextEncoder().encode(`${version}.${paymentId}.${expiry}`),
   );
+  return valid ? paymentId : null;
 }

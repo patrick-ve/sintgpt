@@ -33,9 +33,6 @@
       </NuxtErrorBoundary>
 
       <NuxtPage />
-      <ClientOnly>
-        <CookieBanner />
-      </ClientOnly>
     </UApp>
   </div>
 </template>

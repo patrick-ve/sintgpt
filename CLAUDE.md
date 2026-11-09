@@ -33,7 +33,7 @@ Local Worker preview: `npm run build:cloudflare && npx wrangler --cwd .output de
 
 ### Poem generation
 1. Form in `pages/index.vue` → `usePoemGenerator` POSTs to `/api/poem/generate`.
-2. `server/api/poem/generate.post.ts`: rate limit (3/day/IP + 10 s debounce, skipped with the unlimited-access cookie), Zod validation, prompt from `server/utils/poem.ts`, `streamText` via AI Gateway.
+2. `server/api/poem/generate.post.ts`: rate limit (free: 3/day per IP; buyers: 100/day per payment; both with a 10 s debounce), Zod validation, prompt from `server/utils/poem.ts`, `streamText` via AI Gateway.
 3. Response is an AI SDK UI message stream (SSE), released word by word by `smoothStream`. The client parses it with `utils/poemStream.ts` (`text-delta` events; an `error` event throws so gateway failures show an error instead of an empty poem).
 4. `utils/smoothReveal.ts` shows the text at a steady pace with `requestAnimationFrame`, whatever way the chunks arrive. Reduced motion and hidden tabs show it at once. The writing animation is visible until the first text arrives, while the model reasons.
 5. The finished poem is saved to the on-device history (`usePoemHistory`, localStorage key `sintgpt-poem-history`, max 50) and shown in `PoemHistoryDrawer.vue`.
@@ -43,7 +43,10 @@ Notes:
 - Cloudflare: Workers do not buffer the stream and waiting on the gateway is no CPU time. `cache-control: no-transform` stops zone compression. `enable_request_signal` (in `nuxt.config.ts`) lets a client disconnect abort the gateway request.
 - Keep **temperature at 1** for Gemini 3.x. At 2 the model reasons for minutes and can stream garbled text.
 - Client IP for rate limiting: `cf-connecting-ip` first (trusted on Cloudflare), then X-Forwarded-For.
-- Rate limiting is in `server/utils/rateLimit.ts`. State is in memory, so on Workers it is per isolate, not global. A request counts before validation.
+- Rate limiting (`server/utils/poemRateLimit.ts`): on Cloudflare the `POEM_BURST` Rate Limiting binding refuses fast repeats (approximate, per location), then a Durable Object per IP or buyer (`server/durable/RateLimitCounter.ts`, binding `RATE_LIMITER`) keeps the strict, global count. The rule itself is `applyRateLimit` in `server/utils/rateLimit.ts`. If Cloudflare fails, and in the Node build, an in-memory limiter decides. A request counts before validation.
+- Counter names are an HMAC of the IP (IPv6 per /64) or payment ID, never the raw value. Each object deletes its data with an alarm when the 24-hour window ends. The privacy page says this, so keep them in line.
+- The Durable Object class must be exported from the Worker. `server/cloudflare-entry.ts` re-exports Nitro's `cloudflare-module` entry plus the class; `nuxt.config.ts` uses it only when `NITRO_PRESET` is a Cloudflare preset. A new or renamed class needs a new `migrations` tag (Free plan: `new_sqlite_classes` only).
+- 429 responses carry `data.reason`: `limit` (the page shows the upgrade offer), `debounce` and `fair-use` (the buyer cap; the page shows a message).
 - Visitor text is escaped by `asPromptData` before it goes between XML tags in the prompt, so it cannot close a tag or end the data block. Instructions refer to the tags and never repeat visitor text.
 - HTTP errors raised on purpose (e.g. 429) are re-thrown as-is; the client shows the upgrade offer on 429.
 
@@ -51,13 +54,16 @@ Notes:
 1. `PaymentModal` POSTs to `/api/payment/create-checkout` and redirects to Dodo's hosted checkout.
 2. Dodo returns the buyer to `/?payment_id=...&status=...`. These parameters are only a hint.
 3. `usePaymentTracking.claimPayment` POSTs the ID to `/api/payment/claim-access`. The server retrieves the payment from Dodo and checks status, product, refunds and disputes (`decidePaymentAccess`).
-4. If granted, the server sets the signed, HTTP-only `sintgpt-access` cookie (`server/utils/paymentAccess.ts`). `hasUnlimitedAccess` verifies the signature on each request.
+4. If granted, the server sets the signed, HTTP-only `sintgpt-access` cookie (`server/utils/paymentAccess.ts`). `hasUnlimitedAccess` verifies the signature on each request; `unlimitedAccessPaymentId` also returns the payment ID for the buyer cap.
+
+When Dodo refuses a checkout with 401 or 403 (for example "Live payments not enabled"), `create-checkout` stores a flag in KV for 15 minutes (`server/utils/paymentsStatus.ts`, key `status:payments-unavailable` in `POEM_LINKS`) and returns 503 with `data.code = 'payments_unavailable'`, never Dodo's text. `GET /api/payment/status` reads the flag. While it is set, the page does not offer payment: the client lifts its 1-poem limit, so only the server's 3/day applies, and the payment window explains the problem.
 
 Notes:
 - Buyers can restore access in `PaymentModal` with their payment ID, or through a `/?payment_id=pay_...` link. This uses the same server check. Anyone who has a valid ID can use it.
 - The browser never decides access. Do not trust query parameters, localStorage or unsigned cookies for it.
 - Refunds after the cookie is set do not revoke it (no database). A refunded payment cannot be claimed again.
 - The free limit is soft: 1 poem in localStorage, 3/day/IP on the server.
+- The payment window says that the buyer pays Dodo (merchant of record) and that the right of withdrawal ends at once, with links to `/voorwaarden` and `/privacy`.
 - `/api/webhooks/dodo-payments` verifies signatures and only logs events.
 
 ### Poem links (no database)
@@ -80,6 +86,10 @@ Notes:
 "Opslaan als PDF" builds the file in the browser (`utils/poemPdf.ts`, pdf-lib), so it uses no Worker CPU. It is loaded with a dynamic import, because pdf-lib is large.
 - The background `public/pdf/paper.jpg` is the empty scroll, rendered from the CSS of `PaperScroll.vue`.
 - The text is real text in Alegreya, with a Texturina drop cap (`public/pdf/`, SIL OFL). Long poems get a smaller size, then more pages. Keep the sizes and colours in line with `PaperScroll.vue`.
+
+### Privacy and terms
+`/privacy` and `/voorwaarden` render `components/LegalPage.vue` from `legal.*` in the locales. They state the limits (3/day, 100/day for buyers), the 90-day storage of short links, the 24-hour counters and the €6.99 price. Change them when the code changes; an e2e test checks the numbers.
+- There is no cookie banner. The site sets only the functional `sintgpt-access` cookie after payment, Umami is cookieless and the rest is localStorage for features the visitor uses. Do not add tracking cookies or third-party embeds without consent handling.
 
 ### SEO
 - The main address is `https://sintgpt.com`. `server/middleware/canonical-host.ts` redirects `www` to it. Each page sets its own canonical link.
@@ -131,4 +141,4 @@ The deployed files hold no comments. Source files keep theirs.
 - `tests/e2e/app.test.ts` - builds the app, starts the server and a headless browser: pages, OG tags, rate limiting, the history drawer at phone size, and one **live** poem via AI Gateway (skipped without a key; costs a few cents)
 
 ## Analytics (Umami events)
-`Generate poem`, `Poem generation failed`, `Open poem from history`, `Proceed to payment`, `Payment succeeded`, `Access restored`, `Copy share link`, `Open shared poem`, `Shared via WhatsApp/Email/Facebook`, `Copy to clipboard`, `Save as PDF`, `Regenerate poem`.
+`Generate poem`, `Poem generation failed`, `Open poem from history`, `Proceed to payment`, `Payment succeeded`, `Access restored`, `Copy share link`, `Open shared poem`, `Shared via WhatsApp/Email/Facebook`, `Copy to clipboard`, `Save as PDF`, `Regenerate poem`, `Payments unavailable`.

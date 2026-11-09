@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   ACCESS_TTL_SECONDS,
   decidePaymentAccess,
+  readAccessToken,
   signAccessToken,
   verifyAccessToken,
 } from '../../server/utils/paymentAccess';
@@ -78,5 +79,17 @@ describe('dodoEnvironment', () => {
     expect(dodoEnvironment('dodo_live_abc')).toBe('live_mode');
     expect(dodoEnvironment('dodo_test_abc')).toBe('test_mode');
     expect(dodoEnvironment('anything-else')).toBe('test_mode');
+  });
+});
+
+describe('readAccessToken', () => {
+  const secret = 'test-secret';
+
+  it('returns the payment ID of a valid token', async () => {
+    expect(await readAccessToken(await signAccessToken('pay_abc', secret), secret)).toBe('pay_abc');
+  });
+
+  it('returns null for a token signed with another secret', async () => {
+    expect(await readAccessToken(await signAccessToken('pay_abc', 'other'), secret)).toBeNull();
   });
 });

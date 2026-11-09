@@ -271,6 +271,10 @@ useHead({
            <span>🐴</span>
            <span>🥕</span>
         </div>
+        <nav class="mb-6 flex justify-center gap-6 font-bold" aria-label="Voettekst">
+          <NuxtLink to="/privacy" class="underline underline-offset-4">Privacy</NuxtLink>
+          <NuxtLink to="/voorwaarden" class="underline underline-offset-4">{{ locale === 'nl' ? 'Voorwaarden' : 'Terms' }}</NuxtLink>
+        </nav>
         <p class="font-bold text-lg">
          Copyright {{ new Date().getFullYear() }} SintGPT. Alle rechten voorbehouden.
         </p>

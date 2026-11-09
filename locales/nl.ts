@@ -111,6 +111,8 @@ export default {
     sampleTitle: 'Gedicht voor Daan (7)',
     sampleSignature: 'Sint en Piet',
     regenerate: 'Herschrijf dit gedicht',
+    wait: 'Even geduld: je kunt over {seconds} seconden een nieuw gedicht maken.',
+    fairUse: 'Je hebt de afgelopen 24 uur 100 gedichten gemaakt. Dat is het maximum per dag. Probeer het later opnieuw.',
     sampleText:
       'Daan is al zeven en een held in het doel,\nals keeper bij de F-jes houd jij het hoofd koel.\nEn na elke wedstrijd eet jij voor de trek,\neen berg pannenkoeken met stroop tot je nek!\n\nDe Pieten stonden te juichen langs de lijn,\nwant ballen tegenhouden vind jij reuze fijn.\nDaarom brengt de Sint nu iets moois voor op het veld:\neen prachtige voetbal voor deze grote held!',
   },
@@ -138,6 +140,8 @@ export default {
     contact: 'Neem contact op',
     nav: 'Voettekst',
     blog: 'Blog: tips en inspiratie',
+    privacy: 'Privacy',
+    terms: 'Voorwaarden',
   },
   error: {
     title: 'Oeps! Er ging iets mis.',
@@ -273,17 +277,165 @@ export default {
     remainingPoems: '{count} gratis gedicht over | {count} gratis gedichten over',
     unlimitedAccess: 'Onbeperkt toegang voor slechts €6,99 (incl. BTW)',
     unlimitedUnlocked: 'Onbeperkt gedichten ontgrendeld!',
+    unavailable: {
+      title: 'Betalen lukt nu even niet',
+      message: 'Onze betaalpagina werkt op dit moment niet. Tot die weer werkt, mag je vandaag tot 3 gedichten gratis maken.',
+      continue: 'Verder met een gratis gedicht',
+      hint: 'Betalen lukt nu even niet, dus je mag vandaag tot 3 gedichten gratis maken.',
+      limitTitle: 'Je hebt de gratis gedichten van vandaag gebruikt',
+      limitMessage: 'Betalen lukt nu even niet. Morgen kun je weer gratis gedichten maken. Lukt het niet? Mail naar patrick@sintgpt.com.',
+    },
+    legal: {
+      before: 'Je betaalt aan Dodo Payments. Je krijgt direct toegang, dus het herroepingsrecht vervalt zodra je betaald hebt. Lees de',
+      terms: 'voorwaarden',
+      middle: 'en de',
+      privacy: 'privacyverklaring',
+      after: '.',
+    },
   },
   video: {
     title: 'Sinterklaas over sintgpt.com',
   },
-  cookie: {
-    title: 'Pepernootje erbij?',
-    message:
-      'De Sint gebruikt cookies (en pepernoten) om deze website optimaal voor jou te laten werken.',
-    required:
-      'Je moet cookies accepteren om een gedicht te kunnen genereren.',
-    accept: 'Lekker!',
-    decline: 'Nee bedankt, Sint',
+  legal: {
+    back: 'Terug naar SintGPT',
+    updated: 'Laatst bijgewerkt: 9 november 2026',
+    privacy: {
+      title: 'Privacyverklaring',
+      seoTitle: 'Privacyverklaring | SintGPT',
+      description: 'Welke gegevens SintGPT gebruikt om je sinterklaasgedicht te maken, waar ze heen gaan en hoe lang we ze bewaren.',
+      intro: 'SintGPT maakt sinterklaasgedichten met AI. We gebruiken zo min mogelijk gegevens. Hier lees je welke, waarvoor en hoe lang.',
+      sections: [
+        {
+          heading: 'Wie we zijn',
+          body: [
+            'SintGPT (sintgpt.com) is verantwoordelijk voor de gegevens in deze verklaring. Je bereikt ons via patrick@sintgpt.com.',
+          ],
+        },
+        {
+          heading: 'Wat je invult voor een gedicht',
+          body: [
+            'Om een gedicht te schrijven sturen we wat je in het formulier invult (zoals de naam, het cadeau en de weetjes) naar onze AI-diensten: Vercel AI Gateway en het AI-model van Google. Bij een storing gebruiken we het model van OpenAI. Deze diensten kunnen de gegevens buiten de Europese Unie verwerken.',
+            'SintGPT bewaart wat je invult niet op een server. We schrijven het ook niet in onze logs. Vul geen gevoelige gegevens in, zoals gezondheid, geloof of adressen.',
+            'Grondslag: het uitvoeren van de dienst waar je om vraagt.',
+          ],
+        },
+        {
+          heading: 'Op je eigen apparaat',
+          body: [
+            'Je gedichten, je taalkeuze en het aantal gratis gedichten dat je gebruikte staan in de opslag van je browser (localStorage). Ze verlaten je apparaat niet. Je wist ze met "Alles wissen" onder Mijn gedichten, of door de websitegegevens in je browser te wissen.',
+          ],
+        },
+        {
+          heading: 'Gedeelde gedichten',
+          body: [
+            'Deel je een gedicht met een korte link, dan bewaren we het gedicht 90 dagen bij Cloudflare (Workers KV). Daarna verdwijnt het vanzelf. Iedereen met de link kan het lezen. Bij een lange link staat het gedicht in de link zelf. De eerste regels kunnen dan in de serverlogs komen.',
+          ],
+        },
+        {
+          heading: 'Je IP-adres',
+          body: [
+            'Gratis gebruikers mogen 3 gedichten per dag maken. Om dat te tellen gebruiken we je IP-adres. We bewaren het niet zelf: Cloudflare bewaart alleen een versleutelde afgeleide (een hash) en een teller. Die verdwijnen na hooguit 24 uur. Voor betalende gebruikers tellen we op dezelfde manier per betaling, met een maximum van 100 gedichten per dag.',
+            'Cloudflare host de website en houdt technische logs bij, zoals het tijdstip en het adres van een aanvraag. Die logs bewaren we hooguit 7 dagen, om storingen en misbruik op te sporen.',
+            'Grondslag: ons gerechtvaardigd belang om de dienst betaalbaar, veilig en beschikbaar te houden.',
+          ],
+        },
+        {
+          heading: 'Betalen',
+          body: [
+            'Onbeperkt toegang koop je bij Dodo Payments. Dodo is de verkoper (merchant of record) en verwerkt je naam, e-mailadres en betaalgegevens volgens zijn eigen privacybeleid. SintGPT krijgt alleen het betalings-ID, de status en het product van je betaling te zien.',
+            'Na een geslaagde betaling zetten we het cookie "sintgpt-access" in je browser. Het bevat je betalings-ID en een handtekening, zodat we weten dat je betaald hebt. Het is een jaar geldig en is nodig voor de dienst die je kocht.',
+            'Grondslag: het uitvoeren van de overeenkomst.',
+          ],
+        },
+        {
+          heading: 'Statistieken',
+          body: [
+            'We tellen bezoeken en een paar handelingen (zoals "gedicht gemaakt") met Umami. Umami gebruikt geen cookies en volgt je niet over andere websites. We zien geen namen en geen ingevulde teksten.',
+            'Grondslag: ons gerechtvaardigd belang om de website te verbeteren.',
+          ],
+        },
+        {
+          heading: 'Cookies',
+          body: [
+            'SintGPT gebruikt geen tracking- of advertentiecookies. Het enige cookie is "sintgpt-access", na een betaling. Daarom tonen we geen cookiemelding.',
+          ],
+        },
+        {
+          heading: 'E-mail',
+          body: [
+            'Mail je ons, dan gebruiken we je e-mailadres en je bericht alleen om je te helpen. We verwijderen de mail als we hem niet meer nodig hebben.',
+          ],
+        },
+        {
+          heading: 'Je rechten',
+          body: [
+            'Je mag ons vragen welke gegevens we van je hebben, en vragen om ze te verbeteren of te verwijderen. Je mag ook bezwaar maken tegen het gebruik. Mail daarvoor naar patrick@sintgpt.com. We antwoorden binnen een maand.',
+            'Ben je het niet eens met hoe we met je gegevens omgaan? Dan kun je een klacht indienen bij de Autoriteit Persoonsgegevens.',
+          ],
+        },
+      ],
+    },
+    terms: {
+      title: 'Voorwaarden',
+      seoTitle: 'Voorwaarden | SintGPT',
+      description: 'De voorwaarden voor het gebruik van SintGPT en voor onbeperkt toegang.',
+      intro: 'Deze voorwaarden gelden als je SintGPT gebruikt. Ze zijn kort, en we hebben ze zo duidelijk mogelijk geschreven.',
+      sections: [
+        {
+          heading: 'De dienst',
+          body: [
+            'SintGPT schrijft met AI sinterklaasgedichten op basis van wat je invult. Je kunt de gedichten kopiëren, delen en als PDF opslaan.',
+          ],
+        },
+        {
+          heading: 'Gratis gebruik',
+          body: [
+            'Je eerste gedicht is gratis. Per internetaansluiting kun je hooguit 3 gratis gedichten per 24 uur maken.',
+          ],
+        },
+        {
+          heading: 'Onbeperkt toegang',
+          body: [
+            'Onbeperkt toegang kost eenmalig €6,99, inclusief btw. Je krijgt een jaar toegang in de browser waarmee je betaalde. In een andere browser herstel je je toegang met je betalings-ID.',
+            'Onbeperkt betekent: zoveel gedichten als je redelijkerwijs nodig hebt, met een maximum van 100 gedichten per 24 uur. Zo houden we de dienst betaalbaar.',
+            'Je betaalt aan Dodo Payments. Dodo is de verkoper (merchant of record) en stuurt je de factuur. Voor de betaling gelden ook de voorwaarden van Dodo.',
+          ],
+        },
+        {
+          heading: 'Herroepingsrecht',
+          body: [
+            'Onbeperkt toegang is een digitale dienst die direct na de betaling begint. Als je betaalt, vraag je om die directe levering. Daardoor vervalt je herroepingsrecht van 14 dagen zodra je toegang hebt.',
+            'Werkt er iets niet zoals het hoort? Mail naar patrick@sintgpt.com, dan zoeken we samen een oplossing.',
+          ],
+        },
+        {
+          heading: 'Gedichten van AI',
+          body: [
+            'De gedichten worden door AI geschreven. Ze kunnen fouten bevatten, niet goed rijmen of niet passen bij de ontvanger. Lees een gedicht dus altijd na voordat je het gebruikt.',
+            'Je bent zelf verantwoordelijk voor wat je invult en voor wat je met een gedicht doet. Houd het leuk, ook bij Roast en Pikant: gebruik SintGPT niet om iemand te kwetsen, te bedreigen of te discrimineren.',
+            'Vul alleen gegevens over anderen in als je weet dat zij dat goed vinden, en vul nooit gevoelige gegevens in.',
+          ],
+        },
+        {
+          heading: 'Gebruik van de gedichten',
+          body: [
+            'Je mag de gedichten die je maakt vrij gebruiken, aanpassen en delen. De website zelf, met de teksten, afbeeldingen en code, blijft van SintGPT.',
+          ],
+        },
+        {
+          heading: 'Beschikbaarheid en aansprakelijkheid',
+          body: [
+            'We doen ons best om SintGPT altijd te laten werken, maar we beloven dat niet. We kunnen de dienst aanpassen of tijdelijk stopzetten, bijvoorbeeld bij onderhoud of een storing bij een AI-dienst.',
+            'Onze aansprakelijkheid is beperkt tot het bedrag dat je voor onbeperkt toegang betaalde, behalve bij opzet of grove nalatigheid.',
+          ],
+        },
+        {
+          heading: 'Overig',
+          body: [
+            'Op deze voorwaarden is Nederlands recht van toepassing. We kunnen de voorwaarden aanpassen. De datum bovenaan laat zien wanneer dat voor het laatst gebeurde. Vragen? Mail naar patrick@sintgpt.com.',
+          ],
+        },
+      ],
+    },
   },
 };

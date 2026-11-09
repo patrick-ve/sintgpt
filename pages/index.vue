@@ -15,8 +15,9 @@ const {
   storedTrialPoem,
   storedTrialPoemName,
   saveTrialPoem,
+  paymentsUnavailable,
+  refreshPaymentsStatus,
 } = usePaymentTracking();
-const { hasAcceptedCookies, showConsentBanner } = useCookieConsent();
 const poemHistory = usePoemHistory();
 const historyEntries = poemHistory.entries;
 const route = useRoute();
@@ -167,17 +168,13 @@ const scrollToFaq = () => {
 type PoemFormData = typeof formData.value;
 const lastRequest = ref<PoemFormData | null>(null);
 
-// Cookies and the free limit apply to a rewrite as well.
-const canStartGeneration = (): boolean => {
-  if (!import.meta.dev && !hasAcceptedCookies.value) {
-    showConsentBanner(true);
-    return false;
-  }
-  if (!import.meta.dev && !canGeneratePoem.value) {
-    showPaymentModal.value = true;
-    return false;
-  }
-  return true;
+// The free limit applies to a rewrite as well. While payments do not work,
+// the page does not ask for one: only the server's daily limit applies.
+const canStartGeneration = async (): Promise<boolean> => {
+  if (import.meta.dev || canGeneratePoem.value) return true;
+  if (!(await refreshPaymentsStatus())) return true;
+  showPaymentModal.value = true;
+  return false;
 };
 
 const runGeneration = async (request: PoemFormData, regenerate = false) => {
@@ -229,13 +226,13 @@ const handleSubmit = async () => {
     document.getElementById('poem-name')?.focus();
     return;
   }
-  if (!canStartGeneration()) return;
+  if (!(await canStartGeneration())) return;
   await runGeneration(formData.value);
 };
 
 const regeneratePoem = async () => {
   if (!lastRequest.value || isLoading.value) return;
-  if (!canStartGeneration()) return;
+  if (!(await canStartGeneration())) return;
   await runGeneration(lastRequest.value, true);
 };
 
@@ -1072,6 +1069,7 @@ useHead({
               </button>
               <p class="flex-[1_1_220px] text-[0.9375rem] text-[#5c0f26]">
                 <template v-if="isPaid">{{ t('payment.unlimitedUnlocked') }}</template>
+                <template v-else-if="paymentsUnavailable">{{ t('payment.unavailable.hint') }}</template>
                 <template v-else>{{ t('payment.remainingPoems', { count: remainingFreePoems }) }}.</template>
                 {{ t('form.submit.time') }}
               </p>
@@ -1102,19 +1100,29 @@ useHead({
                   alt=""
                   class="w-36 h-36 rounded-full object-cover ring-4 ring-[#f4cd60] mb-6"
                 />
-                <h3 id="poem-title" class="text-2xl font-bold text-[#8b1538] mb-3 font-display">
-                  {{ t('payment.limitReached') }}
-                </h3>
-                <p class="text-[#5c0f26] mb-8 max-w-md font-medium">
-                  {{ t('payment.description') }}
-                </p>
-                <button
-                  type="button"
-                  class="btn-festive px-8 py-4 text-lg"
-                  @click="showPaymentModal = true"
-                >
-                  {{ t('payment.unlimitedAccess') }}
-                </button>
+                <template v-if="paymentsUnavailable">
+                  <h3 id="poem-title" class="text-2xl font-bold text-[#8b1538] mb-3 font-display">
+                    {{ t('payment.unavailable.limitTitle') }}
+                  </h3>
+                  <p class="text-[#5c0f26] max-w-md font-medium">
+                    {{ t('payment.unavailable.limitMessage') }}
+                  </p>
+                </template>
+                <template v-else>
+                  <h3 id="poem-title" class="text-2xl font-bold text-[#8b1538] mb-3 font-display">
+                    {{ t('payment.limitReached') }}
+                  </h3>
+                  <p class="text-[#5c0f26] mb-8 max-w-md font-medium">
+                    {{ t('payment.description') }}
+                  </p>
+                  <button
+                    type="button"
+                    class="btn-festive px-8 py-4 text-lg"
+                    @click="showPaymentModal = true"
+                  >
+                    {{ t('payment.unlimitedAccess') }}
+                  </button>
+                </template>
               </div>
 
               <template v-else>
@@ -1361,6 +1369,18 @@ useHead({
             class="inline-flex items-center min-h-11 px-4 rounded-md border-2 border-[#d4a853] text-[#f4cd60] font-bold hover:bg-[#d4a853]/15"
           >
             {{ t('footer.blog') }}
+          </NuxtLink>
+          <NuxtLink
+            to="/privacy"
+            class="inline-flex items-center min-h-11 px-4 rounded-md border-2 border-[#d4a853] text-[#f4cd60] font-bold hover:bg-[#d4a853]/15"
+          >
+            {{ t('footer.privacy') }}
+          </NuxtLink>
+          <NuxtLink
+            to="/voorwaarden"
+            class="inline-flex items-center min-h-11 px-4 rounded-md border-2 border-[#d4a853] text-[#f4cd60] font-bold hover:bg-[#d4a853]/15"
+          >
+            {{ t('footer.terms') }}
           </NuxtLink>
           <UButton
             as="a"
