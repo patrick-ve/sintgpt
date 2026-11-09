@@ -21,6 +21,7 @@ const {
   refreshPaymentsStatus,
 } = usePaymentTracking();
 const poemHistory = usePoemHistory();
+const { track } = useAnalytics();
 const historyEntries = poemHistory.entries;
 const route = useRoute();
 
@@ -64,9 +65,10 @@ onMounted(async () => {
     const claim = await claimPayment(paymentId);
     if (claim === 'granted') {
       paymentStatus.value = 'success';
-      (window as any).umami?.track('Payment succeeded');
+      track('Payment succeeded');
     } else {
       paymentStatus.value = claim === 'pending' ? 'pending' : 'failed';
+      track('Payment returned', { detail: claim });
     }
     // While pending, keep the ID in the URL so a reload checks again.
     if (claim !== 'pending') {
@@ -74,6 +76,7 @@ onMounted(async () => {
     }
   } else if (route.query.payment === 'cancelled') {
     paymentStatus.value = 'cancelled';
+    track('Payment returned', { detail: 'cancelled' });
     router.replace({ query: {} });
   }
 });
@@ -99,6 +102,7 @@ const restoreForm = (draft: Partial<PoemFormData>) => {
 
 // The next step after paying: write the poem from the restored form.
 const continueAfterPayment = async () => {
+  track('Continue after payment');
   dismissPaymentStatus();
   scrollToForm();
   await handleSubmit();
@@ -188,7 +192,10 @@ const inputUi = {
 
 const selectedLocale = computed({
   get: () => locale.value,
-  set: (value) => setLocale(value),
+  set: (value) => {
+    setLocale(value);
+    track('Switch language', { detail: value });
+  },
 });
 
 const copySuccess = ref(false);
@@ -199,12 +206,18 @@ const poemSectionRef = ref<HTMLElement | null>(null);
 const scrollBehavior = (): ScrollBehavior =>
   window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
 
+const startFromHero = () => {
+  track('Scroll to poem form', { detail: 'hero' });
+  scrollToForm();
+};
+
 const scrollToForm = () => {
   const el = document.getElementById('poem-form');
   el?.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
 };
 
 const scrollToFaq = () => {
+  track('Scroll to FAQ');
   const el = document.getElementById('faq-section');
   el?.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
 };
@@ -216,14 +229,38 @@ const scrollToFaq = () => {
 type PoemFormData = typeof formData.value;
 const lastRequest = ref<PoemFormData | null>(null);
 
+// Why the payment window opened, for analytics.
+const paymentTrigger = ref<'submit' | 'rewrite' | 'limit'>('submit');
+const openPaymentModal = (trigger: 'submit' | 'rewrite' | 'limit') => {
+  paymentTrigger.value = trigger;
+  showPaymentModal.value = true;
+};
+
 // The free limit applies to a rewrite as well. While payments do not work,
 // the page does not ask for one: only the server's daily limit applies.
-const canStartGeneration = async (): Promise<boolean> => {
+const canStartGeneration = async (trigger: 'submit' | 'rewrite'): Promise<boolean> => {
   if (import.meta.dev || canGeneratePoem.value) return true;
   if (!(await refreshPaymentsStatus())) return true;
-  showPaymentModal.value = true;
+  openPaymentModal(trigger);
   return false;
 };
+
+// The first time the visitor types or picks something in the form.
+let formStarted = false;
+const onFormActivity = () => {
+  if (formStarted) return;
+  formStarted = true;
+  track('Form started');
+};
+
+const startFromExamples = () => {
+  track('Scroll to poem form', { detail: 'examples' });
+  scrollToForm();
+};
+
+watch(showHistory, (open) => {
+  if (open) track('Open history');
+});
 
 const runGeneration = async (request: PoemFormData, regenerate = false) => {
   // Scroll to poem section on mobile immediately so user sees loading state
@@ -247,7 +284,7 @@ const runGeneration = async (request: PoemFormData, regenerate = false) => {
   if (!error.value && !isRateLimitError.value && poem.value) {
     incrementPoemCount();
 
-    (window as any).umami?.track(regenerate ? 'Regenerate poem' : 'Generate poem');
+    // The server records "Generate poem" and "Regenerate poem", with the cost.
 
     // Keep it in the on-device history drawer
     const saved = poemHistory.add({
@@ -260,6 +297,8 @@ const runGeneration = async (request: PoemFormData, regenerate = false) => {
       share: generatedShare.value,
     });
     activeHistoryId.value = saved.id;
+    // How many poems this device has (the history keeps up to 50).
+    track('Poem ready', { detail: regenerate ? 'rewrite' : 'new', value: historyEntries.value.length });
 
     // Save trial poem for unpaid users so it persists across page refreshes
     if (!isPaid.value) {
@@ -271,16 +310,17 @@ const runGeneration = async (request: PoemFormData, regenerate = false) => {
 const handleSubmit = async () => {
   if (!isFormValid.value) {
     showNameError.value = true;
+    track('Form refused', { detail: 'no name' });
     document.getElementById('poem-name')?.focus();
     return;
   }
-  if (!(await canStartGeneration())) return;
+  if (!(await canStartGeneration('submit'))) return;
   await runGeneration(formData.value);
 };
 
 const regeneratePoem = async () => {
   if (!lastRequest.value || isLoading.value) return;
-  if (!(await canStartGeneration())) return;
+  if (!(await canStartGeneration('rewrite'))) return;
   await runGeneration(lastRequest.value, true);
 };
 
@@ -290,11 +330,13 @@ const copyToClipboard = async () => {
   try {
     await navigator.clipboard.writeText(poem.value);
     copySuccess.value = true;
+    track('Copy to clipboard');
     setTimeout(() => {
       copySuccess.value = false;
     }, 2000);
   } catch (err) {
     console.error('Failed to copy:', err);
+    track('Copy failed');
   }
 };
 
@@ -361,7 +403,7 @@ const copyShareLink = async () => {
     await navigator.clipboard.writeText((await link) ?? '');
   }
   linkCopied.value = true;
-  (window as any).umami?.track('Copy share link');
+  track('Copy share link');
   setTimeout(() => {
     linkCopied.value = false;
   }, 2000);
@@ -401,9 +443,10 @@ const savePoemPdf = async () => {
     link.download = poemPdfFileName(displayedRecipient.value);
     link.click();
     setTimeout(() => URL.revokeObjectURL(href), 60_000);
-    (window as any).umami?.track('Save as PDF');
+    track('Save as PDF');
   } catch (error) {
     console.error('Failed to save PDF:', error);
+    track('PDF failed');
     pdfFailed.value = true;
   } finally {
     isSavingPdf.value = false;
@@ -420,7 +463,7 @@ const getPoemWithAttribution = () => {
 };
 
 const shareViaWhatsApp = () => {
-  (window as any).umami?.track('Shared via WhatsApp');
+  track('Shared via WhatsApp');
   openWithShareLink((link) => {
     const text = link ? `${poemTitle.value}\n${link}` : getPoemWithAttribution();
     return `https://wa.me/?text=${encodeURIComponent(text)}`;
@@ -430,12 +473,12 @@ const shareViaWhatsApp = () => {
 const shareViaEmail = () => {
   const subject = encodeURIComponent(poemTitle.value);
   const body = encodeURIComponent(getPoemWithAttribution());
-  (window as any).umami?.track('Shared via Email');
+  track('Shared via Email');
   window.location.href = `mailto:?subject=${subject}&body=${body}`;
 };
 
 const shareViaFacebook = () => {
-  (window as any).umami?.track('Shared via Facebook');
+  track('Shared via Facebook');
   openWithShareLink(link =>
     `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link ?? window.location.origin)}`,
   );
@@ -470,7 +513,7 @@ const openPoemFromHistory = (entry: PoemHistoryEntry) => {
   displayedRecipient.value = entry.recipient;
   activeHistoryId.value = entry.id;
   lastRequest.value = null;
-  (window as any).umami?.track('Open poem from history');
+  track('Open poem from history');
   nextTick(() => {
     poemSectionRef.value?.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
   });
@@ -806,15 +849,13 @@ useHead({
           <div class="flex flex-col sm:flex-row sm:flex-wrap gap-3">
             <button
               type="button"
-              data-umami-event="Scroll to poem form"
               class="hero-action min-h-14 px-8 bg-[#f4cd60] text-[#3d0716] font-display text-xl hover:bg-[#ffe08a]"
-              @click="scrollToForm"
+              @click="startFromHero"
             >
               {{ t('hero.cta') }}
             </button>
             <button
               type="button"
-              data-umami-event="Scroll to FAQ"
               class="hero-action min-h-14 px-6 border-2 border-[#d4a853] text-[#f4cd60] text-lg hover:bg-[#d4a853]/15"
               @click="scrollToFaq"
             >
@@ -864,6 +905,8 @@ useHead({
             novalidate
             class="flex-[1_1_560px] min-w-0 flex flex-col gap-7"
             @submit.prevent="handleSubmit"
+            @input="onFormActivity"
+            @change="onFormActivity"
           >
             <!-- Step 1: who -->
             <fieldset class="form-step">
@@ -1178,7 +1221,7 @@ useHead({
                   <button
                     type="button"
                     class="btn-festive px-8 py-4 text-lg"
-                    @click="showPaymentModal = true"
+                    @click="openPaymentModal('limit')"
                   >
                     {{ t('payment.unlimitedAccess') }}
                   </button>
@@ -1262,7 +1305,6 @@ useHead({
                 type="button"
                 class="poem-action"
                 :disabled="!poem"
-                data-umami-event="Copy to clipboard"
                 @click="copyToClipboard"
               >
                 <UIcon name="i-heroicons-clipboard-document" class="size-[1.125rem]" aria-hidden="true" />
@@ -1344,7 +1386,7 @@ useHead({
     </section>
 
     <!-- Example poems in every style -->
-    <ExamplePoems @start="scrollToForm" />
+    <ExamplePoems @start="startFromExamples" />
 
     <!-- Sinterklaas video message -->
     <section class="container mx-auto px-6 py-12 relative z-10">
@@ -1467,6 +1509,7 @@ useHead({
             as="a"
             href="mailto:patrick@sintgpt.com"
             size="lg"
+            @click="track('Contact')"
             variant="outline"
             class="border-2 border-[#d4a853] text-[#f4cd60] hover:bg-[#d4a853] hover:text-[#5c0f26] transition rounded-xl"
             icon="i-heroicons-envelope"
@@ -1502,7 +1545,7 @@ useHead({
 
     <!-- Payment Modal -->
     <ClientOnly>
-      <PaymentModal v-model="showPaymentModal" @restored="paymentStatus = 'success'" @checkout="saveFormForCheckout" />
+      <PaymentModal v-model="showPaymentModal" :trigger="paymentTrigger" @restored="paymentStatus = 'success'" @checkout="saveFormForCheckout" />
     </ClientOnly>
 
     <!-- Earlier poems, stored on this device -->
@@ -1901,6 +1944,11 @@ useHead({
   border-radius: 0.75rem;
   font-weight: 700;
   cursor: pointer;
+  /* The two buttons use different fonts, which sit at different heights in
+     their line box. Centre on the capitals instead, so both labels look
+     centred and their baselines line up. Browsers without text-box keep the
+     old look. */
+  text-box: trim-both cap alphabetic;
   transition-property: background-color, scale;
   transition-duration: 150ms;
   transition-timing-function: ease-out;

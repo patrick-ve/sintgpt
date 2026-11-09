@@ -7,6 +7,7 @@ import {
   streamText,
   toUIMessageStream,
 } from 'ai';
+import { formFacts, trackServerEvent } from '../../utils/analytics';
 import { clientDisconnectSignal } from '../../utils/clientDisconnect';
 import { unlimitedAccessPaymentId } from '../../utils/paymentCookie';
 import { checkPoemRateLimit, rateLimitIp } from '../../utils/poemRateLimit';
@@ -50,6 +51,7 @@ export default defineEventHandler(async (event) => {
         const reason = verdict.reason === 'limit' && hasUnlimited ? 'fair-use' : verdict.reason;
         // No IP in the log: the reason is enough to see abuse.
         consola.warn(`Rate limit: ${reason}`);
+        trackServerEvent(event, 'Rate limited', { detail: reason, plan: hasUnlimited ? 'paid' : 'free' });
         setResponseHeader(event, 'retry-after', verdict.retryAfterSeconds);
         throw createError({
           statusCode: 429,
@@ -77,6 +79,22 @@ export default defineEventHandler(async (event) => {
       regenerate: validatedData.regenerate ?? false,
       // Never log what visitors type: names and details are personal.
     });
+
+    // The poem settings for analytics: never the name or any other text typed.
+    const poemFields = {
+      style: validatedData.style,
+      rhymeScheme: validatedData.rhymeScheme,
+      language: validatedData.language,
+      lines: validatedData.lines,
+      plan: hasUnlimited ? 'paid' as const : 'free' as const,
+      ...formFacts(validatedData),
+    };
+
+    // Timings for analytics. On Workers the clock moves with I/O, which is
+    // exactly what these measure: waiting on the gateway.
+    const startedAt = Date.now();
+    let firstTextAt: number | null = null;
+    const seconds = (from: number, to = Date.now()) => Math.round((to - from) / 100) / 10;
 
     // Build the prompt
     const prompt = buildPrompt(validatedData);
@@ -107,11 +125,36 @@ export default defineEventHandler(async (event) => {
       abortSignal: clientDisconnectSignal(event),
       // Models send text in bursts; release it word by word instead.
       experimental_transform: smoothStream({ delayInMs: 15, chunking: 'word' }),
+      onChunk({ chunk }) {
+        if (firstTextAt === null && chunk.type === 'text-delta') firstTextAt = Date.now();
+      },
       onAbort() {
         consola.info('Client disconnected - stopped poem generation');
+        trackServerEvent(event, 'Poem aborted', {
+          ...poemFields,
+          detail: firstTextAt === null ? 'before text' : 'during text',
+          totalSeconds: seconds(startedAt),
+        });
+      },
+      onError({ error }) {
+        // The message only: AI SDK errors can carry the whole prompt.
+        consola.error('Poem stream failed:', (error as Error | undefined)?.message);
+        trackServerEvent(event, 'Poem generation failed', {
+          ...poemFields,
+          detail: (error as Error | undefined)?.name ?? 'stream error',
+        });
       },
       onEnd({ usage }) {
         consola.info('Poem generated successfully');
+        trackServerEvent(event, validatedData.regenerate ? 'Regenerate poem' : 'Generate poem', {
+          ...poemFields,
+          detail: modelId,
+          inputTokens: usage.inputTokens ?? 0,
+          outputTokens: usage.outputTokens ?? 0,
+          costUsd: estimateCostUsd(usage, modelId),
+          firstTextSeconds: firstTextAt === null ? 0 : seconds(startedAt, firstTextAt),
+          totalSeconds: seconds(startedAt),
+        });
         consola.info(
           `Tokens: ${usage.inputTokens ?? 0} in, ${usage.outputTokens ?? 0} out `
           + `(${usage.outputTokenDetails.reasoningTokens ?? 0} reasoning). `
@@ -158,6 +201,9 @@ export default defineEventHandler(async (event) => {
 
     // The message only: AI SDK errors can carry the whole prompt.
     consola.error('Error generating poem:', error?.message);
+    trackServerEvent(event, 'Poem generation failed', {
+      detail: error?.name === 'ZodError' ? 'invalid request' : String(error?.name ?? 'error'),
+    });
 
     // Handle validation errors
     if (error.name === 'ZodError') {

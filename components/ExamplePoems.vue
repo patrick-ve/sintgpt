@@ -3,6 +3,7 @@ import { EXAMPLE_POEMS, type ExampleStyle } from '~/utils/examplePoems';
 
 const emit = defineEmits<{ start: [] }>();
 const { t } = useI18n();
+const { track } = useAnalytics();
 
 const styles: { value: ExampleStyle; key: string }[] = [
   { value: 'funny', key: 'funny' },
@@ -14,6 +15,11 @@ const styles: { value: ExampleStyle; key: string }[] = [
 ];
 
 const selected = ref<ExampleStyle>('funny');
+
+const choose = (style: ExampleStyle) => {
+  selected.value = style;
+  track('Show example', { detail: style });
+};
 
 // The first Dutch example of the chosen style.
 const example = computed(() =>
@@ -45,7 +51,7 @@ const example = computed(() =>
           type="button"
           class="style-chip"
           :aria-pressed="selected === style.value"
-          @click="selected = style.value"
+          @click="choose(style.value)"
         >
           {{ t(`form.style.${style.key}`) }}
         </button>

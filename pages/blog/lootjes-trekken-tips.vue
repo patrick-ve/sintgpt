@@ -3,7 +3,7 @@
     slug="lootjes-trekken-tips"
     title="Lootjes trekken: zo organiseer je het eerlijk en zonder gedoe"
     lead="Met lootjes trekken koopt iedereen één cadeau en maakt iedereen één gedicht. Dat scheelt geld en stress. Maar alleen als de trekking eerlijk is en iedereen dezelfde afspraken kent. Zo pak je het aan."
-    published="2026-11-09"
+    published="2026-11-05"
     :read-minutes="6"
     seo-title="Lootjes trekken voor Sinterklaas: tips en afspraken | SintGPT"
     seo-description="Lootjes trekken voor Sinterklaas: eerlijk trekken zonder dat iemand zichzelf trekt, budget, deadline, partners en groepen op afstand. Met een gratis lootjespagina."
@@ -120,6 +120,7 @@
       </p>
       <NuxtLink
         to="/"
+        data-cta="blog:lootjes-trekken-tips"
         class="inline-block px-8 py-3 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-transform transform hover:scale-105 text-lg border border-[#F4CD60]"
       >
         Schrijf je eerste gedicht gratis →

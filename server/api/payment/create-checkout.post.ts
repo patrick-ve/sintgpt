@@ -1,4 +1,6 @@
+import type { H3Event } from 'h3';
 import { consola } from 'consola';
+import { trackServerEvent } from '../../utils/analytics';
 import { createDodoClient } from '../../utils/dodo';
 import {
   markPaymentsUnavailable,
@@ -11,7 +13,8 @@ interface CheckoutResponse {
 }
 
 /** The page shows a friendly message for this code, never Dodo's own text. */
-function paymentsUnavailableError() {
+function paymentsUnavailableError(event: H3Event, detail: string) {
+  trackServerEvent(event, 'Payments unavailable', { detail });
   return createError({
     statusCode: 503,
     statusMessage: 'Payments are not available right now',
@@ -24,12 +27,12 @@ export default defineEventHandler(async (event): Promise<CheckoutResponse> => {
 
   if (!paymentsConfigured(event)) {
     consola.error('Dodo Payments API key or product ID not configured');
-    throw paymentsUnavailableError();
+    throw paymentsUnavailableError(event, 'not configured');
   }
 
   // Dodo refused a checkout a few minutes ago. Do not ask again yet.
   if (!(await paymentsAvailable(event))) {
-    throw paymentsUnavailableError();
+    throw paymentsUnavailableError(event, 'flag set');
   }
 
   const client = createDodoClient(runtimeConfig.dodoPaymentsApiKey);
@@ -71,14 +74,15 @@ export default defineEventHandler(async (event): Promise<CheckoutResponse> => {
     if (error?.status === 401 || error?.status === 403) {
       await markPaymentsUnavailable(event);
     }
-    throw paymentsUnavailableError();
+    throw paymentsUnavailableError(event, `dodo ${error?.status ?? 'error'}`);
   }
 
   if (!checkoutUrl) {
     consola.error('Dodo returned no checkout URL');
-    throw paymentsUnavailableError();
+    throw paymentsUnavailableError(event, 'no checkout url');
   }
 
   consola.success('Checkout session created');
+  trackServerEvent(event, 'Proceed to payment');
   return { checkoutUrl };
 });

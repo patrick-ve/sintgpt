@@ -288,7 +288,7 @@ export default {
   },
   examples: {
     title: 'Zo klinkt een gedicht van SintGPT',
-    intro: 'Echte gedichten van SintGPT, voor verzonnen mensen. Kies een stijl.',
+    intro: 'Echte gedichten gemaakt met SintGPT. Kies een stijl.',
     styleLabel: 'Kies een stijl',
     for: 'Voor',
     present: 'Cadeau',
@@ -391,7 +391,8 @@ export default {
         {
           heading: 'Statistieken',
           body: [
-            'We tellen bezoeken en een paar handelingen (zoals "gedicht gemaakt") met Umami. Umami gebruikt geen cookies en volgt je niet over andere websites. We zien geen namen en geen ingevulde teksten.',
+            'We tellen bezoeken en een paar handelingen, zoals "gedicht gemaakt" en "PDF opgeslagen". Dat doen we zelf, met Cloudflare Workers Analytics Engine. Per handeling bewaren we wat het was, de pagina, je taalkeuze, je land, de website waar je vandaan kwam, de campagnecode in de link (zoals utm_source), de instellingen van het gedicht (zoals stijl en lengte), of je velden zoals de weetjes hebt ingevuld (niet wat erin staat), hoe lang het schrijven duurde, het hoeveelste gedicht op je apparaat het is en of je betaald hebt. Cloudflare leidt je land af uit je IP-adres; het IP-adres zelf bewaren we niet.',
+            'We bewaren geen namen, geen ingevulde teksten, geen betalings-ID en geen IP-adres. We gebruiken er geen cookies voor en volgen je niet over andere websites. Cloudflare wist deze gegevens na 3 maanden.',
             'Grondslag: ons gerechtvaardigd belang om de website te verbeteren.',
           ],
         },

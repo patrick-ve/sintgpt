@@ -3,34 +3,10 @@ const { t, locale } = useI18n();
 
 const blogPosts = computed(() => [
   {
-    title: 'Rijm en ritme: zo klinkt je sinterklaasgedicht als een echt gedicht',
-    description: 'Heffingen tellen, staand en slepend rijm, en de vier rijmschema\'s met voorbeelden. Zo leest je gedicht lekker voor.',
-    slug: 'rijm-en-ritme-sinterklaasgedicht',
-    date: '2026-11-09',
-    image: '/sint-352.webp',
-    readTime: '7 min',
-  },
-  {
     title: 'Lootjes trekken: zo organiseer je het eerlijk en zonder gedoe',
     description: 'Eerlijk trekken zonder dat iemand zichzelf trekt, en de afspraken over budget, gedicht en surprise die ruzie voorkomen.',
     slug: 'lootjes-trekken-tips',
-    date: '2026-11-09',
-    image: '/sint-352.webp',
-    readTime: '6 min',
-  },
-  {
-    title: 'Een surprise maken: materialen, technieken en ideeën per persoon',
-    description: 'Van het idee tot papier-maché: zo maak je een surprise die bij de ontvanger en bij je gedicht past.',
-    slug: 'surprise-maken-ideeen',
-    date: '2026-11-09',
-    image: '/sint-352.webp',
-    readTime: '7 min',
-  },
-  {
-    title: 'Een roast-gedicht schrijven zonder iemand te kwetsen',
-    description: 'Stevig plagen met liefde: waar je wel en geen grappen over maakt, de check vooraf en een warm slot.',
-    slug: 'roast-sinterklaasgedicht-zonder-te-kwetsen',
-    date: '2026-11-09',
+    date: '2026-11-05',
     image: '/sint-352.webp',
     readTime: '6 min',
   },
@@ -38,9 +14,33 @@ const blogPosts = computed(() => [
     title: 'Sinterklaas op het werk: lootjes, gedichten en een feest voor iedereen',
     description: 'Vrijwillig meedoen, een eerlijk budget en gedichten over collega\'s die leuk blijven, ook op maandag.',
     slug: 'sinterklaas-op-het-werk',
-    date: '2026-11-09',
+    date: '2026-10-27',
     image: '/sint-352.webp',
     readTime: '6 min',
+  },
+  {
+    title: 'Een roast-gedicht schrijven zonder iemand te kwetsen',
+    description: 'Stevig plagen met liefde: waar je wel en geen grappen over maakt, de check vooraf en een warm slot.',
+    slug: 'roast-sinterklaasgedicht-zonder-te-kwetsen',
+    date: '2026-10-18',
+    image: '/sint-352.webp',
+    readTime: '6 min',
+  },
+  {
+    title: 'Een surprise maken: materialen, technieken en ideeën per persoon',
+    description: 'Van het idee tot papier-maché: zo maak je een surprise die bij de ontvanger en bij je gedicht past.',
+    slug: 'surprise-maken-ideeen',
+    date: '2026-10-09',
+    image: '/sint-352.webp',
+    readTime: '7 min',
+  },
+  {
+    title: 'Rijm en ritme: zo klinkt je sinterklaasgedicht als een echt gedicht',
+    description: 'Heffingen tellen, staand en slepend rijm, en de vier rijmschema\'s met voorbeelden. Zo leest je gedicht lekker voor.',
+    slug: 'rijm-en-ritme-sinterklaasgedicht',
+    date: '2026-09-30',
+    image: '/sint-352.webp',
+    readTime: '7 min',
   },
   {
     title: 'Hoe schrijf je het perfecte sinterklaasgedicht in 2026',
@@ -184,6 +184,7 @@ useHead({
           </p>
           <NuxtLink
             to="/"
+            data-cta="blog:index"
             class="inline-block px-8 py-4 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-transform transform hover:scale-105 shadow-lg border-2 border-[#F4CD60] text-xl"
           >
             {{ locale === 'nl' ? 'Schrijf je eerste gedicht gratis' : 'Write your first poem for free' }}

@@ -286,7 +286,7 @@ export default {
   },
   examples: {
     title: 'This is how a SintGPT poem sounds',
-    intro: 'Real poems by SintGPT, for made-up people. Choose a style.',
+    intro: 'Real poems made with SintGPT. Choose a style.',
     styleLabel: 'Choose a style',
     for: 'For',
     present: 'Present',
@@ -389,7 +389,8 @@ export default {
         {
           heading: 'Statistics',
           body: [
-            'We count visits and a few actions (such as "poem made") with Umami. Umami uses no cookies and does not follow you across other websites. We see no names and no text you fill in.',
+            'We count visits and a few actions, such as "poem made" and "PDF saved". We do this ourselves, with Cloudflare Workers Analytics Engine. For each action we keep what it was, the page, your language choice, your country, the website you came from, the campaign code in the link (such as utm_source), the poem settings (such as style and length), whether you filled in fields such as the fun facts (not what you wrote), how long the writing took, which poem on your device it is and whether you paid. Cloudflare works out your country from your IP address; we do not keep the IP address itself.',
+            'We keep no names, no text you fill in, no payment ID and no IP address. We use no cookies for this and do not follow you across other websites. Cloudflare deletes this data after 3 months.',
             'Legal basis: our legitimate interest in improving the website.',
           ],
         },

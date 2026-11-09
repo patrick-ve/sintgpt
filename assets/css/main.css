@@ -61,6 +61,20 @@
     line-height: 1.15;
     text-wrap: balance;
   }
+
+  /* Long Dutch compounds ("sinterklaasgedicht") break with a hyphen on a
+     phone instead of running out of the article card. */
+  article :where(h1, h2, h3) {
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+
+  /* Blog posts use `prose` classes, but the typography plugin is not
+     installed, so give their headings the intended red here. A colour
+     utility on the heading still wins. */
+  .prose :where(h2, h3, h4) {
+    color: #7f1d1d;
+  }
 }
 
 /* ===== ANIMATED SNOWFLAKES ===== */

@@ -57,7 +57,7 @@ export function rateLimitIp(ip: string): string {
  * The name of the counter. A keyed hash, so Cloudflare stores no IP addresses
  * or payment IDs, and nobody can work out the name from an IP.
  */
-async function counterName(subject: RateLimitSubject, secret: string): Promise<string> {
+export async function counterName(subject: RateLimitSubject, secret: string): Promise<string> {
   const data = new TextEncoder().encode(`${subject.kind}:${subject.id}`);
   const digest = secret
     ? await crypto.subtle.sign(
