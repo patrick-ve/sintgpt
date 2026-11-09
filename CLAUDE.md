@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+Open work, pending decisions and findings are tracked in `ISSUES.md`. Update it when an item changes.
+
 ## Project Overview
 
 SintGPT is a Sinterklaas poem generator built with Nuxt 4. Users describe the recipient and the poem (style, rhyme scheme, length, language) and Gemini writes a personalised poem in Dutch or English, streamed to the page. Poems are kept on the device in a history drawer. Hosted on Cloudflare Workers.
