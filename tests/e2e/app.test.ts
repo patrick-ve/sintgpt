@@ -1147,7 +1147,8 @@ describe('days until pakjesavond', () => {
   it('counts the days in the hero', async () => {
     const page = await homeAt('2026-11-20T10:00:00+01:00');
     await page.locator('.countdown').getByText('Nog 15 dagen tot pakjesavond').waitFor();
-    expect(await page.getByText('Binnen 30 seconden heb je een gedicht').count()).toBe(0);
+    // The FAQ also says it takes 30 seconds; the hint belongs only in the countdown.
+    expect(await page.locator('.countdown').getByText('Op het laatste moment?').count()).toBe(0);
     await page.close();
   }, 30_000);
 
