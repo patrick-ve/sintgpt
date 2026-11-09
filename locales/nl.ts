@@ -7,13 +7,21 @@ export default {
   },
   hero: {
     question: 'Wil het rijmen met ChatGPT maar niet lukken?',
-    answer: 'SintGPT schrijft binnen 30 seconden een leuk sinterklaasgedicht!',
+    answer: 'SintGPT schrijft je sinterklaasgedicht in 30 seconden.',
+    subtitle: 'Persoonlijk, grappig of flink op de hak. In het Nederlands of Engels, en het rijmt echt.',
     cta: 'Begin met rijmen',
-    moreInfo: 'Meer informatie',
+    moreInfo: 'Hoe werkt het?',
+    photoAlt: 'Sinterklaas wijst met een knipoog naar zijn slaap',
+    photoCaption: 'Ook de Sint rijmt niet altijd vanzelf.',
     note: 'Eerste gedicht gratis, daarna eenmalig €6,99 voor onbeperkt.',
   },
   form: {
-    title: 'Details voor het gedicht',
+    title: 'Schrijf je gedicht in drie stappen',
+    steps: {
+      who: 'Voor wie is het?',
+      special: 'Wat maakt hen bijzonder?',
+      tone: 'Hoe moet het klinken?',
+    },
     more: 'Meer opties: wie schrijft het en voor welk publiek?',
     name: {
       label: 'Naam ontvanger',
@@ -26,8 +34,8 @@ export default {
     },
     revealPresent: {
       label: 'Cadeau vermelden?',
-      yes: 'Ja, vermeld het cadeau in het gedicht',
-      no: 'Nee, houd het cadeau geheim (vaag omschrijven)',
+      yes: 'Noem het cadeau',
+      no: 'Houd het geheim',
     },
     funFacts: {
       label: 'Leuke weetjes over de ontvanger',
@@ -78,6 +86,7 @@ export default {
     submit: {
       generate: 'Genereer gedicht',
       generating: 'Gedicht genereren...',
+      time: 'Klaar in ongeveer 30 seconden.',
     },
     required: '*',
   },
@@ -98,8 +107,10 @@ export default {
     loading: 'Jouw gepersonaliseerde gedicht wordt gemaakt...',
     ready: 'Je gedicht is klaar.',
     error: 'Fout',
-    empty: 'Vul het formulier in. Je eigen gedicht verschijnt hier.',
-    sampleLabel: 'Voorbeeld: gedicht voor Daan (7)',
+    sample: 'Voorbeeld',
+    sampleTitle: 'Gedicht voor Daan (7)',
+    sampleSignature: 'Sint en Piet',
+    regenerate: 'Herschrijf dit gedicht',
     sampleText:
       'Daan is al zeven en een held in het doel,\nals keeper bij de F-jes houd jij het hoofd koel.\nEn na elke wedstrijd eet jij voor de trek,\neen berg pannenkoeken met stroop tot je nek!\n\nDe Pieten stonden te juichen langs de lijn,\nwant ballen tegenhouden vind jij reuze fijn.\nDaarom brengt de Sint nu iets moois voor op het veld:\neen prachtige voetbal voor deze grote held!',
   },

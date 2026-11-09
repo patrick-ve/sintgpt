@@ -7,13 +7,21 @@ export default {
   },
   hero: {
     question: "Can't get ChatGPT to rhyme?",
-    answer: 'SintGPT writes a fun Sinterklaas poem in 30 seconds!',
+    answer: 'SintGPT writes your Sinterklaas poem in 30 seconds.',
+    subtitle: 'Personal, funny or a proper roast. In Dutch or English, and it really rhymes.',
     cta: 'Start rhyming',
-    moreInfo: 'More information',
+    moreInfo: 'How does it work?',
+    photoAlt: 'Sinterklaas winks and taps his temple',
+    photoCaption: 'Even Sinterklaas finds rhyming hard sometimes.',
     note: 'First poem free, then a one-time €6,99 for unlimited poems.',
   },
   form: {
-    title: 'Poem details',
+    title: 'Write your poem in three steps',
+    steps: {
+      who: 'Who is it for?',
+      special: 'What makes them special?',
+      tone: 'How should it sound?',
+    },
     more: 'More options: who writes it and for which audience?',
     name: {
       label: 'Recipient name',
@@ -26,8 +34,8 @@ export default {
     },
     revealPresent: {
       label: 'Mention the present?',
-      yes: 'Yes, mention the present in the poem',
-      no: 'No, keep the present secret (describe vaguely)',
+      yes: 'Mention the present',
+      no: 'Keep it secret',
     },
     funFacts: {
       label: 'Fun facts about the recipient',
@@ -78,6 +86,7 @@ export default {
     submit: {
       generate: 'Generate poem',
       generating: 'Generating poem...',
+      time: 'Ready in about 30 seconds.',
     },
     required: '*',
   },
@@ -98,8 +107,10 @@ export default {
     loading: 'Your personalized poem is being created...',
     error: 'Error',
     ready: 'Your poem is ready.',
-    empty: 'Fill in the form. Your own poem appears here.',
-    sampleLabel: 'Example: poem for Mark',
+    sample: 'Example',
+    sampleTitle: 'Poem for Mark',
+    sampleSignature: 'Sinterklaas and Pete',
+    regenerate: 'Rewrite this poem',
     sampleText:
       "There once was a fellow named Mark,\nWho turned every meal pitch-black dark.\nHe'll even burn toast,\nTill it looks like a ghost,\nAnd fills the whole house with a spark.\n\nGood Saint Nick brought a cookbook with dread,\nTo ensure that you actually get fed.\nPlease read every page,\nAnd lower the gauge,\nBefore you burn charcoal instead!",
   },

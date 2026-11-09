@@ -127,6 +127,16 @@ const uiLanguageItemsShort = [
   { value: 'en', label: '🇬🇧 EN' },
 ];
 
+// Shared looks for Nuxt UI controls on this page.
+const languageSelectUi = {
+  base: 'h-11 bg-transparent border-[#d4a853] border-2 text-[#f4cd60] font-bold rounded-[10px]',
+  value: 'text-[#f4cd60]',
+  trailingIcon: 'text-[#f4cd60]',
+};
+const inputUi = {
+  base: 'bg-white border-2 border-[#a08850] focus:border-[#8b1538] rounded-[10px]',
+};
+
 const selectedLocale = computed({
   get: () => locale.value,
   set: (value) => setLocale(value),
@@ -150,25 +160,27 @@ const scrollToFaq = () => {
   el?.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
 };
 
-const handleSubmit = async () => {
-  if (!isFormValid.value) {
-    showNameError.value = true;
-    document.getElementById('poem-name')?.focus();
-    return;
-  }
+// The form as it was sent for the poem on screen. "Herschrijf dit gedicht"
+// sends it again, so edits to the form after that do not change the rewrite.
+// Poems opened from the history have none, because the history does not keep
+// the details people typed.
+type PoemFormData = typeof formData.value;
+const lastRequest = ref<PoemFormData | null>(null);
 
-  // Check if user has accepted cookies (skip in development)
+// Cookies and the free limit apply to a rewrite as well.
+const canStartGeneration = (): boolean => {
   if (!import.meta.dev && !hasAcceptedCookies.value) {
     showConsentBanner(true);
-    return;
+    return false;
   }
-
-  // Check if user can generate a poem (skip in development)
   if (!import.meta.dev && !canGeneratePoem.value) {
     showPaymentModal.value = true;
-    return;
+    return false;
   }
+  return true;
+};
 
+const runGeneration = async (request: PoemFormData, regenerate = false) => {
   // Scroll to poem section on mobile immediately so user sees loading state
   if (window.innerWidth < 1024 && poemSectionRef.value) {
     poemSectionRef.value.scrollIntoView({
@@ -179,40 +191,52 @@ const handleSubmit = async () => {
 
   poemAnnouncement.value = t('poem.loading');
 
-  // Generate the poem
-  displayedRecipient.value = formData.value.name.trim();
+  displayedRecipient.value = request.name.trim();
   activeHistoryId.value = null;
-  await generatePoem(formData.value);
+  lastRequest.value = { ...request };
+  await generatePoem({ ...request, regenerate });
 
-  // If rate limit was hit, it will be displayed in the UI with upgrade button
-  // No need to show modal immediately
-
-  // Only increment count if generation was successful (no error and no rate limit)
+  // A rate limit shows the upgrade offer in the poem area.
   poemAnnouncement.value = poem.value ? t('poem.ready') : '';
 
   if (!error.value && !isRateLimitError.value && poem.value) {
     incrementPoemCount();
 
-    // Track successful poem generation
-    (window as any).umami?.track('Generate poem');
+    (window as any).umami?.track(regenerate ? 'Regenerate poem' : 'Generate poem');
 
     // Keep it in the on-device history drawer
     const saved = poemHistory.add({
       recipient: displayedRecipient.value,
       poem: poem.value,
-      style: formData.value.style,
-      rhymeScheme: formData.value.rhymeScheme,
-      language: formData.value.language,
-      lines: formData.value.lines,
+      style: request.style,
+      rhymeScheme: request.rhymeScheme,
+      language: request.language,
+      lines: request.lines,
       share: generatedShare.value,
     });
     activeHistoryId.value = saved.id;
 
     // Save trial poem for unpaid users so it persists across page refreshes
     if (!isPaid.value) {
-      saveTrialPoem(poem.value, formData.value.name);
+      saveTrialPoem(poem.value, request.name);
     }
   }
+};
+
+const handleSubmit = async () => {
+  if (!isFormValid.value) {
+    showNameError.value = true;
+    document.getElementById('poem-name')?.focus();
+    return;
+  }
+  if (!canStartGeneration()) return;
+  await runGeneration(formData.value);
+};
+
+const regeneratePoem = async () => {
+  if (!lastRequest.value || isLoading.value) return;
+  if (!canStartGeneration()) return;
+  await runGeneration(lastRequest.value, true);
 };
 
 const copyToClipboard = async () => {
@@ -400,11 +424,15 @@ const openPoemFromHistory = (entry: PoemHistoryEntry) => {
   isRateLimitError.value = false;
   displayedRecipient.value = entry.recipient;
   activeHistoryId.value = entry.id;
+  lastRequest.value = null;
   (window as any).umami?.track('Open poem from history');
   nextTick(() => {
     poemSectionRef.value?.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
   });
 };
+
+// One element per verse line, so a wrapped line hangs under its verse.
+const poemLines = computed(() => (poem.value ?? '').split('\n'));
 
 const isLimerick = computed(
   () => formData.value.rhymeScheme === 'Limerick'
@@ -530,114 +558,60 @@ useHead({
     </ClientOnly>
 
     <!-- Header -->
-    <header
-      class="festive-header text-white shadow-2xl relative z-20"
-    >
-      <!-- Decorative top border -->
-      <div
-        class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-[#d4a853] via-[#f4cd60] to-[#d4a853]"
-      ></div>
+    <header class="site-header relative z-20 bg-[#3d0716] border-t-[6px] border-[#d4a853]">
+      <div class="mx-auto max-w-[1240px] px-4 sm:px-6 py-5 flex items-center justify-between gap-3">
+        <p class="font-display font-bold text-3xl md:text-[2rem] leading-none text-[#f4cd60]">
+          {{ t('header.title') }}
+        </p>
 
-      <!-- Golden corner accents -->
-      <div class="absolute top-2 left-0 w-24 h-24 overflow-hidden">
-        <div
-          class="absolute -top-12 -left-12 w-24 h-24 bg-[#d4a853] rotate-45 opacity-20"
-        ></div>
-      </div>
-      <div class="absolute top-2 right-0 w-24 h-24 overflow-hidden">
-        <div
-          class="absolute -top-12 -right-12 w-24 h-24 bg-[#d4a853] rotate-45 opacity-20"
-        ></div>
-      </div>
+        <!-- Mobile: icon-only history button and short language names -->
+        <div class="flex md:hidden items-center gap-2 flex-shrink-0">
+          <button
+            type="button"
+            class="history-trigger size-11 justify-center"
+            :aria-label="t('history.open')"
+            @click="showHistory = true"
+          >
+            <UIcon name="i-heroicons-book-open" class="size-5" />
+            <span
+              v-if="historyEntries.length"
+              class="history-badge"
+            >{{ historyEntries.length }}</span>
+          </button>
+          <USelect
+            v-model="selectedLocale"
+            :items="uiLanguageItemsShort"
+            class="w-[6.5rem]"
+            size="lg"
+            :aria-label="'Taal / Language'"
+            :ui="languageSelectUi"
+          />
+        </div>
 
-      <div
-        class="container mx-auto px-6 pt-6 pb-10 md:pt-10 md:pb-12 relative z-10"
-      >
-        <div
-          class="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-4 md:gap-8"
-        >
-          <!-- Mobile: Title, history and language in one row -->
-          <div class="flex md:hidden items-center justify-between w-full gap-3">
-            <p
-              class="text-3xl font-bold font-display text-gold-gradient drop-shadow-lg leading-none"
-            >
-              {{ t('header.title') }}
-            </p>
-            <div class="flex items-center gap-2 flex-shrink-0">
-              <button
-                type="button"
-                class="history-trigger size-11 justify-center"
-                :aria-label="t('history.open')"
-                @click="showHistory = true"
-              >
-                <UIcon name="i-heroicons-book-open" class="size-5" />
-                <span
-                  v-if="historyEntries.length"
-                  class="history-badge"
-                >{{ historyEntries.length }}</span>
-              </button>
-              <USelect
-                v-model="selectedLocale"
-                :items="uiLanguageItemsShort"
-                class="w-[6.5rem]"
-                size="lg"
-                :aria-label="'Taal / Language'"
-                :ui="{
-                  base: 'h-11 bg-[#5c0f26] border-[#d4a853] border-2 text-[#f4cd60] font-bold rounded-lg shadow-lg',
-                  value: 'text-[#f4cd60]',
-                  trailingIcon: 'text-[#f4cd60]',
-                }"
-              />
-            </div>
-          </div>
-
-          <!-- Desktop: Logo and Title -->
-          <div class="hidden md:flex flex-shrink-0 items-center gap-5">
-            <div
-              class="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-[#f4cd60] to-[#d4a853] shadow-lg"
-            >
-              <span class="text-4xl">🎁</span>
-            </div>
-            <p
-              class="text-5xl font-bold font-display text-gold-gradient drop-shadow-lg leading-none"
-            >
-              {{ t('header.title') }}
-            </p>
-          </div>
-
-          <!-- Right: History + Language Switcher (Desktop only) -->
-          <div class="hidden md:flex items-center gap-3">
-            <button
-              type="button"
-              class="history-trigger h-10 px-4"
-              @click="showHistory = true"
-            >
-              <UIcon name="i-heroicons-book-open" class="size-5" />
-              <span>{{ t('history.open') }}</span>
-              <span
-                v-if="historyEntries.length"
-                class="history-badge"
-              >{{ historyEntries.length }}</span>
-            </button>
-            <!-- Language Switcher -->
-            <USelect
-              v-model="selectedLocale"
-              :items="uiLanguageItems"
-              :aria-label="'Taal / Language'"
-              class="w-44"
-              size="md"
-              :ui="{
-                base: 'bg-[#5c0f26] border-[#d4a853] border-2 text-[#f4cd60] font-bold rounded-lg shadow-lg',
-                value: 'text-[#f4cd60]',
-                trailingIcon: 'text-[#f4cd60]',
-              }"
-            />
-          </div>
+        <!-- Desktop -->
+        <div class="hidden md:flex items-center gap-2">
+          <button
+            type="button"
+            class="history-trigger h-11 px-4"
+            @click="showHistory = true"
+          >
+            <UIcon name="i-heroicons-book-open" class="size-5" />
+            <span>{{ t('history.open') }}</span>
+            <span
+              v-if="historyEntries.length"
+              class="history-badge"
+            >{{ historyEntries.length }}</span>
+          </button>
+          <USelect
+            v-model="selectedLocale"
+            :items="uiLanguageItems"
+            :aria-label="'Taal / Language'"
+            class="w-44"
+            size="lg"
+            :ui="languageSelectUi"
+          />
         </div>
       </div>
-
-      <!-- Decorative zigzag border -->
-      <div class="header-decoration"></div>
     </header>
 
     <!-- Payment Status Notifications -->
@@ -756,767 +730,547 @@ useHead({
     </div>
 
     <main>
-    <!-- Hero Section with Video -->
-    <section class="relative z-10 overflow-hidden">
-      <!-- Decorative background layer -->
-      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#8b1538]/20 to-transparent pointer-events-none"></div>
+    <!-- Hero -->
+    <section aria-labelledby="hero-title" class="relative z-10 bg-[#3d0716] text-[#fbf1dc]">
+      <div class="mx-auto max-w-[1240px] px-4 sm:px-6 pt-4 pb-16 md:pt-6 md:pb-20 flex flex-wrap items-center gap-10 lg:gap-14">
+        <div class="flex-[1_1_520px] min-w-0 flex flex-col gap-6">
+          <h1
+            id="hero-title"
+            class="font-display font-bold text-[2.25rem] sm:text-5xl xl:text-6xl leading-[1.08] tracking-[-0.01em] text-balance"
+          >
+            <span class="block">{{ t('hero.question') }}</span>
+            <span class="block mt-3 text-[#f4cd60]">{{ t('hero.answer') }}</span>
+          </h1>
 
-      <div class="container mx-auto px-4 md:px-6 py-8 md:py-12 lg:py-16">
-        <div class="max-w-7xl mx-auto">
-          <!-- Two-column layout: Video left, Content right -->
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-center">
-            <!-- Left: Video (hidden on mobile, shown on desktop) -->
-            <div class="hidden lg:block lg:order-1 relative">
-              <!-- Decorative glow behind video -->
-              <div class="absolute -inset-8 bg-gradient-to-r from-[#d4a853]/10 via-[#8b1538]/20 to-[#d4a853]/10 blur-3xl rounded-full opacity-60 pointer-events-none"></div>
+          <p class="text-lg md:text-xl leading-normal text-[#f7e6c0] max-w-[32em] text-pretty">
+            {{ t('hero.subtitle') }}
+          </p>
 
-              <ClientOnly>
-                <HeroVideo />
-              </ClientOnly>
-
-              <!-- Video caption -->
-              <p class="text-center mt-4 text-[#f7e6c0] text-sm">
-                {{ t('video.title') }}
-              </p>
-            </div>
-
-            <!-- Right: Title and CTAs -->
-            <div class="lg:order-2 text-center lg:text-left mt-6 lg:mt-0">
-              <h1 class="font-display text-3xl sm:text-4xl xl:text-5xl leading-[1.1] text-white mb-6">
-                <span class="block">{{ t('hero.question') }}</span>
-                <span class="block mt-2 text-[#f4cd60]">{{ t('hero.answer') }}</span>
-              </h1>
-
-              <!-- Decorative divider -->
-              <div class="flex items-center justify-center lg:justify-start gap-4 mb-6" aria-hidden="true">
-                <div class="w-12 md:w-20 h-[2px] bg-gradient-to-r from-transparent via-[#d4a853] to-[#d4a853]"></div>
-                <div class="w-3 h-3 bg-[#d4a853] rotate-45"></div>
-                <div class="w-12 md:w-20 h-[2px] bg-gradient-to-l from-transparent via-[#d4a853] to-[#d4a853]"></div>
-              </div>
-
-              <p class="text-[#f7e6c0] text-lg md:text-xl mb-8 max-w-lg mx-auto lg:mx-0 leading-normal text-pretty">
-                {{ t('header.subtitle1') }}
-              </p>
-
-              <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
-                <button
-                  type="button"
-                  data-umami-event="Scroll to poem form"
-                  class="hero-action w-full sm:w-auto px-8 bg-[#f4cd60] text-[#5c0f26] font-display text-xl shadow-lg hover:bg-[#ffe08a]"
-                  @click="scrollToForm"
-                >
-                  {{ t('hero.cta') }}
-                </button>
-                <button
-                  type="button"
-                  data-umami-event="Scroll to FAQ"
-                  class="hero-action w-full sm:w-auto px-6 border-2 border-[#d4a853] text-[#f4cd60] text-lg hover:bg-[#d4a853]/15"
-                  @click="scrollToFaq"
-                >
-                  {{ t('hero.moreInfo') }}
-                </button>
-              </div>
-
-              <p class="mt-4 text-[#f7e6c0] text-base text-center lg:text-start">
-                {{ t('hero.note') }}
-              </p>
-            </div>
+          <div class="flex flex-col sm:flex-row sm:flex-wrap gap-3">
+            <button
+              type="button"
+              data-umami-event="Scroll to poem form"
+              class="hero-action min-h-14 px-8 bg-[#f4cd60] text-[#3d0716] font-display text-xl hover:bg-[#ffe08a]"
+              @click="scrollToForm"
+            >
+              {{ t('hero.cta') }}
+            </button>
+            <button
+              type="button"
+              data-umami-event="Scroll to FAQ"
+              class="hero-action min-h-14 px-6 border-2 border-[#d4a853] text-[#f4cd60] text-lg hover:bg-[#d4a853]/15"
+              @click="scrollToFaq"
+            >
+              {{ t('hero.moreInfo') }}
+            </button>
           </div>
-        </div>
-      </div>
 
-      <!-- Bottom decorative wave -->
-      <div class="absolute bottom-0 left-0 right-0 h-8 overflow-hidden">
-        <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#8b1538]/50 to-transparent"></div>
+          <p class="text-base text-[#f7e6c0]">
+            {{ t('hero.note') }}
+          </p>
+        </div>
+
+        <figure class="flex-[1_1_400px] min-w-0 max-w-[300px] sm:max-w-[500px] mx-auto flex flex-col gap-3">
+          <img
+            src="/sint-hero-800.webp"
+            srcset="/sint-hero-400.webp 400w, /sint-hero-800.webp 800w"
+            sizes="(min-width: 640px) 500px, 300px"
+            width="800"
+            height="1000"
+            fetchpriority="high"
+            :alt="t('hero.photoAlt')"
+            class="block w-full h-auto aspect-[4/5] object-cover rounded-[260px_260px_24px_24px] border-4 border-[#d4a853]"
+          />
+          <figcaption class="text-center text-[0.9375rem] text-[#f7e6c0]">
+            {{ t('hero.photoCaption') }}
+          </figcaption>
+        </figure>
       </div>
     </section>
 
-    <!-- Main Content -->
-    <div
+    <!-- Form and poem -->
+    <section
       id="poem-form"
-      class="container mx-auto px-4 md:px-6 pb-12 pt-8 md:pt-12 relative z-10"
+      aria-labelledby="form-title"
+      class="relative z-10 bg-[#fbf3e2] text-[#3d0716] px-4 sm:px-6 pt-12 pb-16 md:pt-16 md:pb-20"
     >
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
-        <!-- Form Section -->
-        <section class="sint-card p-6 md:p-8 relative">
-          <!-- Decorative ribbon -->
-          <div class="ribbon-decoration ribbon-corner-tl"></div>
-          <div class="ribbon-decoration ribbon-corner-br"></div>
+      <div class="mx-auto max-w-[1240px] flex flex-col gap-9">
+        <h2
+          id="form-title"
+          class="font-display font-bold text-[1.75rem] md:text-[2.5rem] leading-tight text-[#8b1538]"
+        >
+          {{ t('form.title') }}
+        </h2>
 
-          <!-- Floating scroll icon -->
-          <div
-            class="absolute -top-6 -right-4 text-5xl rotate-12 drop-shadow-lg filter"
-            aria-hidden="true"
+        <div class="flex flex-wrap items-start gap-10">
+          <form
+            novalidate
+            class="flex-[1_1_560px] min-w-0 flex flex-col gap-7"
+            @submit.prevent="handleSubmit"
           >
-            📜
-          </div>
+            <!-- Step 1: who -->
+            <fieldset class="form-step">
+              <legend class="form-step-legend">
+                <span class="step-number" aria-hidden="true">1</span>
+                <span>{{ t('form.steps.who') }}</span>
+              </legend>
 
-          <h2
-            class="text-2xl md:text-3xl font-bold text-[#8b1538] mb-6 font-display border-b-2 border-[#d4a853]/30 pb-3 ps-8 md:ps-6 flex items-center gap-3"
-          >
-            {{ t('form.title') }}
-          </h2>
+              <div class="flex flex-wrap gap-4">
+                <div class="flex-[1_1_200px] min-w-0">
+                  <label for="poem-name" class="field-label">
+                    {{ t('form.name.label') }}<span class="ms-1" aria-hidden="true">*</span>
+                  </label>
+                  <UInput
+                    id="poem-name"
+                    :maxlength="POEM_INPUT_LIMITS.name"
+                    v-model="formData.name"
+                    required
+                    autocomplete="off"
+                    :aria-invalid="showNameError || undefined"
+                    :aria-describedby="showNameError ? 'poem-name-error' : undefined"
+                    :placeholder="t('form.name.placeholder')"
+                    size="xl"
+                    :disabled="isLoading"
+                    class="w-full input-festive"
+                    :ui="inputUi"
+                  />
+                  <p
+                    v-if="showNameError"
+                    id="poem-name-error"
+                    class="mt-1.5 flex items-center gap-1.5 text-sm font-bold text-[#8b1538]"
+                  >
+                    <UIcon name="i-heroicons-exclamation-circle" class="size-4 shrink-0" aria-hidden="true" />
+                    {{ t('form.name.required') }}
+                  </p>
+                </div>
 
-          <form novalidate class="space-y-5" @submit.prevent="handleSubmit">
-            <!-- Recipient Name -->
-            <div class="form-group">
-              <label
-                for="poem-name"
-                class="block text-base font-bold text-[#8b1538] mb-2"
-              >
-                {{ t('form.name.label')
-                }}<span class="text-[#b91c4a] ml-1">*</span>
-              </label>
-              <UInput
-                id="poem-name"
-                :maxlength="POEM_INPUT_LIMITS.name"
-                v-model="formData.name"
-                required
-                autocomplete="off"
-                :aria-invalid="showNameError || undefined"
-                :aria-describedby="showNameError ? 'poem-name-error' : undefined"
-                :placeholder="t('form.name.placeholder')"
-                size="xl"
-                :disabled="isLoading"
-                class="w-full input-festive"
-                :ui="{
-                  base: 'bg-white border-2 border-[#a08850] focus:border-[#d4a853] rounded-lg',
-                }"
-              />
-              <p
-                v-if="showNameError"
-                id="poem-name-error"
-                class="mt-1.5 flex items-center gap-1.5 text-sm font-bold text-[#8b1538]"
-              >
-                <UIcon name="i-heroicons-exclamation-circle" class="size-4 shrink-0" aria-hidden="true" />
-                {{ t('form.name.required') }}
-              </p>
-            </div>
+                <div class="flex-[1_1_200px] min-w-0">
+                  <label for="poem-present" class="field-label">
+                    {{ t('form.present.label') }}
+                  </label>
+                  <UInput
+                    id="poem-present"
+                    :maxlength="POEM_INPUT_LIMITS.present"
+                    v-model="formData.present"
+                    autocomplete="off"
+                    :placeholder="t('form.present.placeholder')"
+                    size="xl"
+                    :disabled="isLoading"
+                    class="w-full input-festive"
+                    :ui="inputUi"
+                  />
+                </div>
+              </div>
 
-            <!-- Present -->
-            <div class="form-group">
-              <label
-                for="poem-present"
-                class="block text-base font-bold text-[#8b1538] mb-2"
+              <div
+                role="radiogroup"
+                :aria-label="t('form.revealPresent.label')"
+                class="flex flex-wrap gap-x-7 gap-y-1"
               >
-                {{ t('form.present.label') }}
-              </label>
-              <UInput
-                id="poem-present"
-                :maxlength="POEM_INPUT_LIMITS.present"
-                v-model="formData.present"
-                autocomplete="off"
-                :placeholder="t('form.present.placeholder')"
-                size="xl"
-                :disabled="isLoading"
-                class="w-full input-festive"
-                :ui="{
-                  base: 'bg-white border-2 border-[#a08850] focus:border-[#d4a853] rounded-lg',
-                }"
-              />
-            </div>
-
-            <!-- Reveal Present -->
-            <div class="form-group">
-              <label
-                for="poem-reveal"
-                class="block text-base font-bold text-[#8b1538] mb-2"
-              >
-                {{ t('form.revealPresent.label') }}
-              </label>
-              <select
-                id="poem-reveal"
-                v-model="formData.revealPresent"
-                :disabled="isLoading"
-                class="w-full px-4 py-3 text-base border-2 border-[#a08850] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d4a853] focus:border-[#d4a853] bg-white disabled:bg-gray-100 disabled:cursor-not-allowed transition"
-              >
-                <option
+                <label
                   v-for="option in revealPresentOptions"
-                  :key="option.value!.toString()"
-                  :value="option.value"
+                  :key="String(option.value)"
+                  class="radio-plain"
                 >
+                  <input
+                    v-model="formData.revealPresent"
+                    type="radio"
+                    name="poem-reveal"
+                    :value="option.value"
+                    :disabled="isLoading"
+                  />
                   {{ option.label }}
-                </option>
-              </select>
-            </div>
-
-            <!-- Fun Facts -->
-            <div class="form-group">
-              <label
-                for="poem-facts"
-                class="block text-base font-bold text-[#8b1538] mb-2"
-              >
-                {{ t('form.funFacts.label') }}
-              </label>
-              <UTextarea
-                id="poem-facts"
-                :maxlength="POEM_INPUT_LIMITS.funFacts"
-                v-model="formData.funFacts"
-                aria-describedby="poem-facts-help"
-                :placeholder="t('form.funFacts.placeholder')"
-                :rows="5"
-                size="xl"
-                :disabled="isLoading"
-                class="w-full input-festive"
-                :ui="{
-                  base: 'bg-white border-2 border-[#a08850] focus:border-[#d4a853] rounded-lg',
-                }"
-              />
-              <p
-                id="poem-facts-help"
-                class="text-sm text-[#5c0f26] mt-1.5"
-              >
-                {{ t('form.funFacts.help') }}
-              </p>
-            </div>
-
-            <!-- Optional details -->
-            <details class="form-more">
-              <summary>{{ t('form.more') }}</summary>
-              <div class="space-y-5 pt-4">
-            <!-- Written By -->
-            <div class="form-group">
-              <label
-                for="poem-written-by"
-                class="block text-base font-bold text-[#8b1538] mb-2"
-              >
-                {{ t('form.writtenBy.label') }}
-              </label>
-              <UInput
-                id="poem-written-by"
-                :maxlength="POEM_INPUT_LIMITS.writtenBy"
-                v-model="formData.writtenBy"
-                aria-describedby="poem-written-by-help"
-                :placeholder="t('form.writtenBy.placeholder')"
-                size="xl"
-                :disabled="isLoading"
-                class="w-full input-festive"
-                :ui="{
-                  base: 'bg-white border-2 border-[#a08850] focus:border-[#d4a853] rounded-lg',
-                }"
-              />
-              <p
-                id="poem-written-by-help"
-                class="text-sm text-[#5c0f26] mt-1.5"
-              >
-                {{ t('form.writtenBy.help') }}
-              </p>
-            </div>
-
-            <!-- Written For Audience -->
-            <div class="form-group">
-              <label
-                for="poem-audience"
-                class="block text-base font-bold text-[#8b1538] mb-2"
-              >
-                {{ t('form.writtenForAudience.label') }}
-              </label>
-              <UInput
-                id="poem-audience"
-                :maxlength="POEM_INPUT_LIMITS.writtenForAudience"
-                v-model="formData.writtenForAudience"
-                aria-describedby="poem-audience-help"
-                :placeholder="
-                  t('form.writtenForAudience.placeholder')
-                "
-                size="xl"
-                :disabled="isLoading"
-                class="w-full input-festive"
-                :ui="{
-                  base: 'bg-white border-2 border-[#a08850] focus:border-[#d4a853] rounded-lg',
-                }"
-              />
-              <p
-                id="poem-audience-help"
-                class="text-sm text-[#5c0f26] mt-1.5"
-              >
-                {{ t('form.writtenForAudience.help') }}
-              </p>
-            </div>
-              </div>
-            </details>
-
-            <!-- Style Selection -->
-            <fieldset class="form-group">
-              <legend
-                class="block text-base font-bold text-[#8b1538] mb-3"
-              >
-                {{ t('form.style.label') }}
-                <span class="text-[#b91c4a] ml-1">*</span>
-              </legend>
-              <div class="grid grid-cols-2 gap-3">
-                <label
-                  v-for="option in styleOptions"
-                  :key="option.value"
-                  class="radio-festive flex items-center gap-2 cursor-pointer"
-                  :class="{
-                    selected: formData.style === option.value,
-                  }"
-                >
-                  <input
-                    type="radio"
-                    v-model="formData.style"
-                    :value="option.value"
-                    :disabled="isLoading"
-                    class="sr-only"
-                  />
-                  <span
-                    class="text-sm text-[#8b1538] font-bold"
-                    >{{ option.label }}</span
-                  >
                 </label>
               </div>
             </fieldset>
 
-            <!-- Rhyme Scheme -->
-            <fieldset class="form-group">
-              <legend
-                class="block text-base font-bold text-[#8b1538] mb-3"
-              >
-                {{ t('form.rhymeScheme.label') }}
-                <span class="text-[#b91c4a] ml-1">*</span>
+            <!-- Step 2: what makes them special -->
+            <fieldset class="form-step">
+              <legend class="form-step-legend">
+                <span class="step-number" aria-hidden="true">2</span>
+                <span>{{ t('form.steps.special') }}</span>
               </legend>
-              <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                <label
-                  v-for="option in rhymeSchemeOptions"
-                  :key="option.value"
-                  class="radio-festive flex flex-col items-center justify-start py-3 md:py-4 cursor-pointer text-center"
-                  :class="{
-                    selected: formData.rhymeScheme === option.value,
-                  }"
-                >
-                  <input
-                    type="radio"
-                    v-model="formData.rhymeScheme"
-                    :value="option.value"
-                    :disabled="isLoading"
-                    class="sr-only"
-                  />
-                  <span
-                    class="text-sm text-[#8b1538] font-bold"
-                    >{{ option.label }}</span
-                  >
-                  <!-- Rhyme scheme example (tablet/desktop only) -->
-                  <div
-                    class="hidden md:flex flex-col items-center mt-2 pt-2 border-t border-[#d4a853]/30 w-full"
-                  >
-                    <div
-                      v-if="option.value === 'AABB'"
-                      class="rhyme-example"
-                    >
-                      <span class="rhyme-line-a">━━━━ A</span>
-                      <span class="rhyme-line-a">━━━━ A</span>
-                      <span class="rhyme-line-b">━━━━ B</span>
-                      <span class="rhyme-line-b">━━━━ B</span>
-                    </div>
-                    <div
-                      v-else-if="option.value === 'ABAB'"
-                      class="rhyme-example"
-                    >
-                      <span class="rhyme-line-a">━━━━ A</span>
-                      <span class="rhyme-line-b">━━━━ B</span>
-                      <span class="rhyme-line-a">━━━━ A</span>
-                      <span class="rhyme-line-b">━━━━ B</span>
-                    </div>
-                    <div
-                      v-else-if="option.value === 'ABBA'"
-                      class="rhyme-example"
-                    >
-                      <span class="rhyme-line-a">━━━━ A</span>
-                      <span class="rhyme-line-b">━━━━ B</span>
-                      <span class="rhyme-line-b">━━━━ B</span>
-                      <span class="rhyme-line-a">━━━━ A</span>
-                    </div>
-                    <div
-                      v-else-if="option.value === 'Limerick'"
-                      class="rhyme-example"
-                    >
-                      <span class="rhyme-line-a">━━━━ A</span>
-                      <span class="rhyme-line-a">━━━━ A</span>
-                      <span class="rhyme-line-b">━━ B</span>
-                      <span class="rhyme-line-b">━━ B</span>
-                      <span class="rhyme-line-a">━━━━ A</span>
-                    </div>
-                  </div>
-                </label>
-              </div>
-            </fieldset>
 
-            <!-- Language -->
-            <fieldset class="form-group">
-              <legend
-                class="block text-base font-bold text-[#8b1538] mb-3"
-              >
-                {{ t('form.language.label') }}
-                <span class="text-[#b91c4a] ml-1">*</span>
-              </legend>
-              <div class="grid grid-cols-2 gap-3">
-                <label
-                  v-for="option in languageOptions"
-                  :key="option.value"
-                  class="radio-festive flex items-center justify-center gap-2 py-3 cursor-pointer"
-                  :class="{
-                    selected: formData.language === option.value,
-                  }"
-                >
-                  <input
-                    type="radio"
-                    v-model="formData.language"
-                    :value="option.value"
-                    :disabled="isLoading"
-                    class="sr-only"
-                  />
-                  <span
-                    class="text-sm text-[#8b1538] font-bold whitespace-nowrap"
-                    >{{ option.label }}</span
-                  >
+              <div>
+                <label for="poem-facts" class="field-label">
+                  {{ t('form.funFacts.label') }}
                 </label>
-              </div>
-            </fieldset>
-
-            <!-- Number of Lines Slider -->
-            <div class="form-group">
-              <label
-                for="poem-lines"
-                class="block text-base font-bold text-[#8b1538] mb-3"
-              >
-                {{ t('form.lines.label') }}:
-                <span class="tabular-nums">{{
-                  formData.lines
-                }}</span>
-              </label>
-              <div class="relative pt-1">
-                <input
-                  id="poem-lines"
-                  v-model.number="formData.lines"
-                  type="range"
-                  :min="sliderMin"
-                  :max="sliderMax"
-                  :step="sliderStep"
-                  class="slider-festive w-full"
+                <UTextarea
+                  id="poem-facts"
+                  :maxlength="POEM_INPUT_LIMITS.funFacts"
+                  v-model="formData.funFacts"
+                  aria-describedby="poem-facts-help"
+                  :placeholder="t('form.funFacts.placeholder')"
+                  :rows="5"
+                  size="xl"
                   :disabled="isLoading"
+                  class="w-full input-festive"
+                  :ui="inputUi"
                 />
-                <div
-                  class="flex justify-between text-sm font-bold text-[#5c0f26] mt-2"
-                >
-                  <span
-                    >{{ sliderMin }} {{ t('form.lines.min') }}</span
-                  >
-                  <span
-                    >{{ sliderMax }} {{ t('form.lines.max') }}</span
-                  >
-                </div>
-              </div>
-              <p
-                v-if="isLimerick"
-                class="text-sm text-[#5c0f26] mt-2"
-              >
-                {{ t('form.lines.limerickNote') }}
-              </p>
-            </div>
-
-            <!-- Unlimited Access Badge -->
-            <div
-              v-if="isPaid"
-              class="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-400 rounded-xl p-4 text-center shadow-md"
-            >
-              <div class="flex items-center justify-center gap-2">
-                <div
-                  class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center"
-                >
-                  <svg
-                    class="w-5 h-5 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                </div>
-                <p
-                  class="text-sm font-bold text-green-800"
-                >
-                  {{ t('payment.unlimitedUnlocked') }}
+                <p id="poem-facts-help" class="text-sm text-[#5c0f26] mt-1.5">
+                  {{ t('form.funFacts.help') }}
                 </p>
               </div>
-            </div>
+            </fieldset>
 
-            <!-- Remaining Poems Info -->
-            <div
-              v-else
-              class="bg-gradient-to-r from-[#fff8e7] to-[#f5e6c8] border-2 border-[#d4a853] rounded-xl p-4 text-center shadow-md"
-            >
-              <p class="text-sm font-bold text-[#8b1538]">
-                {{
-                  t('payment.remainingPoems', {
-                    count: remainingFreePoems,
-                  })
-                }}
+            <!-- Step 3: how it should sound -->
+            <fieldset class="form-step">
+              <legend class="form-step-legend">
+                <span class="step-number" aria-hidden="true">3</span>
+                <span>{{ t('form.steps.tone') }}</span>
+              </legend>
+
+              <fieldset>
+                <legend class="field-label">{{ t('form.style.label') }}</legend>
+                <div class="grid grid-cols-[repeat(auto-fill,minmax(8.5rem,1fr))] gap-2">
+                  <label
+                    v-for="option in styleOptions"
+                    :key="option.value"
+                    class="choice"
+                  >
+                    <input
+                      v-model="formData.style"
+                      type="radio"
+                      name="poem-style"
+                      :value="option.value"
+                      :disabled="isLoading"
+                    />
+                    <span>{{ option.label }}</span>
+                  </label>
+                </div>
+              </fieldset>
+
+              <div class="flex flex-wrap gap-5">
+                <fieldset class="flex-[1_1_260px] min-w-0">
+                  <legend class="field-label">{{ t('form.rhymeScheme.label') }}</legend>
+                  <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+                    <label
+                      v-for="option in rhymeSchemeOptions"
+                      :key="option.value"
+                      class="choice"
+                    >
+                      <input
+                        v-model="formData.rhymeScheme"
+                        type="radio"
+                        name="poem-rhyme"
+                        :value="option.value"
+                        :disabled="isLoading"
+                      />
+                      <span>{{ option.label }}</span>
+                    </label>
+                  </div>
+                </fieldset>
+
+                <fieldset class="flex-[1_1_200px] min-w-0">
+                  <legend class="field-label">{{ t('form.language.label') }}</legend>
+                  <div class="grid grid-cols-2 gap-1.5">
+                    <label
+                      v-for="option in languageOptions"
+                      :key="option.value"
+                      class="choice"
+                    >
+                      <input
+                        v-model="formData.language"
+                        type="radio"
+                        name="poem-language"
+                        :value="option.value"
+                        :disabled="isLoading"
+                      />
+                      <span class="whitespace-nowrap">{{ option.label }}</span>
+                    </label>
+                  </div>
+                </fieldset>
+              </div>
+
+              <div>
+                <label for="poem-lines" class="field-label">
+                  {{ t('form.lines.label') }}:
+                  <span class="tabular-nums">{{ formData.lines }}</span>
+                </label>
+                <div class="relative pt-1">
+                  <input
+                    id="poem-lines"
+                    v-model.number="formData.lines"
+                    type="range"
+                    :min="sliderMin"
+                    :max="sliderMax"
+                    :step="sliderStep"
+                    class="slider-festive w-full"
+                    :disabled="isLoading"
+                  />
+                  <div class="flex justify-between text-sm font-bold text-[#5c0f26] mt-2">
+                    <span>{{ sliderMin }} {{ t('form.lines.min') }}</span>
+                    <span>{{ sliderMax }} {{ t('form.lines.max') }}</span>
+                  </div>
+                </div>
+                <p v-if="isLimerick" class="text-sm text-[#5c0f26] mt-2">
+                  {{ t('form.lines.limerickNote') }}
+                </p>
+              </div>
+
+              <!-- Optional details -->
+              <details class="form-more">
+                <summary>{{ t('form.more') }}</summary>
+                <div class="space-y-5 pt-4">
+                  <div>
+                    <label for="poem-written-by" class="field-label">
+                      {{ t('form.writtenBy.label') }}
+                    </label>
+                    <UInput
+                      id="poem-written-by"
+                      :maxlength="POEM_INPUT_LIMITS.writtenBy"
+                      v-model="formData.writtenBy"
+                      aria-describedby="poem-written-by-help"
+                      :placeholder="t('form.writtenBy.placeholder')"
+                      size="xl"
+                      :disabled="isLoading"
+                      class="w-full input-festive"
+                      :ui="inputUi"
+                    />
+                    <p id="poem-written-by-help" class="text-sm text-[#5c0f26] mt-1.5">
+                      {{ t('form.writtenBy.help') }}
+                    </p>
+                  </div>
+
+                  <div>
+                    <label for="poem-audience" class="field-label">
+                      {{ t('form.writtenForAudience.label') }}
+                    </label>
+                    <UInput
+                      id="poem-audience"
+                      :maxlength="POEM_INPUT_LIMITS.writtenForAudience"
+                      v-model="formData.writtenForAudience"
+                      aria-describedby="poem-audience-help"
+                      :placeholder="t('form.writtenForAudience.placeholder')"
+                      size="xl"
+                      :disabled="isLoading"
+                      class="w-full input-festive"
+                      :ui="inputUi"
+                    />
+                    <p id="poem-audience-help" class="text-sm text-[#5c0f26] mt-1.5">
+                      {{ t('form.writtenForAudience.help') }}
+                    </p>
+                  </div>
+                </div>
+              </details>
+            </fieldset>
+
+            <div class="flex flex-wrap items-center gap-4">
+              <button
+                type="submit"
+                :disabled="isLoading"
+                class="btn-festive flex-[1_1_280px] min-h-[3.625rem] px-6 text-[1.375rem] disabled:opacity-70 disabled:cursor-wait"
+              >
+                <span v-if="isLoading" class="flex items-center justify-center gap-3">
+                  <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none" />
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                  {{ t('form.submit.generating') }}
+                </span>
+                <span v-else>{{ t('form.submit.generate') }}</span>
+              </button>
+              <p class="flex-[1_1_220px] text-[0.9375rem] text-[#5c0f26]">
+                <template v-if="isPaid">{{ t('payment.unlimitedUnlocked') }}</template>
+                <template v-else>{{ t('payment.remainingPoems', { count: remainingFreePoems }) }}.</template>
+                {{ t('form.submit.time') }}
               </p>
             </div>
-
-            <!-- Submit Button -->
-            <button
-              type="submit"
-              :disabled="isLoading"
-              class="btn-festive w-full py-3.5 text-xl disabled:opacity-70 disabled:cursor-wait"
-            >
-              <span
-                v-if="isLoading"
-                class="flex items-center justify-center gap-3"
-              >
-                <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                  <circle
-                    class="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    stroke-width="4"
-                    fill="none"
-                  />
-                  <path
-                    class="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  />
-                </svg>
-                {{ t('form.submit.generating') }}
-              </span>
-              <span
-                v-else
-                class="flex items-center justify-center gap-2"
-              >
-                {{ t('form.submit.generate') }}
-              </span>
-            </button>
           </form>
-        </section>
 
-        <!-- Poem Display Section -->
-        <section
-          ref="poemSectionRef"
-          class="sint-card p-5 md:p-8 relative min-h-[420px] md:min-h-[600px] flex flex-col scroll-mt-4"
-        >
-          <!-- Decorative ribbon -->
-          <div class="ribbon-decoration ribbon-corner-tl"></div>
-          <div class="ribbon-decoration ribbon-corner-br"></div>
-
-          <!-- Floating quill icon -->
-          <div
-            class="absolute -top-6 -left-4 text-5xl -rotate-12 drop-shadow-lg filter"
-            aria-hidden="true"
+          <!-- The poem, as a letter -->
+          <section
+            ref="poemSectionRef"
+            aria-labelledby="poem-title"
+            class="flex-[1_1_400px] min-w-0 flex flex-col gap-4 scroll-mt-4"
           >
-            🪶
-          </div>
+            <p class="sr-only" role="status">{{ poemAnnouncement }}</p>
 
-          <p class="sr-only" role="status">{{ poemAnnouncement }}</p>
+            <div class="poem-letter">
+              <div class="wax-seal" aria-hidden="true">S</div>
 
-          <div class="mb-6 border-b-2 border-[#d4a853]/30 pb-4">
-            <h2
-              class="text-2xl md:text-3xl font-bold text-[#8b1538] font-display w-full mb-3 ps-8 md:ps-6 flex items-center gap-3 break-words"
+              <!-- Rate limit: the upgrade offer -->
+              <div
+                v-if="isRateLimitError"
+                class="flex flex-col items-center text-center py-6"
+              >
+                <img
+                  src="/sint-352.webp"
+                  width="176"
+                  height="176"
+                  loading="lazy"
+                  alt=""
+                  class="w-36 h-36 rounded-full object-cover ring-4 ring-[#f4cd60] mb-6"
+                />
+                <h3 id="poem-title" class="text-2xl font-bold text-[#8b1538] mb-3 font-display">
+                  {{ t('payment.limitReached') }}
+                </h3>
+                <p class="text-[#5c0f26] mb-8 max-w-md font-medium">
+                  {{ t('payment.description') }}
+                </p>
+                <button
+                  type="button"
+                  class="btn-festive px-8 py-4 text-lg"
+                  @click="showPaymentModal = true"
+                >
+                  {{ t('payment.unlimitedAccess') }}
+                </button>
+              </div>
+
+              <template v-else>
+                <p
+                  v-if="!poem && !isLoading && !error"
+                  class="text-[0.8125rem] font-bold tracking-[0.06em] uppercase text-[#8b1538]"
+                >
+                  {{ t('poem.sample') }}
+                </p>
+                <h3
+                  id="poem-title"
+                  class="font-display font-bold text-[1.75rem] leading-tight text-[#8b1538] break-words"
+                >
+                  {{ poem || isLoading || error ? poemTitle : t('poem.sampleTitle') }}
+                </h3>
+
+                <!-- Writing -->
+                <div v-if="isLoading && !poem" class="flex items-center justify-center py-6">
+                  <PoemWritingAnimation />
+                </div>
+
+                <!-- Error -->
+                <UAlert
+                  v-else-if="error"
+                  color="error"
+                  variant="subtle"
+                  :title="t('poem.error')"
+                  :description="error"
+                  icon="i-heroicons-exclamation-triangle"
+                  class="border-2 border-red-300 bg-red-50/80 rounded-xl"
+                />
+
+                <!-- The poem -->
+                <pre
+                  v-else-if="poem"
+                  class="poem-text has-dropcap noselect"
+                  :aria-busy="isLoading || undefined"
+                ><span v-for="(line, index) in poemLines" :key="index" class="poem-line">{{ line }}<span v-if="isLoading && index === poemLines.length - 1" class="stream-caret" aria-hidden="true"></span></span></pre>
+
+                <!-- Example -->
+                <template v-else>
+                  <p class="poem-text has-dropcap">{{ t('poem.sampleText') }}</p>
+                  <p class="font-text italic text-[1.0625rem] text-[#5c0f26] text-end">
+                    {{ t('poem.sampleSignature') }}
+                  </p>
+                </template>
+              </template>
+            </div>
+
+            <!-- Actions. Disabled on the example, hidden while writing. -->
+            <div
+              v-if="!isRateLimitError && !error"
+              class="grid grid-cols-[repeat(auto-fill,minmax(12.5rem,1fr))] gap-2"
+              :class="{ invisible: isLoading }"
             >
-              <span class="text-2xl" aria-hidden="true">📖</span>
-              <span class="min-w-0">{{ poemTitle }}</span>
-            </h2>
+              <button
+                v-if="lastRequest || !poem"
+                type="button"
+                class="poem-action poem-action-main col-span-full"
+                :disabled="!poem"
+                @click="regeneratePoem"
+              >
+                <UIcon name="i-heroicons-arrow-path" class="size-5" aria-hidden="true" />
+                {{ t('poem.regenerate') }}
+              </button>
+              <button
+                v-if="shareUrl || !poem"
+                type="button"
+                class="poem-action"
+                :disabled="!poem"
+                @click="copyShareLink"
+              >
+                <UIcon name="i-heroicons-link" class="size-[1.125rem]" aria-hidden="true" />
+                {{ linkCopied ? t('poem.linkCopied') : t('poem.copyLink') }}
+              </button>
+              <button
+                type="button"
+                class="poem-action"
+                :disabled="!poem"
+                data-umami-event="Copy to clipboard"
+                @click="copyToClipboard"
+              >
+                <UIcon name="i-heroicons-clipboard-document" class="size-[1.125rem]" aria-hidden="true" />
+                {{ copySuccess ? t('poem.copied') : t('poem.copy') }}
+              </button>
+              <button
+                type="button"
+                class="poem-action"
+                :disabled="!poem || isSavingPdf"
+                @click="savePoemPdf"
+              >
+                <UIcon
+                  :name="isSavingPdf ? 'i-heroicons-arrow-path' : 'i-heroicons-arrow-down-tray'"
+                  class="size-[1.125rem]"
+                  :class="{ 'motion-safe:animate-spin': isSavingPdf }"
+                  aria-hidden="true"
+                />
+                {{ t('poem.savePdf') }}
+              </button>
+              <button
+                type="button"
+                class="poem-action"
+                :disabled="!poem"
+                @click="shareViaWhatsApp"
+              >
+                <svg class="size-[1.125rem] shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                </svg>
+                {{ t('poem.shareWhatsApp') }}
+              </button>
+              <button
+                type="button"
+                class="poem-action"
+                :disabled="!poem"
+                @click="shareViaEmail"
+              >
+                <UIcon name="i-heroicons-envelope" class="size-[1.125rem]" aria-hidden="true" />
+                {{ t('poem.shareEmail') }}
+              </button>
+              <button
+                type="button"
+                class="poem-action"
+                :disabled="!poem"
+                @click="shareViaFacebook"
+              >
+                <svg class="size-[1.125rem] shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                </svg>
+                {{ t('poem.shareFacebook') }}
+              </button>
+            </div>
+
+            <p v-if="pdfFailed" role="alert" class="text-sm font-medium text-[#8b1538]">
+              {{ t('poem.pdfError') }}
+            </p>
+            <p v-if="shareUrl && !isLoading" class="text-sm text-[#5c0f26]">
+              {{ t('poem.linkPrivacy') }}
+            </p>
 
             <!-- Earlier poems (on-device history) -->
             <button
               v-if="historyEntries.length"
               type="button"
-              class="mb-4 -ml-1 inline-flex items-center gap-1.5 min-h-11 px-1 text-sm font-bold text-[#8b1538]/80 hover:text-[#8b1538] underline decoration-[#d4a853] underline-offset-4 cursor-pointer"
+              class="self-start -ml-1 inline-flex items-center gap-1.5 min-h-11 px-1 text-sm font-bold text-[#8b1538] underline decoration-[#d4a853] underline-offset-4 cursor-pointer"
               @click="showHistory = true"
             >
-              <UIcon name="i-heroicons-book-open" class="size-4" />
+              <UIcon name="i-heroicons-book-open" class="size-4" aria-hidden="true" />
               {{ t('history.previous') }} ({{ historyEntries.length }})
             </button>
-
-            <!-- Share buttons -->
-            <!-- Keeps its space while streaming, so the poem does not jump at the end -->
-            <div
-              v-if="poem || isLoading"
-              class="flex gap-2 flex-wrap w-full"
-              :class="{ invisible: isLoading }"
-            >
-              <p v-if="pdfFailed" role="alert" class="w-full order-last text-sm font-medium text-[#8b1538]">
-                {{ t('poem.pdfError') }}
-              </p>
-              <p v-if="shareUrl" class="w-full order-last text-sm text-[#5c0f26]">
-                {{ t('poem.linkPrivacy') }}
-              </p>
-              <UButton
-                v-if="shareUrl"
-                icon="i-heroicons-link"
-                size="sm"
-                :color="linkCopied ? 'success' : 'primary'"
-                variant="outline"
-                class="border-2 border-[#d4a853] hover:bg-[#f4cd60]/20 text-[#8b1538] cursor-pointer rounded-lg"
-                @click="copyShareLink"
-              >
-                {{ linkCopied ? t('poem.linkCopied') : t('poem.copyLink') }}
-              </UButton>
-              <UButton
-                icon="i-heroicons-clipboard-document"
-                size="sm"
-                :color="copySuccess ? 'success' : 'primary'"
-                variant="outline"
-                class="border-2 border-[#d4a853] hover:bg-[#f4cd60]/20 text-[#8b1538] cursor-pointer rounded-lg"
-                @click="copyToClipboard"
-                data-umami-event="Copy to clipboard"
-              >
-                {{ copySuccess ? t('poem.copied') : t('poem.copy') }}
-              </UButton>
-              <UButton
-                icon="i-heroicons-arrow-down-tray"
-                size="sm"
-                color="primary"
-                variant="outline"
-                :loading="isSavingPdf"
-                class="border-2 border-[#d4a853] hover:bg-[#f4cd60]/20 text-[#8b1538] cursor-pointer rounded-lg"
-                @click="savePoemPdf"
-              >
-                {{ t('poem.savePdf') }}
-              </UButton>
-              <UButton
-                size="sm"
-                color="primary"
-                variant="outline"
-                class="border-2 border-[#d4a853] hover:bg-[#f4cd60]/20 text-[#8b1538] cursor-pointer rounded-lg"
-                @click="shareViaWhatsApp"
-              >
-                <template #leading>
-                  <svg
-                    class="w-4 h-4"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <path
-                      d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"
-                    />
-                  </svg>
-                </template>
-                {{ t('poem.shareWhatsApp') }}
-              </UButton>
-              <UButton
-                icon="i-heroicons-envelope"
-                size="sm"
-                color="primary"
-                variant="outline"
-                class="border-2 border-[#d4a853] hover:bg-[#f4cd60]/20 text-[#8b1538] cursor-pointer rounded-lg"
-                @click="shareViaEmail"
-              >
-                {{ t('poem.shareEmail') }}
-              </UButton>
-              <UButton
-                size="sm"
-                color="primary"
-                variant="outline"
-                class="border-2 border-[#d4a853] hover:bg-[#f4cd60]/20 text-[#8b1538] cursor-pointer rounded-lg"
-                @click="shareViaFacebook"
-              >
-                <template #leading>
-                  <svg
-                    class="w-4 h-4"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <path
-                      d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
-                    />
-                  </svg>
-                </template>
-                {{ t('poem.shareFacebook') }}
-              </UButton>
-            </div>
-          </div>
-
-          <!-- Loading State -->
-          <div
-            v-if="isLoading && !poem"
-            class="flex-grow flex items-center justify-center"
-          >
-            <PoemWritingAnimation />
-          </div>
-
-          <!-- Rate Limit Error State -->
-          <div
-            v-else-if="isRateLimitError"
-            class="flex flex-col items-center justify-center flex-grow text-center py-8"
-          >
-            <div class="relative mb-6">
-              <div
-                class="absolute inset-0 bg-[#f4cd60]/40 rounded-full blur-3xl animate-pulse"
-              ></div>
-              <img
-                src="/sint-352.webp"
-                width="176"
-                height="176"
-                loading="lazy"
-                alt="Sinterklaas"
-                class="w-44 h-44 rounded-full object-cover relative z-10 ring-4 ring-[#f4cd60] drop-shadow-2xl"
-              />
-            </div>
-            <h3
-              class="text-2xl font-bold text-[#8b1538] mb-3 font-display"
-            >
-              {{ t('payment.limitReached') }}
-            </h3>
-            <p class="text-gray-700 mb-8 max-w-md font-medium">
-              {{ t('payment.description') }}
-            </p>
-            <button
-              class="btn-festive px-8 py-4 text-lg"
-              @click="showPaymentModal = true"
-            >
-              <span class="flex items-center gap-2">
-                <span>🎁</span>
-                {{ t('payment.unlimitedAccess') }}
-                <span>🎁</span>
-              </span>
-            </button>
-          </div>
-
-          <!-- Error State -->
-          <div
-            v-else-if="error"
-            class="flex items-center justify-center flex-grow"
-          >
-            <UAlert
-              color="error"
-              variant="subtle"
-              :title="t('poem.error')"
-              :description="error"
-              icon="i-heroicons-exclamation-triangle"
-              class="border-2 border-red-300 bg-red-50/80 rounded-xl"
-            />
-          </div>
-
-          <!-- Poem Display -->
-          <div v-else-if="poem" class="flex-grow noselect">
-            <PaperScroll :poem="poem" :streaming="isLoading" />
-          </div>
-
-          <!-- Empty State -->
-          <div v-else class="flex-grow flex flex-col">
-            <p class="self-start rounded-full border border-[#8b1538] px-3 py-0.5 text-sm font-bold text-[#8b1538]">
-              {{ t('poem.sampleLabel') }}
-            </p>
-            <p class="poem-text mt-4">{{ t('poem.sampleText') }}</p>
-            <p class="mt-auto pt-6 text-base font-medium text-[#5c0f26] text-pretty">
-              {{ t('poem.empty') }}
-            </p>
-          </div>
-        </section>
+          </section>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <!-- Sinterklaas Video Message (Mobile only) -->
-    <section class="lg:hidden container mx-auto px-6 py-12 relative z-10">
+    <!-- Sinterklaas video message -->
+    <section class="container mx-auto px-6 py-12 relative z-10">
       <SinterklaasVideo />
     </section>
 
@@ -1668,19 +1422,256 @@ useHead({
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  border-radius: 0.5rem;
+  border-radius: 10px;
   border: 2px solid #d4a853;
-  background: #5c0f26;
+  background: transparent;
   color: #f4cd60;
   font-family: var(--font-sans);
   font-weight: 700;
-  font-size: 0.875rem;
-  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.25);
+  font-size: 0.9375rem;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 150ms ease-out;
 }
-.history-trigger:hover {
-  background: #7a1533;
+@media (hover: hover) {
+  .history-trigger:hover {
+    background: rgb(212 168 83 / 0.15);
+  }
+}
+
+/* The three numbered steps of the form */
+.form-step {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 0;
+  padding: 1.5rem;
+  border: 1px solid #e6d5b0;
+  border-radius: 18px;
+  background: #fffdf7;
+}
+@media (max-width: 40rem) {
+  .form-step {
+    padding: 1.25rem 1rem;
+  }
+}
+/* Floating the legend keeps it inside the padding of the fieldset. */
+.form-step-legend {
+  float: left;
+  width: 100%;
+  padding: 0;
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.375rem;
+  line-height: 1.2;
+  color: #3d0716;
+}
+.step-number {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: #5c0f26;
+  color: #f4cd60;
+  font-size: 1.125rem;
+}
+.field-label {
+  display: block;
+  margin-bottom: 0.375rem;
+  padding: 0;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: #8b1538;
+}
+
+/* A plain radio button with its label */
+.radio-plain {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-height: 2.75rem;
+  font-weight: 500;
+  font-size: 1.0625rem;
+  color: #3d0716;
+  cursor: pointer;
+}
+.radio-plain input {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0;
+  accent-color: #8b1538;
+  cursor: pointer;
+}
+.radio-plain input:focus-visible {
+  outline: 2px solid #8b1538;
+  outline-offset: 2px;
+}
+
+/* A radio button drawn as a button. Selected is filled dark, not only a
+   different hue. */
+.choice {
+  position: relative;
+  display: block;
+  cursor: pointer;
+}
+.choice input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  margin: 0;
+  cursor: pointer;
+}
+.choice > span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  min-height: 2.75rem;
+  padding: 0 0.75rem;
+  border: 1.5px solid #d9c49a;
+  border-radius: 10px;
+  background: #fff;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: #8b1538;
+  text-align: center;
+  transition-property: background-color, border-color, color;
+  transition-duration: 150ms;
+  transition-timing-function: ease-out;
+}
+.choice input:checked + span {
+  background: #5c0f26;
+  border-color: #5c0f26;
+  color: #f4cd60;
+}
+.choice input:focus-visible + span {
+  outline: 2px solid #8b1538;
+  outline-offset: 2px;
+}
+.choice input:disabled + span {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* The poem as a letter with a wax seal */
+.poem-letter {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2.75rem 2.5rem 2.5rem;
+  background: #fffaf0;
+  border: 1px solid #e6d5b0;
+  border-radius: 6px;
+  box-shadow:
+    0 1px 2px rgb(61 7 22 / 0.08),
+    0 24px 48px -20px rgb(61 7 22 / 0.35);
+}
+@media (max-width: 40rem) {
+  .poem-letter {
+    padding: 2.5rem 1.25rem 1.75rem;
+  }
+}
+.wax-seal {
+  position: absolute;
+  top: -1.375rem;
+  inset-inline-end: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.75rem;
+  height: 3.75rem;
+  border-radius: 50%;
+  background: #a3123f;
+  box-shadow:
+    inset 0 -4px 8px rgb(0 0 0 / 0.25),
+    0 4px 10px rgb(61 7 22 / 0.35);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.75rem;
+  color: #f4b6c4;
+}
+
+/* A wrapped line hangs under its verse line, so each verse stays recognizable. */
+.poem-line {
+  display: block;
+  min-height: 1lh;
+  padding-inline-start: 0.9em;
+  text-indent: -0.9em;
+}
+/* The drop cap needs a plain first line. */
+.poem-line:first-child {
+  padding-inline-start: 0;
+  text-indent: 0;
+}
+/* Shows that the poem is still being written. */
+.stream-caret {
+  display: inline-block;
+  width: 0.09em;
+  height: 1em;
+  margin-inline-start: 0.08em;
+  vertical-align: -0.12em;
+  background: #8b1538;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .stream-caret {
+    animation: caret-blink 1s steps(2, jump-none) infinite;
+  }
+}
+@keyframes caret-blink {
+  from { opacity: 1; }
+  to { opacity: 0.25; }
+}
+
+/* Buttons under the poem */
+.poem-action {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0 0.875rem;
+  border: 1.5px solid #d9c49a;
+  border-radius: 10px;
+  background: #fff;
+  color: #8b1538;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  text-align: start;
+  cursor: pointer;
+  transition-property: background-color, border-color, scale;
+  transition-duration: 150ms;
+  transition-timing-function: ease-out;
+}
+.poem-action-main {
+  justify-content: center;
+  min-height: 3.25rem;
+  border: 2px solid #8b1538;
+  background: #fffaf0;
+  font-size: 1.0625rem;
+}
+@media (hover: hover) {
+  .poem-action:enabled:hover {
+    background: #fdf3dc;
+    border-color: #8b1538;
+  }
+}
+.poem-action:enabled:active {
+  scale: 0.96;
+}
+.poem-action:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.poem-action:focus-visible {
+  outline: 2px solid #8b1538;
+  outline-offset: 2px;
 }
 .history-trigger:focus-visible {
   outline: 2px solid #f4cd60;

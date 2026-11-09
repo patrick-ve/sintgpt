@@ -10,25 +10,17 @@ import {
 import { clientDisconnectSignal } from '../../utils/clientDisconnect';
 import { hasUnlimitedAccess } from '../../utils/paymentCookie';
 import { signPoemShare } from '../../utils/poemShare';
+import { createRateLimiter, POEM_RATE_LIMIT } from '../../utils/rateLimit';
 import {
   buildPrompt,
   DEFAULT_POEM_MODEL,
   FALLBACK_POEM_MODEL,
   estimateCostUsd,
   PoemRequestSchema,
+  REGENERATE_POEM_MODEL,
 } from '../../utils/poem';
 
-// Rate limiting storage
-const rateLimitMap = new Map<
-  string,
-  { count: number; resetTime: number }
->();
-const RATE_LIMIT_MAX_REQUESTS = 3;
-const RATE_LIMIT_WINDOW_MS = 24 * 60 * 60 * 1000; // 24 hours
-
-// Debounce storage - tracks last request time per IP
-const debounceMap = new Map<string, number>();
-const DEBOUNCE_MS = 10_000; // 10 seconds between requests
+const rateLimiter = createRateLimiter();
 
 export default defineEventHandler(async (event) => {
   // Get API keys from runtime config inside handler
@@ -48,61 +40,17 @@ export default defineEventHandler(async (event) => {
 
     // Rate limiting check (skip in development or if user has unlimited access)
     if (!import.meta.dev && !hasUnlimited) {
-      // Debounce check - reject if request came too quickly after previous one
-      const lastRequestTime = debounceMap.get(ip);
-      if (lastRequestTime && now - lastRequestTime < DEBOUNCE_MS) {
-        const waitSeconds = Math.ceil(
-          (DEBOUNCE_MS - (now - lastRequestTime)) / 1000
-        );
-        consola.warn(
-          `Debounce triggered for IP: ${ip} - must wait ${waitSeconds}s`
-        );
+      const verdict = rateLimiter.check(ip, now);
+      if (!verdict.ok) {
+        consola.warn(`Rate limit (${verdict.reason}) for IP ${ip}`);
+        setResponseHeader(event, 'retry-after', verdict.retryAfterSeconds);
         throw createError({
           statusCode: 429,
-          statusMessage: `Please wait ${waitSeconds} seconds before generating another poem.`,
+          statusMessage: verdict.reason === 'debounce'
+            ? `Please wait ${verdict.retryAfterSeconds} seconds before generating another poem.`
+            : `You have reached the maximum of ${POEM_RATE_LIMIT.maxRequests} free poems per 24 hours. Upgrade to unlimited access for just €6,99 (incl. VAT)!`,
         });
       }
-
-      // Rate limit check
-      const rateLimitData = rateLimitMap.get(ip);
-
-      // If no data or reset time has passed, initialize/reset the counter
-      if (!rateLimitData || now >= rateLimitData.resetTime) {
-        rateLimitMap.set(ip, {
-          count: 1, // Start at 1 (this request counts)
-          resetTime: now + RATE_LIMIT_WINDOW_MS,
-        });
-        consola.info(
-          `Rate limit initialized for IP ${ip}: 1/${RATE_LIMIT_MAX_REQUESTS} requests used`
-        );
-      } else if (rateLimitData.count >= RATE_LIMIT_MAX_REQUESTS) {
-        // Rate limit exceeded
-        const timeRemaining = rateLimitData.resetTime - now;
-        const hoursRemaining = Math.ceil(
-          timeRemaining / (60 * 60 * 1000)
-        );
-
-        consola.warn(
-          `Rate limit exceeded for IP: ${ip} (${rateLimitData.count}/${RATE_LIMIT_MAX_REQUESTS} requests)`
-        );
-
-        throw createError({
-          statusCode: 429,
-          statusMessage: `You have reached the maximum of ${RATE_LIMIT_MAX_REQUESTS} free poems per 24 hours. Upgrade to unlimited access for just €6,99 (incl. VAT)!`,
-        });
-      } else {
-        // Increment counter BEFORE generation starts (fixes race condition)
-        rateLimitMap.set(ip, {
-          count: rateLimitData.count + 1,
-          resetTime: rateLimitData.resetTime,
-        });
-        consola.info(
-          `Rate limit for IP ${ip}: ${rateLimitData.count + 1}/${RATE_LIMIT_MAX_REQUESTS} requests used`
-        );
-      }
-
-      // Update debounce timestamp
-      debounceMap.set(ip, now);
     }
 
     // Read and parse the request body
@@ -116,13 +64,17 @@ export default defineEventHandler(async (event) => {
       rhymeScheme: validatedData.rhymeScheme,
       lines: validatedData.lines,
       language: validatedData.language,
+      regenerate: validatedData.regenerate ?? false,
       // Never log what visitors type: names and details are personal.
     });
 
     // Build the prompt
     const prompt = buildPrompt(validatedData);
 
-    const modelId = runtimeConfig.aiGatewayModel || DEFAULT_POEM_MODEL;
+    // A rewrite always uses the larger model, whatever the override says.
+    const modelId = validatedData.regenerate
+      ? REGENERATE_POEM_MODEL
+      : runtimeConfig.aiGatewayModel || DEFAULT_POEM_MODEL;
     consola.info(`Sending request to AI Gateway (${modelId})...`);
 
     // Pass the key explicitly: on Cloudflare Workers secrets arrive as
@@ -153,7 +105,7 @@ export default defineEventHandler(async (event) => {
         consola.info(
           `Tokens: ${usage.inputTokens ?? 0} in, ${usage.outputTokens ?? 0} out `
           + `(${usage.outputTokenDetails.reasoningTokens ?? 0} reasoning). `
-          + `Estimated cost: $${estimateCostUsd(usage).toFixed(6)}`,
+          + `Estimated cost: $${estimateCostUsd(usage, modelId).toFixed(6)}`,
         );
 
         if (hasUnlimited) {

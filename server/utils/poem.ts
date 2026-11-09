@@ -10,19 +10,29 @@ export const DEFAULT_POEM_MODEL = 'google/gemini-3.7-flash';
 // A different provider, so poems still work during a Google outage.
 export const FALLBACK_POEM_MODEL = 'openai/gpt-6.1-terra';
 
-// Gemini 3.7 Flash pricing on AI Gateway (USD per 1M tokens).
-// Output tokens include reasoning tokens. The estimate is only correct
-// for the default model; it is a log hint, not billing.
-const INPUT_PRICE_PER_M = 0.75;
-const OUTPUT_PRICE_PER_M = 3.75;
+// "Herschrijf dit gedicht" writes a new version with a larger model.
+// About 3x the price of the default model per token, and slower.
+export const REGENERATE_POEM_MODEL = 'google/gemini-3.1-pro-preview';
 
-export function estimateCostUsd(usage: {
-  inputTokens?: number;
-  outputTokens?: number;
-}): number {
+// AI Gateway pricing (USD per 1M tokens). Output tokens include reasoning
+// tokens. The estimate is a log hint, not billing. Unknown models (an
+// NUXT_AI_GATEWAY_MODEL override) use the default model's price.
+const PRICES_PER_M: Record<string, { input: number; output: number }> = {
+  [DEFAULT_POEM_MODEL]: { input: 0.75, output: 3.75 },
+  [REGENERATE_POEM_MODEL]: { input: 2, output: 12 },
+};
+
+export function estimateCostUsd(
+  usage: {
+    inputTokens?: number;
+    outputTokens?: number;
+  },
+  modelId: string = DEFAULT_POEM_MODEL,
+): number {
+  const price = PRICES_PER_M[modelId] ?? PRICES_PER_M[DEFAULT_POEM_MODEL]!;
   return (
-    ((usage.inputTokens ?? 0) / 1_000_000) * INPUT_PRICE_PER_M
-    + ((usage.outputTokens ?? 0) / 1_000_000) * OUTPUT_PRICE_PER_M
+    ((usage.inputTokens ?? 0) / 1_000_000) * price.input
+    + ((usage.outputTokens ?? 0) / 1_000_000) * price.output
   );
 }
 
@@ -45,13 +55,37 @@ export const PoemRequestSchema = z.object({
   rhymeScheme: z.enum(['AABB', 'ABAB', 'ABBA', 'Limerick']),
   lines: z.number().int().min(8).max(50),
   language: z.enum(['dutch', 'english']),
+  // A new version of the poem on screen, written by REGENERATE_POEM_MODEL.
+  // The server picks the model; the client only asks for a rewrite.
+  regenerate: z.boolean().optional(),
 });
 
 export type PoemRequest = z.infer<typeof PoemRequestSchema>;
 
+// Visitor text goes between XML tags in the prompt. It must not be able to
+// close a tag, open a new one or end the data block, so the model keeps
+// reading it as data.
+export function asPromptData(value: string): string {
+  return value
+    .replace(/</g, '‹')
+    .replace(/>/g, '›')
+    .replace(/={3,}/g, '==');
+}
+
 export function buildPrompt(
-  data: PoemRequest
+  input: PoemRequest
 ): string {
+  const clean = (value: string | undefined) =>
+    value === undefined ? undefined : asPromptData(value);
+  const data: PoemRequest = {
+    ...input,
+    name: asPromptData(input.name),
+    present: clean(input.present),
+    funFacts: clean(input.funFacts),
+    writtenBy: clean(input.writtenBy),
+    writtenForAudience: clean(input.writtenForAudience),
+  };
+
   const languageInstruction =
     data.language === 'dutch'
       ? 'Schrijf het gedicht in het Nederlands.'
@@ -112,12 +146,12 @@ export function buildPrompt(
 
   const writingPerspectiveInstruction =
     data.writtenBy && data.writtenBy.trim() !== ''
-      ? `\n- BELANGRIJK SCHRIJFPERSPECTIEF: Het gedicht moet geschreven lijken alsof het door "${data.writtenBy}" is geschreven. Pas de taal, woordenschat, schrijfstijl en complexiteit aan zodat het authentiek overkomt alsof deze persoon het heeft geschreven. Bijvoorbeeld: als het door een 8-jarige is, gebruik dan simpele woorden en korte zinnen met typische kindertaal.`
+      ? `\n- BELANGRIJK SCHRIJFPERSPECTIEF: Het gedicht moet geschreven lijken alsof het door de persoon uit <written_by> is geschreven. Pas de taal, woordenschat, schrijfstijl en complexiteit aan zodat het authentiek overkomt alsof deze persoon het heeft geschreven. Bijvoorbeeld: als het door een 8-jarige is, gebruik dan simpele woorden en korte zinnen met typische kindertaal.`
       : '';
 
   const audienceInstruction =
     data.writtenForAudience && data.writtenForAudience.trim() !== ''
-      ? `\n- DOELGROEP: Dit gedicht wordt voorgelezen/gegeven in de context van "${data.writtenForAudience}". Zorg dat de inhoud, toon en humor passend zijn voor deze setting.`
+      ? `\n- DOELGROEP: Dit gedicht wordt voorgelezen/gegeven in de context uit <written_for_audience>. Zorg dat de inhoud, toon en humor passend zijn voor deze setting.`
       : '';
 
   const roastInstruction =

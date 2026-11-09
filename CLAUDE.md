@@ -12,7 +12,7 @@ Package manager: **npm** (not yarn).
 
 - `npm run dev` - Development server (with `--host`)
 - `npm run build` - Production build (node-server preset; used by the tests)
-- `npm run build:cloudflare` - Build for Cloudflare Workers (`cloudflare_module` preset)
+- `npm run build:cloudflare` - Build for Cloudflare Workers (`cloudflare_module` preset), then remove every comment from `.output` (`scripts/strip-comments.ts`; fails if one is left)
 - `npm run deploy` - Build for Cloudflare and deploy with Wrangler
 - `npm run build:og` - Re-render the Open Graph images into `public/og/`
 - `npm run build:pdf-paper` - Re-render the PDF background from the CSS of `PaperScroll.vue`. Run after changing that component
@@ -37,12 +37,14 @@ Local Worker preview: `npm run build:cloudflare && npx wrangler --cwd .output de
 3. Response is an AI SDK UI message stream (SSE), released word by word by `smoothStream`. The client parses it with `utils/poemStream.ts` (`text-delta` events; an `error` event throws so gateway failures show an error instead of an empty poem).
 4. `utils/smoothReveal.ts` shows the text at a steady pace with `requestAnimationFrame`, whatever way the chunks arrive. Reduced motion and hidden tabs show it at once. The writing animation is visible until the first text arrives, while the model reasons.
 5. The finished poem is saved to the on-device history (`usePoemHistory`, localStorage key `sintgpt-poem-history`, max 50) and shown in `PoemHistoryDrawer.vue`.
+6. "Herschrijf dit gedicht" sends the same form again with `regenerate: true`. The server then uses `REGENERATE_POEM_MODEL` (`google/gemini-3.1-pro-preview`, about 3x the price per token). It counts as a poem: free visitors see the payment window. Poems opened from the history have no form data, so they have no rewrite button.
 
 Notes:
 - Cloudflare: Workers do not buffer the stream and waiting on the gateway is no CPU time. `cache-control: no-transform` stops zone compression. `enable_request_signal` (in `nuxt.config.ts`) lets a client disconnect abort the gateway request.
 - Keep **temperature at 1** for Gemini 3.x. At 2 the model reasons for minutes and can stream garbled text.
 - Client IP for rate limiting: `cf-connecting-ip` first (trusted on Cloudflare), then X-Forwarded-For.
-- Rate-limit state is in memory, so on Workers it is per isolate, not global.
+- Rate limiting is in `server/utils/rateLimit.ts`. State is in memory, so on Workers it is per isolate, not global. A request counts before validation.
+- Visitor text is escaped by `asPromptData` before it goes between XML tags in the prompt, so it cannot close a tag or end the data block. Instructions refer to the tags and never repeat visitor text.
 - HTTP errors raised on purpose (e.g. 429) are re-thrown as-is; the client shows the upgrade offer on 429.
 
 ### Payments
@@ -117,10 +119,16 @@ Runtime config is read from `NUXT_*` env vars at runtime (not baked into the bui
 | `NUXT_DODO_PAYMENTS_WEBHOOK_SECRET` | Dodo webhook signing secret. Without it the webhook rejects every event |
 | `NUXT_ACCESS_COOKIE_SECRET` | Signs the unlimited-access cookie and poem links (`openssl rand -hex 32`). Without it nobody gets unlimited access and poem links are off; changing it logs out all paying customers and breaks shared links |
 
+## No comments in the deploy
+The deployed files hold no comments. Source files keep theirs.
+- `sourcemap: false` and Wrangler's `upload_source_maps: false` leave out every `sourceMappingURL` comment. Wrangler `minify: true` drops the `// path` comment it adds per module.
+- `vue.compilerOptions.comments: false` keeps template comments out of the HTML in every build, also the e2e one.
+- `scripts/strip-comments.ts` removes what is left (such as the Tailwind license banner) and fails the build if anything remains. HTML keeps Vue's hydration markers `<!--[-->`, `<!--]-->`, `<!---->` and `<!--v-if-->`.
+
 ## Tests
 
-- `tests/unit/` - prompt/schema/cost and stream parser (fast, no network)
+- `tests/unit/` - prompt/schema/cost, prompt injection, rate limit, stream parser, comment stripping (fast, no network)
 - `tests/e2e/app.test.ts` - builds the app, starts the server and a headless browser: pages, OG tags, rate limiting, the history drawer at phone size, and one **live** poem via AI Gateway (skipped without a key; costs a few cents)
 
 ## Analytics (Umami events)
-`Generate poem`, `Poem generation failed`, `Open poem from history`, `Proceed to payment`, `Payment succeeded`, `Access restored`, `Copy share link`, `Open shared poem`, `Shared via WhatsApp/Email/Facebook`, `Copy to clipboard`, `Save as PDF`.
+`Generate poem`, `Poem generation failed`, `Open poem from history`, `Proceed to payment`, `Payment succeeded`, `Access restored`, `Copy share link`, `Open shared poem`, `Shared via WhatsApp/Email/Facebook`, `Copy to clipboard`, `Save as PDF`, `Regenerate poem`.

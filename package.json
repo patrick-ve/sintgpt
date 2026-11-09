@@ -12,7 +12,7 @@
     "test:unit": "vitest run tests/unit",
     "test:e2e": "vitest run tests/e2e",
     "typecheck": "vue-tsc --noEmit",
-    "build:cloudflare": "NITRO_PRESET=cloudflare_module nuxt build",
+    "build:cloudflare": "NITRO_PRESET=cloudflare_module nuxt build && tsx scripts/strip-comments.ts .output",
     "build:og": "tsx scripts/build-og-image.ts",
     "build:pdf-paper": "tsx scripts/build-pdf-paper.ts",
     "deploy": "npm run build:cloudflare && wrangler --cwd .output deploy"
