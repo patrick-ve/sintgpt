@@ -3,6 +3,8 @@ import {
   applyRateLimit,
   BUYER_RATE_LIMIT,
   createRateLimiter,
+  freeRateLimit,
+  PAYMENTS_DOWN_RATE_LIMIT,
   POEM_RATE_LIMIT,
 } from '../../server/utils/rateLimit';
 
@@ -10,12 +12,25 @@ const HOUR = 60 * 60 * 1000;
 const T0 = 1_800_000_000_000;
 
 describe('createRateLimiter', () => {
-  it('uses the documented free limit: 3 per day, 10 s apart', () => {
-    expect(POEM_RATE_LIMIT).toEqual({ maxRequests: 3, windowMs: 24 * HOUR, debounceMs: 10_000 });
+  it('uses the documented free limit: 1 per day, 10 s apart', () => {
+    expect(POEM_RATE_LIMIT).toEqual({ maxRequests: 1, windowMs: 24 * HOUR, debounceMs: 10_000 });
+  });
+
+  it('allows 3 free poems a day only while payments do not work', () => {
+    expect(PAYMENTS_DOWN_RATE_LIMIT).toEqual({ maxRequests: 3, windowMs: 24 * HOUR, debounceMs: 10_000 });
+    expect(freeRateLimit(true)).toBe(POEM_RATE_LIMIT);
+    expect(freeRateLimit(false)).toBe(PAYMENTS_DOWN_RATE_LIMIT);
+  });
+
+  it('refuses a second free poem from the same connection, as from a private window', () => {
+    const limiter = createRateLimiter(POEM_RATE_LIMIT);
+    expect(limiter.check('1.1.1.1', T0)).toEqual({ ok: true });
+    expect(limiter.check('1.1.1.1', T0 + 20_000)).toMatchObject({ ok: false, reason: 'limit' });
+    expect(limiter.check('2.2.2.2', T0 + 20_000)).toEqual({ ok: true });
   });
 
   it('allows three requests a day and refuses the fourth', () => {
-    const limiter = createRateLimiter();
+    const limiter = createRateLimiter(PAYMENTS_DOWN_RATE_LIMIT);
     expect(limiter.check('1.1.1.1', T0)).toEqual({ ok: true });
     expect(limiter.check('1.1.1.1', T0 + 20_000)).toEqual({ ok: true });
     expect(limiter.check('1.1.1.1', T0 + 40_000)).toEqual({ ok: true });
@@ -27,7 +42,7 @@ describe('createRateLimiter', () => {
   });
 
   it('refuses a request within 10 seconds and says how long to wait', () => {
-    const limiter = createRateLimiter();
+    const limiter = createRateLimiter(PAYMENTS_DOWN_RATE_LIMIT);
     limiter.check('1.1.1.1', T0);
     expect(limiter.check('1.1.1.1', T0 + 2_500)).toEqual({
       ok: false,
@@ -38,7 +53,7 @@ describe('createRateLimiter', () => {
   });
 
   it('does not count a refused request', () => {
-    const limiter = createRateLimiter();
+    const limiter = createRateLimiter(PAYMENTS_DOWN_RATE_LIMIT);
     limiter.check('1.1.1.1', T0);
     // Ten fast retries are all refused, and none of them uses up the limit.
     for (let i = 1; i <= 10; i++) limiter.check('1.1.1.1', T0 + i * 100);
@@ -47,20 +62,20 @@ describe('createRateLimiter', () => {
   });
 
   it('keeps a separate count per IP', () => {
-    const limiter = createRateLimiter();
+    const limiter = createRateLimiter(PAYMENTS_DOWN_RATE_LIMIT);
     for (let i = 0; i < 3; i++) limiter.check('1.1.1.1', T0 + i * 20_000);
     expect(limiter.check('1.1.1.1', T0 + 60_000).ok).toBe(false);
     expect(limiter.check('2.2.2.2', T0 + 60_000)).toEqual({ ok: true });
   });
 
   it('starts a new day after the window', () => {
-    const limiter = createRateLimiter();
+    const limiter = createRateLimiter(PAYMENTS_DOWN_RATE_LIMIT);
     for (let i = 0; i < 3; i++) limiter.check('1.1.1.1', T0 + i * 20_000);
     expect(limiter.check('1.1.1.1', T0 + 24 * HOUR)).toEqual({ ok: true });
   });
 
   it('forgets expired IPs when many are tracked, so memory stays bounded', () => {
-    const limiter = createRateLimiter({ maxTracked: 100 });
+    const limiter = createRateLimiter({ ...PAYMENTS_DOWN_RATE_LIMIT, maxTracked: 100 });
     for (let i = 0; i < 100; i++) limiter.check(`10.0.0.${i}`, T0);
     expect(limiter.trackedCount()).toBe(100);
     // A day later the old entries have expired and are removed.
@@ -69,7 +84,7 @@ describe('createRateLimiter', () => {
   });
 
   it('keeps entries that still count, even above the threshold', () => {
-    const limiter = createRateLimiter({ maxTracked: 10 });
+    const limiter = createRateLimiter({ ...PAYMENTS_DOWN_RATE_LIMIT, maxTracked: 10 });
     for (let i = 0; i < 20; i++) limiter.check(`10.0.0.${i}`, T0 + i);
     expect(limiter.trackedCount()).toBe(20);
     expect(limiter.check('10.0.0.0', T0 + 30_000)).toEqual({ ok: true });

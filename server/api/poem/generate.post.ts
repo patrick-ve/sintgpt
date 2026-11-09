@@ -12,7 +12,8 @@ import { clientDisconnectSignal } from '../../utils/clientDisconnect';
 import { paidAccess } from '../../utils/paymentCookie';
 import { checkPoemRateLimit, rateLimitIp } from '../../utils/poemRateLimit';
 import { signPoemShare } from '../../utils/poemShare';
-import { BUYER_RATE_LIMIT, creditsRule, POEM_RATE_LIMIT } from '../../utils/rateLimit';
+import { paymentsAvailable } from '../../utils/paymentsStatus';
+import { BUYER_RATE_LIMIT, creditsRule, freeRateLimit } from '../../utils/rateLimit';
 import { TIERS } from '../../../utils/pricingTiers';
 import {
   buildPrompt,
@@ -54,12 +55,18 @@ export default defineEventHandler(async (event) => {
     }
 
     if (!import.meta.dev) {
+      // Free visitors get the one poem the page offers, per connection, so a
+      // private window (which resets the page's count) gets nothing extra.
+      // While payments do not work, the page allows more and so does this.
+      const rule = tier?.poems
+        ? creditsRule(tier.poems, access!.expiresAt, Date.now())
+        : access ? BUYER_RATE_LIMIT : freeRateLimit(await paymentsAvailable(event));
       const verdict = await checkPoemRateLimit(
         event,
         access
           ? { kind: 'buyer', id: access.paymentId }
           : { kind: 'ip', id: rateLimitIp(ip) },
-        tier?.poems ? creditsRule(tier.poems, access!.expiresAt, Date.now()) : access ? BUYER_RATE_LIMIT : POEM_RATE_LIMIT,
+        rule,
       );
       if (!verdict.ok) {
         // The client shows the payment window for `limit` (free poems) and
@@ -76,7 +83,7 @@ export default defineEventHandler(async (event) => {
           statusCode: 429,
           statusMessage: {
             debounce: `Please wait ${verdict.retryAfterSeconds} seconds before generating another poem.`,
-            limit: `You have reached the maximum of ${POEM_RATE_LIMIT.maxRequests} free poems per 24 hours.`,
+            limit: `This connection has used its ${rule.maxRequests === 1 ? 'free poem' : `${rule.maxRequests} free poems`} for the last 24 hours.`,
             credits: `You have written the ${tier?.poems} poems you bought.`,
             'fair-use': `You have made ${BUYER_RATE_LIMIT.maxRequests} poems in 24 hours. Please try again later.`,
           }[reason],

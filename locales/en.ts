@@ -246,7 +246,8 @@ export default {
   payment: {
     title: 'Choose how you keep writing',
     nextStep: 'Your free poem is ready. What you filled in stays: after paying, you continue right away.',
-    limitReached: 'Your free poem is ready',
+    limitReached: 'The free poem has already been used',
+    limitReason: 'Someone on this internet connection already wrote a free poem in the last 24 hours.',
     description: 'Want to write for more people? Keep writing from €3.99. A one-time €6.99 covers poems for the whole family.',
     oneTimePayment: 'Pay once',
     includesVAT: 'incl. VAT',
@@ -428,7 +429,7 @@ export default {
         {
           heading: 'Your IP address',
           body: [
-            'Free users can make 3 poems a day. To count them, we use your IP address. We do not keep it ourselves: Cloudflare keeps only a keyed hash and a counter. Both are deleted after 24 hours at most. For paying users we count per payment in the same way, with a maximum of 100 poems a day. With 3 poems, we count per payment how many poems you wrote; that counter is deleted after pakjesavond.',
+            'Free users can make 1 poem a day, or 3 while payments do not work. To count them, we use your IP address. We do not keep it ourselves: Cloudflare keeps only a keyed hash and a counter. Both are deleted after 24 hours at most. For paying users we count per payment in the same way, with a maximum of 100 poems a day. With 3 poems, we count per payment how many poems you wrote; that counter is deleted after pakjesavond.',
             'Cloudflare hosts the website and keeps technical logs, such as the time and the address of a request. We keep those logs for 7 days at most, to find outages and abuse.',
             'Legal basis: our legitimate interest in keeping the service affordable, safe and available.',
           ],
@@ -485,7 +486,7 @@ export default {
         {
           heading: 'Free use',
           body: [
-            'Your first poem is free. Each internet connection can make at most 3 free poems per 24 hours.',
+            'Your first poem is free. Each internet connection can make at most 1 free poem per 24 hours, or 3 while payments do not work.',
           ],
         },
         {

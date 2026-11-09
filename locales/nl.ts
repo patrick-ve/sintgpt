@@ -248,7 +248,8 @@ export default {
   payment: {
     title: 'Kies hoe je verder schrijft',
     nextStep: 'Je gratis gedicht is klaar. Wat je invulde, blijft staan: na het betalen schrijf je meteen verder.',
-    limitReached: 'Je gratis gedicht is klaar',
+    limitReached: 'Het gratis gedicht is al gebruikt',
+    limitReason: 'Op deze internetverbinding is de afgelopen 24 uur al een gratis gedicht geschreven.',
     description: 'Wil je voor meer mensen schrijven? Vanaf €3,99 schrijf je verder. Voor eenmalig €6,99 schrijf je gedichten voor het hele gezin.',
     oneTimePayment: 'Eenmalig betalen',
     includesVAT: 'incl. btw',
@@ -430,7 +431,7 @@ export default {
         {
           heading: 'Je IP-adres',
           body: [
-            'Gratis gebruikers mogen 3 gedichten per dag maken. Om dat te tellen gebruiken we je IP-adres. We bewaren het niet zelf: Cloudflare bewaart alleen een versleutelde afgeleide (een hash) en een teller. Die verdwijnen na hooguit 24 uur. Voor betalende gebruikers tellen we op dezelfde manier per betaling, met een maximum van 100 gedichten per dag. Bij 3 gedichten tellen we per betaling hoeveel gedichten je schreef; die teller verdwijnt na pakjesavond.',
+            'Gratis gebruikers mogen 1 gedicht per dag maken, of 3 als betalen tijdelijk niet werkt. Om dat te tellen gebruiken we je IP-adres. We bewaren het niet zelf: Cloudflare bewaart alleen een versleutelde afgeleide (een hash) en een teller. Die verdwijnen na hooguit 24 uur. Voor betalende gebruikers tellen we op dezelfde manier per betaling, met een maximum van 100 gedichten per dag. Bij 3 gedichten tellen we per betaling hoeveel gedichten je schreef; die teller verdwijnt na pakjesavond.',
             'Cloudflare host de website en houdt technische logs bij, zoals het tijdstip en het adres van een aanvraag. Die logs bewaren we hooguit 7 dagen, om storingen en misbruik op te sporen.',
             'Grondslag: ons gerechtvaardigd belang om de dienst betaalbaar, veilig en beschikbaar te houden.',
           ],
@@ -487,7 +488,7 @@ export default {
         {
           heading: 'Gratis gebruik',
           body: [
-            'Je eerste gedicht is gratis. Per internetaansluiting kun je hooguit 3 gratis gedichten per 24 uur maken.',
+            'Je eerste gedicht is gratis. Per internetaansluiting kun je hooguit 1 gratis gedicht per 24 uur maken. Werkt betalen tijdelijk niet, dan zijn dat er 3.',
           ],
         },
         {

@@ -88,7 +88,7 @@ describe('privacy and terms', () => {
     expect(privacy).toContain('90 dagen');
     expect(privacy).toContain('24 uur');
     expect(privacy).toContain('100 gedichten per dag');
-    expect(terms).toContain('3 gratis gedichten per 24 uur');
+    expect(terms).toContain('1 gratis gedicht per 24 uur');
     expect(terms).toContain('100 gedichten per 24 uur');
     expect(terms).toContain('€6,99');
     expect(terms).toContain('€3,99');
@@ -394,7 +394,8 @@ describe('poem area states', () => {
 
   it('offers to keep writing when the server limit is reached', async () => {
     const page = await submitWith({ status: 429, json: { statusMessage: 'limit' } });
-    await page.getByRole('heading', { name: /Je gratis gedicht is klaar/ }).waitFor();
+    await page.getByRole('heading', { name: 'Het gratis gedicht is al gebruikt' }).waitFor();
+    await page.getByText('Op deze internetverbinding is de afgelopen 24 uur al een gratis gedicht geschreven.').waitFor();
     await page.getByRole('button', { name: 'Kies hoe je verder schrijft' }).click();
     await page.locator('dialog[open]').waitFor();
     expect(await page.getByRole('button', { name: 'Herschrijf dit gedicht' }).count()).toBe(0);
@@ -1009,18 +1010,21 @@ describe('POST /api/poem/generate', () => {
     expect(retryAfter).toBeLessThanOrEqual(10);
   });
 
-  it('allows 3 requests per IP a day, also when they are invalid', async () => {
+  it('allows the free poems per IP a day, also when they are invalid', async () => {
     // Each request counts before validation, so junk cannot be used to probe
-    // for free. The debounce is 10 s, so these use different IPs per step.
+    // for free. 1 a day while payments work (a private window gets nothing
+    // extra), 3 while they do not. The debounce is 10 s.
+    const { available } = (await (await fetch('/api/payment/status')).json()) as { available: boolean };
+    const free = available ? 1 : 3;
     const ip = '10.0.0.9';
     const statuses: number[] = [];
     let last: Response | undefined;
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i <= free; i++) {
       last = await postPoem({ name: '' }, ip);
       statuses.push(last.status);
-      if (i < 3) await new Promise(resolve => setTimeout(resolve, 10_100));
+      if (i < free) await new Promise(resolve => setTimeout(resolve, 10_100));
     }
-    expect(statuses).toEqual([400, 400, 400, 429]);
+    expect(statuses).toEqual([...Array(free).fill(400), 429]);
     expect(((await last!.json()) as { data: { reason: string } }).data.reason).toBe('limit');
 
     // A buyer on the same connection counts per payment, not per IP.

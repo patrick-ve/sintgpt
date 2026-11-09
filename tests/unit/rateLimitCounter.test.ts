@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { RateLimitCounter, type CounterState } from '../../server/durable/RateLimitCounter';
-import { creditsRule, POEM_RATE_LIMIT } from '../../server/utils/rateLimit';
+import { creditsRule, PAYMENTS_DOWN_RATE_LIMIT } from '../../server/utils/rateLimit';
 
 const T0 = 1_800_000_000_000;
 const DAY = 24 * 60 * 60 * 1000;
@@ -22,7 +22,7 @@ function fakeState() {
 async function check(counter: RateLimitCounter) {
   const res = await counter.fetch(new Request('https://rate-limit.internal/check', {
     method: 'POST',
-    body: JSON.stringify(POEM_RATE_LIMIT),
+    body: JSON.stringify(PAYMENTS_DOWN_RATE_LIMIT),
   }));
   return res.json();
 }

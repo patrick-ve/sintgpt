@@ -32,12 +32,32 @@ export interface RateLimitEntry {
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-/** Free visitors, per IP. */
+/**
+ * Free visitors, per IP: the one free poem the page offers. The page counts
+ * it in localStorage, which a private window or cleared site data resets, so
+ * the server holds the same number per connection.
+ */
 export const POEM_RATE_LIMIT = {
+  maxRequests: 1,
+  windowMs: DAY_MS,
+  debounceMs: 10_000,
+} as const satisfies RateLimitRule;
+
+/**
+ * Free visitors, per IP, while payments do not work (see paymentsStatus.ts).
+ * Nobody can buy more poems then, so the page lifts its own limit and the
+ * server allows a few free poems a day.
+ */
+export const PAYMENTS_DOWN_RATE_LIMIT = {
   maxRequests: 3,
   windowMs: DAY_MS,
   debounceMs: 10_000,
 } as const satisfies RateLimitRule;
+
+/** The rule for a free visitor. */
+export function freeRateLimit(paymentsOn: boolean): RateLimitRule {
+  return paymentsOn ? POEM_RATE_LIMIT : PAYMENTS_DOWN_RATE_LIMIT;
+}
 
 /**
  * Buyers with unlimited access, per payment. High enough that no family

@@ -32,6 +32,7 @@ Last updated: 9 November 2026. Live version: `50d3116e-afd1-45cb-ada6-194a35e3c1
 | [#14](#14-blog-dates) | Low | Blog dates | Open |
 | [#15](#15-small-ui-items) | Low | Small UI items | Open |
 | [#16](#16-wrangler-update) | Low | Wrangler update | Open |
+| [#17](#17-free-poems-from-a-new-ip-address) | Low | Free poems from a new IP address | Accepted risk |
 
 ## Open
 
@@ -40,7 +41,7 @@ Last updated: 9 November 2026. Live version: `50d3116e-afd1-45cb-ada6-194a35e3c1
 - **Status:** waiting for Dodo.
 - **What:** live checkouts fail with "403 Live payments not enabled for merchant".
   The site catches this: it stores a flag for 15 minutes, shows "Betalen lukt nu
-  even niet" and allows 3 free poems a day.
+  even niet" and allows 3 free poems a day per connection (otherwise 1).
 - **Effect:** nobody can pay. This is the largest block in the funnel.
 - **Next step:** get live payments approved by Dodo. Then do #3.
 
@@ -197,6 +198,22 @@ Last updated: 9 November 2026. Live version: `50d3116e-afd1-45cb-ada6-194a35e3c1
 - **Status:** open.
 - **What:** Wrangler 4.158.0 is in use; 4.159.0 is available.
 
+### #17 Free poems from a new IP address
+
+- **Status:** accepted risk, after the fix of 9 November (see Closed).
+- **What:** the server allows 1 free poem per IP address per 24 hours (IPv6 per
+  /64). A visitor with a new IP address gets a new free poem: another network,
+  a VPN, or a phone that reconnects to the mobile network.
+- **Side effect:** people who share one connection (a household on one wifi,
+  an office, some mobile networks) share the 1 free poem. The second person sees
+  "Het gratis gedicht is al gebruikt" and the payment offer.
+- **Options if analytics shows abuse** (many `Generate poem` events with plan
+  `free`, few `Rate limited`):
+  1. Cloudflare Turnstile on free poems. Stops scripts that rotate IP addresses,
+     not people. It is a third-party script: update the privacy page.
+  2. Count IPv6 per /56 instead of /64. Stricter, but can join neighbours on
+     some mobile networks.
+
 ## Findings
 
 ### Visitors on 9 November 2026
@@ -224,3 +241,4 @@ Last updated: 9 November 2026. Live version: `50d3116e-afd1-45cb-ada6-194a35e3c1
 | 9 Nov 2026 | Pricing tiers | Commit `810ca80`, live (only Gezin on sale) |
 | 9 Nov 2026 | Gift links | Commit `b2d116b`, live |
 | 9 Nov 2026 | Dodo test products for the tiers | Created in the new business (#3) |
+| 9 Nov 2026 | Free poems in a private window | The server now allows 1 free poem per IP per 24 hours, like the page (3 while payments do not work). Not deployed yet. Remaining risk: #17 |

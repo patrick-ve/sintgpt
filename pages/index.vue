@@ -1314,7 +1314,7 @@ useHead({
                     {{ rateLimitReason === 'credits' ? t('payment.creditsUsedTitle') : t('payment.limitReached') }}
                   </h3>
                   <p class="text-[#5c0f26] mb-8 max-w-md font-medium">
-                    {{ rateLimitReason === 'credits' ? t('payment.creditsUsedMessage') : t('payment.description') }}
+                    {{ rateLimitReason === 'credits' ? t('payment.creditsUsedMessage') : `${t('payment.limitReason')} ${t('payment.description')}` }}
                   </p>
                   <button
                     type="button"
