@@ -54,4 +54,34 @@ export const OG_IMAGES: OgImageSpec[] = [
     title: 'Hoe schrijf je het perfecte sinterklaas\u00ADgedicht?',
     subtitle: 'Praktische tips voor een gedicht dat indruk maakt',
   },
+  {
+    name: 'blog-rijm-en-ritme-sinterklaasgedicht',
+    kind: 'article',
+    title: 'Rijm en ritme in je sinterklaas­gedicht',
+    subtitle: 'Heffingen tellen, rijmschema\'s en de bekendste valkuilen',
+  },
+  {
+    name: 'blog-lootjes-trekken-tips',
+    kind: 'article',
+    title: 'Lootjes trekken zonder gedoe',
+    subtitle: 'Eerlijk trekken en heldere afspraken over budget en gedicht',
+  },
+  {
+    name: 'blog-surprise-maken-ideeen',
+    kind: 'article',
+    title: 'Een surprise maken',
+    subtitle: 'Materialen, technieken en ideeën per persoon',
+  },
+  {
+    name: 'blog-roast-sinterklaasgedicht-zonder-te-kwetsen',
+    kind: 'article',
+    title: 'Roasten zonder te kwetsen',
+    subtitle: 'Stevig plagen in je gedicht, met een warm slot',
+  },
+  {
+    name: 'blog-sinterklaas-op-het-werk',
+    kind: 'article',
+    title: 'Sinterklaas op het werk',
+    subtitle: 'Lootjes, budget en gedichten over collega\'s',
+  },
 ];

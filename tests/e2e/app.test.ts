@@ -381,10 +381,10 @@ describe('poem area states', () => {
     return page;
   }
 
-  it('offers unlimited access when the server limit is reached', async () => {
+  it('offers to keep writing when the server limit is reached', async () => {
     const page = await submitWith({ status: 429, json: { statusMessage: 'limit' } });
-    await page.getByRole('heading', { name: /gratis gedicht gebruikt/ }).waitFor();
-    await page.getByRole('button', { name: /Onbeperkt toegang/ }).click();
+    await page.getByRole('heading', { name: /Je gratis gedicht is klaar/ }).waitFor();
+    await page.getByRole('button', { name: /Schrijf verder voor/ }).click();
     await page.locator('dialog[open]').waitFor();
     expect(await page.getByRole('button', { name: 'Herschrijf dit gedicht' }).count()).toBe(0);
     await page.close();
@@ -396,7 +396,7 @@ describe('poem area states', () => {
       json: { statusCode: 429, data: { reason: 'debounce', retryAfterSeconds: 7 } },
     });
     await page.getByText('over 7 seconden').waitFor();
-    expect(await page.getByRole('heading', { name: /gratis gedicht gebruikt/ }).count()).toBe(0);
+    expect(await page.getByRole('heading', { name: /Je gratis gedicht is klaar/ }).count()).toBe(0);
     await page.close();
   }, 30_000);
 
@@ -406,7 +406,7 @@ describe('poem area states', () => {
       json: { statusCode: 429, data: { reason: 'fair-use', retryAfterSeconds: 3600 } },
     });
     await page.getByText('100 gedichten gemaakt').waitFor();
-    expect(await page.getByRole('button', { name: /Onbeperkt toegang/ }).count()).toBe(0);
+    expect(await page.getByRole('button', { name: /Schrijf verder voor/ }).count()).toBe(0);
     await page.close();
   }, 30_000);
 
@@ -435,6 +435,8 @@ describe('poem area states', () => {
     for (const name of POEM_ACTIONS.filter(n => n !== 'Kopieer link')) {
       expect(await page.getByRole('button', { name }).isEnabled(), name).toBe(true);
     }
+    // The free poem is complete: sharing, copying and the PDF all work for it.
+    await page.getByText('Dit gratis gedicht is helemaal van jou').waitFor();
     const history = await page.evaluate(() =>
       JSON.parse(localStorage.getItem('sintgpt-poem-history') || '[]'));
     expect(history).toHaveLength(1);
@@ -460,7 +462,7 @@ describe('Herschrijf dit gedicht', () => {
       return route.fulfill({ status: 200, contentType: 'text/event-stream', body: poemStream(poem) });
     });
     await page.goto(url('/'), { waitUntil: 'networkidle' });
-    await page.getByText('Onbeperkt gedichten ontgrendeld!').waitFor();
+    await page.getByText('Je schrijft zoveel gedichten als je wilt.').waitFor();
 
     await page.fill('#poem-name', 'Sanne');
     await page.getByRole('radio', { name: /Klassiek/ }).check();
@@ -656,7 +658,7 @@ describe('restoring access', () => {
       route.fulfill({ json: { status: 'granted' } }));
     await page.fill('#restore-payment-id', 'pay_valid');
     await page.locator('.restore-submit').click();
-    await page.getByText('Betaling geslaagd!').waitFor();
+    await page.getByText('Gelukt! Je kunt verder schrijven').waitFor();
     expect(await page.locator('dialog[open]').count()).toBe(0);
     await page.close();
   }, 30_000);
@@ -717,7 +719,7 @@ describe('when payments do not work', () => {
     await page.locator('#poem-form button[type=submit]').click();
 
     await page.getByRole('heading', { name: 'Je hebt de gratis gedichten van vandaag gebruikt' }).waitFor();
-    expect(await page.getByRole('button', { name: /Onbeperkt toegang/ }).count()).toBe(0);
+    expect(await page.getByRole('button', { name: /Schrijf verder voor/ }).count()).toBe(0);
     await page.close();
   }, 30_000);
 
@@ -1072,4 +1074,189 @@ describe('POST /api/poem/generate', () => {
       expect(Math.max(...verses.map(v => v.length))).toBeLessThan(160);
     },
   );
+});
+
+describe('keeping the form during payment', () => {
+  it('shows the next step, keeps the form and writes the poem after paying', async () => {
+    const page = await createPage();
+    await paymentsWork(page);
+    await page.addInitScript(() => {
+      if (!sessionStorage.getItem('started')) {
+        sessionStorage.setItem('started', '1');
+        localStorage.setItem('sinterklaas-payment', JSON.stringify({ poemCount: 1 }));
+      }
+    });
+    await page.route('**/api/payment/create-checkout', route =>
+      route.fulfill({ json: { checkoutUrl: url('/?payment_id=pay_ok&status=succeeded') } }));
+    await page.route('**/api/payment/claim-access', route =>
+      route.fulfill({ json: { status: 'granted' } }));
+    const requests: Record<string, unknown>[] = [];
+    await page.route('**/api/poem/generate', (route) => {
+      requests.push(route.request().postDataJSON());
+      return route.fulfill({ status: 200, contentType: 'text/event-stream', body: poemStream('Een nieuw gedicht.') });
+    });
+
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+    await page.fill('#poem-name', 'Oma Truus');
+    await page.fill('#poem-present', 'warme sokken');
+    await page.locator('#poem-form button[type=submit]').click();
+
+    // The payment window shows the next step and the offer for the household,
+    // without the name from the form.
+    const dialog = page.locator('dialog[open]');
+    await dialog.getByText('na het betalen schrijf je meteen verder').waitFor();
+    await dialog.getByText('Eén keer betalen, gedichten voor het hele gezin').waitFor();
+    await dialog.getByText('Bij 7 gedichten betaal je minder dan €1 per gedicht.').waitFor();
+    expect(await dialog.textContent()).not.toContain('Oma Truus');
+    await dialog.getByRole('button', { name: /Verder met je gedicht/ }).click();
+
+    await page.getByText('Gelukt! Je kunt verder schrijven').waitFor({ timeout: 15_000 });
+    await page.getByText('Wat je invulde, staat nog in het formulier.').waitFor();
+    expect(await page.inputValue('#poem-name')).toBe('Oma Truus');
+    expect(await page.inputValue('#poem-present')).toBe('warme sokken');
+    // Used once, then gone.
+    expect(await page.evaluate(() => localStorage.getItem('sintgpt-form-draft'))).toBeNull();
+
+    await page.getByRole('button', { name: 'Schrijf het gedicht' }).click();
+    await page.getByText('Een nieuw gedicht.').waitFor({ timeout: 15_000 });
+    expect(requests).toHaveLength(1);
+    expect(requests[0]).toMatchObject({ name: 'Oma Truus', present: 'warme sokken' });
+    await page.close();
+  }, 45_000);
+
+  it('does not fill in the form on a normal visit', async () => {
+    const page = await createPage();
+    await page.addInitScript(() => {
+      localStorage.setItem('sintgpt-form-draft', JSON.stringify({ savedAt: Date.now(), form: { name: 'Oud' } }));
+    });
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+    expect(await page.inputValue('#poem-name')).toBe('');
+    expect(await page.evaluate(() => localStorage.getItem('sintgpt-form-draft'))).toBeNull();
+    await page.close();
+  }, 30_000);
+});
+
+describe('days until pakjesavond', () => {
+  async function homeAt(time: string) {
+    const page = await createPage();
+    await page.clock.setFixedTime(new Date(time));
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+    return page;
+  }
+
+  it('counts the days in the hero', async () => {
+    const page = await homeAt('2026-11-20T10:00:00+01:00');
+    await page.locator('.countdown').getByText('Nog 15 dagen tot pakjesavond').waitFor();
+    expect(await page.getByText('Binnen 30 seconden heb je een gedicht').count()).toBe(0);
+    await page.close();
+  }, 30_000);
+
+  it('adds the time hint close to the date', async () => {
+    const page = await homeAt('2026-12-04T10:00:00+01:00');
+    await page.locator('.countdown').getByText('Morgen is het pakjesavond').waitFor();
+    await page.locator('.countdown').getByText('Op het laatste moment? Binnen 30 seconden heb je een gedicht.').waitFor();
+    await page.close();
+  }, 30_000);
+
+  it('shows nothing after pakjesavond', async () => {
+    const page = await homeAt('2026-12-06T10:00:00+01:00');
+    await page.locator('.countdown').waitFor({ state: 'detached' });
+    await page.close();
+  }, 30_000);
+});
+
+describe('example poems', () => {
+  it('shows an example per style on the home page', async () => {
+    const page = await createPage();
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+    const section = page.locator('section[aria-labelledby="examples-title"]');
+    await section.getByRole('heading', { name: 'Gedicht voor Opa Kees' }).waitFor();
+    await section.getByRole('button', { name: /Roast/ }).click();
+    await section.getByRole('heading', { name: 'Gedicht voor Daan', exact: true }).waitFor();
+    expect(await section.getByRole('button', { name: /Roast/ }).getAttribute('aria-pressed')).toBe('true');
+    await page.close();
+  }, 30_000);
+
+  it('lists every example on /voorbeelden', async () => {
+    const res = await fetch('/voorbeelden');
+    expect(res.status).toBe(200);
+    const html = await res.text();
+    expect(html).toContain('<link rel="canonical" href="https://sintgpt.com/voorbeelden"');
+    for (const name of ['Opa Kees', 'Lotte', 'Mark', 'Tante Els', 'Daan', 'Jeroen', 'Buurman Gerrit', 'Emma']) {
+      expect(html, name).toContain(`Gedicht voor ${name}`);
+    }
+    expect(html).not.toMatch(/gemini|openai/i);
+  });
+});
+
+describe('lootjes trekken', () => {
+  it('renders the page with its own canonical address', async () => {
+    const res = await fetch('/lootjes');
+    expect(res.status).toBe(200);
+    const html = await res.text();
+    expect(html).toContain('<link rel="canonical" href="https://sintgpt.com/lootjes"');
+    expect(html).toMatch(/<h1[^>]*>\s*Lootjes trekken\s*<\/h1>/);
+  });
+
+  it('asks for at least three names', async () => {
+    const page = await createPage();
+    await page.goto(url('/lootjes'), { waitUntil: 'networkidle' });
+    await page.fill('#lootjes-names', 'Sanne\nDaan');
+    await page.getByRole('button', { name: 'Trek lootjes' }).click();
+    await page.getByText('Vul minstens 3 namen in.').waitFor();
+    expect(await page.locator('#lootjes-names').getAttribute('aria-invalid')).toBe('true');
+    await page.close();
+  }, 30_000);
+
+  it('lets each person see only their own lootje, and keeps the draw after a reload', async () => {
+    const page = await createPage();
+    await page.goto(url('/lootjes'), { waitUntil: 'networkidle' });
+    await page.fill('#lootjes-names', 'Sanne\nDaan\nOpa Kees');
+    await page.getByRole('button', { name: 'Trek lootjes' }).click();
+    await page.getByText('Geef de telefoon door. Tik op je eigen naam.').waitFor();
+
+    await page.getByRole('button', { name: 'Sanne' }).click();
+    await page.getByText('Sanne, jij hebt het lootje van').waitFor();
+    const drawn = (await page.locator('#lootjes-reveal').textContent())!.trim();
+    expect(['Daan', 'Opa Kees']).toContain(drawn);
+    await page.getByRole('button', { name: 'Verberg en geef door' }).click();
+    await page.getByText('1 van de 3 hebben hun lootje gezien.').waitFor();
+
+    await page.reload({ waitUntil: 'networkidle' });
+    await page.getByRole('button', { name: 'Sanne' }).click();
+    expect((await page.locator('#lootjes-reveal').textContent())!.trim()).toBe(drawn);
+    await page.getByRole('button', { name: 'Verberg en geef door' }).click();
+
+    // A new draw needs a second click, so nobody starts one by accident.
+    await page.getByRole('button', { name: 'Nieuwe trekking' }).click();
+    await page.getByRole('button', { name: 'Ja, trek opnieuw' }).click();
+    expect(await page.inputValue('#lootjes-names')).toBe('Sanne\nDaan\nOpa Kees');
+    await page.close();
+  }, 45_000);
+});
+
+describe('blog', () => {
+  it.each([
+    'rijm-en-ritme-sinterklaasgedicht',
+    'lootjes-trekken-tips',
+    'surprise-maken-ideeen',
+    'roast-sinterklaasgedicht-zonder-te-kwetsen',
+    'sinterklaas-op-het-werk',
+  ])('renders /blog/%s without naming the AI model', async (slug) => {
+    const res = await fetch(`/blog/${slug}`);
+    expect(res.status).toBe(200);
+    const html = await res.text();
+    expect(html).toContain(`<link rel="canonical" href="https://sintgpt.com/blog/${slug}"`);
+    expect(html.match(/<h1[\s>]/g)).toHaveLength(1);
+    expect(html).not.toMatch(/gemini|openai|gpt-\d/i);
+    const index = await (await fetch('/blog')).text();
+    expect(index).toContain(`href="/blog/${slug}"`);
+  });
+
+  it('lists the new pages in the sitemap', async () => {
+    const sitemap = await (await fetch('/sitemap.xml')).text();
+    for (const path of ['/voorbeelden', '/lootjes', '/blog/lootjes-trekken-tips']) {
+      expect(sitemap, path).toContain(`<loc>https://sintgpt.com${path}</loc>`);
+    }
+  });
 });

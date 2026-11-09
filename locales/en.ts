@@ -13,7 +13,13 @@ export default {
     moreInfo: 'How does it work?',
     photoAlt: 'Sinterklaas winks and taps his temple',
     photoCaption: 'Even Sinterklaas finds rhyming hard sometimes.',
-    note: 'First poem free, then a one-time €6,99 for unlimited poems.',
+    note: 'Your first poem is free. After that, a one-time €6,99 covers poems for the whole family.',
+  },
+  countdown: {
+    days: 'Pakjesavond is in {count} day | Pakjesavond is in {count} days',
+    tomorrow: 'Pakjesavond is tomorrow',
+    today: 'Pakjesavond is tonight',
+    hint: 'Last minute? You will have a poem in 30 seconds.',
   },
   form: {
     title: 'Write your poem in three steps',
@@ -41,19 +47,19 @@ export default {
       label: 'Fun facts about the recipient',
       placeholder:
         "Tell as much detail as possible about hobbies, work, sports, interests or other anecdotes.\n\nFor example: Sinterklaas is a true horse lover and spends hours with his faithful white horse Amerigo. He loves gingerbread cookies and speculaas, but dislikes licorice. In his spare time, he enjoys reading letters from children and often forgets where he left his bishop's hat...",
-      help: 'This information is used to make the poem more personal',
+      help: 'The more you tell, the more personal the poem.',
     },
     writtenBy: {
       label: 'Written by',
       placeholder:
         'For example: an 8-year-old child, a colleague, a family member...',
-      help: 'The poem will be written as if created by this person',
+      help: 'The poem sounds as if this person wrote it.',
     },
     writtenForAudience: {
       label: 'For what audience',
       placeholder:
         'For example: elementary school class, adult workplace, family...',
-      help: 'The tone and content will be adjusted for this context',
+      help: 'The poem suits the people who will hear it.',
     },
     style: {
       label: 'Poem style',
@@ -84,8 +90,8 @@ export default {
         'Limericks are always 5 lines (AABBA rhyme scheme)',
     },
     submit: {
-      generate: 'Generate poem',
-      generating: 'Generating poem...',
+      generate: 'Write my poem',
+      generating: 'Sinterklaas is writing…',
       time: 'Ready in about 30 seconds.',
     },
     required: '*',
@@ -104,8 +110,9 @@ export default {
     shareWhatsApp: 'Share on WhatsApp',
     shareEmail: 'Send via email',
     shareFacebook: 'Share on Facebook',
-    loading: 'Your personalized poem is being created...',
-    error: 'Error',
+    loading: 'Sinterklaas is writing your poem…',
+    error: 'That did not work',
+    freeComplete: 'This free poem is all yours: share it, copy it or save it as a PDF.',
     ready: 'Your poem is ready.',
     sample: 'Example',
     sampleTitle: 'Poem for Mark',
@@ -140,24 +147,26 @@ export default {
     contact: 'Contact us',
     nav: 'Footer',
     blog: 'Blog: tips and inspiration',
+    examples: 'Examples',
+    lootjes: 'Draw names',
     privacy: 'Privacy',
     terms: 'Terms',
   },
   error: {
     title: 'Oops! Something went wrong.',
     message:
-      'An error occurred while displaying this part of the page.',
+      'This part of the page did not load.',
     label: 'Error',
     retry: 'Try again',
   },
   seo: {
     title: "Sinterklaas poem generator with AI | SintGPT",
     description: "Create a personal Sinterklaas poem that really rhymes in 30 seconds. First poem free. Unlike ChatGPT, SintGPT rhymes properly in Dutch and English.",
-    ogTitle: 'SintGPT - AI Sinterklaas Poem Generator',
+    ogTitle: 'SintGPT: your Sinterklaas poem in 30 seconds',
     ogDescription:
-      'Generate perfectly rhyming Sinterklaas poems in 30 seconds. Unlike ChatGPT, SintGPT actually rhymes in Dutch!',
+      'Personal Sinterklaas poems that really rhyme. Ready in 30 seconds, and your first poem is free.',
     ogImageAlt:
-      'SintGPT - AI Sinterklaas Poem Generator that actually rhymes in Dutch',
+      'SintGPT: ChatGPT cannot rhyme, SintGPT can',
   },
   faq: {
     title: 'Frequently Asked Questions',
@@ -165,22 +174,22 @@ export default {
       {
         question: 'How do I create a Sinterklaas poem with SintGPT?',
         answer:
-          'Simply fill in the recipient\'s name, optionally add fun facts about hobbies or work, choose a style (funny, classic, ironic, or old-fashioned) and a rhyme scheme. Click "Generate poem" and within 30 seconds you\'ll have a unique, personalized Sinterklaas poem!',
+          'Fill in the name of the recipient and tell us about their hobbies, work or funny habits. Choose a style and a rhyme scheme, and click "Write my poem". Within 30 seconds you have a poem that is really about that person.',
       },
       {
         question: 'Is SintGPT free?',
         answer:
-          'Yes! You can generate 1 Sinterklaas poem for free. After that, you can upgrade to unlimited access for just €6,99 (incl. VAT), allowing you to create as many poems as you want for the entire Sinterklaas celebration.',
+          'Your first poem is free, with everything included: sharing, copying and saving as a PDF. After that, you pay a one-time €6,99 (incl. VAT) and write poems for the whole family for a year. With 7 poems, that is less than €1 per poem.',
       },
       {
         question: 'What poem styles are available?',
         answer:
-          'SintGPT offers 6 different styles: Funny (with humor and wordplay), Classic (traditional and atmospheric), Ironic (with a wink and sarcasm), Old-fashioned (in old Dutch style), Spicy (with daring winks), and Roast (tease your friends without mercy). You can also choose from different rhyme schemes like AABB, ABBA, or Limerick.',
+          'You choose from 6 styles: Funny (with humor and wordplay), Classic (traditional and atmospheric), Ironic (with a wink and sarcasm), Old-fashioned (in old Dutch style), Spicy (with daring winks), and Roast (tease your friends without mercy). You can also choose from different rhyme schemes like AABB, ABBA, or Limerick.',
       },
       {
         question: 'How personal do the poems get?',
         answer:
-          'The more details you provide, the more personal the poem! You can add information about hobbies, work, special characteristics, or funny anecdotes. Our AI processes this information and creates a unique poem that perfectly fits the recipient.',
+          'The more you tell, the more personal the poem. Mention hobbies, work, habits or a funny story. SintGPT turns those details into a poem that fits only this person.',
       },
       {
         question: 'Can I keep the present secret in the poem?',
@@ -190,17 +199,17 @@ export default {
       {
         question: 'In which languages can SintGPT create poems?',
         answer:
-          'SintGPT can generate Sinterklaas poems in Dutch and English. This is ideal for Dutch families abroad or international friends who want to participate in the Sinterklaas tradition.',
+          'SintGPT writes Sinterklaas poems in Dutch and English. Useful for Dutch families abroad, and for friends who are just getting to know the tradition.',
       },
       {
-        question: 'How long does it take to generate a poem?',
+        question: 'How long does it take to write a poem?',
         answer:
-          'Generating a Sinterklaas poem takes an average of 20-30 seconds. Our AI analyzes your input and creates a unique, rhyming poem that perfectly matches your preferences.',
+          'About 20 to 30 seconds. You see the poem appear line by line.',
       },
       {
-        question: 'Can I edit or regenerate the poems?',
+        question: 'Can I change a poem or have it written again?',
         answer:
-          "You can easily copy the generated poem to your clipboard and then edit it in your favorite text editor. If you're not satisfied, you can generate a new poem with different details or style until you have the perfect result!",
+          'Yes. "Rewrite this poem" gives you a new version with the same details. Want to change something yourself? Copy the poem and edit it however you like.',
       },
       {
         question: 'Is my data stored?',
@@ -216,66 +225,49 @@ export default {
     ],
   },
   payment: {
-    title: 'Upgrade to unlimited access',
-    description: 'You have used your free poem',
-    limitReached:
-      "You've used your free poem. Upgrade to unlimited access for just €6,99 (incl. VAT)!",
-    oneTimePayment: 'One-time payment',
+    title: 'Keep writing for the whole family',
+    nextStep: 'Your free poem is ready. What you filled in stays: after paying, you continue right away.',
+    limitReached: 'Your free poem is ready',
+    description: 'Want to write for more people? A one-time €6,99 covers poems for the whole family.',
+    oneTimePayment: 'One-time',
     includesVAT: 'incl. VAT',
-    whatYouGet: 'What you get:',
-    benefit1: 'Generate unlimited Sinterklaas poems',
-    benefit2: 'No more limits',
-    benefit3: 'Instant access after payment',
-    feature1: 'Unlimited poem generation',
-    feature2: 'All styles and rhyme schemes',
-    feature3: 'One-time payment, one year of access in this browser',
-    emailLabel: 'Email address for invoice',
-    emailPlaceholder: 'your@email.com',
-    emailHelp: 'We will send your invoice to this email address',
-    proceedToPayment: 'Proceed to payment',
-    payNow: 'Pay €6,99 (incl. VAT) for unlimited access',
-    processing: 'Processing...',
+    household: 'Pay once, poems for the whole family',
+    perPoem: 'With 7 poems, you pay less than €1 per poem.',
+    feature1: 'For grandpa, your colleague and the neighbours: write for everyone on your list',
+    feature2: 'All styles and rhyme schemes, and Rewrite this poem',
+    feature3: 'For a whole year, in this browser',
+    payNow: 'Continue with your poem · €6,99',
+    processing: 'One moment…',
     securePayment: 'Secure payment via Dodo Payments',
-    poweredByStripe: 'Powered by Stripe',
-    invalidEmail: 'Please enter a valid email address',
-    initError:
-      'Could not initialize payment. Please try again later.',
-    notInitialized: 'Payment is not properly initialized',
-    cardError: 'Please check your card details',
-    error: 'Payment failed. Please try again.',
-    errorTitle: 'Payment Error',
-    unexpectedError: 'Something went wrong. Please try again.',
-    confirmError: 'Could not complete payment. Please try again.',
-    processingMessage:
-      'Your payment is being processed. Please wait...',
+    error: 'The payment did not work. Please try again.',
+    errorTitle: 'That did not work',
     dismiss: 'Close message',
     restore: {
-      title: 'Already paid? Restore your access',
+      title: 'Already paid? Continue with your payment ID',
       label: 'Payment ID',
-      submit: 'Restore',
-      checking: 'Checking...',
-      help: 'A payment ID starts with pay_. Cannot find it? Contact us and we will look it up.',
+      submit: 'Continue',
+      checking: 'Checking…',
+      help: 'A payment ID starts with pay_. Cannot find it? Email us and we will look it up.',
       invalid: 'This is not a valid payment ID. It starts with pay_.',
-      failed: 'We found no successful payment with this ID. Check the ID or contact us.',
+      failed: 'We found no successful payment with this ID. Check the ID, or email us.',
       pending: 'This payment is not complete yet. Please try again in a few minutes.',
     },
-    successTitle: 'Payment successful!',
-    successMessage:
-      'You now have unlimited access to generate poems!',
-    successDescription:
-      'You now have unlimited access to the poem generator.',
-    pendingTitle: 'Checking your payment...',
+    successTitle: 'Done! You can keep writing',
+    successMessage: 'Write as many poems as you like, for the whole family.',
+    successDraft: 'What you filled in is still in the form.',
+    successNext: 'Write the poem',
+    pendingTitle: 'Checking your payment…',
     pendingMessage:
       'We are checking your payment. This can take a moment. Refresh the page if you do not get a confirmation.',
     failedTitle: 'Payment not completed',
     failedMessage:
-      'We could not find a successful payment, so nothing was unlocked. Please try again or contact us.',
-    cancelledTitle: 'Payment cancelled',
+      'We could not find a successful payment. Please try again, or email us.',
+    cancelledTitle: 'You did not pay',
     cancelledMessage:
-      'Your payment was cancelled. You can try again anytime.',
+      'No problem. You can try again any time.',
     remainingPoems: '{count} free poem remaining | {count} free poems remaining',
-    unlimitedAccess: 'Unlimited access for just €6,99 (incl. VAT)',
-    unlimitedUnlocked: 'Unlimited poems unlocked!',
+    unlimitedAccess: 'Keep writing for €6,99',
+    unlimitedUnlocked: 'Write as many poems as you like.',
     unavailable: {
       title: 'Payments are not working right now',
       message: 'Our payment page does not work at the moment. Until it does, you can make up to 3 free poems today.',
@@ -285,12 +277,58 @@ export default {
       limitMessage: 'Payments are not working right now. Tomorrow you can make free poems again. Problems? Email patrick@sintgpt.com.',
     },
     legal: {
-      before: 'You pay Dodo Payments. You get access at once, so the right of withdrawal ends when you have paid. Read the',
+      before: 'You pay Dodo Payments. You can keep writing at once, so the right of withdrawal ends when you have paid. Read the',
       terms: 'terms',
       middle: 'and the',
       privacy: 'privacy statement',
       after: '.',
     },
+  },
+  examples: {
+    title: 'This is how a SintGPT poem sounds',
+    intro: 'Real poems by SintGPT, for made-up people. Choose a style.',
+    styleLabel: 'Choose a style',
+    for: 'For',
+    present: 'Present',
+    secret: 'kept secret',
+    facts: 'Fun facts',
+    writtenBy: 'Written by',
+    audience: 'Audience',
+    rhyme: 'Rhyme scheme',
+    lines: '{count} lines',
+    english: 'English',
+    more: 'See all examples',
+    cta: 'Write your own poem',
+    pageTitle: 'Examples of Sinterklaas poems',
+    seoTitle: 'Examples of Sinterklaas poems | SintGPT',
+    description: 'Read examples of Sinterklaas poems in six styles: funny, classic, ironic, old-fashioned, spicy and roast.',
+    pageIntro: 'SintGPT wrote these poems from the details shown with them. The people are made up. This shows what each style does.',
+    ctaText: 'Your first poem is free. After that, a one-time €6,99 covers poems for the whole family.',
+  },
+  lootjes: {
+    seoTitle: 'Draw names for Sinterklaas | SintGPT',
+    description: 'Draw names for Sinterklaas for free. Enter the names, pass the phone round, and everyone sees only their own name.',
+    title: 'Draw names (lootjes trekken)',
+    intro: 'Enter the names and draw. Then pass the phone round: everyone taps their own name and sees only the person they drew.',
+    namesLabel: 'Names, one per line',
+    namesHelp: 'At least 3 names. Nobody draws themselves.',
+    placeholder: 'Sanne\nDaan\nGrandpa Kees',
+    draw: 'Draw names',
+    tooFew: 'Enter at least 3 names.',
+    tooMany: 'Enter 50 names or fewer.',
+    duplicate: 'Each name can appear only once. Make them different, for example "Sanne B." and "Sanne K.".',
+    pass: 'Pass the phone round. Tap your own name.',
+    seen: 'seen',
+    youDrew: '{name}, you drew',
+    hide: 'Hide and pass on',
+    progress: '{seen} of {total} have seen their name.',
+    again: 'New draw',
+    confirmAgain: 'The current draw will disappear. Are you sure?',
+    confirmYes: 'Yes, draw again',
+    cancel: 'Cancel',
+    ctaTitle: 'Got your name? Now write a poem',
+    cta: 'Write a poem',
+    privacy: 'The names stay on this device. We do not send them to a server.',
   },
   video: {
     title: 'Sinterklaas talks about sintgpt.com',
@@ -322,6 +360,8 @@ export default {
           heading: 'On your own device',
           body: [
             'Your poems, your language choice and the number of free poems you used are kept in your browser\'s storage (localStorage). They do not leave your device. You delete them with "Clear all" under My poems, or by clearing the site data in your browser.',
+            'When you go to pay, we also keep what you filled in on the form, so it is still there when you come back. We delete it as soon as you are back. If you do not come back within 2 hours, we no longer use it and delete it on your next visit.',
+            'When you draw names on sintgpt.com/lootjes, the names and the draw stay on your device only, until you start a new draw. We do not send them to a server.',
           ],
         },
         {
@@ -341,7 +381,7 @@ export default {
         {
           heading: 'Payments',
           body: [
-            'You buy unlimited access from Dodo Payments. Dodo is the seller (merchant of record) and processes your name, email address and payment details under its own privacy policy. SintGPT only sees the payment ID, the status and the product of your payment.',
+            'You pay Dodo Payments. Dodo is the seller (merchant of record) and processes your name, email address and payment details under its own privacy policy. SintGPT only sees the payment ID, the status and the product of your payment.',
             'After a successful payment we set the cookie "sintgpt-access" in your browser. It holds your payment ID and a signature, so we know you have paid. It is valid for one year and is necessary for the service you bought.',
             'Legal basis: performing the agreement.',
           ],
@@ -377,7 +417,7 @@ export default {
     terms: {
       title: 'Terms',
       seoTitle: 'Terms | SintGPT',
-      description: 'The terms for using SintGPT and for unlimited access.',
+      description: 'The terms for using SintGPT and for poems for the whole family.',
       intro: 'These terms apply when you use SintGPT. They are short, and we wrote them as clearly as we could.',
       sections: [
         {
@@ -393,17 +433,17 @@ export default {
           ],
         },
         {
-          heading: 'Unlimited access',
+          heading: 'Poems for the whole family',
           body: [
-            'Unlimited access costs a one-time €6.99, including VAT. You get one year of access in the browser you paid with. In another browser, you restore your access with your payment ID.',
-            'Unlimited means: as many poems as you reasonably need, with a maximum of 100 poems per 24 hours. This keeps the service affordable.',
+            'Poems for the whole family costs a one-time €6.99, including VAT. You can then write poems for a year in the browser you paid with. In another browser, you continue with your payment ID.',
+            'You write as many poems as you reasonably need, with a maximum of 100 poems per 24 hours. This keeps the service affordable.',
             'You pay Dodo Payments. Dodo is the seller (merchant of record) and sends you the invoice. Dodo\'s terms also apply to the payment.',
           ],
         },
         {
           heading: 'Right of withdrawal',
           body: [
-            'Unlimited access is a digital service that starts right after payment. When you pay, you ask for that immediate delivery. Because of this, your 14-day right of withdrawal ends once you have access.',
+            'Poems for the whole family is a digital service that starts right after payment. When you pay, you ask for that immediate delivery. Because of this, your 14-day right of withdrawal ends once you can keep writing.',
             'Is something not working as it should? Email patrick@sintgpt.com and we will find a solution together.',
           ],
         },

@@ -17,6 +17,7 @@ Package manager: **npm** (not yarn).
 - `npm run build:og` - Re-render the Open Graph images into `public/og/`
 - `npm run build:pdf-paper` - Re-render the PDF background from the CSS of `PaperScroll.vue`. Run after changing that component
 - `npx tsx scripts/build-sint-images.ts` - Crop `public/sint.png` to the avatar, favicons and share image. Run `build:og` after it
+- `npx tsx --env-file=.env scripts/generate-example-poems.ts <out.json> [id ...]` - Write the example poems again with the live prompt (costs a few cents). Review them, then copy the ones you keep into `utils/examplePoems.ts`
 - `npm run typecheck` - `vue-tsc --noEmit`
 - `npm test` - All tests (`test:unit`, `test:e2e`)
 
@@ -58,6 +59,8 @@ Notes:
 
 When Dodo refuses a checkout with 401 or 403 (for example "Live payments not enabled"), `create-checkout` stores a flag in KV for 15 minutes (`server/utils/paymentsStatus.ts`, key `status:payments-unavailable` in `POEM_LINKS`) and returns 503 with `data.code = 'payments_unavailable'`, never Dodo's text. `GET /api/payment/status` reads the flag. While it is set, the page does not offer payment: the client lifts its 1-poem limit, so only the server's 3/day applies, and the payment window explains the problem.
 
+Keeping the form during payment: just before the redirect, `PaymentModal` emits `checkout` and the home page saves the form in localStorage (`utils/formDraft.ts`, key `sintgpt-form-draft`, 2 hours). On the next load of `/` the draft is always removed; it fills the form only when the visitor comes back from Dodo (`payment_id` or `payment=cancelled`). After a successful payment, the notice offers "Schrijf het gedicht". The payment window never shows the recipient's name.
+
 Notes:
 - Buyers can restore access in `PaymentModal` with their payment ID, or through a `/?payment_id=pay_...` link. This uses the same server check. Anyone who has a valid ID can use it.
 - The browser never decides access. Do not trust query parameters, localStorage or unsigned cookies for it.
@@ -86,6 +89,21 @@ Notes:
 "Opslaan als PDF" builds the file in the browser (`utils/poemPdf.ts`, pdf-lib), so it uses no Worker CPU. It is loaded with a dynamic import, because pdf-lib is large.
 - The background `public/pdf/paper.jpg` is the empty scroll, rendered from the CSS of `PaperScroll.vue`.
 - The text is real text in Alegreya, with a Texturina drop cap (`public/pdf/`, SIL OFL). Long poems get a smaller size, then more pages. Keep the sizes and colours in line with `PaperScroll.vue`.
+
+### Persuasion: what the page may say
+- The paid product is described as poems for the whole family ("Gedichten voor het hele gezin"), €6,99 once, one year in that browser, at most 100 a day. "Bij 7 gedichten betaal je minder dan €1 per gedicht" is plain maths (6,99 / 7). Keep these in line with the price and the limits.
+- Use warm, plain words in visible text: "schrijven", not "genereren"; no "upgrade", "onbeperkt toegang", "AI-gegenereerd" or "tool". Search meta (`seo.title`, `seo.description`) may keep search terms.
+- Do not name the AI model in public text, except where the privacy statement must name the services that process data.
+- The countdown in the hero (`utils/pakjesavond.ts`) counts Dutch calendar days to 5 December, from 60 days before. From 3 days before it adds that a poem takes 30 seconds. It is a real date: never add a countdown to a price or an offer.
+
+### Example poems
+`utils/examplePoems.ts` holds poems that SintGPT wrote with `scripts/generate-example-poems.ts`, each next to the input it came from. The people are made up, and the page says so. They show on the home page (`components/ExamplePoems.vue`, one per style) and on `/voorbeelden` (all).
+
+### Lootjes trekken
+`/lootjes` draws names in the browser (`utils/lootjes.ts`, Sattolo's shuffle: one circle, nobody draws themselves). One phone goes round; each person taps their name to see their lootje. The draw stays in localStorage (`sintgpt-lootjes`) until "Nieuwe trekking". Nothing goes to the server. The blog post `/blog/lootjes-trekken-tips` describes this behaviour, so change both together.
+
+### Blog
+New posts use `components/BlogPost.vue` (layout, SEO meta, OG image, canonical, Article JSON-LD). Add each post to `pages/blog/index.vue`, `public/sitemap.xml` and `scripts/og-images.ts`, then run `npm run build:og`.
 
 ### Privacy and terms
 `/privacy` and `/voorwaarden` render `components/LegalPage.vue` from `legal.*` in the locales. They state the limits (3/day, 100/day for buyers), the 90-day storage of short links, the 24-hour counters and the €6.99 price. Change them when the code changes; an e2e test checks the numbers.
@@ -137,8 +155,8 @@ The deployed files hold no comments. Source files keep theirs.
 
 ## Tests
 
-- `tests/unit/` - prompt/schema/cost, prompt injection, rate limit, stream parser, comment stripping (fast, no network)
+- `tests/unit/` - prompt/schema/cost, prompt injection, rate limit, stream parser, comment stripping, countdown, lootjes, form draft, example poems (fast, no network)
 - `tests/e2e/app.test.ts` - builds the app, starts the server and a headless browser: pages, OG tags, rate limiting, the history drawer at phone size, and one **live** poem via AI Gateway (skipped without a key; costs a few cents)
 
 ## Analytics (Umami events)
-`Generate poem`, `Poem generation failed`, `Open poem from history`, `Proceed to payment`, `Payment succeeded`, `Access restored`, `Copy share link`, `Open shared poem`, `Shared via WhatsApp/Email/Facebook`, `Copy to clipboard`, `Save as PDF`, `Regenerate poem`, `Payments unavailable`.
+`Generate poem`, `Poem generation failed`, `Open poem from history`, `Proceed to payment`, `Payment succeeded`, `Access restored`, `Copy share link`, `Open shared poem`, `Shared via WhatsApp/Email/Facebook`, `Copy to clipboard`, `Save as PDF`, `Regenerate poem`, `Payments unavailable`, `Draw lootjes` (with the number of people).

@@ -13,7 +13,13 @@ export default {
     moreInfo: 'Hoe werkt het?',
     photoAlt: 'Sinterklaas wijst met een knipoog naar zijn slaap',
     photoCaption: 'Ook de Sint rijmt niet altijd vanzelf.',
-    note: 'Eerste gedicht gratis, daarna eenmalig €6,99 voor onbeperkt.',
+    note: 'Je eerste gedicht is gratis. Daarna schrijf je voor eenmalig €6,99 gedichten voor het hele gezin.',
+  },
+  countdown: {
+    days: 'Nog {count} dag tot pakjesavond | Nog {count} dagen tot pakjesavond',
+    tomorrow: 'Morgen is het pakjesavond',
+    today: 'Vanavond is het pakjesavond',
+    hint: 'Op het laatste moment? Binnen 30 seconden heb je een gedicht.',
   },
   form: {
     title: 'Schrijf je gedicht in drie stappen',
@@ -41,19 +47,19 @@ export default {
       label: 'Leuke weetjes over de ontvanger',
       placeholder:
         "Vertel zo uitgebreid mogelijk over hobby's, werk, sport, interesses of andere anekdotes.\n\nBijvoorbeeld: Sinterklaas is een echte paardenliefhebber en brengt uren door met zijn trouwe schimmel Amerigo. Hij houdt van pepernoten en speculaas, maar heeft een hekel aan dropjes. In zijn vrije tijd leest hij graag brieven van kinderen en hij vergeet vaak waar hij zijn mijter heeft neergelegd...",
-      help: 'Deze informatie wordt gebruikt om het gedicht persoonlijker te maken',
+      help: 'Hoe meer je vertelt, hoe persoonlijker het gedicht.',
     },
     writtenBy: {
       label: 'Geschreven door',
       placeholder:
         'Bijvoorbeeld: een 8-jarig kind, een collega, een familielid...',
-      help: 'Het gedicht wordt geschreven alsof het door deze persoon is gemaakt',
+      help: 'Het gedicht klinkt alsof deze persoon het schreef.',
     },
     writtenForAudience: {
       label: 'Voor welk publiek',
       placeholder:
         'Bijvoorbeeld: groep 5/6 van de basisschool, volwassen werkplek, familie...',
-      help: 'De toon en inhoud worden aangepast aan deze context',
+      help: 'Het gedicht past bij de mensen die het horen.',
     },
     style: {
       label: 'Gedichtstijl',
@@ -84,8 +90,8 @@ export default {
         'Limericks zijn altijd 5 regels (AABBA rijmschema)',
     },
     submit: {
-      generate: 'Genereer gedicht',
-      generating: 'Gedicht genereren...',
+      generate: 'Schrijf mijn gedicht',
+      generating: 'De Sint schrijft…',
       time: 'Klaar in ongeveer 30 seconden.',
     },
     required: '*',
@@ -104,9 +110,10 @@ export default {
     shareWhatsApp: 'Deel op WhatsApp',
     shareEmail: 'Verstuur via e-mail',
     shareFacebook: 'Deel op Facebook',
-    loading: 'Jouw gepersonaliseerde gedicht wordt gemaakt...',
+    loading: 'De Sint schrijft je gedicht…',
     ready: 'Je gedicht is klaar.',
-    error: 'Fout',
+    error: 'Dat ging mis',
+    freeComplete: 'Dit gratis gedicht is helemaal van jou: deel het, kopieer het of bewaar het als PDF.',
     sample: 'Voorbeeld',
     sampleTitle: 'Gedicht voor Daan (7)',
     sampleSignature: 'Sint en Piet',
@@ -140,24 +147,26 @@ export default {
     contact: 'Neem contact op',
     nav: 'Voettekst',
     blog: 'Blog: tips en inspiratie',
+    examples: 'Voorbeelden',
+    lootjes: 'Lootjes trekken',
     privacy: 'Privacy',
     terms: 'Voorwaarden',
   },
   error: {
     title: 'Oeps! Er ging iets mis.',
     message:
-      'Er is een fout opgetreden bij het weergeven van dit gedeelte van de pagina.',
+      'Dit deel van de pagina lukt even niet.',
     label: 'Fout',
     retry: 'Probeer opnieuw',
   },
   seo: {
     title: "Sinterklaasgedicht maken met AI | SintGPT",
     description: "Maak in 30 seconden een persoonlijk sinterklaasgedicht dat echt rijmt. Eerste gedicht gratis. SintGPT rijmt wél in het Nederlands, in tegenstelling tot ChatGPT.",
-    ogTitle: 'SintGPT - Sinterklaasgedicht Generator met AI',
+    ogTitle: 'SintGPT: je sinterklaasgedicht in 30 seconden',
     ogDescription:
-      'Genereer perfect rijmende sinterklaasgedichten in 30 seconden. In tegenstelling tot ChatGPT, rijmt SintGPT wél in het Nederlands!',
+      'Persoonlijke sinterklaasgedichten die echt rijmen. Klaar in 30 seconden, en je eerste gedicht is gratis.',
     ogImageAlt:
-      'SintGPT - AI Sinterklaasgedicht Generator die wél rijmt in het Nederlands',
+      'SintGPT: ChatGPT kan niet rijmen, SintGPT wél',
   },
   faq: {
     title: 'Veelgestelde vragen',
@@ -165,23 +174,23 @@ export default {
       {
         question: 'Hoe maak ik een sinterklaasgedicht met SintGPT?',
         answer:
-          'Vul simpelweg de naam van de ontvanger in, voeg optioneel leuke weetjes toe over hobby\'s of werk, kies een stijl (grappig, klassiek, ironisch of ouderwets) en een rijmschema. Klik op "Genereer gedicht" en binnen 30 seconden heb je een uniek, gepersonaliseerd sinterklaasgedicht!',
+          'Vul de naam van de ontvanger in en vertel iets over hobby\'s, werk of grappige gewoontes. Kies een stijl en een rijmschema, en klik op "Schrijf mijn gedicht". Binnen 30 seconden heb je een gedicht dat echt over die persoon gaat.',
       },
       {
         question: 'Is SintGPT gratis?',
         answer:
-          'Ja! Je kunt 1 sinterklaasgedicht gratis genereren. Daarna kun je voor slechts €6,99 (incl. BTW) upgraden naar onbeperkt toegang, zodat je zoveel gedichten kunt maken als je wilt voor het hele Sinterklaasfeest.',
+          'Je eerste gedicht is gratis, met alles erop en eraan: delen, kopiëren en opslaan als PDF. Daarna betaal je eenmalig €6,99 (incl. btw) en schrijf je een jaar lang gedichten voor het hele gezin. Bij 7 gedichten is dat minder dan €1 per gedicht.',
       },
       {
         question:
           'Welke stijlen sinterklaasgedichten zijn beschikbaar?',
         answer:
-          "SintGPT biedt 6 verschillende stijlen: Grappig (met humor en woordspelingen), Klassiek (traditioneel en sfeervol), Ironisch (met een knipoog en sarcasme), Ouderwets (in oude Nederlandse stijl), Pikant (met gewaagde knipogen) en Roast (neem je vrienden flink op de hak). Je kunt ook kiezen uit verschillende rijmschema's zoals AABB, ABBA of Limerick.",
+          "Je kiest uit 6 stijlen: Grappig (met humor en woordspelingen), Klassiek (traditioneel en sfeervol), Ironisch (met een knipoog en sarcasme), Ouderwets (in oude Nederlandse stijl), Pikant (met gewaagde knipogen) en Roast (neem je vrienden flink op de hak). Je kunt ook kiezen uit verschillende rijmschema's zoals AABB, ABBA of Limerick.",
       },
       {
         question: 'Hoe persoonlijk worden de gedichten?',
         answer:
-          "Hoe meer details je invult, hoe persoonlijker het gedicht! Je kunt informatie toevoegen over hobby's, werk, bijzondere eigenschappen of grappige anekdotes. Onze AI verwerkt deze informatie en maakt er een uniek gedicht van dat perfect bij de ontvanger past.",
+          "Hoe meer je vertelt, hoe persoonlijker het gedicht. Noem hobby's, werk, gewoontes of een grappige anekdote. SintGPT verwerkt die details in een gedicht dat alleen bij deze persoon past.",
       },
       {
         question: 'Kan ik het cadeau geheim houden in het gedicht?',
@@ -191,18 +200,18 @@ export default {
       {
         question: 'In welke talen kan SintGPT gedichten maken?',
         answer:
-          'SintGPT kan sinterklaasgedichten genereren in het Nederlands en Engels. Dit is ideaal voor Nederlandse families in het buitenland of internationale vrienden die mee willen doen met de Sinterklaas traditie.',
+          'SintGPT schrijft sinterklaasgedichten in het Nederlands en het Engels. Handig voor Nederlandse families in het buitenland, en voor vrienden die de traditie net leren kennen.',
       },
       {
-        question: 'Hoe lang duurt het om een gedicht te genereren?',
+        question: 'Hoe lang duurt het om een gedicht te schrijven?',
         answer:
-          'Het genereren van een sinterklaasgedicht duurt gemiddeld 20-30 seconden. Onze AI analyseert je input en creëert een uniek, rijmend gedicht dat perfect aansluit bij jouw wensen.',
+          'Gemiddeld 20 tot 30 seconden. Je ziet het gedicht regel voor regel verschijnen.',
       },
       {
         question:
-          'Kan ik de gedichten bewerken of opnieuw genereren?',
+          'Kan ik een gedicht aanpassen of opnieuw laten schrijven?',
         answer:
-          'Je kunt het gegenereerde gedicht eenvoudig kopiëren naar je klembord en daarna bewerken in je favoriete teksteditor. Als je niet tevreden bent, kun je met andere details of stijl een nieuw gedicht genereren tot je het perfecte resultaat hebt!',
+          'Ja. Met "Herschrijf dit gedicht" krijg je een nieuwe versie met dezelfde gegevens. Wil je zelf iets veranderen? Kopieer het gedicht en pas het aan waar je wilt.',
       },
       {
         question: 'Worden mijn gegevens opgeslagen?',
@@ -218,65 +227,49 @@ export default {
     ],
   },
   payment: {
-    title: 'Upgrade naar onbeperkt toegang',
-    description: 'Je hebt je gratis gedicht gebruikt',
-    limitReached:
-      'Je hebt je gratis gedicht gebruikt. Upgrade naar onbeperkt toegang voor slechts €6,99 (incl. BTW)!',
-    oneTimePayment: 'Eenmalige betaling',
-    includesVAT: 'incl. BTW',
-    whatYouGet: 'Wat je krijgt:',
-    benefit1: 'Onbeperkt Sinterklaasgedichten genereren',
-    benefit2: 'Geen limieten meer',
-    benefit3: 'Direct toegang na betaling',
-    feature1: 'Onbeperkt gedichten genereren',
-    feature2: "Alle stijlen en rijmschema's",
-    feature3: 'Eenmalige betaling, een jaar toegang in deze browser',
-    emailLabel: 'E-mailadres voor factuur',
-    emailPlaceholder: 'jouw@email.nl',
-    emailHelp: 'We sturen je factuur naar dit e-mailadres',
-    proceedToPayment: 'Ga naar betaling',
-    payNow: 'Betaal €6,99 (incl. BTW) voor onbeperkt toegang',
-    processing: 'Verwerken...',
+    title: 'Schrijf verder voor het hele gezin',
+    nextStep: 'Je gratis gedicht is klaar. Wat je invulde, blijft staan: na het betalen schrijf je meteen verder.',
+    limitReached: 'Je gratis gedicht is klaar',
+    description: 'Wil je voor meer mensen schrijven? Voor eenmalig €6,99 schrijf je gedichten voor het hele gezin.',
+    oneTimePayment: 'Eenmalig',
+    includesVAT: 'incl. btw',
+    household: 'Eén keer betalen, gedichten voor het hele gezin',
+    perPoem: 'Bij 7 gedichten betaal je minder dan €1 per gedicht.',
+    feature1: 'Voor opa, je collega en de buren: schrijf voor iedereen op je lijstje',
+    feature2: "Alle stijlen en rijmschema's, en Herschrijf dit gedicht",
+    feature3: 'Een jaar lang, in deze browser',
+    payNow: 'Verder met je gedicht · €6,99',
+    processing: 'Even geduld…',
     securePayment: 'Veilig betalen via Dodo Payments',
-    poweredByStripe: 'Powered by Stripe',
-    invalidEmail: 'Voer een geldig e-mailadres in',
-    initError:
-      'Kon betaling niet initialiseren. Probeer het later opnieuw.',
-    notInitialized: 'Betaling is niet correct geïnitialiseerd',
-    cardError: 'Controleer je kaartgegevens',
-    error: 'Betaling mislukt. Probeer het opnieuw.',
-    errorTitle: 'Betalingsfout',
-    unexpectedError: 'Er ging iets mis. Probeer het opnieuw.',
-    confirmError: 'Kon betaling niet voltooien. Probeer het opnieuw.',
-    processingMessage: 'Je betaling wordt verwerkt. Even geduld...',
+    error: 'Het betalen lukte niet. Probeer het nog eens.',
+    errorTitle: 'Dat ging mis',
     dismiss: 'Melding sluiten',
     restore: {
-      title: 'Al betaald? Herstel je toegang',
+      title: 'Al betaald? Ga verder met je betalings-ID',
       label: 'Betalings-ID',
-      submit: 'Herstellen',
-      checking: 'Controleren...',
-      help: 'Een betalings-ID begint met pay_. Kun je het niet vinden? Neem contact met ons op, dan zoeken we het op.',
+      submit: 'Verder',
+      checking: 'Even kijken…',
+      help: 'Een betalings-ID begint met pay_. Kun je het niet vinden? Mail ons, dan zoeken we het op.',
       invalid: 'Dit is geen geldig betalings-ID. Het begint met pay_.',
-      failed: 'We vonden geen geslaagde betaling met dit ID. Controleer het ID of neem contact met ons op.',
+      failed: 'We vonden geen geslaagde betaling met dit ID. Kijk het ID nog eens na, of mail ons.',
       pending: 'Deze betaling is nog niet afgerond. Probeer het over een paar minuten opnieuw.',
     },
-    successTitle: 'Betaling geslaagd!',
-    successMessage:
-      'Je hebt nu onbeperkt toegang om gedichten te genereren!',
-    successDescription:
-      'Je hebt nu onbeperkt toegang tot de gedichtengenerator.',
-    pendingTitle: 'Betaling controleren...',
+    successTitle: 'Gelukt! Je kunt verder schrijven',
+    successMessage: 'Schrijf zoveel gedichten als je wilt, voor het hele gezin.',
+    successDraft: 'Wat je invulde, staat nog in het formulier.',
+    successNext: 'Schrijf het gedicht',
+    pendingTitle: 'Even je betaling nakijken…',
     pendingMessage:
-      'We controleren je betaling. Dit kan even duren. Vernieuw de pagina als je geen bevestiging krijgt.',
+      'We kijken je betaling na. Dat kan even duren. Vernieuw de pagina als je geen bevestiging krijgt.',
     failedTitle: 'Betaling niet gelukt',
     failedMessage:
-      'We konden geen geslaagde betaling vinden. Er is niets ontgrendeld. Probeer het opnieuw of neem contact met ons op.',
-    cancelledTitle: 'Betaling geannuleerd',
+      'We vonden geen geslaagde betaling. Probeer het opnieuw, of mail ons.',
+    cancelledTitle: 'Je hebt niet betaald',
     cancelledMessage:
-      'Je betaling is geannuleerd. Je kunt het op elk moment opnieuw proberen.',
+      'Geen probleem. Je kunt het op elk moment opnieuw proberen.',
     remainingPoems: '{count} gratis gedicht over | {count} gratis gedichten over',
-    unlimitedAccess: 'Onbeperkt toegang voor slechts €6,99 (incl. BTW)',
-    unlimitedUnlocked: 'Onbeperkt gedichten ontgrendeld!',
+    unlimitedAccess: 'Schrijf verder voor €6,99',
+    unlimitedUnlocked: 'Je schrijft zoveel gedichten als je wilt.',
     unavailable: {
       title: 'Betalen lukt nu even niet',
       message: 'Onze betaalpagina werkt op dit moment niet. Tot die weer werkt, mag je vandaag tot 3 gedichten gratis maken.',
@@ -286,12 +279,58 @@ export default {
       limitMessage: 'Betalen lukt nu even niet. Morgen kun je weer gratis gedichten maken. Lukt het niet? Mail naar patrick@sintgpt.com.',
     },
     legal: {
-      before: 'Je betaalt aan Dodo Payments. Je krijgt direct toegang, dus het herroepingsrecht vervalt zodra je betaald hebt. Lees de',
+      before: 'Je betaalt aan Dodo Payments. Je kunt direct verder schrijven, dus het herroepingsrecht vervalt zodra je betaald hebt. Lees de',
       terms: 'voorwaarden',
       middle: 'en de',
       privacy: 'privacyverklaring',
       after: '.',
     },
+  },
+  examples: {
+    title: 'Zo klinkt een gedicht van SintGPT',
+    intro: 'Echte gedichten van SintGPT, voor verzonnen mensen. Kies een stijl.',
+    styleLabel: 'Kies een stijl',
+    for: 'Voor',
+    present: 'Cadeau',
+    secret: 'geheim gehouden',
+    facts: 'Weetjes',
+    writtenBy: 'Geschreven door',
+    audience: 'Publiek',
+    rhyme: 'Rijmschema',
+    lines: '{count} regels',
+    english: 'Engels',
+    more: 'Bekijk alle voorbeelden',
+    cta: 'Schrijf je eigen gedicht',
+    pageTitle: 'Voorbeelden van sinterklaasgedichten',
+    seoTitle: 'Voorbeelden van sinterklaasgedichten | SintGPT',
+    description: 'Lees voorbeelden van sinterklaasgedichten in zes stijlen: grappig, klassiek, ironisch, ouderwets, pikant en roast.',
+    pageIntro: 'SintGPT schreef deze gedichten met de gegevens die erbij staan. De mensen zijn verzonnen. Zo zie je wat elke stijl doet.',
+    ctaText: 'Je eerste gedicht is gratis. Daarna schrijf je voor eenmalig €6,99 gedichten voor het hele gezin.',
+  },
+  lootjes: {
+    seoTitle: 'Lootjes trekken voor Sinterklaas | SintGPT',
+    description: 'Trek gratis lootjes voor Sinterklaas. Vul de namen in, geef de telefoon door, en iedereen ziet alleen zijn eigen lootje.',
+    title: 'Lootjes trekken',
+    intro: 'Vul de namen in en trek de lootjes. Geef dan de telefoon door: iedereen tikt op zijn eigen naam en ziet alleen zijn eigen lootje.',
+    namesLabel: 'Namen, één per regel',
+    namesHelp: 'Minstens 3 namen. Niemand trekt zichzelf.',
+    placeholder: 'Sanne\nDaan\nOpa Kees',
+    draw: 'Trek lootjes',
+    tooFew: 'Vul minstens 3 namen in.',
+    tooMany: 'Vul hooguit 50 namen in.',
+    duplicate: 'Elke naam mag maar één keer voorkomen. Maak ze verschillend, bijvoorbeeld "Sanne B." en "Sanne K.".',
+    pass: 'Geef de telefoon door. Tik op je eigen naam.',
+    seen: 'gezien',
+    youDrew: '{name}, jij hebt het lootje van',
+    hide: 'Verberg en geef door',
+    progress: '{seen} van de {total} hebben hun lootje gezien.',
+    again: 'Nieuwe trekking',
+    confirmAgain: 'De lootjes van nu verdwijnen. Weet je het zeker?',
+    confirmYes: 'Ja, trek opnieuw',
+    cancel: 'Annuleren',
+    ctaTitle: 'Lootje binnen? Nu nog een gedicht',
+    cta: 'Schrijf een gedicht',
+    privacy: 'De namen blijven op dit apparaat. We sturen ze niet naar een server.',
   },
   video: {
     title: 'Sinterklaas over sintgpt.com',
@@ -323,6 +362,8 @@ export default {
           heading: 'Op je eigen apparaat',
           body: [
             'Je gedichten, je taalkeuze en het aantal gratis gedichten dat je gebruikte staan in de opslag van je browser (localStorage). Ze verlaten je apparaat niet. Je wist ze met "Alles wissen" onder Mijn gedichten, of door de websitegegevens in je browser te wissen.',
+            'Ga je betalen, dan bewaren we ook wat je in het formulier invulde, zodat het er nog staat als je terugkomt. We wissen het zodra je terug bent. Kom je niet binnen 2 uur terug, dan gebruiken we het niet meer en wissen we het bij je volgende bezoek.',
+            'Trek je lootjes op sintgpt.com/lootjes, dan staan de namen en de lootjes alleen op je apparaat, tot je een nieuwe trekking begint. We sturen ze niet naar een server.',
           ],
         },
         {
@@ -342,7 +383,7 @@ export default {
         {
           heading: 'Betalen',
           body: [
-            'Onbeperkt toegang koop je bij Dodo Payments. Dodo is de verkoper (merchant of record) en verwerkt je naam, e-mailadres en betaalgegevens volgens zijn eigen privacybeleid. SintGPT krijgt alleen het betalings-ID, de status en het product van je betaling te zien.',
+            'Je betaalt bij Dodo Payments. Dodo is de verkoper (merchant of record) en verwerkt je naam, e-mailadres en betaalgegevens volgens zijn eigen privacybeleid. SintGPT krijgt alleen het betalings-ID, de status en het product van je betaling te zien.',
             'Na een geslaagde betaling zetten we het cookie "sintgpt-access" in je browser. Het bevat je betalings-ID en een handtekening, zodat we weten dat je betaald hebt. Het is een jaar geldig en is nodig voor de dienst die je kocht.',
             'Grondslag: het uitvoeren van de overeenkomst.',
           ],
@@ -378,7 +419,7 @@ export default {
     terms: {
       title: 'Voorwaarden',
       seoTitle: 'Voorwaarden | SintGPT',
-      description: 'De voorwaarden voor het gebruik van SintGPT en voor onbeperkt toegang.',
+      description: 'De voorwaarden voor het gebruik van SintGPT en voor gedichten voor het hele gezin.',
       intro: 'Deze voorwaarden gelden als je SintGPT gebruikt. Ze zijn kort, en we hebben ze zo duidelijk mogelijk geschreven.',
       sections: [
         {
@@ -394,17 +435,17 @@ export default {
           ],
         },
         {
-          heading: 'Onbeperkt toegang',
+          heading: 'Gedichten voor het hele gezin',
           body: [
-            'Onbeperkt toegang kost eenmalig €6,99, inclusief btw. Je krijgt een jaar toegang in de browser waarmee je betaalde. In een andere browser herstel je je toegang met je betalings-ID.',
-            'Onbeperkt betekent: zoveel gedichten als je redelijkerwijs nodig hebt, met een maximum van 100 gedichten per 24 uur. Zo houden we de dienst betaalbaar.',
+            'Gedichten voor het hele gezin kost eenmalig €6,99, inclusief btw. Je schrijft dan een jaar lang gedichten in de browser waarmee je betaalde. In een andere browser ga je verder met je betalings-ID.',
+            'Je schrijft zoveel gedichten als je redelijkerwijs nodig hebt, met een maximum van 100 gedichten per 24 uur. Zo houden we de dienst betaalbaar.',
             'Je betaalt aan Dodo Payments. Dodo is de verkoper (merchant of record) en stuurt je de factuur. Voor de betaling gelden ook de voorwaarden van Dodo.',
           ],
         },
         {
           heading: 'Herroepingsrecht',
           body: [
-            'Onbeperkt toegang is een digitale dienst die direct na de betaling begint. Als je betaalt, vraag je om die directe levering. Daardoor vervalt je herroepingsrecht van 14 dagen zodra je toegang hebt.',
+            'Gedichten voor het hele gezin is een digitale dienst die direct na de betaling begint. Als je betaalt, vraag je om die directe levering. Daardoor vervalt je herroepingsrecht van 14 dagen zodra je verder kunt schrijven.',
             'Werkt er iets niet zoals het hoort? Mail naar patrick@sintgpt.com, dan zoeken we samen een oplossing.',
           ],
         },

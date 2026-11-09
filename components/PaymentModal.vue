@@ -8,7 +8,8 @@ const dialogRef = ref<HTMLDialogElement | null>(null);
 const isLoading = ref(false);
 const error = ref<string | null>(null);
 
-const emit = defineEmits<{ restored: [] }>();
+// `checkout` fires just before the page leaves for Dodo, so the form can be kept.
+const emit = defineEmits<{ restored: []; checkout: [] }>();
 const { claimPayment, paymentsUnavailable, refreshPaymentsStatus } = usePaymentTracking();
 
 // Buyers on another browser, or with a cookie from before Nov 2026, can get
@@ -86,6 +87,8 @@ const handlePayment = async () => {
         method: 'POST',
       }
     );
+
+    emit('checkout');
 
     // Close the dialog before redirecting to avoid browser navigation issues
     dialogRef.value?.close();
@@ -168,13 +171,15 @@ const closeModal = () => {
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
-        <p class="banner-text">{{ t('payment.limitReached') }}</p>
+        <p class="banner-text">{{ t('payment.nextStep') }}</p>
       </div>
 
       <!-- Pricing card -->
       <div class="pricing-card">
         <!-- Decorative inner border -->
         <div class="pricing-inner-border"></div>
+
+        <p class="household">{{ t('payment.household') }}</p>
 
         <!-- Price display -->
         <div class="price-wrapper">
@@ -184,6 +189,7 @@ const closeModal = () => {
         </div>
 
         <p class="price-description">{{ t('payment.oneTimePayment') }} · {{ t('payment.includesVAT') }}</p>
+        <p class="per-poem">{{ t('payment.perPoem') }}</p>
 
         <!-- Features list -->
         <ul class="features-list">
@@ -308,6 +314,27 @@ const closeModal = () => {
 </template>
 
 <style scoped>
+.household {
+  position: relative;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.125rem;
+  line-height: 1.3;
+  color: #8b1538;
+  text-align: center;
+  text-wrap: balance;
+  margin-bottom: 0.5rem;
+}
+
+.per-poem {
+  position: relative;
+  margin-top: 0.25rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #5c0f26;
+  text-align: center;
+}
+
 .unavailable {
   margin-top: 1rem;
   padding: 1rem;
