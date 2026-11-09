@@ -88,6 +88,12 @@ export default defineNuxtConfig({
         compatibility_flags: ['enable_request_signal'],
         // Stores poems that people share with a short link.
         kv_namespaces: [{ binding: 'POEM_LINKS', id: 'bc2a7dcb97274e6b82a18989e89fd04c' }],
+        // The Worker serves the domain itself. www redirects to the apex in
+        // server/middleware/canonical-host.ts.
+        routes: [
+          { pattern: 'sintgpt.com', custom_domain: true },
+          { pattern: 'www.sintgpt.com', custom_domain: true },
+        ],
       },
     },
   },
