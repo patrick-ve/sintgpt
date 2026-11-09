@@ -4,6 +4,17 @@ export default defineNuxtConfig({
 
   devtools: { enabled: true },
 
+  // No source maps in the deploy: Wrangler does not upload them, and each one
+  // leaves a sourceMappingURL comment. scripts/strip-comments.ts removes the
+  // rest of the comments after the build.
+  sourcemap: { server: false, client: false },
+
+  // Template comments never reach the HTML, whatever NODE_ENV the build runs
+  // with (the e2e build runs as `test`).
+  vue: {
+    compilerOptions: { comments: false },
+  },
+
   modules: [
     '@nuxt/image',
     '@vueuse/nuxt',
@@ -84,6 +95,11 @@ export default defineNuxtConfig({
       wrangler: {
         name: 'sintgpt',
         observability: { enabled: true },
+        // Wrangler bundles the Worker again. Without minify it adds a
+        // `// path` comment for every module.
+        minify: true,
+        // Also stops Wrangler's own source map and its sourceMappingURL comment.
+        upload_source_maps: false,
         // Lets the Worker notice a client disconnect and stop poem generation.
         compatibility_flags: ['enable_request_signal'],
         // Stores poems that people share with a short link.
