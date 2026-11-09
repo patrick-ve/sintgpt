@@ -2,21 +2,18 @@
 // pdf-lib is large and only people who save a poem need it.
 import fontkit from '@pdf-lib/fontkit';
 import { PDFDocument, rgb } from 'pdf-lib';
+import { DEFAULT_PDF_DESIGN, PDF_DESIGNS, type PdfColor, type PdfDesign, type PdfTextSize } from './pdfDesigns';
 import { stripEmoji } from './poemLink';
 
-export interface PoemPdfAssets {
-  /** public/pdf/paper.jpg, made by scripts/build-pdf-paper.ts. */
-  paper: Uint8Array;
-  /** Alegreya, like the poem on screen. */
-  textFont: Uint8Array;
-  /** Texturina, like the drop cap on screen. */
-  capFont: Uint8Array;
-}
-
-export interface PoemPdfOptions extends PoemPdfAssets {
+export interface PoemPdfOptions {
   poem: string;
   title: string;
-  attribution: string;
+  design: PdfDesign;
+  /** The design's background JPEG. */
+  background: Uint8Array;
+  textFont: Uint8Array;
+  /** Needed when the design has a drop cap. */
+  capFont?: Uint8Array;
 }
 
 export interface PoemRow {
@@ -30,31 +27,38 @@ export interface PoemLayout {
   /** The first letter when it becomes a drop cap, and its size. */
   dropCap: { letter: string; size: number } | null;
   pages: PoemRow[][];
+  /** Rows that fit on one page at this size. */
+  perPage: number;
+}
+
+/** The space the poem may use, from a design. */
+export interface PoemFrame {
+  width: number;
+  height: number;
+  sizes: PdfTextSize[];
+  /** Wrapped rows hang under their verse line; centred text does not. */
+  hanging: boolean;
 }
 
 type Measure = (text: string, size: number) => number;
 
 const PAGE = { width: 595.28, height: 841.89 };
-// The writing area of the parchment in paper.jpg.
-const TEXT_AREA = { left: 80, right: 80, top: 104, bottom: 100 };
-const TEXT_WIDTH = PAGE.width - TEXT_AREA.left - TEXT_AREA.right;
-const TEXT_HEIGHT = PAGE.height - TEXT_AREA.top - TEXT_AREA.bottom;
 
-// The same ratios as PaperScroll.vue. Longer poems step down until they fit one
-// page, and the last step continues on more pages.
-const SIZES = [
-  { fontSize: 15, lineHeight: 30 },
-  { fontSize: 14, lineHeight: 26 },
-  { fontSize: 13, lineHeight: 22 },
-  { fontSize: 12.5, lineHeight: 19 },
-];
+export function poemFrame(design: PdfDesign): PoemFrame {
+  return {
+    width: PAGE.width - design.area.left - design.area.right,
+    height: PAGE.height - design.area.top - design.area.bottom,
+    sizes: design.sizes,
+    hanging: design.align === 'left',
+  };
+}
+
+const DEFAULT_FRAME = poemFrame(PDF_DESIGNS[DEFAULT_PDF_DESIGN]);
+
 const HANGING_INDENT_EM = 0.9;
 const CAP_SIZE_EM = 3.33;
 const CAP_MARGIN_EM = 0.15;
 const CAP_ROWS = 2;
-
-const INK = rgb(0x2d / 255, 0x18 / 255, 0x10 / 255);
-const WINE = rgb(0x8b / 255, 0x15 / 255, 0x38 / 255);
 
 function splitLongWord(word: string, fits: (text: string) => boolean): string[] {
   const parts: string[] = [];
@@ -77,9 +81,10 @@ function wrapRows(
   size: number,
   measure: Measure,
   capIndent: number,
+  frame: PoemFrame,
 ): PoemRow[] {
   const rows: PoemRow[] = [];
-  const hanging = HANGING_INDENT_EM * size;
+  const hanging = frame.hanging ? HANGING_INDENT_EM * size : 0;
   const extraIndent = () => (rows.length < CAP_ROWS ? capIndent : 0);
 
   for (const line of lines) {
@@ -89,7 +94,7 @@ function wrapRows(
     }
     let row = '';
     let indent = extraIndent();
-    const fits = (text: string) => measure(text, size) <= TEXT_WIDTH - indent;
+    const fits = (text: string) => measure(text, size) <= frame.width - indent;
     const flush = () => {
       rows.push({ text: row, indent });
       row = '';
@@ -136,93 +141,114 @@ function paginate(rows: PoemRow[], perPage: number): PoemRow[][] {
   return pages;
 }
 
-export function layoutPoem(poem: string, measure: Measure, measureCap: Measure): PoemLayout {
+/**
+ * Splits the poem into rows and pages. Without `measureCap` there is no drop
+ * cap. The frame defaults to the parchment design.
+ */
+export function layoutPoem(
+  poem: string,
+  measure: Measure,
+  measureCap: Measure | null,
+  frame: PoemFrame = DEFAULT_FRAME,
+): PoemLayout {
   const lines = poem.trim().split('\n').map(stripEmoji);
   const first = lines[0] ?? '';
-  const hasDropCap = /^[\p{L}\p{N}]/u.test(first);
+  const hasDropCap = measureCap !== null && /^[\p{L}\p{N}]/u.test(first);
   const letter = hasDropCap ? [...first][0]! : '';
   const verse = hasDropCap ? [first.slice(letter.length), ...lines.slice(1)] : lines;
 
-  const fit = (size: { fontSize: number; lineHeight: number }) => {
+  const fit = (size: PdfTextSize) => {
     const capSize = size.fontSize * CAP_SIZE_EM;
     const capIndent = hasDropCap ? measureCap(letter, capSize) + CAP_MARGIN_EM * capSize : 0;
-    const rows = wrapRows(verse, size.fontSize, measure, capIndent);
-    return { ...size, capSize, rows, perPage: Math.floor(TEXT_HEIGHT / size.lineHeight) };
+    const rows = wrapRows(verse, size.fontSize, measure, capIndent, frame);
+    return { ...size, capSize, rows, perPage: Math.floor(frame.height / size.lineHeight) };
   };
 
-  const chosen = SIZES.map(fit).find(option => option.rows.length <= option.perPage)
-    ?? fit(SIZES.at(-1)!);
+  const chosen = frame.sizes.map(fit).find(option => option.rows.length <= option.perPage)
+    ?? fit(frame.sizes.at(-1)!);
   return {
     fontSize: chosen.fontSize,
     lineHeight: chosen.lineHeight,
     dropCap: hasDropCap ? { letter, size: chosen.capSize } : null,
     pages: paginate(chosen.rows, chosen.perPage),
+    perPage: chosen.perPage,
   };
 }
 
+const color = ({ r, g, b }: PdfColor) => rgb(r, g, b);
+
 export async function buildPoemPdf(options: PoemPdfOptions): Promise<Uint8Array> {
+  const { design } = options;
   const doc = await PDFDocument.create();
   doc.registerFontkit(fontkit);
   doc.setTitle(options.title);
-  doc.setAuthor('SintGPT');
-  doc.setCreator('SintGPT');
 
-  const paper = await doc.embedJpg(options.paper);
-  const textFont = await doc.embedFont(options.textFont, { subset: true });
-  const capFont = await doc.embedFont(options.capFont, { subset: true });
+  const background = await doc.embedJpg(options.background);
+  const textFont = await doc.embedFont(
+    options.textFont,
+    design.plainFont ? { subset: false, features: { calt: false, liga: false } } : { subset: true },
+  );
+  const capFont = design.capFont && options.capFont
+    ? await doc.embedFont(options.capFont, { subset: true })
+    : null;
 
+  const frame = poemFrame(design);
   const layout = layoutPoem(
     options.poem,
     (text, size) => textFont.widthOfTextAtSize(text, size),
-    (text, size) => capFont.widthOfTextAtSize(text, size),
+    capFont ? (text, size) => capFont.widthOfTextAtSize(text, size) : null,
+    frame,
   );
   const { fontSize, lineHeight, dropCap } = layout;
+  const ink = color(design.ink);
   // Centres the text in its line, as a browser does with a large line height.
   const baselineOffset = (lineHeight + fontSize * 0.6) / 2;
   const rowY = (index: number) =>
-    PAGE.height - TEXT_AREA.top - index * lineHeight - baselineOffset;
+    PAGE.height - design.area.top - index * lineHeight - baselineOffset;
+  const rowX = (row: PoemRow) => design.align === 'center'
+    ? design.area.left + (frame.width - textFont.widthOfTextAtSize(row.text, fontSize)) / 2
+    : design.area.left + row.indent;
 
-  layout.pages.forEach((rows, pageIndex) => {
+  for (const [pageIndex, rows] of layout.pages.entries()) {
     const page = doc.addPage([PAGE.width, PAGE.height]);
-    page.drawImage(paper, { x: 0, y: 0, width: PAGE.width, height: PAGE.height });
+    page.drawImage(background, { x: 0, y: 0, width: PAGE.width, height: PAGE.height });
 
-    if (pageIndex === 0 && dropCap) {
+    if (design.rules) {
+      // A line under every row the page can hold, as in a school notebook.
+      const { left, right } = design.rules;
+      for (let index = 0; index < layout.perPage; index += 1) {
+        const y = rowY(index) - fontSize * 0.12;
+        page.drawLine({
+          start: { x: left, y },
+          end: { x: PAGE.width - right, y },
+          thickness: 0.6,
+          color: color(design.rules.color),
+        });
+      }
+    }
+
+    if (pageIndex === 0 && dropCap && capFont) {
       page.drawText(dropCap.letter, {
-        x: TEXT_AREA.left,
+        x: design.area.left,
         y: rowY(CAP_ROWS - 1),
         size: dropCap.size,
         font: capFont,
-        color: WINE,
+        color: color(design.accent),
       });
     }
-    rows.forEach((row, rowIndex) => {
-      if (!row.text) return;
-      page.drawText(row.text, {
-        x: TEXT_AREA.left + row.indent,
-        y: rowY(rowIndex),
-        size: fontSize,
-        font: textFont,
-        color: INK,
-      });
-    });
-
-    if (pageIndex === layout.pages.length - 1) {
-      const size = 10;
-      page.drawText(options.attribution, {
-        x: (PAGE.width - textFont.widthOfTextAtSize(options.attribution, size)) / 2,
-        y: 76,
-        size,
-        font: textFont,
-        color: WINE,
-        opacity: 0.7,
-      });
+    for (const [rowIndex, row] of rows.entries()) {
+      if (!row.text) continue;
+      page.drawText(row.text, { x: rowX(row), y: rowY(rowIndex), size: fontSize, font: textFont, color: ink });
     }
-  });
+  }
 
   return doc.save();
 }
 
-/** A safe file name, for example sinterklaasgedicht-oma-truus.pdf. */
+/**
+ * A safe file name that names the site, for example
+ * sinterklaasgedicht-oma-truus-sintgpt.com.pdf. The PDF itself never names it.
+ */
 export function poemPdfFileName(name: string): string {
   const slug = name
     .normalize('NFD')
@@ -231,5 +257,5 @@ export function poemPdfFileName(name: string): string {
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
     .slice(0, 60);
-  return slug ? `sinterklaasgedicht-${slug}.pdf` : 'sinterklaasgedicht.pdf';
+  return slug ? `sinterklaasgedicht-${slug}-sintgpt.com.pdf` : 'sinterklaasgedicht-sintgpt.com.pdf';
 }

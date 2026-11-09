@@ -1,19 +1,14 @@
 // Prints a short report from the Workers Analytics Engine dataset.
 //
-//   CLOUDFLARE_ACCOUNT_ID=... CLOUDFLARE_ANALYTICS_TOKEN=... npx tsx scripts/analytics-report.ts [days]
+//   CLOUDFLARE_ANALYTICS_TOKEN=... npx tsx scripts/analytics-report.ts [days]
 //
 // The token needs only "Account Analytics Read". Column names follow the
 // order in server/utils/analytics.ts. Counts are weighted with
 // _sample_interval, because Analytics Engine can sample busy datasets.
 
-const DATASET = 'sintgpt_events';
+import { DATASET, analyticsCredentials, analyticsQuery as query } from './analyticsSql';
 
-const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
-const token = process.env.CLOUDFLARE_ANALYTICS_TOKEN;
-if (!accountId || !token) {
-  console.error('Set CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_ANALYTICS_TOKEN (Account Analytics Read).');
-  process.exit(1);
-}
+analyticsCredentials();
 
 const days = Number.parseInt(process.argv[2] ?? '7', 10);
 if (!Number.isInteger(days) || days < 1 || days > 92) {
@@ -91,15 +86,6 @@ const QUERIES: Record<string, string> = {
     FROM ${DATASET} WHERE ${since} AND blob1 = 'Page view'
     GROUP BY country ORDER BY views DESC LIMIT 10`,
 };
-
-async function query(sql: string): Promise<Record<string, unknown>[]> {
-  const res = await fetch(
-    `https://api.cloudflare.com/client/v4/accounts/${accountId}/analytics_engine/sql`,
-    { method: 'POST', headers: { Authorization: `Bearer ${token}` }, body: `${sql} FORMAT JSON` },
-  );
-  if (!res.ok) throw new Error(`${res.status}: ${(await res.text()).slice(0, 300)}`);
-  return ((await res.json()) as { data: Record<string, unknown>[] }).data;
-}
 
 console.log(`SintGPT, last ${days} day(s)`);
 for (const [title, sql] of Object.entries(QUERIES)) {

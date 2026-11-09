@@ -86,9 +86,13 @@ Notes:
 - `/g/<id>` is `noindex` and uses the same `/gedicht/preview.png` share image.
 
 ### Poem PDF
-"Opslaan als PDF" builds the file in the browser (`utils/poemPdf.ts`, pdf-lib), so it uses no Worker CPU. It is loaded with a dynamic import, because pdf-lib is large.
-- The background `public/pdf/paper.jpg` is the empty scroll, rendered from the CSS of `PaperScroll.vue`.
-- The text is real text in Alegreya, with a Texturina drop cap (`public/pdf/`, SIL OFL). Long poems get a smaller size, then more pages. Keep the sizes and colours in line with `PaperScroll.vue`.
+"Opslaan als PDF" opens `PdfDesignDialog.vue`, where the visitor picks one of four designs (`utils/pdfDesigns.ts`: perkament, pakjesavond, cadeaupapier, schoolschrift; the last choice stays in localStorage `sintgpt-pdf-design`). The browser then builds the file (`utils/poemPdf.ts`, pdf-lib), so it uses no Worker CPU. pdf-lib is loaded with a dynamic import, because it is large.
+- The PDF never names the site: no attribution line, no author or creator in the metadata, no text on a background. Only the file name does: `sinterklaasgedicht-<name>-sintgpt.com.pdf`.
+- Each design has a full-page JPEG background, a text font, an optional drop-cap font, colours, a writing area and font sizes. Long poems get a smaller size, then more pages.
+- Backgrounds: `public/pdf/paper.jpg` is the empty scroll, rendered from the CSS of `PaperScroll.vue` (`npm run build:pdf-paper`). The other three are SVG in `scripts/build-pdf-designs.ts` (`npm run build:pdf-designs`). Keep their empty spaces in line with `area` in the design.
+- Previews in the dialog (`public/pdf/previews/`) are page 1 of a real PDF of an example poem: `npm run build:pdf-previews` (needs `pdftoppm` from Poppler). Run it after changing a design. `npx tsx scripts/build-pdf-previews.ts <dir>` writes full-size PDFs and PNGs to review.
+- Fonts in `public/pdf/` (SIL OFL): Alegreya and Texturina, like the site, and Caveat for the notebook. pdf-lib cannot subset Caveat or lay out its contextual alternates, so that design sets `plainFont` (embedded whole, no alternates).
+- `Save as PDF` and `PDF failed` carry the design in `detail`.
 
 ### Persuasion: what the page may say
 - The paid product is described as poems for the whole family ("Gedichten voor het hele gezin"), €6,99 once, one year in that browser, at most 100 a day. "Bij 7 gedichten betaal je minder dan €1 per gedicht" is plain maths (6,99 / 7). Keep these in line with the price and the limits.
@@ -172,4 +176,4 @@ No third-party script. Events go to the dataset `sintgpt_events` (binding `ANALY
 - The endpoint accepts only the names in `utils/analyticsEvents.ts`, short `detail` values and a number. The `EVENTS_BURST` Rate Limiting binding allows 60 events a minute per IP (keyed hash). Add a new event to that list first.
 - Columns are positional; the order is documented at the top of `server/utils/analytics.ts`. Never reorder them, only append. Never put names, poem text, payment IDs or IP addresses in an event. Paths drop the query and hash, and `/g/<id>` becomes `/g/:id`. The privacy page lists what is kept: change it with the columns.
 - Without the binding (Node build, tests) nothing is written.
-- Reports: `CLOUDFLARE_ACCOUNT_ID=... CLOUDFLARE_ANALYTICS_TOKEN=... npx tsx scripts/analytics-report.ts [days]`. The token needs **Account Analytics Read**. Weight counts with `_sample_interval`: `SUM(_sample_interval)`, not `COUNT()`.
+- Dashboard: `npm run analytics -- [today|yesterday|<days>] [--no-open]` (`scripts/analytics-dashboard.ts`) writes `reports/analytics-<period>.html` (git-ignored) and opens it. Days are Dutch calendar days. Text report: `npx tsx scripts/analytics-report.ts [days]`. Both share `scripts/analyticsSql.ts`; the account ID has a default (`CLOUDFLARE_ACCOUNT_ID` overrides it). The token (`CLOUDFLARE_ANALYTICS_TOKEN`) comes from the environment or from `.env.analytics` (git-ignored, apart from the app secrets in `.env`). It needs **Account Analytics Read**. Weight counts with `_sample_interval`: `SUM(_sample_interval)`, not `COUNT()`.

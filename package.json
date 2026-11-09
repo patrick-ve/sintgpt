@@ -14,8 +14,11 @@
     "typecheck": "vue-tsc --noEmit",
     "build:cloudflare": "NITRO_PRESET=cloudflare_module nuxt build && tsx scripts/strip-comments.ts .output",
     "build:og": "tsx scripts/build-og-image.ts",
+    "build:pdf-designs": "tsx scripts/build-pdf-designs.ts",
+    "build:pdf-previews": "tsx scripts/build-pdf-previews.ts",
     "build:pdf-paper": "tsx scripts/build-pdf-paper.ts",
-    "deploy": "npm run build:cloudflare && wrangler --cwd .output deploy"
+    "deploy": "npm run build:cloudflare && wrangler --cwd .output deploy",
+    "analytics": "tsx scripts/analytics-dashboard.ts"
   },
   "dependencies": {
     "@nuxt/image": "^2.2.1",
