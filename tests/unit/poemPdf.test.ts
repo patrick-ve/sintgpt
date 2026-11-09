@@ -1,13 +1,20 @@
 import { readFileSync } from 'node:fs';
 import { PDFDocument } from 'pdf-lib';
 import { describe, expect, it } from 'vitest';
-import { buildPoemPdf, layoutPoem, poemPdfFileName } from '../../utils/poemPdf';
+import { PDF_DESIGNS, PDF_DESIGN_IDS, type PdfDesignId } from '../../utils/pdfDesigns';
+import { buildPoemPdf, layoutPoem, poemFrame, poemPdfFileName } from '../../utils/poemPdf';
 
-const assets = {
-  paper: readFileSync('public/pdf/paper.jpg'),
-  textFont: readFileSync('public/pdf/alegreya-400.ttf'),
-  capFont: readFileSync('public/pdf/texturina-700.ttf'),
+const file = (publicPath: string) => readFileSync(`public${publicPath}`);
+const assetsFor = (id: PdfDesignId) => {
+  const design = PDF_DESIGNS[id];
+  return {
+    design,
+    background: file(design.background),
+    textFont: file(design.textFont),
+    capFont: design.capFont ? file(design.capFont) : undefined,
+  };
 };
+const assets = assetsFor('perkament');
 const measure = (text: string, size: number) => text.length * size * 0.45;
 const verse = 'Sint zag oma Truus\nzij bakt elke zondag\nHaar taart is een feest\nvoor mens en voor beest';
 
@@ -72,8 +79,52 @@ describe('layoutPoem', () => {
   });
 });
 
+describe('layoutPoem with a design', () => {
+  it('has no drop cap without a cap font', () => {
+    const { dropCap, pages } = layoutPoem(verse, measure, null, poemFrame(PDF_DESIGNS.cadeaupapier));
+    expect(dropCap).toBeNull();
+    expect(pages[0]![0]!.text).toBe('Sint zag oma Truus');
+  });
+
+  it('does not hang wrapped rows in a centred design', () => {
+    const line = 'woord '.repeat(40).trim();
+    const { pages } = layoutPoem(`A\nB\n${line}`, measure, null, poemFrame(PDF_DESIGNS.cadeaupapier));
+    expect(pages[0]!.every(row => row.indent === 0)).toBe(true);
+  });
+
+  it('uses the sizes of the design', () => {
+    const { fontSize } = layoutPoem(verse, measure, null, poemFrame(PDF_DESIGNS.schoolschrift));
+    expect(fontSize).toBe(PDF_DESIGNS.schoolschrift.sizes[0]!.fontSize);
+  });
+});
+
+describe('PDF designs', () => {
+  it.each(PDF_DESIGN_IDS)('%s has its files in public/', (id) => {
+    const design = PDF_DESIGNS[id];
+    for (const path of [design.background, design.preview, design.textFont, design.capFont].filter(Boolean)) {
+      expect(() => file(path!), path!).not.toThrow();
+    }
+  });
+
+  it.each(PDF_DESIGN_IDS)('%s makes a one-page PDF with Dutch accents', async (id) => {
+    const poem = `${verse}\nCafé, coördinatie, reünie\nEën, ’s avonds — “prima” …`;
+    const doc = await PDFDocument.load(await buildPoemPdf({ ...assetsFor(id), title: 'Voor oma', poem }));
+    expect(doc.getPageCount()).toBe(1);
+  });
+
+  it('never names the site in the PDF', async () => {
+    for (const id of PDF_DESIGN_IDS) {
+      const bytes = await buildPoemPdf({ ...assetsFor(id), title: 'Voor oma', poem: verse });
+      const doc = await PDFDocument.load(bytes);
+      expect(doc.getAuthor() ?? '').not.toMatch(/sintgpt/i);
+      expect(doc.getCreator() ?? '').not.toMatch(/sintgpt/i);
+      expect(Buffer.from(bytes).toString('latin1')).not.toMatch(/sintgpt/i);
+    }
+  });
+});
+
 describe('buildPoemPdf', () => {
-  const options = { ...assets, title: 'Voor oma', attribution: 'Geschreven met sintgpt.com' };
+  const options = { ...assets, title: 'Voor oma' };
 
   it('makes a valid A4 PDF with the title', async () => {
     const doc = await PDFDocument.load(await buildPoemPdf({ ...options, poem: verse }));
@@ -98,11 +149,11 @@ describe('buildPoemPdf', () => {
 
 describe('poemPdfFileName', () => {
   it.each([
-    ['Oma Truus', 'sinterklaasgedicht-oma-truus.pdf'],
-    ['René & Zoë', 'sinterklaasgedicht-rene-zoe.pdf'],
-    ['../../etc', 'sinterklaasgedicht-etc.pdf'],
-    ['', 'sinterklaasgedicht.pdf'],
-    ['🎁', 'sinterklaasgedicht.pdf'],
+    ['Oma Truus', 'sinterklaasgedicht-oma-truus-sintgpt.com.pdf'],
+    ['René & Zoë', 'sinterklaasgedicht-rene-zoe-sintgpt.com.pdf'],
+    ['../../etc', 'sinterklaasgedicht-etc-sintgpt.com.pdf'],
+    ['', 'sinterklaasgedicht-sintgpt.com.pdf'],
+    ['🎁', 'sinterklaasgedicht-sintgpt.com.pdf'],
   ])('turns %s into %s', (name, file) => {
     expect(poemPdfFileName(name)).toBe(file);
   });

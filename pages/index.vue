@@ -3,6 +3,7 @@ import { buildShareUrl } from '~/utils/poemLink';
 import { POEM_INPUT_LIMITS } from '~/utils/poemLimits';
 import { saveFormDraft, takeFormDraft } from '~/utils/formDraft';
 import { pakjesavondCountdown } from '~/utils/pakjesavond';
+import { PDF_DESIGNS, type PdfDesignId } from '~/utils/pdfDesigns';
 import type { PoemHistoryEntry } from '~/composables/usePoemHistory';
 
 const { generatePoem, isLoading, error, poem, isRateLimitError, share: generatedShare } =
@@ -411,6 +412,12 @@ const copyShareLink = async () => {
 
 const isSavingPdf = ref(false);
 const pdfFailed = ref(false);
+const pdfDialogOpen = ref(false);
+
+const openPdfDialog = () => {
+  pdfFailed.value = false;
+  pdfDialogOpen.value = true;
+};
 
 const fetchBytes = async (path: string) => {
   const response = await fetch(path);
@@ -418,22 +425,24 @@ const fetchBytes = async (path: string) => {
   return new Uint8Array(await response.arrayBuffer());
 };
 
-const savePoemPdf = async () => {
+// The PDF never names the site; only the file name does.
+const savePoemPdf = async (designId: PdfDesignId) => {
   if (!import.meta.client || !poem.value || isSavingPdf.value) return;
   isSavingPdf.value = true;
   pdfFailed.value = false;
   try {
-    const [{ buildPoemPdf, poemPdfFileName }, paper, textFont, capFont] = await Promise.all([
+    const design = PDF_DESIGNS[designId];
+    const [{ buildPoemPdf, poemPdfFileName }, background, textFont, capFont] = await Promise.all([
       import('~/utils/poemPdf'),
-      fetchBytes('/pdf/paper.jpg'),
-      fetchBytes('/pdf/alegreya-400.ttf'),
-      fetchBytes('/pdf/texturina-700.ttf'),
+      fetchBytes(design.background),
+      fetchBytes(design.textFont),
+      design.capFont ? fetchBytes(design.capFont) : Promise.resolve(undefined),
     ]);
     const bytes = await buildPoemPdf({
       poem: poem.value,
       title: poemTitle.value,
-      attribution: t('poem.pdfAttribution'),
-      paper,
+      design,
+      background,
       textFont,
       capFont,
     });
@@ -443,10 +452,11 @@ const savePoemPdf = async () => {
     link.download = poemPdfFileName(displayedRecipient.value);
     link.click();
     setTimeout(() => URL.revokeObjectURL(href), 60_000);
-    track('Save as PDF');
+    track('Save as PDF', { detail: designId });
+    pdfDialogOpen.value = false;
   } catch (error) {
     console.error('Failed to save PDF:', error);
-    track('PDF failed');
+    track('PDF failed', { detail: designId });
     pdfFailed.value = true;
   } finally {
     isSavingPdf.value = false;
@@ -1313,15 +1323,11 @@ useHead({
               <button
                 type="button"
                 class="poem-action"
-                :disabled="!poem || isSavingPdf"
-                @click="savePoemPdf"
+                :disabled="!poem"
+                aria-haspopup="dialog"
+                @click="openPdfDialog"
               >
-                <UIcon
-                  :name="isSavingPdf ? 'i-heroicons-arrow-path' : 'i-heroicons-arrow-down-tray'"
-                  class="size-[1.125rem]"
-                  :class="{ 'motion-safe:animate-spin': isSavingPdf }"
-                  aria-hidden="true"
-                />
+                <UIcon name="i-heroicons-arrow-down-tray" class="size-[1.125rem]" aria-hidden="true" />
                 {{ t('poem.savePdf') }}
               </button>
               <button
@@ -1362,9 +1368,6 @@ useHead({
               class="text-sm text-[#5c0f26]"
             >
               {{ t('poem.freeComplete') }}
-            </p>
-            <p v-if="pdfFailed" role="alert" class="text-sm font-medium text-[#8b1538]">
-              {{ t('poem.pdfError') }}
             </p>
             <p v-if="shareUrl && !isLoading" class="text-sm text-[#5c0f26]">
               {{ t('poem.linkPrivacy') }}
@@ -1546,6 +1549,7 @@ useHead({
     <!-- Payment Modal -->
     <ClientOnly>
       <PaymentModal v-model="showPaymentModal" :trigger="paymentTrigger" @restored="paymentStatus = 'success'" @checkout="saveFormForCheckout" />
+      <PdfDesignDialog v-model="pdfDialogOpen" :busy="isSavingPdf" :failed="pdfFailed" @save="savePoemPdf" />
     </ClientOnly>
 
     <!-- Earlier poems, stored on this device -->

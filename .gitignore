@@ -27,3 +27,6 @@ logs
 
 # Screenshots from browser checks
 .playwright-mcp/
+
+# Analytics dashboards (scripts/analytics-dashboard.ts)
+reports/

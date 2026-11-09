@@ -842,8 +842,18 @@ describe('poem links', () => {
 
     const button = page.getByRole('button', { name: 'Opslaan als PDF' });
     await button.waitFor({ timeout: 15_000 });
-    const [download] = await Promise.all([page.waitForEvent('download'), button.click()]);
-    expect(download.suggestedFilename()).toBe('sinterklaasgedicht-oma-truus.pdf');
+    await button.click();
+    const dialog = page.getByRole('dialog', { name: 'Kies een ontwerp' });
+    await dialog.waitFor();
+    // The radio is visually hidden; people click its picture or name.
+    await dialog.getByText('Schoolschrift', { exact: true }).click();
+    expect(await dialog.getByRole('radio', { name: /Schoolschrift/ }).isChecked()).toBe(true);
+    const [download] = await Promise.all([
+      page.waitForEvent('download'),
+      dialog.getByRole('button', { name: 'PDF opslaan' }).click(),
+    ]);
+    expect(download.suggestedFilename()).toBe('sinterklaasgedicht-oma-truus-sintgpt.com.pdf');
+    await dialog.waitFor({ state: 'hidden' });
 
     const stream = await download.createReadStream();
     const chunksRead: Buffer[] = [];
