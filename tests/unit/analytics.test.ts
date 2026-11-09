@@ -36,13 +36,14 @@ describe('analyticsDataPoint', () => {
       present: 'secret',
       writtenBy: 'yes',
       audience: 'no',
+      tier: 'familie',
       firstTextSeconds: 2.4,
       totalSeconds: 18.1,
     })).toEqual({
       indexes: ['Generate poem'],
       blobs: [
         'Generate poem', '/', 'nl', 'NL', 'roast', 'AABB', 'dutch', 'paid', 'google/gemini-3.7-flash',
-        'newsletter', 'email', 'pakjesavond', 'long', 'secret', 'yes', 'no',
+        'newsletter', 'email', 'pakjesavond', 'long', 'secret', 'yes', 'no', 'familie',
       ],
       doubles: [12, 900, 400, 0.0021, 3, 2.4, 18.1],
     });
@@ -50,7 +51,7 @@ describe('analyticsDataPoint', () => {
 
   it('fills empty columns, so later columns never shift', () => {
     const point = analyticsDataPoint('Save as PDF', { detail: 'x' });
-    expect(point.blobs).toHaveLength(16);
+    expect(point.blobs).toHaveLength(17);
     expect(point.blobs[8]).toBe('x');
     expect(point.doubles).toEqual([0, 0, 0, 0, 0, 0, 0]);
   });

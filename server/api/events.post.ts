@@ -1,5 +1,5 @@
 import { ClientEventSchema, trackServerEvent } from '../utils/analytics';
-import { unlimitedAccessPaymentId } from '../utils/paymentCookie';
+import { paidAccess } from '../utils/paymentCookie';
 import { counterName, rateLimitIp } from '../utils/poemRateLimit';
 
 interface RateLimitBindingLike {
@@ -31,9 +31,11 @@ export default defineEventHandler(async (event) => {
   }
 
   const { name, ...fields } = parsed.data;
+  const access = await paidAccess(event);
   trackServerEvent(event, name, {
     ...fields,
-    plan: (await unlimitedAccessPaymentId(event)) ? 'paid' : 'free',
+    plan: access ? 'paid' : 'free',
+    tier: access?.tier,
   });
   setResponseStatus(event, 204);
   return null;

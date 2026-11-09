@@ -12,6 +12,8 @@ export const SERVER_EVENTS = [
   'Poem aborted',
   'Payment verified',
   'Payment webhook',
+  'Surprise ideas',
+  'Surprise ideas failed',
 ] as const;
 
 export const CLIENT_EVENTS = [
@@ -49,6 +51,7 @@ export const CLIENT_EVENTS = [
   'Play video',
   'Show example',
   'Draw lootjes',
+  'Show surprise ideas',
 ] as const;
 
 export type ServerEventName = (typeof SERVER_EVENTS)[number];

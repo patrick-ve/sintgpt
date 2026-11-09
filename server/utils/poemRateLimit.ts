@@ -31,6 +31,7 @@ const RULES: Record<RateLimitSubject['kind'], RateLimitRule> = {
 };
 
 // Per isolate: for the Node build, and when Cloudflare cannot be reached.
+// Drie buyers use the buyer limiter with their own rule.
 const memory = {
   ip: createRateLimiter(POEM_RATE_LIMIT),
   buyer: createRateLimiter(BUYER_RATE_LIMIT),
@@ -84,9 +85,9 @@ export async function counterName(subject: RateLimitSubject, secret: string): Pr
 export async function checkPoemRateLimit(
   event: H3Event,
   subject: RateLimitSubject,
+  rule: RateLimitRule = RULES[subject.kind],
 ): Promise<RateLimitVerdict> {
   const env = (event.context as { cloudflare?: { env?: RateLimitEnv } }).cloudflare?.env;
-  const rule = RULES[subject.kind];
 
   if (env?.RATE_LIMITER) {
     try {
@@ -108,5 +109,21 @@ export async function checkPoemRateLimit(
     }
   }
 
-  return memory[subject.kind].check(subject.id);
+  return memory[subject.kind].check(subject.id, Date.now(), rule);
+}
+
+/** How many requests the subject's current window has used. Counts nothing. */
+export async function poemsUsed(event: H3Event, subject: RateLimitSubject): Promise<number> {
+  const env = (event.context as { cloudflare?: { env?: RateLimitEnv } }).cloudflare?.env;
+  if (env?.RATE_LIMITER) {
+    try {
+      const name = await counterName(subject, useRuntimeConfig(event).accessCookieSecret);
+      const counter = env.RATE_LIMITER.get(env.RATE_LIMITER.idFromName(name));
+      const res = await counter.fetch('https://rate-limit.internal/peek', { method: 'POST' });
+      if (res.ok) return ((await res.json()) as { used: number }).used;
+    } catch (error: any) {
+      consola.warn('Rate limit counter failed, using memory:', error?.message);
+    }
+  }
+  return memory[subject.kind].peek(subject.id);
 }

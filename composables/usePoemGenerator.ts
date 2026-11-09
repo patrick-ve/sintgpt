@@ -22,6 +22,8 @@ export const usePoemGenerator = () => {
   const error = ref<string | null>(null);
   const poem = ref<string | null>(null);
   const isRateLimitError = ref(false);
+  // Why the payment offer shows: `limit` (free poems) or `credits` (Drie used up).
+  const rateLimitReason = ref<'limit' | 'credits' | null>(null);
   const share = ref<PoemShare | null>(null);
 
   const generatePoem = async (request: PoemRequest) => {
@@ -29,6 +31,7 @@ export const usePoemGenerator = () => {
     error.value = null;
     poem.value = '';
     isRateLimitError.value = false;
+    rateLimitReason.value = null;
     share.value = null;
 
     const reveal = createSmoothReveal((text) => {
@@ -55,6 +58,7 @@ export const usePoemGenerator = () => {
           error.value = t('poem.fairUse');
         } else {
           isRateLimitError.value = true;
+          rateLimitReason.value = data?.reason === 'credits' ? 'credits' : 'limit';
           error.value = null;
         }
         return;
@@ -99,6 +103,7 @@ export const usePoemGenerator = () => {
     error,
     poem,
     isRateLimitError,
+    rateLimitReason,
     share,
     generatePoem,
   };

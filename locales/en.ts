@@ -13,7 +13,7 @@ export default {
     moreInfo: 'How does it work?',
     photoAlt: 'Sinterklaas winks and taps his temple',
     photoCaption: 'Even Sinterklaas finds rhyming hard sometimes.',
-    note: 'Your first poem is free. After that, a one-time €6,99 covers poems for the whole family.',
+    note: 'Your first poem is free. After that, a one-time €6.99 covers poems for the whole family, or €3.99 buys 3 poems.',
   },
   countdown: {
     days: 'Pakjesavond is in {count} day | Pakjesavond is in {count} days',
@@ -113,6 +113,9 @@ export default {
       pakjesavond: { name: 'Pakjesavond', description: 'Stars and rooftops at night' },
       cadeaupapier: { name: 'Gift wrap', description: 'Red paper with a golden bow' },
       schoolschrift: { name: 'Notebook', description: 'Handwritten on lined paper' },
+      goudfolie: { name: 'Gold foil', description: 'Gold on velvet red, with a mitre' },
+      stoomboot: { name: 'Steamboat', description: 'The present boat at sea by moonlight' },
+      unlock: 'See Whole family',
     },
     linkCopied: 'Link copied!',
     linkPrivacy: 'Anyone with the link can read this poem. We keep it for 90 days for this.',
@@ -127,6 +130,13 @@ export default {
     sampleTitle: 'Poem for Mark',
     sampleSignature: 'Sinterklaas and Pete',
     regenerate: 'Rewrite this poem',
+    surprise: {
+      button: 'Think of a surprise',
+      loading: 'The Sint is thinking…',
+      title: 'Surprise ideas for {name}',
+      materials: 'You need',
+      error: 'That did not work. Please try again.',
+    },
     wait: 'One moment: you can make a new poem in {seconds} seconds.',
     fairUse: 'You have made 100 poems in the last 24 hours. That is the daily maximum. Please try again later.',
     sampleText:
@@ -188,7 +198,7 @@ export default {
       {
         question: 'Is SintGPT free?',
         answer:
-          'Your first poem is free, with everything included: sharing, copying and saving as a PDF. After that, you pay a one-time €6,99 (incl. VAT) and write poems for the whole family for a year. With 7 poems, that is less than €1 per poem.',
+          'Your first poem is free, with everything included: sharing, copying and saving as a PDF. After that, you choose what suits you, with one payment including VAT: 3 poems for €3.99, Family for €6.99 (as many poems as you like for a year, rewrites included) or Whole family for €12.99 (everything in Family until pakjesavond next year, with 2 extra PDF designs and surprise ideas). With 7 poems, Family costs less than €1 per poem.',
       },
       {
         question: 'What poem styles are available?',
@@ -218,7 +228,7 @@ export default {
       {
         question: 'Can I change a poem or have it written again?',
         answer:
-          'Yes. "Rewrite this poem" gives you a new version with the same details. Want to change something yourself? Copy the poem and edit it however you like.',
+          'Yes. "Rewrite this poem" gives you a new version with the same details. It comes with Family and Whole family. Want to change something yourself? Copy the poem and edit it however you like.',
       },
       {
         question: 'Is my data stored?',
@@ -234,18 +244,45 @@ export default {
     ],
   },
   payment: {
-    title: 'Keep writing for the whole family',
+    title: 'Choose how you keep writing',
     nextStep: 'Your free poem is ready. What you filled in stays: after paying, you continue right away.',
     limitReached: 'Your free poem is ready',
-    description: 'Want to write for more people? A one-time €6,99 covers poems for the whole family.',
-    oneTimePayment: 'One-time',
+    description: 'Want to write for more people? Keep writing from €3.99. A one-time €6.99 covers poems for the whole family.',
+    oneTimePayment: 'Pay once',
     includesVAT: 'incl. VAT',
-    household: 'Pay once, poems for the whole family',
-    perPoem: 'With 7 poems, you pay less than €1 per poem.',
-    feature1: 'For grandpa, your colleague and the neighbours: write for everyone on your list',
-    feature2: 'All styles and rhyme schemes, and Rewrite this poem',
-    feature3: 'For a whole year, in this browser',
-    payNow: 'Continue with your poem · €6,99',
+    intro: {
+      rewriteTier: 'Rewriting poems with AI comes with Family and Whole family. What you filled in stays.',
+      credits: 'You have written your 3 poems. Want to keep writing? What you filled in stays.',
+      surprise: 'Surprise ideas for your poem come with Whole family.',
+      design: 'This PDF design comes with Whole family.',
+    },
+    tiers: {
+      legend: 'Choose what to buy',
+      recommended: 'Recommended',
+      owned: 'You have this',
+      notIncluded: 'Not included',
+      perPoem: '{price} per poem',
+      nudge: 'For {difference} more, Family lets you write as many poems as you like.',
+      drie: {
+        name: '3 poems',
+        note: '',
+        features: ['3 poems, for anyone you like', 'All styles and rhyme schemes', 'Until pakjesavond {season}'],
+        missing: ['Rewrite poems with AI'],
+      },
+      gezin: {
+        name: 'Family',
+        note: 'With 7 poems, less than €1 per poem',
+        features: ['As many poems as you like', 'Rewrite poems with AI', 'For a whole year'],
+        missing: [],
+      },
+      familie: {
+        name: 'Whole family',
+        note: 'Next year too',
+        features: ['Everything in Family', 'Until pakjesavond {nextSeason}', '2 extra PDF designs', 'Surprise ideas for every poem'],
+        missing: [],
+      },
+    },
+    payNow: 'Continue with {tier} · {price}',
     processing: 'One moment…',
     securePayment: 'Secure payment via Dodo Payments',
     error: 'The payment did not work. Please try again.',
@@ -260,9 +297,12 @@ export default {
       invalid: 'This is not a valid payment ID. It starts with pay_.',
       failed: 'We found no successful payment with this ID. Check the ID, or email us.',
       pending: 'This payment is not complete yet. Please try again in a few minutes.',
+      expired: 'This payment has expired. Choose above how you want to keep writing.',
     },
     successTitle: 'Done! You can keep writing',
     successMessage: 'Write as many poems as you like, for the whole family.',
+    successMessageDrie: 'You can write 3 more poems, until pakjesavond.',
+    successMessageFamilie: 'Write as many poems as you like, next year too. With every poem you can ask for surprise ideas.',
     successDraft: 'What you filled in is still in the form.',
     successNext: 'Write the poem',
     pendingTitle: 'Checking your payment…',
@@ -275,8 +315,11 @@ export default {
     cancelledMessage:
       'No problem. You can try again any time.',
     remainingPoems: '{count} free poem remaining | {count} free poems remaining',
-    unlimitedAccess: 'Keep writing for €6,99',
+    unlimitedAccess: 'Choose how to keep writing',
     unlimitedUnlocked: 'Write as many poems as you like.',
+    poemsLeft: 'You can write {count} more poem. | You can write {count} more poems.',
+    creditsUsedTitle: 'You have written your 3 poems',
+    creditsUsedMessage: 'Want to keep writing? With Family you write as many poems as you like.',
     unavailable: {
       title: 'Payments are not working right now',
       message: 'Our payment page does not work at the moment. Until it does, you can make up to 3 free poems today.',
@@ -312,7 +355,7 @@ export default {
     seoTitle: 'Examples of Sinterklaas poems | SintGPT',
     description: 'Read examples of Sinterklaas poems in six styles: funny, classic, ironic, old-fashioned, spicy and roast.',
     pageIntro: 'SintGPT wrote these poems from the details shown with them. The people are made up. This shows what each style does.',
-    ctaText: 'Your first poem is free. After that, a one-time €6,99 covers poems for the whole family.',
+    ctaText: 'Your first poem is free. After that, a one-time €6.99 covers poems for the whole family, or €3.99 buys 3 poems.',
   },
   lootjes: {
     seoTitle: 'Draw names for Sinterklaas | SintGPT',
@@ -382,7 +425,7 @@ export default {
         {
           heading: 'Your IP address',
           body: [
-            'Free users can make 3 poems a day. To count them, we use your IP address. We do not keep it ourselves: Cloudflare keeps only a keyed hash and a counter. Both are deleted after 24 hours at most. For paying users we count per payment in the same way, with a maximum of 100 poems a day.',
+            'Free users can make 3 poems a day. To count them, we use your IP address. We do not keep it ourselves: Cloudflare keeps only a keyed hash and a counter. Both are deleted after 24 hours at most. For paying users we count per payment in the same way, with a maximum of 100 poems a day. With 3 poems, we count per payment how many poems you wrote; that counter is deleted after pakjesavond.',
             'Cloudflare hosts the website and keeps technical logs, such as the time and the address of a request. We keep those logs for 7 days at most, to find outages and abuse.',
             'Legal basis: our legitimate interest in keeping the service affordable, safe and available.',
           ],
@@ -391,14 +434,14 @@ export default {
           heading: 'Payments',
           body: [
             'You pay Dodo Payments. Dodo is the seller (merchant of record) and processes your name, email address and payment details under its own privacy policy. SintGPT only sees the payment ID, the status and the product of your payment.',
-            'After a successful payment we set the cookie "sintgpt-access" in your browser. It holds your payment ID and a signature, so we know you have paid. It is valid for one year and is necessary for the service you bought.',
+            'After a successful payment we set the cookie "sintgpt-access" in your browser. It holds your payment ID and a signature, so we know you have paid. It also holds what you bought and until when it is valid, and it then expires (after 400 days at most). It is necessary for the service you bought.',
             'Legal basis: performing the agreement.',
           ],
         },
         {
           heading: 'Statistics',
           body: [
-            'We count visits and a few actions, such as "poem made" and "PDF saved". We do this ourselves, with Cloudflare Workers Analytics Engine. For each action we keep what it was, the page, your language choice, your country, the website you came from, the campaign code in the link (such as utm_source), the poem settings (such as style and length), whether you filled in fields such as the fun facts (not what you wrote), how long the writing took, which poem on your device it is and whether you paid. Cloudflare works out your country from your IP address; we do not keep the IP address itself.',
+            'We count visits and a few actions, such as "poem made" and "PDF saved". We do this ourselves, with Cloudflare Workers Analytics Engine. For each action we keep what it was, the page, your language choice, your country, the website you came from, the campaign code in the link (such as utm_source), the poem settings (such as style and length), whether you filled in fields such as the fun facts (not what you wrote), how long the writing took, which poem on your device it is, whether you paid and what you bought. Cloudflare works out your country from your IP address; we do not keep the IP address itself.',
             'We keep no names, no text you fill in, no payment ID and no IP address. We use no cookies for this and do not follow you across other websites. Cloudflare deletes this data after 3 months.',
             'Legal basis: our legitimate interest in improving the website.',
           ],
@@ -427,7 +470,7 @@ export default {
     terms: {
       title: 'Terms',
       seoTitle: 'Terms | SintGPT',
-      description: 'The terms for using SintGPT and for poems for the whole family.',
+      description: 'The terms for using SintGPT and for what you can buy: 3 poems, Family and Whole family.',
       intro: 'These terms apply when you use SintGPT. They are short, and we wrote them as clearly as we could.',
       sections: [
         {
@@ -443,17 +486,21 @@ export default {
           ],
         },
         {
-          heading: 'Poems for the whole family',
+          heading: 'What you can buy',
           body: [
-            'Poems for the whole family costs a one-time €6.99, including VAT. You can then write poems for a year in the browser you paid with. In another browser, you continue with your payment ID.',
-            'You write as many poems as you reasonably need, with a maximum of 100 poems per 24 hours. This keeps the service affordable.',
+            'After your free poem, you choose from three options. You pay once; prices include VAT. There is no subscription.',
+            '3 poems costs €3.99. You write 3 poems, until the next pakjesavond (5 December). Rewriting poems with AI is not included.',
+            'Family costs €6.99. For a year from your payment, you write as many poems as you like, and you can rewrite poems.',
+            'Whole family costs €12.99. You get everything in Family, until the second pakjesavond after your payment: if you pay before 6 December 2026, until 5 December 2027. You also get 2 extra PDF designs and surprise ideas for your poems.',
+            'With Family and Whole family you write as many poems as you reasonably need, with a maximum of 100 poems per 24 hours; surprise ideas count too. This keeps the service affordable.',
+            'You write in the browser you paid with. In another browser, you continue with your payment ID. If you want more later, you buy another option separately; we do not offset what you already paid.',
             'You pay Dodo Payments. Dodo is the seller (merchant of record) and sends you the invoice. Dodo\'s terms also apply to the payment.',
           ],
         },
         {
           heading: 'Right of withdrawal',
           body: [
-            'Poems for the whole family is a digital service that starts right after payment. When you pay, you ask for that immediate delivery. Because of this, your 14-day right of withdrawal ends once you can keep writing.',
+            'What you buy is a digital service that starts right after payment. When you pay, you ask for that immediate delivery. Because of this, your 14-day right of withdrawal ends once you can keep writing.',
             'Is something not working as it should? Email patrick@sintgpt.com and we will find a solution together.',
           ],
         },
@@ -475,7 +522,7 @@ export default {
           heading: 'Availability and liability',
           body: [
             'We do our best to keep SintGPT working, but we cannot promise it. We can change the service or pause it, for example for maintenance or an outage at an AI service.',
-            'Our liability is limited to the amount you paid for unlimited access, except in case of intent or gross negligence.',
+            'Our liability is limited to the amount you paid to SintGPT, except in case of intent or gross negligence.',
           ],
         },
         {

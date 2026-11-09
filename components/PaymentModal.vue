@@ -1,11 +1,16 @@
 <script setup lang="ts">
-const { t } = useI18n();
+import { fillSeasons, formatPrice, pricePerPoemCents, RECOMMENDED_TIER, TIER_IDS, TIERS, type TierId } from '~/utils/pricingTiers';
+
+export type PaymentTrigger = 'submit' | 'rewrite' | 'limit' | 'credits' | 'surprise' | 'design';
+
+const { t, locale } = useI18n();
 
 const isOpen = defineModel<boolean>({ default: false });
 
-// Why the window opened, for analytics: the second poem, a rewrite, or the
-// server's daily limit.
-const props = defineProps<{ trigger?: 'submit' | 'rewrite' | 'limit' }>();
+// Why the window opened, for analytics and the first line: the second poem, a
+// rewrite, the server's daily limit, the Drie poems used up, or a Hele
+// familie feature. `tier` is the card to select, if it can be bought.
+const props = defineProps<{ trigger?: PaymentTrigger; tier?: TierId }>();
 
 const dialogRef = ref<HTMLDialogElement | null>(null);
 
@@ -14,7 +19,53 @@ const error = ref<string | null>(null);
 
 // `checkout` fires just before the page leaves for Dodo, so the form can be kept.
 const emit = defineEmits<{ restored: []; checkout: [] }>();
-const { claimPayment, paymentsUnavailable, refreshPaymentsStatus } = usePaymentTracking();
+const {
+  claimPayment,
+  paymentsUnavailable,
+  refreshPaymentsStatus,
+  tier: ownedTier,
+  tiersOnSale,
+  suggestedTier,
+} = usePaymentTracking();
+
+// The tier cards. Gezin is the recommended one and selected by default; a
+// buyer sees what they have and can only choose a tier above it.
+const selectedTier = ref<TierId>(RECOMMENDED_TIER);
+const tierCards = computed(() => TIER_IDS.filter(id => tiersOnSale.value.includes(id)).map((id) => {
+  const tier = TIERS[id];
+  const perPoem = pricePerPoemCents(tier);
+  const owned = ownedTier.value !== null && TIER_IDS.indexOf(id) <= TIER_IDS.indexOf(ownedTier.value);
+  return {
+    id,
+    name: t(`payment.tiers.${id}.name`),
+    price: formatPrice(tier.priceCents, locale.value),
+    note: perPoem
+      ? t('payment.tiers.perPoem', { price: formatPrice(perPoem, locale.value) })
+      : t(`payment.tiers.${id}.note`),
+    features: (t(`payment.tiers.${id}.features`) as string[]).map(feature => fillSeasons(feature)),
+    missing: t(`payment.tiers.${id}.missing`) as string[],
+    recommended: id === RECOMMENDED_TIER,
+    owned,
+  };
+}));
+
+const selectedCard = computed(() => tierCards.value.find(card => card.id === selectedTier.value));
+
+// "Voor €3 meer schrijf je met Gezin zoveel gedichten als je wilt": plain maths.
+const upgradeNudge = computed(() => {
+  if (selectedTier.value !== 'drie' || !tiersOnSale.value.includes('gezin')) return '';
+  const difference = TIERS.gezin.priceCents - TIERS.drie.priceCents;
+  const amount = difference % 100 === 0 ? `€${difference / 100}` : formatPrice(difference, locale.value);
+  return t('payment.tiers.nudge', { difference: amount });
+});
+
+const intro = computed(() => {
+  if (props.trigger === 'rewrite' && ownedTier.value) return t('payment.intro.rewriteTier');
+  if (props.trigger === 'credits' || props.trigger === 'surprise' || props.trigger === 'design') {
+    return t(`payment.intro.${props.trigger}`);
+  }
+  return t('payment.nextStep');
+});
 const { track } = useAnalytics();
 
 // Buyers on another browser, or with a cookie from before Nov 2026, can get
@@ -49,10 +100,13 @@ const handleRestore = async () => {
 // Sync dialog element with isOpen state
 watch(isOpen, (newValue) => {
   if (newValue) {
+    selectedTier.value = suggestedTier(props.tier);
     dialogRef.value?.showModal();
     track('Show payment modal', { detail: props.trigger });
     // Payments may have stopped or started working since the page loaded.
-    refreshPaymentsStatus();
+    refreshPaymentsStatus().then(() => {
+      selectedTier.value = suggestedTier(props.tier);
+    });
   } else {
     dialogRef.value?.close();
   }
@@ -94,6 +148,7 @@ const handlePayment = async () => {
       '/api/payment/create-checkout',
       {
         method: 'POST',
+        body: { tier: selectedTier.value },
       }
     );
 
@@ -182,54 +237,48 @@ const closeModal = (how: 'button' | 'backdrop' | 'continue free') => {
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
-        <p class="banner-text">{{ t('payment.nextStep') }}</p>
+        <p class="banner-text">{{ intro }}</p>
       </div>
 
-      <!-- Pricing card -->
-      <div class="pricing-card">
-        <!-- Decorative inner border -->
-        <div class="pricing-inner-border"></div>
+      <!-- The tiers: one choice, Gezin selected -->
+      <fieldset v-if="!paymentsUnavailable" class="tiers">
+        <legend class="sr-only">{{ t('payment.tiers.legend') }}</legend>
+        <label
+          v-for="card in tierCards"
+          :key="card.id"
+          class="tier"
+          :class="{ 'tier-recommended': card.recommended, 'tier-owned': card.owned }"
+          :data-tier="card.id"
+        >
+          <input
+            v-model="selectedTier"
+            type="radio"
+            name="payment-tier"
+            class="sr-only"
+            :value="card.id"
+            :disabled="card.owned"
+          >
+          <span v-if="card.owned" class="tier-badge tier-badge-owned">{{ t('payment.tiers.owned') }}</span>
+          <span v-else-if="card.recommended" class="tier-badge">{{ t('payment.tiers.recommended') }}</span>
+          <span class="tier-name">{{ card.name }}</span>
+          <span class="tier-price">{{ card.price }}</span>
+          <span class="tier-note">{{ card.note }}</span>
+          <ul class="tier-features">
+            <li v-for="feature in card.features" :key="feature" class="tier-feature">
+              <span class="tier-mark tier-mark-yes" aria-hidden="true">✓</span>{{ feature }}
+            </li>
+            <li v-for="feature in card.missing" :key="feature" class="tier-feature tier-feature-missing">
+              <span class="tier-mark tier-mark-no" aria-hidden="true">✕</span>
+              <span><span class="sr-only">{{ t('payment.tiers.notIncluded') }}: </span>{{ feature }}</span>
+            </li>
+          </ul>
+        </label>
+      </fieldset>
 
-        <p class="household">{{ t('payment.household') }}</p>
-
-        <!-- Price display -->
-        <div class="price-wrapper">
-          <span class="price-currency">€</span>
-          <span class="price-amount">6</span>
-          <span class="price-cents">,99</span>
-        </div>
-
-        <p class="price-description">{{ t('payment.oneTimePayment') }} · {{ t('payment.includesVAT') }}</p>
-        <p class="per-poem">{{ t('payment.perPoem') }}</p>
-
-        <!-- Features list -->
-        <ul class="features-list">
-          <li class="feature-item">
-            <span class="feature-check">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-              </svg>
-            </span>
-            <span class="feature-text">{{ t('payment.feature1') }}</span>
-          </li>
-          <li class="feature-item">
-            <span class="feature-check">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-              </svg>
-            </span>
-            <span class="feature-text">{{ t('payment.feature2') }}</span>
-          </li>
-          <li class="feature-item">
-            <span class="feature-check">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-              </svg>
-            </span>
-            <span class="feature-text">{{ t('payment.feature3') }}</span>
-          </li>
-        </ul>
-      </div>
+      <p v-if="!paymentsUnavailable" class="tier-summary">
+        {{ t('payment.oneTimePayment') }} · {{ t('payment.includesVAT') }}
+      </p>
+      <p v-if="upgradeNudge" class="tier-nudge" aria-live="polite">{{ upgradeNudge }}</p>
 
       <!-- Error display -->
       <div v-if="error" class="error-banner">
@@ -258,7 +307,7 @@ const closeModal = (how: 'button' | 'backdrop' | 'continue free') => {
         v-else
         type="button"
         class="pay-button"
-        :disabled="isLoading"
+        :disabled="isLoading || !selectedCard || selectedCard.owned"
         @click="handlePayment"
       >
         <span v-if="isLoading" class="button-loading">
@@ -269,9 +318,9 @@ const closeModal = (how: 'button' | 'backdrop' | 'continue free') => {
           {{ t('payment.processing') }}
         </span>
         <span v-else class="button-content">
-          <span class="button-icon">🎁</span>
-          {{ t('payment.payNow') }}
-          <span class="button-icon">🎁</span>
+          <span class="button-icon" aria-hidden="true">🎁</span>
+          {{ t('payment.payNow', { tier: selectedCard?.name ?? '', price: selectedCard?.price ?? '' }) }}
+          <span class="button-icon" aria-hidden="true">🎁</span>
         </span>
         <!-- Shimmer effect -->
         <div class="button-shimmer"></div>
@@ -325,25 +374,178 @@ const closeModal = (how: 'button' | 'backdrop' | 'continue free') => {
 </template>
 
 <style scoped>
-.household {
+/* Tier cards */
+.tiers {
   position: relative;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.125rem;
-  line-height: 1.3;
-  color: #8b1538;
-  text-align: center;
-  text-wrap: balance;
-  margin-bottom: 0.5rem;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 0.75rem;
+  margin: 0 0 0.75rem;
+  padding: 0;
+  border: 0;
 }
 
-.per-poem {
+.tier {
   position: relative;
-  margin-top: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.125rem;
+  padding: 1rem 1rem 0.875rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 2px solid rgba(160, 136, 80, 0.55);
+  border-radius: 14px;
+  cursor: pointer;
+  transition-property: border-color, background-color, box-shadow;
+  transition-duration: 150ms;
+}
+
+@media (hover: hover) {
+  .tier:not(.tier-owned):not(:has(input:checked)):hover {
+    border-color: #d4a853;
+    background: rgba(255, 255, 255, 0.8);
+  }
+}
+
+.tier:has(input:checked) {
+  background: #fff;
+  border: 3px solid #8b1538;
+  padding: calc(1rem - 1px) calc(1rem - 1px) calc(0.875rem - 1px);
+  box-shadow: 0 6px 20px rgba(139, 21, 56, 0.18);
+}
+
+.tier:has(input:focus-visible) {
+  outline: 3px solid #3d0716;
+  outline-offset: 3px;
+}
+
+.tier-owned {
+  cursor: default;
+  opacity: 0.65;
+}
+
+.tier-recommended {
+  padding-top: 1.375rem;
+}
+
+.tier-recommended:has(input:checked) {
+  padding-top: calc(1.375rem - 1px);
+}
+
+@media (min-width: 720px) {
+  /* The recommended card stands a little taller than the others. */
+  .tier-recommended {
+    margin-top: -0.5rem;
+    margin-bottom: -0.5rem;
+  }
+}
+
+.tier-badge {
+  position: absolute;
+  top: -0.75rem;
+  left: 50%;
+  translate: -50% 0;
+  padding: 0.125rem 0.75rem;
+  white-space: nowrap;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #f4cd60;
+  background: #8b1538;
+  border: 2px solid #d4a853;
+  border-radius: 999px;
+}
+
+.tier-badge-owned {
+  color: #fff;
+  background: #2d5a3d;
+  border-color: #2d5a3d;
+}
+
+.tier-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.25rem;
+  line-height: 1.2;
+  color: #8b1538;
+}
+
+.tier-price {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 2rem;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+  color: #3d0716;
+}
+
+.tier-note {
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #5c0f26;
+}
+
+.tier-features {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.tier-feature {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.9375rem;
+  line-height: 1.35;
+  color: #3d2914;
+}
+
+.tier-feature-missing {
+  color: #6b5a4a;
+}
+
+.tier-mark {
+  flex-shrink: 0;
+  width: 1.125rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.tier-mark-yes {
+  color: #2d5a3d;
+}
+
+.tier-mark-no {
+  color: #8b1538;
+}
+
+.tier-summary {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 0.5rem;
+  font-size: 0.8125rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-align: center;
+  color: #5c0f26;
+}
+
+.tier-nudge {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 0.75rem;
+  padding: 0.5rem 0.75rem;
   font-size: 0.9375rem;
   font-weight: 700;
-  color: #5c0f26;
   text-align: center;
+  color: #5c0f26;
+  background: rgba(212, 168, 83, 0.2);
+  border-radius: 10px;
 }
 
 .unavailable {
@@ -394,7 +596,7 @@ const closeModal = (how: 'button' | 'backdrop' | 'continue free') => {
   padding: 0;
   border: none;
   border-radius: 20px;
-  max-width: 420px;
+  max-width: 860px;
   width: calc(100% - 2rem);
   max-height: calc(100dvh - 2rem);
   overflow: visible;
@@ -498,8 +700,8 @@ const closeModal = (how: 'button' | 'backdrop' | 'continue free') => {
 }
 
 .ribbon-br {
-  bottom: -4px;
-  right: -4px;
+  bottom: 0;
+  right: 0;
 }
 
 .ribbon-br::before {
@@ -658,131 +860,6 @@ const closeModal = (how: 'button' | 'backdrop' | 'continue free') => {
   color: #5c0f26;
   margin: 0;
   line-height: 1.5;
-}
-
-/* Pricing card */
-.pricing-card {
-  position: relative;
-  background: linear-gradient(145deg, #fff 0%, #fef9e7 100%);
-  border: 3px solid #8b1538;
-  border-radius: 16px;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-  text-align: center;
-  box-shadow:
-    0 6px 20px rgba(139, 21, 56, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 1);
-  z-index: 1;
-}
-
-.pricing-inner-border {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  right: 8px;
-  bottom: 8px;
-  border: 2px dashed #d4a853;
-  border-radius: 10px;
-  pointer-events: none;
-  opacity: 0.4;
-}
-
-/* Price display */
-.price-wrapper {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  margin-bottom: 0.25rem;
-}
-
-.price-currency {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #8b1538;
-  margin-top: 0.5rem;
-  margin-right: 0.125rem;
-}
-
-.price-amount {
-  font-family: var(--font-display);
-  font-size: 4rem;
-  font-weight: 900;
-  background: linear-gradient(135deg, #8b1538 0%, #b91c4a 50%, #8b1538 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: none;
-  filter: drop-shadow(0 2px 4px rgba(139, 21, 56, 0.2));
-}
-
-.price-cents {
-  font-family: var(--font-display);
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: #8b1538;
-  margin-top: 0.5rem;
-}
-
-.price-description {
-  font-family: var(--font-sans);
-  font-size: 0.8rem;
-  color: #5c0f26;
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-/* Card divider */
-.card-divider {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 1rem 0;
-}
-
-.divider-ornament {
-  color: #d4a853;
-  font-size: 1.25rem;
-  opacity: 0.7;
-}
-
-/* Features list */
-.features-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  text-align: left;
-}
-
-.feature-item {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem 0;
-}
-
-.feature-item:not(:last-child) {
-  border-bottom: 1px solid rgba(212, 168, 83, 0.2);
-}
-
-.feature-check {
-  flex-shrink: 0;
-  width: 24px;
-  height: 24px;
-  background: linear-gradient(135deg, #2d5a3d 0%, #1a472a 100%);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #f4cd60;
-  box-shadow: 0 2px 6px rgba(26, 71, 42, 0.3);
-}
-
-.feature-text {
-  font-family: var(--font-text);
-  font-size: 0.95rem;
-  color: #3d2914;
 }
 
 /* Error banner */
@@ -1025,6 +1102,31 @@ const closeModal = (how: 'button' | 'backdrop' | 'continue free') => {
   opacity: 0.7;
 }
 
+/* On narrow screens the cards stack; keep the pay button in view at the bottom. */
+@media (max-width: 719px) {
+  .pay-button {
+    position: sticky;
+    bottom: 0;
+  }
+}
+
+/* A compact header on wide screens, so the three cards fit without scrolling. */
+@media (min-width: 720px) {
+  .modal-header {
+    margin-bottom: 1rem;
+  }
+
+  .sint-badge {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 0.5rem;
+  }
+
+  .sint-emoji {
+    font-size: 1.75rem;
+  }
+}
+
 /* Mobile responsive */
 /* Where the window scrolls, this corner ribbon would end up mid-content. */
 @media (max-height: 800px) {
@@ -1056,17 +1158,9 @@ const closeModal = (how: 'button' | 'backdrop' | 'continue free') => {
     font-size: 1.25rem;
   }
 
-  .price-amount {
-    font-size: 3.5rem;
-  }
-
-  .price-currency,
-  .price-cents {
-    font-size: 1.25rem;
-  }
-
   .floating-gift,
-  .floating-star {
+  .floating-star,
+  .button-icon {
     display: none;
   }
 

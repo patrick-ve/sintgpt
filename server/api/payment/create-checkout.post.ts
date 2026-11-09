@@ -6,7 +6,9 @@ import {
   markPaymentsUnavailable,
   paymentsAvailable,
   paymentsConfigured,
+  tierProducts,
 } from '../../utils/paymentsStatus';
+import { isTierId, RECOMMENDED_TIER } from '../../../utils/pricingTiers';
 
 interface CheckoutResponse {
   checkoutUrl: string;
@@ -35,6 +37,15 @@ export default defineEventHandler(async (event): Promise<CheckoutResponse> => {
     throw paymentsUnavailableError(event, 'flag set');
   }
 
+  // The browser names a tier, never a product ID. Without one (an old page
+  // still open) it is the recommended tier.
+  const body = await readBody<{ tier?: unknown }>(event).catch(() => null);
+  const tier = body?.tier === undefined ? RECOMMENDED_TIER : body.tier;
+  const productId = isTierId(tier) ? tierProducts(event)[tier] : undefined;
+  if (!isTierId(tier) || !productId) {
+    throw createError({ statusCode: 400, statusMessage: 'Unknown tier' });
+  }
+
   const client = createDodoClient(runtimeConfig.dodoPaymentsApiKey);
 
   // Get the base URL for return URL
@@ -47,7 +58,7 @@ export default defineEventHandler(async (event): Promise<CheckoutResponse> => {
     const session = await client.checkoutSessions.create({
       product_cart: [
         {
-          product_id: runtimeConfig.dodoProductId,
+          product_id: productId,
           quantity: 1,
         },
       ],
@@ -83,6 +94,6 @@ export default defineEventHandler(async (event): Promise<CheckoutResponse> => {
   }
 
   consola.success('Checkout session created');
-  trackServerEvent(event, 'Proceed to payment');
+  trackServerEvent(event, 'Proceed to payment', { detail: tier, tier });
   return { checkoutUrl };
 });

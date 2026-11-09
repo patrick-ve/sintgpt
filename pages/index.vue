@@ -4,9 +4,11 @@ import { POEM_INPUT_LIMITS } from '~/utils/poemLimits';
 import { saveFormDraft, takeFormDraft } from '~/utils/formDraft';
 import { pakjesavondCountdown } from '~/utils/pakjesavond';
 import { PDF_DESIGNS, type PdfDesignId } from '~/utils/pdfDesigns';
+import { fillSeasons, TIERS, type TierId } from '~/utils/pricingTiers';
 import type { PoemHistoryEntry } from '~/composables/usePoemHistory';
+import type { PaymentTrigger } from '~/components/PaymentModal.vue';
 
-const { generatePoem, isLoading, error, poem, isRateLimitError, share: generatedShare } =
+const { generatePoem, isLoading, error, poem, isRateLimitError, rateLimitReason, share: generatedShare } =
   usePoemGenerator();
 const { t, locale, setLocale } = useI18n();
 const {
@@ -20,6 +22,10 @@ const {
   saveTrialPoem,
   paymentsUnavailable,
   refreshPaymentsStatus,
+  tier: ownedTier,
+  poemsLeft,
+  creditsUsed,
+  hasFeature,
 } = usePaymentTracking();
 const poemHistory = usePoemHistory();
 const { track } = useAnalytics();
@@ -230,19 +236,27 @@ const scrollToFaq = () => {
 type PoemFormData = typeof formData.value;
 const lastRequest = ref<PoemFormData | null>(null);
 
-// Why the payment window opened, for analytics.
-const paymentTrigger = ref<'submit' | 'rewrite' | 'limit'>('submit');
-const openPaymentModal = (trigger: 'submit' | 'rewrite' | 'limit') => {
+// Why the payment window opened (for analytics and its first line), and the
+// tier it selects.
+const paymentTrigger = ref<PaymentTrigger>('submit');
+const paymentTier = ref<TierId | undefined>();
+const openPaymentModal = (trigger: PaymentTrigger, tier?: TierId) => {
   paymentTrigger.value = trigger;
+  paymentTier.value = tier;
   showPaymentModal.value = true;
 };
 
 // The free limit applies to a rewrite as well. While payments do not work,
 // the page does not ask for one: only the server's daily limit applies.
+// Drie includes no rewrites and ends after 3 poems; the server checks both.
 const canStartGeneration = async (trigger: 'submit' | 'rewrite'): Promise<boolean> => {
+  if (isPaid.value && trigger === 'rewrite' && !hasFeature('rewrites')) {
+    openPaymentModal('rewrite');
+    return false;
+  }
   if (import.meta.dev || canGeneratePoem.value) return true;
-  if (!(await refreshPaymentsStatus())) return true;
-  openPaymentModal(trigger);
+  if (!isPaid.value && !(await refreshPaymentsStatus())) return true;
+  openPaymentModal(creditsUsed.value ? 'credits' : trigger);
   return false;
 };
 
@@ -277,6 +291,7 @@ const runGeneration = async (request: PoemFormData, regenerate = false) => {
   displayedRecipient.value = request.name.trim();
   activeHistoryId.value = null;
   lastRequest.value = { ...request };
+  resetSurprise();
   await generatePoem({ ...request, regenerate });
 
   // A rate limit shows the upgrade offer in the poem area.
@@ -410,9 +425,64 @@ const copyShareLink = async () => {
   }, 2000);
 };
 
+// Surprise ideas for the poem on screen: part of Hele familie. Others see the
+// button too, and it opens the payment window with that tier selected.
+interface SurpriseIdea { title: string; materials: string; steps: string }
+const surpriseIdeas = ref<SurpriseIdea[] | null>(null);
+const surpriseLoading = ref(false);
+const surpriseError = ref(false);
+const resetSurprise = () => {
+  surpriseIdeas.value = null;
+  surpriseError.value = false;
+};
+
+const askSurpriseIdeas = async () => {
+  if (!lastRequest.value || surpriseLoading.value) return;
+  if (!hasFeature('surpriseIdeas')) {
+    track('Show surprise ideas', { detail: 'locked' });
+    openPaymentModal('surprise', 'familie');
+    return;
+  }
+  track('Show surprise ideas', { detail: 'open' });
+  surpriseLoading.value = true;
+  surpriseError.value = false;
+  try {
+    const { name, present, revealPresent, funFacts, language } = lastRequest.value;
+    const { ideas } = await $fetch<{ ideas: SurpriseIdea[] }>('/api/poem/surprise', {
+      method: 'POST',
+      body: { name, present, revealPresent, funFacts, language },
+    });
+    surpriseIdeas.value = ideas;
+  } catch {
+    surpriseError.value = true;
+  } finally {
+    surpriseLoading.value = false;
+  }
+};
+
+// The text under the submit button.
+const accessHint = computed(() => {
+  if (isPaid.value && poemsLeft.value !== null) return t('payment.poemsLeft', { count: poemsLeft.value });
+  if (isPaid.value) return t('payment.unlimitedUnlocked');
+  return '';
+});
+
+const successMessage = computed(() => {
+  if (restoredDraft.value) return t('payment.successDraft');
+  if (ownedTier.value === 'drie') return t('payment.successMessageDrie');
+  if (ownedTier.value === 'familie') return t('payment.successMessageFamilie');
+  return t('payment.successMessage');
+});
+
 const isSavingPdf = ref(false);
 const pdfFailed = ref(false);
 const pdfDialogOpen = ref(false);
+
+// A locked design in the PDF window: offer Hele familie instead.
+const upgradeForDesign = () => {
+  pdfDialogOpen.value = false;
+  openPaymentModal('design', 'familie');
+};
 
 const openPdfDialog = () => {
   pdfFailed.value = false;
@@ -598,15 +668,17 @@ const structuredData = computed(() => ({
       description: t('seo.description'),
       applicationCategory: 'UtilitiesApplication',
       operatingSystem: 'Web Browser',
-      offers: {
+      // The real tiers and prices, after 1 free poem.
+      offers: (['drie', 'gezin', 'familie'] as const).map(id => ({
         '@type': 'Offer',
-        price: '6.99',
+        name: t(`payment.tiers.${id}.name`),
+        price: (TIERS[id].priceCents / 100).toFixed(2),
         priceCurrency: 'EUR',
         description:
           locale.value === 'nl'
-            ? 'Gedichten voor het hele gezin, na 1 gratis gedicht'
-            : 'Poems for the whole family, after 1 free poem',
-      },
+            ? `${fillSeasons(t(`payment.tiers.${id}.features`).join(', '))}; na 1 gratis gedicht`
+            : `${fillSeasons(t(`payment.tiers.${id}.features`).join(', '))}; after 1 free poem`,
+      })),
       featureList:
         locale.value === 'nl'
           ? "Persoonlijke sinterklaasgedichten, Zes stijlen (grappig, klassiek, ironisch, ouderwets, pikant, roast), Nederlands en Engels, Verschillende rijmschema's"
@@ -748,7 +820,7 @@ useHead({
               {{ t('payment.successTitle') }}
             </h3>
             <p class="text-sm text-green-700 mt-1">
-              {{ restoredDraft ? t('payment.successDraft') : t('payment.successMessage') }}
+              {{ successMessage }}
             </p>
             <button
               v-if="restoredDraft && formData.name.trim()"
@@ -1181,7 +1253,7 @@ useHead({
                 <span v-else>{{ t('form.submit.generate') }}</span>
               </button>
               <p class="flex-[1_1_220px] text-[0.9375rem] text-[#5c0f26]">
-                <template v-if="isPaid">{{ t('payment.unlimitedUnlocked') }}</template>
+                <template v-if="isPaid">{{ accessHint }}</template>
                 <template v-else-if="paymentsUnavailable">{{ t('payment.unavailable.hint') }}</template>
                 <template v-else>{{ t('payment.remainingPoems', { count: remainingFreePoems }) }}.</template>
                 {{ t('form.submit.time') }}
@@ -1223,15 +1295,15 @@ useHead({
                 </template>
                 <template v-else>
                   <h3 id="poem-title" class="text-2xl font-bold text-[#8b1538] mb-3 font-display">
-                    {{ t('payment.limitReached') }}
+                    {{ rateLimitReason === 'credits' ? t('payment.creditsUsedTitle') : t('payment.limitReached') }}
                   </h3>
                   <p class="text-[#5c0f26] mb-8 max-w-md font-medium">
-                    {{ t('payment.description') }}
+                    {{ rateLimitReason === 'credits' ? t('payment.creditsUsedMessage') : t('payment.description') }}
                   </p>
                   <button
                     type="button"
                     class="btn-festive px-8 py-4 text-lg"
-                    @click="openPaymentModal('limit')"
+                    @click="openPaymentModal(rateLimitReason === 'credits' ? 'credits' : 'limit')"
                   >
                     {{ t('payment.unlimitedAccess') }}
                   </button>
@@ -1361,6 +1433,45 @@ useHead({
                 </svg>
                 {{ t('poem.shareFacebook') }}
               </button>
+            </div>
+
+            <!-- Surprise ideas (Hele familie) for the poem from the form -->
+            <div
+              v-if="poem && lastRequest && !isLoading && !error && !isRateLimitError"
+              class="surprise"
+            >
+              <button
+                v-if="!surpriseIdeas"
+                type="button"
+                class="poem-action"
+                :disabled="surpriseLoading"
+                :aria-haspopup="hasFeature('surpriseIdeas') ? undefined : 'dialog'"
+                @click="askSurpriseIdeas"
+              >
+                <UIcon
+                  :name="surpriseLoading ? 'i-heroicons-arrow-path' : hasFeature('surpriseIdeas') ? 'i-heroicons-gift' : 'i-heroicons-lock-closed'"
+                  class="size-[1.125rem]"
+                  :class="{ 'motion-safe:animate-spin': surpriseLoading }"
+                  aria-hidden="true"
+                />
+                {{ surpriseLoading ? t('poem.surprise.loading') : t('poem.surprise.button') }}
+                <span v-if="!hasFeature('surpriseIdeas')" class="surprise-tag">{{ t('payment.tiers.familie.name') }}</span>
+              </button>
+              <p v-if="surpriseError" role="alert" class="text-sm font-medium text-[#8b1538]">
+                {{ t('poem.surprise.error') }}
+              </p>
+              <section v-if="surpriseIdeas" aria-labelledby="surprise-title" class="surprise-ideas">
+                <h4 id="surprise-title" class="font-display font-bold text-xl text-[#8b1538]">
+                  {{ t('poem.surprise.title', { name: displayedRecipient }) }}
+                </h4>
+                <ol class="surprise-list">
+                  <li v-for="idea in surpriseIdeas" :key="idea.title" class="surprise-idea">
+                    <p class="font-bold text-[#3d0716]">{{ idea.title }}</p>
+                    <p class="text-[0.9375rem] text-[#3b2a1f]">{{ idea.steps }}</p>
+                    <p class="text-sm text-[#5c4a3d]"><strong>{{ t('poem.surprise.materials') }}:</strong> {{ idea.materials }}</p>
+                  </li>
+                </ol>
+              </section>
             </div>
 
             <p
@@ -1548,8 +1659,15 @@ useHead({
 
     <!-- Payment Modal -->
     <ClientOnly>
-      <PaymentModal v-model="showPaymentModal" :trigger="paymentTrigger" @restored="paymentStatus = 'success'" @checkout="saveFormForCheckout" />
-      <PdfDesignDialog v-model="pdfDialogOpen" :busy="isSavingPdf" :failed="pdfFailed" @save="savePoemPdf" />
+      <PaymentModal v-model="showPaymentModal" :trigger="paymentTrigger" :tier="paymentTier" @restored="paymentStatus = 'success'" @checkout="saveFormForCheckout" />
+      <PdfDesignDialog
+        v-model="pdfDialogOpen"
+        :busy="isSavingPdf"
+        :failed="pdfFailed"
+        :extra-unlocked="hasFeature('extraDesigns')"
+        @save="savePoemPdf"
+        @upgrade="upgradeForDesign"
+      />
     </ClientOnly>
 
     <!-- Earlier poems, stored on this device -->
@@ -1820,6 +1938,44 @@ useHead({
 .poem-action:focus-visible {
   outline: 2px solid #8b1538;
   outline-offset: 2px;
+}
+/* Surprise ideas */
+.surprise {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.surprise > .poem-action {
+  align-self: flex-start;
+}
+.surprise-tag {
+  padding: 0.0625rem 0.5rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #f4cd60;
+  background: #8b1538;
+  border-radius: 999px;
+}
+.surprise-ideas {
+  padding: 1rem 1.125rem;
+  background: #fffaf0;
+  border: 1.5px solid #d9c49a;
+  border-radius: 12px;
+}
+.surprise-list {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  list-style: decimal;
+  padding-inline-start: 1.25rem;
+}
+.surprise-idea {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  line-height: 1.45;
 }
 .history-trigger:focus-visible {
   outline: 2px solid #f4cd60;

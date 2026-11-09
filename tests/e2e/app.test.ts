@@ -4,7 +4,8 @@ import { Webhook } from 'standardwebhooks';
 import { describe, expect, it } from 'vitest';
 import { OG_IMAGES } from '../../scripts/og-images';
 import { VUE_MARKER } from '../../scripts/strip-comments';
-import { signAccessToken } from '../../server/utils/paymentAccess';
+import { signAccessToken, signLegacyAccessToken } from '../../server/utils/paymentAccess';
+import type { TierId } from '../../utils/pricingTiers';
 import { signPoemShare } from '../../server/utils/poemShare';
 import { encodePoem, encodeText } from '../../utils/poemLink';
 import { readPoemStream } from '../../utils/poemStream';
@@ -49,9 +50,15 @@ function poemStream(poem: string): string {
 
 type TestPage = Awaited<ReturnType<typeof createPage>>;
 
-/** Payments work in the browser, whatever Dodo key this environment has. */
+/** Payments work in the browser, whatever Dodo key this environment has, and every tier is on sale. */
 function paymentsWork(page: TestPage, available = true) {
-  return page.route('**/api/payment/status', route => route.fulfill({ json: { available } }));
+  return page.route('**/api/payment/status', route =>
+    route.fulfill({ json: { available, tiers: ['drie', 'gezin', 'familie'] } }));
+}
+
+/** A signed access cookie value for a buyer of `tier`. */
+function buyerToken(paymentId: string, tier: TierId = 'gezin') {
+  return signAccessToken({ paymentId, tier, expiresAt: Date.now() + 30 * 24 * 60 * 60 * 1000 }, 'e2e-access-secret');
 }
 
 // The endpoint rate-limits per client IP, so each case uses its own IP.
@@ -84,6 +91,10 @@ describe('privacy and terms', () => {
     expect(terms).toContain('3 gratis gedichten per 24 uur');
     expect(terms).toContain('100 gedichten per 24 uur');
     expect(terms).toContain('€6,99');
+    expect(terms).toContain('€3,99');
+    expect(terms).toContain('€12,99');
+    expect(terms).toContain('tot en met de eerstvolgende pakjesavond');
+    expect(privacy).toContain('verdwijnt na pakjesavond');
   });
 
   it('links to both from the home page and the blog', async () => {
@@ -384,7 +395,7 @@ describe('poem area states', () => {
   it('offers to keep writing when the server limit is reached', async () => {
     const page = await submitWith({ status: 429, json: { statusMessage: 'limit' } });
     await page.getByRole('heading', { name: /Je gratis gedicht is klaar/ }).waitFor();
-    await page.getByRole('button', { name: /Schrijf verder voor/ }).click();
+    await page.getByRole('button', { name: 'Kies hoe je verder schrijft' }).click();
     await page.locator('dialog[open]').waitFor();
     expect(await page.getByRole('button', { name: 'Herschrijf dit gedicht' }).count()).toBe(0);
     await page.close();
@@ -448,7 +459,7 @@ describe('poem area states', () => {
 describe('Herschrijf dit gedicht', () => {
   async function paidPage() {
     const page = await createPage();
-    const token = await signAccessToken('pay_x', 'e2e-access-secret');
+    const token = await buyerToken('pay_x');
     await page.context().addCookies([{ name: 'sintgpt-access', value: token, url: url('/') }]);
     return page;
   }
@@ -902,7 +913,7 @@ describe('paywall', () => {
   });
 
   it('gives access with a correctly signed cookie', async () => {
-    const token = await signAccessToken('pay_x', 'e2e-access-secret');
+    const token = await buyerToken('pay_x');
     expect(await hasAccess(`sintgpt-access=${token}`)).toBe(true);
   });
 
@@ -1013,7 +1024,7 @@ describe('POST /api/poem/generate', () => {
     expect(((await last!.json()) as { data: { reason: string } }).data.reason).toBe('limit');
 
     // A buyer on the same connection counts per payment, not per IP.
-    const token = await signAccessToken('pay_same_ip', 'e2e-access-secret');
+    const token = await buyerToken('pay_same_ip');
     const buyer = await fetch('/api/poem/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-Forwarded-For': ip, cookie: `sintgpt-access=${token}` },
@@ -1033,7 +1044,7 @@ describe('POST /api/poem/generate', () => {
       headers: {
         'Content-Type': 'application/json',
         'X-Forwarded-For': '10.0.0.5',
-        cookie: `sintgpt-access=${await signAccessToken(paymentId, 'e2e-access-secret')}`,
+        cookie: `sintgpt-access=${await buyerToken(paymentId)}`,
       },
       body: JSON.stringify({ name: '' }),
     });
@@ -1111,14 +1122,14 @@ describe('keeping the form during payment', () => {
     await page.fill('#poem-present', 'warme sokken');
     await page.locator('#poem-form button[type=submit]').click();
 
-    // The payment window shows the next step and the offer for the household,
-    // without the name from the form.
+    // The payment window shows the next step and the three tiers, Gezin
+    // selected, without the name from the form.
     const dialog = page.locator('dialog[open]');
     await dialog.getByText('na het betalen schrijf je meteen verder').waitFor();
-    await dialog.getByText('Eén keer betalen, gedichten voor het hele gezin').waitFor();
-    await dialog.getByText('Bij 7 gedichten betaal je minder dan €1 per gedicht.').waitFor();
+    await dialog.getByText('Bij 7 gedichten minder dan €1 per gedicht').waitFor();
     expect(await dialog.textContent()).not.toContain('Oma Truus');
-    await dialog.getByRole('button', { name: /Verder met je gedicht/ }).click();
+    expect(await dialog.locator('input[value=gezin]').isChecked()).toBe(true);
+    await dialog.getByRole('button', { name: 'Verder met Gezin · €6,99' }).click();
 
     await page.getByText('Gelukt! Je kunt verder schrijven').waitFor({ timeout: 15_000 });
     await page.getByText('Wat je invulde, staat nog in het formulier.').waitFor();
@@ -1377,4 +1388,150 @@ describe('analytics funnel events', () => {
     ]);
     await page.close();
   }, 30_000);
+});
+
+describe('pricing tiers', () => {
+  /** A free visitor who used the free poem, at the payment window. */
+  async function freeVisitorAtPaywall() {
+    const page = await createPage();
+    await paymentsWork(page);
+    await page.addInitScript(() => {
+      localStorage.setItem('sinterklaas-payment', JSON.stringify({ poemCount: 1 }));
+    });
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+    await page.fill('#poem-name', 'Sanne');
+    await page.locator('#poem-form button[type=submit]').click();
+    const dialog = page.locator('dialog[open]');
+    await dialog.locator('.tier').first().waitFor();
+    return { page, dialog };
+  }
+
+  it('shows three tiers with Gezin recommended and selected, and sends the chosen tier', async () => {
+    const { page, dialog } = await freeVisitorAtPaywall();
+    expect(await dialog.locator('.tier').count()).toBe(3);
+    expect(await dialog.locator('[data-tier=gezin] .tier-badge').textContent()).toContain('Aanbevolen');
+    expect(await dialog.locator('input[value=gezin]').isChecked()).toBe(true);
+    await dialog.getByText('€1,33 per gedicht').waitFor();
+    // No popularity claim without data.
+    expect(await dialog.textContent()).not.toMatch(/meest gekozen|populair/i);
+
+    // The small tier says what the step up costs.
+    await dialog.locator('[data-tier=drie]').click();
+    await dialog.getByText('Voor €3 meer schrijf je met Gezin zoveel gedichten als je wilt.').waitFor();
+
+    const bodies: unknown[] = [];
+    await page.route('**/api/payment/create-checkout', (route) => {
+      bodies.push(route.request().postDataJSON());
+      return route.fulfill({ status: 503, json: { data: { code: 'payments_unavailable' } } });
+    });
+    await dialog.getByRole('button', { name: 'Verder met 3 gedichten · €3,99' }).click();
+    await expect.poll(() => bodies).toEqual([{ tier: 'drie' }]);
+    await page.close();
+  }, 30_000);
+
+  it('opens with Hele familie selected for a locked surprise or PDF design', async () => {
+    const page = await createPage();
+    await paymentsWork(page);
+    await page.route('**/api/poem/generate', route =>
+      route.fulfill({ status: 200, contentType: 'text/event-stream', body: poemStream('Een gratis gedicht.') }));
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+    await page.fill('#poem-name', 'Sanne');
+    await page.locator('#poem-form button[type=submit]').click();
+    await page.getByText('Een gratis gedicht.').waitFor({ timeout: 15_000 });
+
+    await page.getByRole('button', { name: /Bedenk een surprise/ }).click();
+    const dialog = page.locator('dialog[open]');
+    await dialog.getByText('Surprise-ideeën bij je gedicht horen bij Hele familie.').waitFor();
+    expect(await dialog.locator('input[value=familie]').isChecked()).toBe(true);
+    await page.keyboard.press('Escape');
+
+    await page.getByRole('button', { name: 'Opslaan als PDF' }).click();
+    await page.locator('dialog[open]').getByText('Goudfolie').click();
+    await page.locator('dialog[open]').getByRole('button', { name: 'Bekijk Hele familie' }).click();
+    await page.locator('dialog[open]').getByText('Dit PDF-ontwerp hoort bij Hele familie.').waitFor();
+    expect(await page.locator('dialog[open] input[value=familie]').isChecked()).toBe(true);
+    await page.close();
+  }, 45_000);
+
+  it('offers a Drie buyer the tiers above, not a rewrite', async () => {
+    const page = await createPage();
+    await paymentsWork(page);
+    await page.context().addCookies([{ name: 'sintgpt-access', value: await buyerToken('pay_drie_ui', 'drie'), url: url('/') }]);
+    let calls = 0;
+    await page.route('**/api/poem/generate', (route) => {
+      calls++;
+      return route.fulfill({ status: 200, contentType: 'text/event-stream', body: poemStream('Een Drie gedicht.') });
+    });
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+    await page.getByText('Je kunt nog 3 gedichten schrijven.').waitFor();
+    await page.fill('#poem-name', 'Sanne');
+    await page.locator('#poem-form button[type=submit]').click();
+    await page.getByText('Een Drie gedicht.').waitFor({ timeout: 15_000 });
+
+    await page.getByRole('button', { name: 'Herschrijf dit gedicht' }).click();
+    const dialog = page.locator('dialog[open]');
+    await dialog.getByText('Gedichten herschrijven met AI zit in Gezin en Hele familie.').waitFor();
+    expect(await dialog.locator('[data-tier=drie]').textContent()).toContain('Dit heb je al');
+    expect(await dialog.locator('input[value=drie]').isDisabled()).toBe(true);
+    expect(await dialog.locator('input[value=gezin]').isChecked()).toBe(true);
+    expect(calls).toBe(1);
+    await page.close();
+  }, 45_000);
+
+  it('counts 3 poems for Drie, refuses its rewrites, and says what is left', async () => {
+    const cookie = `sintgpt-access=${await buyerToken('pay_drie_api', 'drie')}`;
+    const post = (body: unknown) => fetch('/api/poem/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Forwarded-For': '10.0.0.9', cookie },
+      body: JSON.stringify(body),
+    });
+    const left = async () => ((await (await fetch('/api/payment/check-access', { headers: { cookie } })).json()) as { tier: string; poemsLeft: number });
+
+    expect(await left()).toMatchObject({ tier: 'drie', poemsLeft: 3 });
+    // A rewrite is refused before it counts.
+    const rewrite = await post({ ...VALID_POEM_REQUEST, regenerate: true });
+    expect(rewrite.status).toBe(403);
+    expect((await left()).poemsLeft).toBe(3);
+
+    // Requests count before validation, so empty ones use up the poems.
+    const statuses: number[] = [];
+    let last: Response | undefined;
+    for (let i = 0; i < 4; i++) {
+      last = await post({ name: '' });
+      statuses.push(last.status);
+      if (i < 3) await new Promise(resolve => setTimeout(resolve, 10_100));
+    }
+    expect(statuses).toEqual([400, 400, 400, 429]);
+    expect(((await last!.json()) as { data: { reason: string } }).data.reason).toBe('credits');
+    expect((await left()).poemsLeft).toBe(0);
+  }, 60_000);
+
+  it('reads a cookie from before the tiers as Gezin', async () => {
+    const cookie = `sintgpt-access=${await signLegacyAccessToken('pay_legacy', 'e2e-access-secret')}`;
+    const res = await fetch('/api/payment/check-access', { headers: { cookie } });
+    expect(await res.json()).toMatchObject({ hasAccess: true, tier: 'gezin', poemsLeft: null });
+  });
+
+  it('keeps surprise ideas for Hele familie', async () => {
+    const ask = async (tier: TierId) => fetch('/api/poem/surprise', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', cookie: `sintgpt-access=${await buyerToken(`pay_surprise_${tier}`, tier)}` },
+      body: JSON.stringify({ name: '' }),
+    });
+    expect((await fetch('/api/poem/surprise', { method: 'POST', body: '{}' })).status).toBe(403);
+    expect((await ask('gezin')).status).toBe(403);
+    // Hele familie gets past the tier check; the empty name stops it before the AI.
+    expect((await ask('familie')).status).toBe(400);
+  });
+
+  it('sells only tiers with a product, and never takes a product ID from the browser', async () => {
+    const status = (await (await fetch('/api/payment/status')).json()) as { tiers: string[] };
+    expect(status.tiers).toContain('gezin');
+    const res = await fetch('/api/payment/create-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tier: 'pdt_anything' }),
+    });
+    expect([400, 503]).toContain(res.status);
+  });
 });

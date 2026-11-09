@@ -29,7 +29,7 @@ Local Worker preview: `npm run build:cloudflare && npx wrangler --cwd .output de
 - **Framework**: Nuxt 4 (legacy root layout, no `app/` dir) with TypeScript
 - **UI**: Nuxt UI 4 + Tailwind CSS 4, fonts self-hosted by `@nuxt/fonts`
 - **AI**: AI SDK 7 through **Vercel AI Gateway** (`createGateway` from `ai`). Default model `google/gemini-3.7-flash` (`server/utils/poem.ts`, picked by a blind test in Nov 2026), override with `NUXT_AI_GATEWAY_MODEL`
-- **Payments**: Dodo Payments (€6.99 unlimited access)
+- **Payments**: Dodo Payments, three tiers (€3.99 / €6.99 / €12.99, see Pricing tiers)
 - **Hosting**: Cloudflare Workers via Nitro `cloudflare_module`
 
 ### Poem generation
@@ -38,24 +38,38 @@ Local Worker preview: `npm run build:cloudflare && npx wrangler --cwd .output de
 3. Response is an AI SDK UI message stream (SSE), released word by word by `smoothStream`. The client parses it with `utils/poemStream.ts` (`text-delta` events; an `error` event throws so gateway failures show an error instead of an empty poem).
 4. `utils/smoothReveal.ts` shows the text at a steady pace with `requestAnimationFrame`, whatever way the chunks arrive. Reduced motion and hidden tabs show it at once. The writing animation is visible until the first text arrives, while the model reasons.
 5. The finished poem is saved to the on-device history (`usePoemHistory`, localStorage key `sintgpt-poem-history`, max 50) and shown in `PoemHistoryDrawer.vue`.
-6. "Herschrijf dit gedicht" sends the same form again with `regenerate: true`. The server then uses `REGENERATE_POEM_MODEL` (`google/gemini-3.1-pro-preview`, about 3x the price per token). It counts as a poem: free visitors see the payment window. Poems opened from the history have no form data, so they have no rewrite button.
+6. "Herschrijf dit gedicht" sends the same form again with `regenerate: true`. The server then uses `REGENERATE_POEM_MODEL` (`google/gemini-3.1-pro-preview`, about 3x the price per token). It counts as a poem: free visitors see the payment window. Drie does not include rewrites: the page opens the payment window and the server refuses it with 403 `data.reason = 'tier'` before it counts. Poems opened from the history have no form data, so they have no rewrite button.
 
 Notes:
 - Cloudflare: Workers do not buffer the stream and waiting on the gateway is no CPU time. `cache-control: no-transform` stops zone compression. `enable_request_signal` (in `nuxt.config.ts`) lets a client disconnect abort the gateway request.
 - Keep **temperature at 1** for Gemini 3.x. At 2 the model reasons for minutes and can stream garbled text.
 - Client IP for rate limiting: `cf-connecting-ip` first (trusted on Cloudflare), then X-Forwarded-For.
 - Rate limiting (`server/utils/poemRateLimit.ts`): on Cloudflare the `POEM_BURST` Rate Limiting binding refuses fast repeats (approximate, per location), then a Durable Object per IP or buyer (`server/durable/RateLimitCounter.ts`, binding `RATE_LIMITER`) keeps the strict, global count. The rule itself is `applyRateLimit` in `server/utils/rateLimit.ts`. If Cloudflare fails, and in the Node build, an in-memory limiter decides. A request counts before validation.
-- Counter names are an HMAC of the IP (IPv6 per /64) or payment ID, never the raw value. Each object deletes its data with an alarm when the 24-hour window ends. The privacy page says this, so keep them in line.
+- Counter names are an HMAC of the IP (IPv6 per /64) or payment ID, never the raw value. Each object deletes its data with an alarm when its window ends: after 24 hours, or for a Drie payment at the end of pakjesavond (one window of 3 poems, `creditsRule`). `POST /peek` on the object reads the count without counting (`poemsUsed`, for "poems left"). The privacy page says this, so keep them in line.
 - The Durable Object class must be exported from the Worker. `server/cloudflare-entry.ts` re-exports Nitro's `cloudflare-module` entry plus the class; `nuxt.config.ts` uses it only when `NITRO_PRESET` is a Cloudflare preset. A new or renamed class needs a new `migrations` tag (Free plan: `new_sqlite_classes` only).
-- 429 responses carry `data.reason`: `limit` (the page shows the upgrade offer), `debounce` and `fair-use` (the buyer cap; the page shows a message).
+- 429 responses carry `data.reason`: `limit` (the page shows the payment offer), `credits` (the 3 Drie poems are used; the page offers the tiers above), `debounce` and `fair-use` (the buyer cap; the page shows a message).
 - Visitor text is escaped by `asPromptData` before it goes between XML tags in the prompt, so it cannot close a tag or end the data block. Instructions refer to the tags and never repeat visitor text.
 - HTTP errors raised on purpose (e.g. 429) are re-thrown as-is; the client shows the upgrade offer on 429.
 
 ### Payments
 1. `PaymentModal` POSTs to `/api/payment/create-checkout` and redirects to Dodo's hosted checkout.
 2. Dodo returns the buyer to `/?payment_id=...&status=...`. These parameters are only a hint.
-3. `usePaymentTracking.claimPayment` POSTs the ID to `/api/payment/claim-access`. The server retrieves the payment from Dodo and checks status, product, refunds and disputes (`decidePaymentAccess`).
-4. If granted, the server sets the signed, HTTP-only `sintgpt-access` cookie (`server/utils/paymentAccess.ts`). `hasUnlimitedAccess` verifies the signature on each request; `unlimitedAccessPaymentId` also returns the payment ID for the buyer cap.
+3. `usePaymentTracking.claimPayment` POSTs the ID to `/api/payment/claim-access`. The server retrieves the payment from Dodo and checks status, product, refunds and disputes (`decidePaymentAccess`). The product decides the tier; the payment date (`created_at`) decides when access ends, so restoring an old payment never starts a new period (`expired`).
+4. If granted, the server sets the signed, HTTP-only `sintgpt-access` cookie (`server/utils/paymentAccess.ts`, token `v2.<payment>.<tier>.<expiry>.<sig>`, max-age until the access ends, at most 400 days). `paidAccess` verifies it on each request and returns the payment ID, tier and end. `v1` tokens from before the tiers still work and mean Gezin. `GET /api/payment/check-access` tells the page the tier and, for Drie, the poems left.
+
+### Pricing tiers
+`utils/pricingTiers.ts` is the one source for the tiers; the payment window, server, JSON-LD, terms and tests follow it. Open Dodo and Cloudflare setup steps for the tiers (test key, live products, Worker secrets): `docs/dodo-payments-todo.md`.
+
+| Tier | Price | Poems | Valid | Extras |
+|---|---|---|---|---|
+| `drie` ("3 gedichten") | €3.99 | 3 in total | until the next pakjesavond (end of 5 Dec, NL time) | no rewrites |
+| `gezin` ("Gezin", recommended) | €6.99 | max 100/day | 365 days | rewrites |
+| `familie` ("Hele familie") | €12.99 | max 100/day | until the second pakjesavond | rewrites, 2 extra PDF designs, surprise ideas |
+
+- Each tier is its own Dodo product: `NUXT_DODO_PRODUCT_ID` (Gezin, the product from before the tiers), `NUXT_DODO_PRODUCT_ID_DRIE`, `NUXT_DODO_PRODUCT_ID_FAMILIE`. A tier without a product is not on sale: `/api/payment/status` lists the tiers on sale and the window shows only those. The browser sends a tier name, never a product ID.
+- The payment window selects Gezin (or the next tier above what the buyer has). Tiers at or below the buyer's tier show "Dit heb je al". There is no upgrade discount: a buyer pays the full price of the higher tier; the terms say so.
+- Surprise ideas: `POST /api/poem/surprise` (Hele familie only, 403 `tier` otherwise) returns 3 ideas as structured output from `DEFAULT_POEM_MODEL` (`server/utils/surprise.ts`, same prompt-injection rules as the poem). It counts towards the 100/day cap. Others see the button with a lock; it opens the payment window with Hele familie selected.
+- The extra PDF designs are a soft lock: the PDF is built in the browser, so the page offers Hele familie instead of building a locked design.
 
 When Dodo refuses a checkout with 401 or 403 (for example "Live payments not enabled"), `create-checkout` stores a flag in KV for 15 minutes (`server/utils/paymentsStatus.ts`, key `status:payments-unavailable` in `POEM_LINKS`) and returns 503 with `data.code = 'payments_unavailable'`, never Dodo's text. `GET /api/payment/status` reads the flag. While it is set, the page does not offer payment: the client lifts its 1-poem limit, so only the server's 3/day applies, and the payment window explains the problem.
 
@@ -86,7 +100,7 @@ Notes:
 - `/g/<id>` is `noindex` and uses the same `/gedicht/preview.png` share image.
 
 ### Poem PDF
-"Opslaan als PDF" opens `PdfDesignDialog.vue`, where the visitor picks one of four designs (`utils/pdfDesigns.ts`: perkament, pakjesavond, cadeaupapier, schoolschrift; the last choice stays in localStorage `sintgpt-pdf-design`). The browser then builds the file (`utils/poemPdf.ts`, pdf-lib), so it uses no Worker CPU. pdf-lib is loaded with a dynamic import, because it is large.
+"Opslaan als PDF" opens `PdfDesignDialog.vue`, where the visitor picks one of six designs (`utils/pdfDesigns.ts`: perkament, pakjesavond, cadeaupapier, schoolschrift, and goudfolie and stoomboot for Hele familie, `EXTRA_PDF_DESIGN_IDS`; the last choice stays in localStorage `sintgpt-pdf-design`). The browser then builds the file (`utils/poemPdf.ts`, pdf-lib), so it uses no Worker CPU. pdf-lib is loaded with a dynamic import, because it is large.
 - The PDF never names the site: no attribution line, no author or creator in the metadata, no text on a background. Only the file name does: `sinterklaasgedicht-<name>-sintgpt.com.pdf`.
 - Each design has a full-page JPEG background, a text font, an optional drop-cap font, colours, a writing area and font sizes. Long poems get a smaller size, then more pages.
 - Backgrounds: `public/pdf/paper.jpg` is the empty scroll, rendered from the CSS of `PaperScroll.vue` (`npm run build:pdf-paper`). The other three are SVG in `scripts/build-pdf-designs.ts` (`npm run build:pdf-designs`). Keep their empty spaces in line with `area` in the design.
@@ -95,7 +109,9 @@ Notes:
 - `Save as PDF` and `PDF failed` carry the design in `detail`.
 
 ### Persuasion: what the page may say
-- The paid product is described as poems for the whole family ("Gedichten voor het hele gezin"), €6,99 once, one year in that browser, at most 100 a day. "Bij 7 gedichten betaal je minder dan €1 per gedicht" is plain maths (6,99 / 7). Keep these in line with the price and the limits.
+- Three tiers, Gezin in the middle (compromise effect), with "Aanbevolen" on it. Never write "meest gekozen" or "populair" without real data. Never show a struck-through "old" price.
+- Gezin is described as poems for the whole family, €6,99 once, one year in that browser, at most 100 a day. "Bij 7 gedichten minder dan €1 per gedicht" is plain maths (6,99 / 7); "€1,33 per gedicht" for Drie is 3,99 / 3 rounded up; "Voor €3 meer schrijf je met Gezin zoveel gedichten als je wilt" is 6,99 − 3,99. Keep these in line with `utils/pricingTiers.ts`.
+- Every tier is a real offer with real value; the extras of Hele familie (a second season, extra designs, surprise ideas) really exist.
 - Use warm, plain words in visible text: "schrijven", not "genereren"; no "upgrade", "onbeperkt toegang", "AI-gegenereerd" or "tool". Search meta (`seo.title`, `seo.description`) may keep search terms.
 - Do not name the AI model in public text, except where the privacy statement must name the services that process data.
 - The countdown in the hero (`utils/pakjesavond.ts`) counts Dutch calendar days to 5 December, from 60 days before. From 3 days before it adds that a poem takes 30 seconds. It is a real date: never add a countdown to a price or an offer.
@@ -147,7 +163,9 @@ Runtime config is read from `NUXT_*` env vars at runtime (not baked into the bui
 | `NUXT_AI_GATEWAY_API_KEY` | AI Gateway key (required) |
 | `NUXT_AI_GATEWAY_MODEL` | Optional model override, e.g. `openai/gpt-6.1-terra` |
 | `NUXT_DODO_PAYMENTS_API_KEY` | Dodo Payments API key. The `dodo_live_` prefix selects live mode, anything else test mode |
-| `NUXT_DODO_PRODUCT_ID` | Dodo product for unlimited access |
+| `NUXT_DODO_PRODUCT_ID` | Dodo product for Gezin (€6.99). Payments are off without it |
+| `NUXT_DODO_PRODUCT_ID_DRIE` | Dodo product for 3 gedichten (€3.99). Optional: without it the tier is not offered |
+| `NUXT_DODO_PRODUCT_ID_FAMILIE` | Dodo product for Hele familie (€12.99). Optional: without it the tier is not offered |
 | `NUXT_DODO_PAYMENTS_WEBHOOK_SECRET` | Dodo webhook signing secret. Without it the webhook rejects every event |
 | `NUXT_ACCESS_COOKIE_SECRET` | Signs the unlimited-access cookie and poem links (`openssl rand -hex 32`). Without it nobody gets unlimited access and poem links are off; changing it logs out all paying customers and breaks shared links |
 
@@ -167,10 +185,12 @@ No third-party script. Events go to the dataset `sintgpt_events` (binding `ANALY
 - **Server events** (`trackServerEvent` in `server/utils/analytics.ts`):
   - `Generate poem` / `Regenerate poem` when the stream ends: style, rhyme scheme, language, lines, plan, model (`detail`), tokens, estimated cost, seconds to the first text and in total, and coarse form use (`formFacts`: fun facts empty/short/long, present none/named/secret, written by and audience yes/no).
   - `Poem aborted` (the visitor left; `detail` before/during text, seconds), `Poem generation failed`, `Rate limited` (reason).
-  - `Proceed to payment`, `Payments unavailable` (cause), `Payment verified` (in `claim-access`; `detail` return/restore), `Payment webhook` (event type in `detail`, amount in `value`, no country).
+  - `Proceed to payment` (tier in `detail`), `Payments unavailable` (cause), `Payment verified` (in `claim-access`; `detail` return/restore), `Payment webhook` (event type in `detail`, amount in `value`, no country).
+  - `Surprise ideas` (tokens, cost, seconds) and `Surprise ideas failed`.
+  - Every event from a buyer carries the tier in `blob17`.
 - **Browser events** (`useAnalytics().track`, sent with `sendBeacon` to `POST /api/events`):
-  - Funnel: `Page view` (first one: referring domain in `detail`, utm tags in source/medium/campaign), `Form started`, `Form refused`, `Poem ready` (`detail` new/rewrite, `value` = poems on this device), `Show payment modal` (`detail` submit/rewrite/limit), `Close payment modal` (button/backdrop/escape/continue free), `Payment returned` (cancelled/failed/pending), `Payment succeeded`, `Continue after payment`, `Access restored`, `Restore failed` (invalid/denied/pending).
-  - Engagement: `Copy share link`, `Copy to clipboard`, `Save as PDF`, `Shared via WhatsApp/Email/Facebook`, `Open shared poem`, `Shared poem to form`, `Open history`, `Open poem from history`, `Delete poem`, `Clear history`, `Switch language`, `Show example` (style), `Draw lootjes` (people), `Play video`, `Contact`.
+  - Funnel: `Page view` (first one: referring domain in `detail`, utm tags in source/medium/campaign), `Form started`, `Form refused`, `Poem ready` (`detail` new/rewrite, `value` = poems on this device), `Show payment modal` (`detail` submit/rewrite/limit/credits/surprise/design), `Close payment modal` (button/backdrop/escape/continue free), `Payment returned` (cancelled/failed/pending), `Payment succeeded`, `Continue after payment`, `Access restored`, `Restore failed` (invalid/denied/pending).
+  - Engagement: `Show surprise ideas` (open/locked), `Copy share link`, `Copy to clipboard`, `Save as PDF`, `Shared via WhatsApp/Email/Facebook`, `Open shared poem`, `Shared poem to form`, `Open history`, `Open poem from history`, `Delete poem`, `Clear history`, `Switch language`, `Show example` (style), `Draw lootjes` (people), `Play video`, `Contact`.
   - Sources: `Scroll to poem form` (hero/examples) and `Go to poem form` (any link with `data-cta="<where>"`, tracked by `plugins/analytics.client.ts`; blog posts use `blog:<slug>`).
   - Problems: `Poem stream failed` (network/stream), `PDF failed`, `Copy failed`.
 - The endpoint accepts only the names in `utils/analyticsEvents.ts`, short `detail` values and a number. The `EVENTS_BURST` Rate Limiting binding allows 60 events a minute per IP (keyed hash). Add a new event to that list first.

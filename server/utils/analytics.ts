@@ -9,6 +9,7 @@ import {
   CAMPAIGN_PATTERN,
   type AnalyticsEventName,
 } from '../../utils/analyticsEvents';
+import type { TierId } from '../../utils/pricingTiers';
 
 /**
  * Events go to Workers Analytics Engine (binding `ANALYTICS`, dataset
@@ -22,6 +23,7 @@ import {
  *   blob10  utm_source      blob13 fun facts: empty | short | long
  *   blob11  utm_medium      blob14 present: none | named | secret
  *   blob12  utm_campaign    blob15 written by: yes | no   blob16 audience: yes | no
+ *   blob17  tier: drie | gezin | familie, empty for free visitors
  *   double1 poem lines      double3 output tokens   double5 value
  *   double2 input tokens    double4 estimated cost in USD
  *   double6 seconds to the first text               double7 seconds in total
@@ -45,6 +47,7 @@ export interface AnalyticsFields {
   present?: 'none' | 'named' | 'secret';
   writtenBy?: 'yes' | 'no';
   audience?: 'yes' | 'no';
+  tier?: TierId;
   lines?: number;
   inputTokens?: number;
   outputTokens?: number;
@@ -87,6 +90,7 @@ export function analyticsDataPoint(name: AnalyticsEventName, fields: AnalyticsFi
     fields.present,
     fields.writtenBy,
     fields.audience,
+    fields.tier,
   ].map(value => (value ?? '').slice(0, BLOB_MAX));
   return {
     indexes: [name],

@@ -1,4 +1,4 @@
-import { applyRateLimit, type RateLimitEntry, type RateLimitRule } from '../utils/rateLimit';
+import { applyRateLimit, usedInWindow, type RateLimitEntry, type RateLimitRule } from '../utils/rateLimit';
 
 /** The parts of the Durable Object state this class uses. */
 export interface CounterState {
@@ -17,15 +17,20 @@ const ENTRY = 'entry';
  * same count. The Worker sends the rule in the body; nothing outside the Worker
  * can reach this object.
  *
- * The object deletes its own data when the window ends, so it keeps nothing
- * for longer than a day. The key is a hash, never the IP address itself.
+ * The object deletes its own data when the window ends: after a day, or for a
+ * Drie payment at the end of pakjesavond. The key is a hash, never the IP
+ * address or payment ID itself.
  */
 export class RateLimitCounter {
   constructor(private readonly state: CounterState) {}
 
   async fetch(request: Request): Promise<Response> {
-    const rule = (await request.json()) as RateLimitRule;
     const now = Date.now();
+    // How many poems this window has used, without counting one.
+    if (new URL(request.url).pathname === '/peek') {
+      return Response.json({ used: usedInWindow(await this.state.storage.get<RateLimitEntry>(ENTRY), now) });
+    }
+    const rule = (await request.json()) as RateLimitRule;
     // Input gates hold other requests to this object while storage is busy,
     // so this read and write cannot interleave with another check.
     const current = await this.state.storage.get<RateLimitEntry>(ENTRY);

@@ -1,4 +1,6 @@
 import type { H3Event } from 'h3';
+import { TIER_IDS, type TierId } from '../../utils/pricingTiers';
+import type { TierProducts } from './paymentAccess';
 import { shortLinkStore } from './poemShortLink';
 
 /**
@@ -16,6 +18,28 @@ export const PAYMENTS_UNAVAILABLE_TTL_SECONDS = 15 * 60;
 
 let memoryUntil = 0;
 
+/**
+ * The Dodo product of each tier. Gezin uses NUXT_DODO_PRODUCT_ID, the product
+ * from before the tiers; the others have their own variable. A tier without a
+ * product is not offered.
+ */
+export function tierProducts(event: H3Event): TierProducts {
+  const config = useRuntimeConfig(event);
+  const products: TierProducts = {
+    drie: String(config.dodoProductIdDrie || ''),
+    gezin: String(config.dodoProductId || ''),
+    familie: String(config.dodoProductIdFamilie || ''),
+  };
+  return Object.fromEntries(Object.entries(products).filter(([, id]) => id)) as TierProducts;
+}
+
+/** The tiers a visitor can buy now, in order of price. */
+export function tiersOnSale(event: H3Event): TierId[] {
+  const products = tierProducts(event);
+  return TIER_IDS.filter(tier => products[tier]);
+}
+
+/** Payments work when there is a key and the recommended tier has a product. */
 export function paymentsConfigured(event: H3Event): boolean {
   const config = useRuntimeConfig(event);
   return Boolean(config.dodoPaymentsApiKey && config.dodoProductId);

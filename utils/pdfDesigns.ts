@@ -4,8 +4,18 @@
 // scripts/build-pdf-designs.ts (the others); previews from
 // scripts/build-pdf-previews.ts.
 
-export const PDF_DESIGN_IDS = ['perkament', 'pakjesavond', 'cadeaupapier', 'schoolschrift'] as const;
+export const PDF_DESIGN_IDS = ['perkament', 'pakjesavond', 'cadeaupapier', 'schoolschrift', 'goudfolie', 'stoomboot'] as const;
 export type PdfDesignId = (typeof PDF_DESIGN_IDS)[number];
+
+/**
+ * Part of Hele familie (utils/pricingTiers.ts). The PDF is built in the
+ * browser, so this is a soft lock: the page offers the tier instead.
+ */
+export const EXTRA_PDF_DESIGN_IDS: readonly PdfDesignId[] = ['goudfolie', 'stoomboot'];
+
+export function isExtraPdfDesign(id: PdfDesignId): boolean {
+  return EXTRA_PDF_DESIGN_IDS.includes(id);
+}
 
 export const DEFAULT_PDF_DESIGN: PdfDesignId = 'perkament';
 
@@ -109,6 +119,30 @@ export const PDF_DESIGNS: Record<PdfDesignId, PdfDesign> = {
       { fontSize: 16, lineHeight: 20 },
     ],
     rules: { color: hex('#9dc1e4'), left: 46, right: 0 },
+  },
+  goudfolie: {
+    id: 'goudfolie',
+    background: '/pdf/goudfolie.jpg',
+    preview: '/pdf/previews/goudfolie.jpg',
+    textFont: '/pdf/alegreya-400.ttf',
+    capFont: null,
+    ink: hex('#f6ead0'),
+    accent: hex('#e8c25f'),
+    area: { left: 92, right: 92, top: 156, bottom: 104 },
+    align: 'center',
+    sizes: SERIF_SIZES,
+  },
+  stoomboot: {
+    id: 'stoomboot',
+    background: '/pdf/stoomboot.jpg',
+    preview: '/pdf/previews/stoomboot.jpg',
+    textFont: '/pdf/alegreya-400.ttf',
+    capFont: '/pdf/texturina-700.ttf',
+    ink: hex('#1d2b4f'),
+    accent: hex('#b51f2e'),
+    area: { left: 84, right: 84, top: 100, bottom: 330 },
+    align: 'left',
+    sizes: SERIF_SIZES,
   },
 };
 

@@ -232,9 +232,129 @@ function schoolschrift(): string {
 </svg>`;
 }
 
+// ---------------------------------------------------------------- goudfolie (Hele familie)
+
+function fan(cx: number, cy: number, rotate: number) {
+  const arcs = [14, 24, 34].map(r => `<path d="M${r} 0 A${r} ${r} 0 0 1 0 ${r}" fill="none" stroke="url(#foil)" stroke-width="1.2"/>`).join('');
+  const rays = [15, 45, 75].map((deg) => {
+    const rad = (deg * Math.PI) / 180;
+    return `<line x1="0" y1="0" x2="${round(34 * Math.cos(rad))}" y2="${round(34 * Math.sin(rad))}" stroke="#d4a23a" stroke-width="0.8"/>`;
+  }).join('');
+  return `<g transform="translate(${cx} ${cy}) rotate(${rotate})">${arcs}${rays}</g>`;
+}
+
+function goudfolie(): string {
+  const mid = W / 2;
+  const inset = 30;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+  <defs>
+    <radialGradient id="velvet" cx="0.5" cy="0.42" r="0.75">
+      <stop offset="0" stop-color="#6a1229"/>
+      <stop offset="0.65" stop-color="#4a0c1d"/>
+      <stop offset="1" stop-color="#2c0611"/>
+    </radialGradient>
+    <linearGradient id="foil" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f6dc8c"/>
+      <stop offset="0.45" stop-color="#d4a23a"/>
+      <stop offset="0.7" stop-color="#f0cf6e"/>
+      <stop offset="1" stop-color="#a87a20"/>
+    </linearGradient>
+    <pattern id="damask" width="36" height="36" patternUnits="userSpaceOnUse">
+      <path d="M18 6 L22 18 L18 30 L14 18 Z" fill="#e8c25f" opacity="0.06"/>
+      <circle cx="0" cy="0" r="1.4" fill="#e8c25f" opacity="0.1"/>
+      <circle cx="36" cy="36" r="1.4" fill="#e8c25f" opacity="0.1"/>
+    </pattern>
+  </defs>
+  <rect width="${W}" height="${H}" fill="url(#velvet)"/>
+  <rect width="${W}" height="${H}" fill="url(#damask)"/>
+
+  <rect x="${inset}" y="${inset}" width="${W - inset * 2}" height="${H - inset * 2}" fill="none" stroke="url(#foil)" stroke-width="2"/>
+  <rect x="${inset + 7}" y="${inset + 7}" width="${W - inset * 2 - 14}" height="${H - inset * 2 - 14}" fill="none" stroke="url(#foil)" stroke-width="0.7" stroke-opacity="0.7"/>
+  ${fan(inset + 7, inset + 7, 0)}
+  ${fan(W - inset - 7, inset + 7, 90)}
+  ${fan(W - inset - 7, H - inset - 7, 180)}
+  ${fan(inset + 7, H - inset - 7, 270)}
+
+  <g transform="translate(${mid} 0)">
+    <path d="M-24 128 L-24 96 Q-24 66 0 48 Q24 66 24 96 L24 128 Z" fill="url(#foil)"/>
+    <path d="M-24 116 L24 116" stroke="#4a0c1d" stroke-width="2.4"/>
+    <path d="M-2.4 70 H2.4 V80 H10 V84.8 H2.4 V104 H-2.4 V84.8 H-10 V80 H-2.4 Z" fill="#4a0c1d"/>
+    <path d="M-70 106 H-38 M38 106 H70" stroke="#d4a23a" stroke-width="0.9"/>
+    <path d="M-34 106 L-30 102 L-26 106 L-30 110 Z M26 106 L30 102 L34 106 L30 110 Z" fill="url(#foil)"/>
+  </g>
+
+  <g transform="translate(${mid} ${H - 74})">
+    <path d="M-90 0 H-12 M12 0 H90" stroke="#d4a23a" stroke-width="0.9"/>
+    <path d="M0 -6 L6 0 L0 6 L-6 0 Z" fill="url(#foil)"/>
+  </g>
+</svg>`;
+}
+
+// ---------------------------------------------------------------- stoomboot (Hele familie)
+
+function stoomboot(): string {
+  const rnd = random(5);
+  const waves = [0, 1, 2, 3, 4].map((row) => {
+    const y = 728 + row * 24;
+    const amp = 5 + row;
+    const len = 46 + row * 8;
+    let d = `M0 ${y}`;
+    for (let x = 0; x <= W + len; x += len) d += ` q${len / 4} ${-amp} ${len / 2} 0 t${len / 2} 0`;
+    d += ` V${H} H0 Z`;
+    const colors = ['#5b83b5', '#3f6699', '#2f527f', '#233f66', '#1a304f'];
+    return `<path d="${d}" fill="${colors[row]}"/>`;
+  }).join('');
+  const stars = Array.from({ length: 9 }, () => {
+    const x = 40 + rnd() * (W - 80);
+    const y = 34 + rnd() * 40;
+    return x > 470 && y < 90 ? '' : sparkle(round(x), round(y), round(2 + rnd() * 2.5)).replace('#e8c25f', '#d4a23a');
+  }).join('');
+  const flags = ['#b51f2e', '#e8c25f', '#2f527f', '#b51f2e', '#e8c25f', '#2f527f', '#b51f2e'];
+  const bunting = (x1: number, y1: number, x2: number, y2: number) => flags.map((color, i) => {
+    const t = (i + 0.5) / flags.length;
+    const x = x1 + (x2 - x1) * t;
+    const y = y1 + (y2 - y1) * t + Math.sin(t * Math.PI) * 10;
+    return `<path d="M${round(x - 5)} ${round(y)} L${round(x + 5)} ${round(y)} L${round(x)} ${round(y + 9)} Z" fill="${color}"/>`;
+  }).join('');
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fbf5e6"/>
+      <stop offset="0.75" stop-color="#f6ecd4"/>
+      <stop offset="1" stop-color="#e9dcc0"/>
+    </linearGradient>
+  </defs>
+  <rect width="${W}" height="${H}" fill="url(#sky)"/>
+  ${stars}
+  <circle cx="532" cy="58" r="17" fill="#e8c25f"/>
+  <circle cx="540" cy="52" r="15" fill="#fbf5e6"/>
+
+  <g opacity="0.85">
+    <circle cx="318" cy="566" r="11" fill="#d9d2c4"/>
+    <circle cx="332" cy="548" r="14" fill="#e3ddd1"/>
+    <circle cx="352" cy="530" r="17" fill="#ece7dd"/>
+  </g>
+  <line x1="196" y1="694" x2="196" y2="604" stroke="#3b2a1f" stroke-width="2"/>
+  <line x1="404" y1="694" x2="404" y2="614" stroke="#3b2a1f" stroke-width="2"/>
+  <line x1="196" y1="606" x2="300" y2="590" stroke="#3b2a1f" stroke-width="0.7"/>
+  <line x1="322" y1="590" x2="404" y2="616" stroke="#3b2a1f" stroke-width="0.7"/>
+  ${bunting(196, 606, 300, 590)}
+  ${bunting(322, 590, 404, 616)}
+  <rect x="300" y="584" width="22" height="58" fill="#b51f2e"/>
+  <rect x="300" y="584" width="22" height="8" fill="#1d2b4f"/>
+  <rect x="236" y="636" width="124" height="24" rx="2" fill="#fffaf0" stroke="#1d2b4f" stroke-width="1"/>
+  <rect x="206" y="658" width="186" height="36" rx="2" fill="#fffaf0" stroke="#1d2b4f" stroke-width="1"/>
+  ${[226, 252, 278, 304, 330, 356].map(x => `<circle cx="${x}" cy="676" r="5" fill="#5b83b5" stroke="#1d2b4f" stroke-width="1"/>`).join('')}
+  <path d="M140 694 L460 694 L432 742 L170 742 Z" fill="#1d2b4f"/>
+  <path d="M146 704 L454 704" stroke="#b51f2e" stroke-width="5"/>
+  ${waves}
+  <rect x="22" y="22" width="${W - 44}" height="${H - 44}" fill="none" stroke="#1d2b4f" stroke-opacity="0.55" stroke-width="0.8"/>
+</svg>`;
+}
+
 // ---------------------------------------------------------------- main
 
-const DESIGNS: Record<string, () => string> = { pakjesavond, cadeaupapier, schoolschrift };
+const DESIGNS: Record<string, () => string> = { pakjesavond, cadeaupapier, schoolschrift, goudfolie, stoomboot };
 
 async function main() {
   for (const [id, draw] of Object.entries(DESIGNS)) {

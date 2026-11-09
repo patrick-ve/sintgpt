@@ -10,6 +10,11 @@ export type RateLimitVerdict =
   | { ok: true }
   | { ok: false; reason: 'debounce' | 'limit'; retryAfterSeconds: number };
 
+/** How many requests counted in the current window, without counting one. */
+export function usedInWindow(entry: RateLimitEntry | undefined, now: number): number {
+  return entry && now < entry.resetTime ? entry.count : 0;
+}
+
 export interface RateLimitRule {
   maxRequests: number;
   windowMs: number;
@@ -44,6 +49,18 @@ export const BUYER_RATE_LIMIT = {
   windowMs: DAY_MS,
   debounceMs: 10_000,
 } as const satisfies RateLimitRule;
+
+/**
+ * Buyers of a tier with a fixed number of poems (Drie): one window that ends
+ * when their access ends, so the count never resets before then.
+ */
+export function creditsRule(poems: number, expiresAt: number, now: number): RateLimitRule {
+  return {
+    maxRequests: poems,
+    windowMs: Math.max(1, expiresAt - now),
+    debounceMs: BUYER_RATE_LIMIT.debounceMs,
+  };
+}
 
 /**
  * Decides one request. Returns the new entry when the request is allowed, and
@@ -93,7 +110,7 @@ export function createRateLimiter(options: RateLimiterOptions = {}) {
     debounceMs = POEM_RATE_LIMIT.debounceMs,
     maxTracked = 10_000,
   } = options;
-  const rule = { maxRequests, windowMs, debounceMs };
+  const defaultRule = { maxRequests, windowMs, debounceMs };
 
   const entries = new Map<string, RateLimitEntry>();
 
@@ -109,7 +126,7 @@ export function createRateLimiter(options: RateLimiterOptions = {}) {
    * Counts the request when it is allowed. A request counts before the body is
    * validated, so invalid requests use up the limit too.
    */
-  const check = (key: string, now = Date.now()): RateLimitVerdict => {
+  const check = (key: string, now = Date.now(), rule: RateLimitRule = defaultRule): RateLimitVerdict => {
     const { verdict, entry } = applyRateLimit(entries.get(key), now, rule);
     if (entry) {
       entries.set(key, entry);
@@ -120,6 +137,7 @@ export function createRateLimiter(options: RateLimiterOptions = {}) {
 
   return {
     check,
+    peek: (key: string, now = Date.now()) => usedInWindow(entries.get(key), now),
     /** Number of keys with a counter, for tests. */
     trackedCount: () => entries.size,
   };

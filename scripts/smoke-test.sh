@@ -33,6 +33,7 @@ done
 
 echo "Files"
 for path in /pdf/paper.jpg /pdf/pakjesavond.jpg /pdf/cadeaupapier.jpg /pdf/schoolschrift.jpg \
+  /pdf/goudfolie.jpg /pdf/stoomboot.jpg /pdf/previews/goudfolie.jpg /pdf/previews/stoomboot.jpg \
   /pdf/previews/perkament.jpg /pdf/previews/pakjesavond.jpg /pdf/previews/cadeaupapier.jpg /pdf/previews/schoolschrift.jpg \
   /pdf/alegreya-400.ttf /pdf/texturina-700.ttf /pdf/caveat-500.ttf /og/home.jpg /sint-hero-800.webp; do
   check "$path" 200 "$(status "$BASE$path")"
@@ -45,6 +46,12 @@ check "/g/<unknown> is 404" 404 "$(status "$BASE/g/abcdefghij")"
 # A server-only event name is refused (400) before anything is written.
 check "/api/events refuses a server event" 400 \
   "$(status -X POST -H 'content-type: application/json' -d '{"name":"Generate poem"}' "$BASE/api/events")"
+
+# The tiers on sale: each needs its product ID as a Worker secret.
+status_json="$("${CURL[@]}" "$BASE/api/payment/status")"
+for tier in drie gezin familie; do
+  check "tier on sale: $tier" 1 "$(grep -c "\"$tier\"" <<<"$status_json" | tr -d ' ')"
+done
 
 echo "Content"
 home="$("${CURL[@]}" "$BASE/")"

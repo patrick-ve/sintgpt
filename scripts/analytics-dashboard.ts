@@ -122,6 +122,10 @@ export function dashboardQueries(period: Period): Record<string, string> {
       AND blob1 = 'Payment webhook' GROUP BY type`,
     aborted: `SELECT blob9 AS detail, ${n}, SUM(_sample_interval * double7) AS seconds ${from}
       AND blob1 = 'Poem aborted' GROUP BY detail`,
+    // blob17 is the tier (utils/pricingTiers.ts); empty for free visitors and older rows.
+    tiers: `SELECT blob1 AS event, blob17 AS tier, ${n} ${from}
+      AND blob1 IN ('Proceed to payment', 'Payment verified', 'Generate poem', 'Regenerate poem', 'Surprise ideas')
+      AND blob17 != '' GROUP BY event, tier`,
   };
 }
 
@@ -391,6 +395,14 @@ export function renderDashboard(period: Period, results: Results, now: Date): st
     card('Present', barList(sumBy(poems, 'present'), { total: poemTotal })),
     card('Written by filled in', barList(sumBy(poems, 'written_by'), { total: poemTotal })),
     card('Audience filled in', barList(sumBy(poems, 'audience'), { total: poemTotal })),
+    card('Tiers chosen', barList(['drie', 'gezin', 'familie'].flatMap((tier) => {
+      const of = (event: string) => rows('tiers').filter(row => row.event === event && row.tier === tier).reduce((sum, row) => sum + num(row.n), 0);
+      return [
+        { label: `${tier}: checkouts started`, n: of('Proceed to payment') },
+        { label: `${tier}: payments verified`, n: of('Payment verified') },
+        { label: `${tier}: poems written`, n: of('Generate poem') + of('Regenerate poem') },
+      ];
+    })), 'From the tier column (blob17). Surprise ideas: ' + int(count('Surprise ideas')) + '.'),
     card('Payment window opened by', barList(details('Show payment modal'))),
     card('Payment window closed by', barList(details('Close payment modal'))),
     card('Payment results', barList([

@@ -3,15 +3,17 @@ import {
   DEFAULT_PDF_DESIGN,
   PDF_DESIGNS,
   PDF_DESIGN_IDS,
+  isExtraPdfDesign,
   isPdfDesignId,
   type PdfDesignId,
 } from '~/utils/pdfDesigns';
 
 // Lets the visitor pick the look of the poem PDF. The page builds the file and
-// closes the window when the download starts.
+// closes the window when the download starts. The extra designs belong to
+// Hele familie: without it, choosing one offers that tier instead.
 const isOpen = defineModel<boolean>({ default: false });
-defineProps<{ busy: boolean; failed: boolean }>();
-const emit = defineEmits<{ save: [design: PdfDesignId] }>();
+const props = defineProps<{ busy: boolean; failed: boolean; extraUnlocked: boolean }>();
+const emit = defineEmits<{ save: [design: PdfDesignId]; upgrade: [] }>();
 
 const { t } = useI18n();
 const dialogRef = ref<HTMLDialogElement | null>(null);
@@ -33,7 +35,14 @@ watch(isOpen, (open) => {
   else dialogRef.value?.close();
 });
 
+const locked = (id: PdfDesignId) => isExtraPdfDesign(id) && !props.extraUnlocked;
+const selectedLocked = computed(() => locked(selected.value));
+
 const save = () => {
+  if (selectedLocked.value) {
+    emit('upgrade');
+    return;
+  }
   try {
     localStorage.setItem(STORAGE_KEY, selected.value);
   } catch {
@@ -69,6 +78,10 @@ const onBackdropClick = (event: MouseEvent) => {
             <span class="design-preview">
               <img :src="PDF_DESIGNS[id].preview" alt="" width="160" height="226" loading="lazy" decoding="async">
             </span>
+            <span v-if="locked(id)" class="design-lock">
+              <UIcon name="i-heroicons-lock-closed" class="size-3.5" aria-hidden="true" />
+              {{ t('payment.tiers.familie.name') }}
+            </span>
             <span class="design-name">{{ t(`poem.pdfDesign.${id}.name`) }}</span>
             <span class="design-description">{{ t(`poem.pdfDesign.${id}.description`) }}</span>
           </label>
@@ -85,12 +98,12 @@ const onBackdropClick = (event: MouseEvent) => {
         </button>
         <button type="submit" class="btn-festive inline-flex items-center gap-2 min-h-12 px-6 text-lg" :disabled="busy">
           <UIcon
-            :name="busy ? 'i-heroicons-arrow-path' : 'i-heroicons-arrow-down-tray'"
+            :name="busy ? 'i-heroicons-arrow-path' : selectedLocked ? 'i-heroicons-gift' : 'i-heroicons-arrow-down-tray'"
             class="size-5"
             :class="{ 'motion-safe:animate-spin': busy }"
             aria-hidden="true"
           />
-          {{ t('poem.pdfDesign.download') }}
+          {{ selectedLocked ? t('poem.pdfDesign.unlock') : t('poem.pdfDesign.download') }}
         </button>
       </div>
     </form>
@@ -124,8 +137,25 @@ const onBackdropClick = (event: MouseEvent) => {
 }
 @media (min-width: 640px) {
   .designs {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+}
+.design {
+  position: relative;
+}
+.design-lock {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #f4cd60;
+  background: #8b1538;
+  border-radius: 999px;
 }
 .design {
   display: flex;

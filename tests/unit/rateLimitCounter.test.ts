@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { RateLimitCounter, type CounterState } from '../../server/durable/RateLimitCounter';
-import { POEM_RATE_LIMIT } from '../../server/utils/rateLimit';
+import { creditsRule, POEM_RATE_LIMIT } from '../../server/utils/rateLimit';
 
 const T0 = 1_800_000_000_000;
 const DAY = 24 * 60 * 60 * 1000;
@@ -58,5 +58,34 @@ describe('RateLimitCounter (Durable Object)', () => {
 
     await counter.alarm();
     expect(data.size).toBe(0);
+  });
+});
+
+describe('Drie: 3 poems until pakjesavond', () => {
+  beforeEach(() => vi.useFakeTimers({ now: T0 }));
+  afterEach(() => vi.useRealTimers());
+
+  const peek = async (counter: RateLimitCounter) =>
+    (await (await counter.fetch(new Request('https://rate-limit.internal/peek', { method: 'POST' }))).json()).used;
+
+  it('allows 3 poems in one window that lasts until the access ends, and peeks without counting', async () => {
+    const { state, alarms } = fakeState();
+    const counter = new RateLimitCounter(state);
+    const expiresAt = T0 + 26 * DAY;
+    const ask = async () => (await counter.fetch(new Request('https://rate-limit.internal/check', {
+      method: 'POST',
+      body: JSON.stringify(creditsRule(3, expiresAt, Date.now())),
+    }))).json();
+
+    expect(await peek(counter)).toBe(0);
+    for (let i = 0; i < 3; i++) {
+      expect(await ask()).toEqual({ ok: true });
+      vi.advanceTimersByTime(2 * DAY);
+    }
+    expect(await peek(counter)).toBe(3);
+    expect(await peek(counter)).toBe(3);
+    expect(await ask()).toMatchObject({ ok: false, reason: 'limit' });
+    // The data goes when the access ends, not after a day.
+    expect(alarms).toEqual([expiresAt]);
   });
 });

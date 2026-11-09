@@ -9,10 +9,11 @@ import {
 } from 'ai';
 import { formFacts, trackServerEvent } from '../../utils/analytics';
 import { clientDisconnectSignal } from '../../utils/clientDisconnect';
-import { unlimitedAccessPaymentId } from '../../utils/paymentCookie';
+import { paidAccess } from '../../utils/paymentCookie';
 import { checkPoemRateLimit, rateLimitIp } from '../../utils/poemRateLimit';
 import { signPoemShare } from '../../utils/poemShare';
-import { BUYER_RATE_LIMIT, POEM_RATE_LIMIT } from '../../utils/rateLimit';
+import { BUYER_RATE_LIMIT, creditsRule, POEM_RATE_LIMIT } from '../../utils/rateLimit';
+import { TIERS } from '../../../utils/pricingTiers';
 import {
   buildPrompt,
   DEFAULT_POEM_MODEL,
@@ -27,9 +28,10 @@ export default defineEventHandler(async (event) => {
   const runtimeConfig = useRuntimeConfig(event);
 
   try {
-    // Buyers have a high daily cap per payment, free visitors a low one per IP.
-    const buyerPaymentId = await unlimitedAccessPaymentId(event);
-    const hasUnlimited = buyerPaymentId !== null;
+    // Buyers have a high daily cap per payment (Drie: 3 poems in total), free
+    // visitors a low one per IP.
+    const access = await paidAccess(event);
+    const tier = access ? TIERS[access.tier] : null;
 
     // On Cloudflare, cf-connecting-ip is set by the edge and cannot be
     // spoofed. The first X-Forwarded-For entry is client-controlled.
@@ -38,26 +40,44 @@ export default defineEventHandler(async (event) => {
       || getRequestIP(event, { xForwardedFor: true })
       || 'unknown';
 
+    // A rewrite uses the larger model. Drie does not include it; refused
+    // before it counts as one of the three poems.
+    if (tier && !tier.rewrites) {
+      const peek = await readBody<{ regenerate?: unknown }>(event).catch(() => null);
+      if (peek?.regenerate === true) {
+        throw createError({
+          statusCode: 403,
+          statusMessage: 'Rewrites are not part of this purchase',
+          data: { reason: 'tier' },
+        });
+      }
+    }
+
     if (!import.meta.dev) {
       const verdict = await checkPoemRateLimit(
         event,
-        hasUnlimited
-          ? { kind: 'buyer', id: buyerPaymentId }
+        access
+          ? { kind: 'buyer', id: access.paymentId }
           : { kind: 'ip', id: rateLimitIp(ip) },
+        tier?.poems ? creditsRule(tier.poems, access!.expiresAt, Date.now()) : access ? BUYER_RATE_LIMIT : POEM_RATE_LIMIT,
       );
       if (!verdict.ok) {
-        // The client shows the upgrade offer only for `limit`. A buyer who
-        // reaches the cap gets `fair-use` and a message instead.
-        const reason = verdict.reason === 'limit' && hasUnlimited ? 'fair-use' : verdict.reason;
+        // The client shows the payment window for `limit` (free poems) and
+        // `credits` (the three Drie poems are used). A buyer who reaches the
+        // daily cap gets `fair-use` and a message instead.
+        const reason = verdict.reason === 'limit' && tier
+          ? (tier.poems ? 'credits' : 'fair-use')
+          : verdict.reason;
         // No IP in the log: the reason is enough to see abuse.
         consola.warn(`Rate limit: ${reason}`);
-        trackServerEvent(event, 'Rate limited', { detail: reason, plan: hasUnlimited ? 'paid' : 'free' });
+        trackServerEvent(event, 'Rate limited', { detail: reason, plan: access ? 'paid' : 'free', tier: access?.tier });
         setResponseHeader(event, 'retry-after', verdict.retryAfterSeconds);
         throw createError({
           statusCode: 429,
           statusMessage: {
             debounce: `Please wait ${verdict.retryAfterSeconds} seconds before generating another poem.`,
-            limit: `You have reached the maximum of ${POEM_RATE_LIMIT.maxRequests} free poems per 24 hours. Upgrade to unlimited access for just €6,99 (incl. VAT)!`,
+            limit: `You have reached the maximum of ${POEM_RATE_LIMIT.maxRequests} free poems per 24 hours.`,
+            credits: `You have written the ${tier?.poems} poems you bought.`,
             'fair-use': `You have made ${BUYER_RATE_LIMIT.maxRequests} poems in 24 hours. Please try again later.`,
           }[reason],
           data: { reason, retryAfterSeconds: verdict.retryAfterSeconds },
@@ -86,7 +106,8 @@ export default defineEventHandler(async (event) => {
       rhymeScheme: validatedData.rhymeScheme,
       language: validatedData.language,
       lines: validatedData.lines,
-      plan: hasUnlimited ? 'paid' as const : 'free' as const,
+      plan: access ? 'paid' as const : 'free' as const,
+      tier: access?.tier,
       ...formFacts(validatedData),
     };
 
