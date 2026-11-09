@@ -9,8 +9,8 @@ findings worth keeping. Newest information first within each section.
   `docs/pricing-tiers.md`.
 - Never put API keys, webhook secrets or gift codes in this file.
 
-Last updated: 9 November 2026. Live version: `50d3116e-afd1-45cb-ada6-194a35e3c1bb`
-(commit `b2d116b`, on GitHub).
+Last updated: 9 November 2026. Live version: `417bb32d-c619-463a-a960-65af023db212`
+(commit `0646247`, on GitHub).
 
 ## Priorities
 
@@ -241,4 +241,5 @@ Last updated: 9 November 2026. Live version: `50d3116e-afd1-45cb-ada6-194a35e3c1
 | 9 Nov 2026 | Pricing tiers | Commit `810ca80`, live (only Gezin on sale) |
 | 9 Nov 2026 | Gift links | Commit `b2d116b`, live |
 | 9 Nov 2026 | Dodo test products for the tiers | Created in the new business (#3) |
-| 9 Nov 2026 | Free poems in a private window | The server now allows 1 free poem per IP per 24 hours, like the page (3 while payments do not work). Not deployed yet. Remaining risk: #17 |
+| 9 Nov 2026 | Free poems in a private window | The server now allows 1 free poem per IP per 24 hours, like the page (3 while payments do not work). Commit `451e146`, live. Remaining risk: #17 |
+| 9 Nov 2026 | llms.txt | Commit `0646247`, live at `/llms.txt` |
