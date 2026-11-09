@@ -24,3 +24,6 @@ logs
 # Cloudflare
 .wrangler
 .dev.vars
+
+# Screenshots from browser checks
+.playwright-mcp/

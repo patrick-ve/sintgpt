@@ -11,6 +11,8 @@ interface PoemRequest {
   linkedinUrl?: string;
   jobTitle?: string;
   language: 'dutch' | 'english';
+  /** Write a new version with the larger model. */
+  regenerate?: boolean;
 }
 
 export const usePoemGenerator = () => {

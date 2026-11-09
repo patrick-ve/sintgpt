@@ -16,6 +16,8 @@ const source = path.join(root, 'public/sint.png');
 
 /** Head, mitre and gesture, for avatars. */
 const SINT_SQUARE = { left: 300, top: 0, width: 880, height: 880 };
+/** Portrait (4:5) for the arched photo in the home page hero. */
+const SINT_HERO = { left: 390, top: 0, width: 819, height: 1024 };
 /** Face and mitre only, so a small icon stays readable. */
 const SINT_ICON = { left: 480, top: 90, width: 560, height: 560 };
 
@@ -49,6 +51,13 @@ async function main() {
     .resize(352, 352)
     .webp({ quality: 80 })
     .toFile(path.join(root, 'public/sint-352.webp'));
+
+  for (const width of [400, 800]) {
+    await crop(SINT_HERO)
+      .resize(width, Math.round(width * 1.25))
+      .webp({ quality: 78 })
+      .toFile(path.join(root, `public/sint-hero-${width}.webp`));
+  }
 
   for (const [name, size] of [
     ['favicon-16x16.png', 16],
