@@ -388,6 +388,29 @@ Last updated: 10 November 2026. Live version: `03b783e6-9347-4d6f-929f-7690ce73a
 | S24 | – | – | Search Console: Domain property verified 10 Nov 2026. To do: submit the sitemap, request indexing of /, /voorbeelden, /lootjes, /blog, check excluded pages after about a week, import into Bing Webmaster Tools. See #12 | Owner |
 | S25 | – | – | PageSpeed Insights and field data from outside the company network (Cato proxy forces HTTP/1.1 locally) | Owner |
 
+### #26 Keywords and blog content
+
+- **Status:** in git on 10 November 2026, not yet deployed.
+- **What changed:**
+  - Keyword map per page: `docs/seo-keywords.md`.
+  - Home: title tag "Sinterklaasgedicht maken met AI: gratis generator", a new meta
+    description, "sinterklaasgedicht" in two headings, and two FAQ entries
+    (who to write for, short poems) that also go into the FAQPage JSON-LD.
+  - `/voorbeelden`: an h2 per example for its recipient ("Grappig sinterklaasgedicht
+    voor opa", …), a list of jump links, and ItemList URLs to the anchors.
+  - `/lootjes`: title tag "Lootjes trekken online: gratis en zonder e-mail", h1
+    "Lootjes trekken voor Sinterklaas".
+  - Blog: 7 new posts (begin and end, rhyme words, short poems, opa en oma, partner,
+    children, English) and the 8 existing posts rewritten. Gemini 3.7 Flash wrote all
+    15 with `scripts/write-blog-posts.ts` (briefs in `scripts/blogBriefs.ts`), with a
+    proofreading pass by the same model. Claude read every post and fixed 7 small
+    errors by hand (a nonsense word, an invented claim, a wrong rhyme rule, an
+    absolute claim about Roast, three broken lines). URLs and publication dates are
+    unchanged; the rewritten posts show "bijgewerkt 10 november 2026".
+- **Next steps:** deploy, then request indexing for the new posts in Search Console
+  (S24). From late November, check Performance → Queries and adjust the briefs.
+- **Notes:** no keyword tool was used, so the map has no search volumes.
+
 ## Findings
 
 ### Visitors on 9 November 2026

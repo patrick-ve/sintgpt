@@ -243,6 +243,16 @@ export default {
           'You choose from 6 styles: Funny (with humor and wordplay), Classic (traditional and atmospheric), Ironic (with a wink and sarcasm), Old-fashioned (in old Dutch style), Spicy (with daring winks), and Roast (tease your friends without mercy). You can also choose from different rhyme schemes like AABB, ABBA, or Limerick.',
       },
       {
+        question: 'Who can I write a Sinterklaas poem for?',
+        answer:
+          'For anyone you can tell something about: your grandparents, your partner, a child, a colleague or the neighbours. Also say who writes the poem and who will hear it. SintGPT then adapts the tone. The examples include poems for a grandfather, a child, a colleague and a neighbour.',
+      },
+      {
+        question: 'Can I make a short Sinterklaas poem?',
+        answer:
+          'Yes. You choose the length, from 8 to 40 lines. A poem of 8 lines takes half a minute to read aloud, which helps when there are many presents. A limerick has verses of 5 lines.',
+      },
+      {
         question: 'How personal do the poems get?',
         answer:
           'The more you tell, the more personal the poem. Mention hobbies, work, habits or a funny story. SintGPT turns those details into a poem that fits only this person.',
@@ -401,6 +411,17 @@ export default {
     pageTitle: 'Examples of Sinterklaas poems',
     seoTitle: 'Examples of Sinterklaas poems | SintGPT',
     description: 'Read examples of Sinterklaas poems in six styles: funny, classic, ironic, old-fashioned, spicy and roast.',
+    indexTitle: 'Choose an example',
+    headings: {
+      'opa-kees': 'Funny Sinterklaas poem for a grandfather',
+      lotte: 'Classic Sinterklaas poem for a child',
+      mark: 'Ironic Sinterklaas poem for a colleague',
+      'tante-els': 'Old-fashioned Sinterklaas poem for an aunt',
+      daan: 'Roast poem for a brother',
+      jeroen: 'Spicy Sinterklaas poem for a boyfriend',
+      'buurman-gerrit': 'Funny Sinterklaas poem for the neighbour',
+      emma: 'Sinterklaas poem in English',
+    },
     pageIntro: 'SintGPT wrote these poems from the details shown with them. The people are made up. This shows what each style does.',
     ctaText: 'Your first poem is free. After that, a one-time €6.99 covers poems for the whole family, or €3.99 buys 3 poems.',
   },

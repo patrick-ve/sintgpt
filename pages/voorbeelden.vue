@@ -32,7 +32,8 @@ useHead({
               itemListElement: EXAMPLE_POEMS.map((example, index) => ({
                 '@type': 'ListItem',
                 position: index + 1,
-                name: t('poem.title', { name: example.request.name }),
+                name: t(`examples.headings.${example.id}`),
+                url: `https://sintgpt.com/voorbeelden#${example.id}`,
               })),
             },
           },
@@ -68,8 +69,25 @@ useHead({
       </h1>
       <p class="mt-4 font-text text-lg leading-relaxed text-pretty">{{ t('examples.pageIntro') }}</p>
 
+      <nav class="mt-8" :aria-label="t('examples.indexTitle')">
+        <p class="font-bold text-[#8b1538]">{{ t('examples.indexTitle') }}</p>
+        <ul class="mt-2 grid gap-x-6 sm:grid-cols-2">
+          <li v-for="example in EXAMPLE_POEMS" :key="example.id">
+            <a :href="`#${example.id}`" class="index-link">{{ t(`examples.headings.${example.id}`) }}</a>
+          </li>
+        </ul>
+      </nav>
+
       <div class="mt-10 flex flex-col gap-10">
-        <ExamplePoemCard v-for="example in EXAMPLE_POEMS" :key="example.id" :example="example" heading-level="h2" />
+        <ExamplePoemCard
+          v-for="example in EXAMPLE_POEMS"
+          :id="example.id"
+          :key="example.id"
+          :example="example"
+          :heading="t(`examples.headings.${example.id}`)"
+          heading-level="h2"
+          class="scroll-mt-6"
+        />
       </div>
 
       <div class="mt-12 flex flex-col items-start gap-4 rounded-xl border-2 border-[#d4a853] bg-white/70 p-6">
@@ -84,6 +102,14 @@ useHead({
 </template>
 
 <style scoped>
+.index-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  color: #8b1538;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 .back-link {
   display: inline-flex;
   align-items: center;

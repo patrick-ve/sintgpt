@@ -1,182 +1,153 @@
 <template>
   <BlogPost
     slug="sinterklaas-tradities"
-    lead="Het Sinterklaasfeest is een van de meest geliefde tradities in Nederland en België. Ontdek de rijke geschiedenis en betekenis van sinterklaasgedichten, surprises en andere gebruiken rondom dit bijzondere feest."
-    seo-title="Sinterklaastradities: van gedichten tot surprises | SintGPT"
-    seo-description="Ontdek de rijke geschiedenis en tradities van het Sinterklaasfeest. Alles over gedichten, surprises, pepernoten en meer!"
+    lead="Ieder jaar vieren we begin december het sinterklaasfeest met vertrouwde gebruiken en lekkernijen. Maar waar komen al die sinterklaas tradities eigenlijk vandaan en hoe vieren we ze vandaag de dag? In dit overzicht lees je alles over de intocht, schoen zetten, surprises en pakjesavond."
+    seo-title="Sinterklaas tradities en gebruiken | SintGPT"
+    seo-description="Wat zijn de bekendste sinterklaas tradities? Lees alles over de intocht, schoen zetten, lekkernijen, surprises en het gedicht op pakjesavond."
     og-image="blog-sinterklaas-tradities"
   >
-    <h2 class="text-3xl font-bold mt-8 mb-4">De oorsprong van Sinterklaas</h2>
+    <h2 class="text-3xl font-bold mt-8 mb-4">De bekendste sinterklaas tradities op een rij</h2>
     <p class="leading-relaxed mb-4">
-      Het Sinterklaasfeest vindt zijn oorsprong in de figuur van Sint-Nicolaas, een bisschop die in de 4e eeuw leefde in het huidige Turkije. Hij stond bekend om zijn gulheid en liefde voor kinderen. De traditie zoals wij die nu kennen, met zijn aankomst uit Spanje en Zwarte Pieten, ontstond pas in de 19e eeuw en is typisch Nederlands en Vlaams.
+      Het sinterklaasfeest is een van de oudste feesten in Nederland en Vlaanderen. Elk jaar kijken jong en oud uit naar de komst van de goedheiligman. Hoewel ieder gezin het feest op een eigen manier viert, zijn er vaste gewoontes die overal terugkeren.
     </p>
-
-    <div class="bg-red-50 border-l-4 border-red-600 p-6 my-6 rounded-r-lg">
-      <h3 class="text-xl font-bold text-red-900 mb-2 font-display">Wist je dat?</h3>
-      <p class="text-red-800">De datum van 5 december is gekozen omdat dit traditioneel gezien de sterfdag van Sint-Nicolaas is. In België wordt Sinterklaas vaak al op 6 december gevierd!</p>
-    </div>
-
-    <h2 class="text-3xl font-bold mt-8 mb-4">Het sinterklaasgedicht: een Nederlandse traditie</h2>
     <p class="leading-relaxed mb-4">
-      Een van de meest kenmerkende aspecten van het Nederlandse Sinterklaasfeest is het gedicht. In tegenstelling tot veel andere landen waar cadeaus zonder meer worden gegeven, hoort bij elk Sinterklaascadeau een persoonlijk gedicht.
+      De <strong>sinterklaas tradities</strong> vormen samen een herkenbaar ritueel dat enkele weken duurt. Het feest begint halverwege november met de feestelijke intocht en eindigt op pakjesavond. Daartussen zitten dagen van verwachting, knutselen, rijmen en gezellig samenzijn.
     </p>
-
-    <h3 class="text-2xl font-bold mt-6 mb-3">De functie van het gedicht</h3>
-    <p class="leading-relaxed mb-4">
-      Het sinterklaasgedicht heeft meerdere functies:
-    </p>
-
     <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
-      <li><strong>Persoonlijk maken:</strong> Het gedicht geeft context bij het cadeau en maakt het persoonlijker</li>
-      <li><strong>Humor en spanning:</strong> Door de ontvanger te plagen of grappige gebeurtenissen te noemen, wordt de sfeer luchtiger</li>
-      <li><strong>Anonimiteit bewaren:</strong> Traditioneel weet de ontvanger niet wie het cadeau heeft gegeven (hoewel dit tegenwoordig vaak wel bekend is)</li>
-      <li><strong>Creativiteit tonen:</strong> Het schrijven van een goed gedicht laat zien dat je moeite hebt gedaan</li>
+      <li>De intocht per stoomboot halverwege november</li>
+      <li>De schoen zetten met een liedje en een wortel voor het paard</li>
+      <li>Snoepen van kruidnoten, marsepein en chocoladeletters</li>
+      <li>Lootjes trekken voor surprises en gedichten</li>
+      <li>Pakjesavond vieren op 5 december met familie of vrienden</li>
     </ul>
-
-    <h3 class="text-2xl font-bold mt-6 mb-3">De evolutie van het gedicht</h3>
+    <h3 class="text-2xl font-bold mt-6 mb-3">Een feest van verwachting en gezelligheid</h3>
     <p class="leading-relaxed mb-4">
-      Vroeger waren sinterklaasgedichten vaak formeler en moraliserend van toon. Tegenwoordig zijn ze lichter, humoristischer en persoonlijker. De focus ligt meer op entertainment dan op vermaan.
+      Wat het sinterklaasfeest zo bijzonder maakt, is de opbouw. Waar jonge kinderen vooral opgaan in het mysterie en de spanning rond de schoen, draait het bij oudere kinderen en volwassenen om creativiteit, humor en aandacht voor elkaar.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Surprises: creativiteit in verpakking</h2>
+    <h2 class="text-3xl font-bold mt-8 mb-4">De oorsprong en geschiedenis van het feest</h2>
     <p class="leading-relaxed mb-4">
-      Naast het gedicht is de "surprise" een belangrijk onderdeel van de Nederlandse Sinterklaas traditie. Een surprise is een creatief verpakt cadeau, vaak met een knipoog naar de hobby's of interesses van de ontvanger.
+      De oorsprong van het feest ligt bij de historische figuur Sint-Nicolaas. Hij was in de vierde eeuw bisschop van Myra, een stad in het huidige Turkije. Hij stond bekend om zijn vrijgevigheid en hulp aan arme mensen en kinderen. Na zijn overlijden ontstonden er rond zijn naam talloze verhalen en legendes.
+    </p>
+    <p class="leading-relaxed mb-4">
+      In de loop der eeuwen groeide zijn herdenkingsdag uit tot een geliefd volksfeest. In Nederland vieren we pakjesavond op <strong>5 december</strong>, de vooravond van zijn traditionele naamdag. In België zetten kinderen meestal op de ochtend van 6 december hun schoen of pakken ze dan hun cadeaus uit.
+    </p>
+    <p class="leading-relaxed mb-4">
+      Veel elementen zoals we die vandaag kennen, kregen in de negentiende eeuw hun vaste vorm. Denk aan het idee dat de Sint uit Spanje komt, de stoomboot, het schimmelpaard en het grote boek waarin alles staat opgeschreven.
     </p>
 
+    <h2 class="text-3xl font-bold mt-8 mb-4">De aanloop: intocht en je schoen zetten</h2>
+    <p class="leading-relaxed mb-4">
+      De feestperiode begint officieel wanneer de stoomboot aankomt. In talloze steden en dorpen staan duizenden kinderen langs de kade om de Sint en zijn helpers welkom te heten. Vanaf dat moment hangt er een vrolijke spanning in huis.
+    </p>
+    <h3 class="text-2xl font-bold mt-6 mb-3">Hoe werkt schoen zetten precies?</h3>
+    <p class="leading-relaxed mb-4">
+      Vanaf de aankomst mogen kinderen thuis hun <strong>schoen zetten</strong>. Dit gebeurt meestal bij de open haard, de kachel of bij de voordeur. Kinderen leggen een tekening of een verlanglijstje in hun schoen, samen met een wortel en wat water voor het paard.
+    </p>
+    <ol class="list-decimal pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
+      <li>Zet de schoen neer op een vaste plek in huis, zoals bij de kachel of voordeur.</li>
+      <li>Doe er een mooie tekening, een verlanglijstje of een wortel voor het paard in.</li>
+      <li>Zing samen een bekend sinterklaasliedje voor het slapengaan.</li>
+      <li>Kijk de volgende ochtend of er een mandarijn, wat strooigoed of een klein cadeautje in zit.</li>
+    </ol>
+    <p class="leading-relaxed mb-4">
+      Veel ouders laten hun kinderen niet elke avond de schoen zetten, maar bijvoorbeeld twee of drie keer per week. Dat houdt het overzichtelijk en voorkomt een teveel aan suikergoed in de aanloop naar pakjesavond.
+    </p>
+    <h3 class="text-2xl font-bold mt-6 mb-3">Het grote boek van Sinterklaas</h3>
+    <p class="leading-relaxed mb-4">
+      Volgens de overlevering houdt de Sint in zijn grote boek bij wat ieder kind het afgelopen jaar heeft beleefd. Vroeger had dit boek een streng karakter, maar tegenwoordig staan er vooral vriendelijke complimenten, behaalde zwemdiploma's en grappige herinneringen in.
+    </p>
+
+    <h2 class="text-3xl font-bold mt-8 mb-4">Traditionele sinterklaas lekkernijen</h2>
+    <p class="leading-relaxed mb-4">
+      Eten en snoepgoed spelen een grote rol bij alle gewoontes rond Sinterklaas. Veel van deze lekkernijen vind je alleen in deze periode van het jaar in de winkels en op tafel.
+    </p>
+    <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
+      <li><strong>Kruidnoten en pepernoten</strong>: Kruidnoten zijn de bekende harde, ronde koekjes met speculaaskruiden. Echte traditionele pepernoten zijn zachtere, taaie blokjes met een uitgesproken anijssmaak.</li>
+      <li><strong>Chocoladeletters</strong>: Traditioneel krijgt iedereen de eerste letter van de eigen voornaam in melk, puur of wit.</li>
+      <li><strong>Marsepein en borstplaat</strong>: Marsepein wordt gemaakt van amandelen en suiker, vaak gevormd als fruit of dieren. Borstplaat bestaat uit gekookte suiker en room.</li>
+      <li><strong>Speculaaspoppen en banketletters</strong>: Grote speculaaspoppen met amandelschaafsel en banketstaven gevuld met amandelspijs horen al eeuwen bij de feestdagen.</li>
+      <li><strong>Taai-taai en schuimpjes</strong>: Taaie koek met honing en anijs, en luchtige suikerfiguurtjes in pastelkleuren die traditioneel worden gestrooid.</li>
+    </ul>
+    <p class="leading-relaxed mb-4">
+      Het strooien van snoepgoed is een oud gebruik. Het herinnert aan de legende waarin Sint-Nicolaas goudstukken door het raam wierp om mensen in nood te helpen. Tegenwoordig staat het strooien vooral voor feestelijkheid en overvloed.
+    </p>
+
+    <h2 class="text-3xl font-bold mt-8 mb-4">Pakjesavond: cadeaus, surprises en gedichten</h2>
+    <p class="leading-relaxed mb-4">
+      Op 5 december bereikt het feest zijn hoogtepunt met pakjesavond. Zodra het donker wordt, verzamelen families of vriendengroepen zich voor een avond vol pakjes. Voor volwassenen en oudere kinderen begint de voorbereiding vaak al weken eerder met <NuxtLink to="/lootjes" class="text-red-700 underline underline-offset-2 hover:text-red-900">lootjes trekken</NuxtLink>.
+    </p>
+    <h3 class="text-2xl font-bold mt-6 mb-3">Surprises maken met een knipoog</h3>
+    <p class="leading-relaxed mb-4">
+      Bij volwassenen en op scholen draait pakjesavond vaak om surprises. Een surprise is een zelfgemaakt knutselwerk waarin het cadeau verstopt zit. Wie inspiratie zoekt voor een creatieve verpakking, kan verschillende <NuxtLink to="/blog/surprise-maken-ideeen" class="text-red-700 underline underline-offset-2 hover:text-red-900">ideeën voor een surprise</NuxtLink> bekijken. Het doel is om iets te maken dat aansluit bij een opvallende gewoonte, blunder of hobby van de ontvanger.
+    </p>
+    <h3 class="text-2xl font-bold mt-6 mb-3">De kunst van het sinterklaasgedicht</h3>
+    <p class="leading-relaxed mb-4">
+      Bij elke surprise hoort traditiegetrouw een passend gedicht. Het gedicht wordt hardop voorgelezen voordat de ontvanger het papier van het cadeau mag scheuren. Hierin mag je iemand met een knipoog plagen of een mooie herinnering ophalen. Wie inspiratie zoekt voor een goed ritme, kan kijken naar <NuxtLink to="/voorbeelden" class="text-red-700 underline underline-offset-2 hover:text-red-900">voorbeelden van sinterklaasgedichten</NuxtLink>.
+    </p>
+    <div class="bg-red-50 border-l-4 border-red-600 p-6 my-6 rounded-r-lg">
+      <p class="font-bold text-red-900 mb-2">Voorbeeld van een traditioneel gedicht</p>
+      <p class="font-text text-lg text-red-900 leading-relaxed mb-3 last:mb-0">
+        Sint liep gisteren door de stille nacht,<br>
+        terwijl heel het huis op een pakje wacht.<br>
+        Hij zag jouw schoen bij de kachel staan<br>
+        en heeft er een mooi cadeau in gedaan.
+      </p>
+      <p class="font-text text-lg text-red-900 leading-relaxed mb-3 last:mb-0">
+        Trek nu het papier maar snel van de doos,<br>
+        en kijk wat de Sint voor jou uitkoos!
+      </p>
+    </div>
     <div class="bg-[#fff3c9] p-6 rounded-lg my-6 border border-[#F4CD60]">
-      <h3 class="text-xl font-bold text-red-900 mb-3 font-display">Populaire surprise-ideeën:</h3>
-      <ul class="text-red-800 space-y-2 list-disc pl-4 marker:text-red-600">
-        <li>Een boek verpakt als gigantisch boek van karton</li>
-        <li>Een sportattribuut verstopt in een zelfgemaakte sportschoen</li>
-        <li>Kookbenodigdheden in een kartonnen oven</li>
-        <li>Beautymiddelen in een papier-maché kappersstoel</li>
-        <li>Reisaccessoires in een miniatuur vliegtuig of trein</li>
-      </ul>
+      <h3 class="text-xl font-bold text-red-900 mb-3 font-display">Tip voor het voorlezen</h3>
+      <p class="text-red-800">Laat iedereen om de beurt een cadeau uitpakken en het bijbehorende gedicht rustig hardop voorlezen. Dat zorgt voor aandacht en plezier voor het hele gezelschap.</p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">De aanloop naar pakjesavond</h2>
+    <h2 class="text-3xl font-bold mt-8 mb-4">Valkuilen bij het vieren van Sinterklaas</h2>
     <p class="leading-relaxed mb-4">
-      Het Sinterklaasfeest begint officieel met de intocht, meestal medio november. Vanaf dat moment begint de spanningsopbouw:
+      Hoewel het sinterklaasfeest draait om plezier, kan de organisatie soms stress opleveren. Met een paar duidelijke afspraken blijft de sfeer ontspannen.
     </p>
-
-    <h3 class="text-2xl font-bold mt-6 mb-3">De intocht</h3>
-    <p class="leading-relaxed mb-4">
-      Sinterklaas arriveert per stoomboot uit Spanje en wordt in vele steden en dorpen feestelijk ontvangen. Deze traditie dateert van de jaren '50 en is inmiddels uitgegroeid tot een groot mediaspektakel.
-    </p>
-
-    <h3 class="text-2xl font-bold mt-6 mb-3">Schoentje zetten</h3>
-    <p class="leading-relaxed mb-4">
-      In de weken voor 5 december mogen kinderen hun schoen zetten bij de schoorsteen (of verwarming). Ze zingen een Sinterklaasliedje en hopen de volgende ochtend een klein cadeautje of snoepgoed te vinden. De wortel is bedoeld voor het paard van Sinterklaas.
-    </p>
-
-    <h3 class="text-2xl font-bold mt-6 mb-3">Het grote boek</h3>
-    <p class="leading-relaxed mb-4">
-      Volgens de traditie houdt Sinterklaas in zijn grote boek bij of kinderen zoet of stout zijn geweest. Dit zorgt voor een speelse spanning en stimuleert goed gedrag (hoewel tegenwoordig elk kind natuurlijk cadeaus krijgt!).
-    </p>
-
-    <h2 class="text-3xl font-bold mt-8 mb-4">Pakjesavond: het hoogtepunt</h2>
-    <p class="leading-relaxed mb-4">
-      Op 5 december - pakjesavond - komt alles samen. Families komen samen om cadeaus uit te wisselen, gedichten voor te lezen en te genieten van Sinterklaas-lekkers.
-    </p>
-
-    <h3 class="text-2xl font-bold mt-6 mb-3">Typische rituelen op pakjesavond:</h3>
     <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
-      <li><strong>De zak:</strong> Alle cadeaus worden verzameld in een grote zak of mand</li>
-      <li><strong>Lootjes trekken:</strong> Vaak wordt geloot wie voor wie een cadeau koopt, vooral in grotere families</li>
-      <li><strong>Surprises bewonderen:</strong> Voor het uitpakken worden de creativiteit en het vakmanschap van de surprises bewonderd</li>
-      <li><strong>Gedichten voorlezen:</strong> Elk gedicht wordt hardop voorgelezen, vaak met veel gelach</li>
-      <li><strong>Gezellig eten:</strong> Pepernoten, chocoladeletters, marsepein en andere Sinterklaas-lekkernijen</li>
+      <li><strong>Te hoge verwachtingen</strong>: Probeer niet alles tot in de puntjes te regisseren. Een rommelige pakjesavond met gelach is vaak gezelliger dan een strak draaiboek.</li>
+      <li><strong>Onduidelijk budget</strong>: Spreek bij het lootjes trekken vooraf een vast bedrag af voor de cadeaus en het knutselmateriaal.</li>
+      <li><strong>Gedichtenstress op het laatste moment</strong>: Begin ruim op tijd met het bedenken van rijmwoorden en onderwerpen, zodat je op 5 december niet meer hoeft te haasten.</li>
+      <li><strong>Te veel cadeaus tegelijk</strong>: Voor jonge kinderen kan een enorme stapel pakjes overweldigend zijn. Een paar goedgekozen cadeaus zorgen voor meer rust en plezier.</li>
     </ul>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Sinterklaaslekkernijen</h2>
+    <h2 class="text-3xl font-bold mt-8 mb-4">Hoe leg je de sinterklaas tradities uit aan nieuwkomers?</h2>
     <p class="leading-relaxed mb-4">
-      Geen Sinterklaasfeest zonder de typische lekkernijen die bij deze tijd horen:
+      Voor vrienden, collega's of internationale familieleden kan het sinterklaasfeest even wennen zijn. De combinatie van schoenen zetten, knutselwerken en persoonlijke rijmen komt in weinig andere culturen voor.
     </p>
-
-    <div class="grid md:grid-cols-2 gap-4 my-6">
-      <div class="bg-[#fff3c9] p-4 rounded-lg border border-[#F4CD60]/50">
-        <h4 class="font-bold text-red-900 mb-2 font-display">Pepernoten</h4>
-        <p class="text-gray-800 text-sm">Kleine, ronde koekjes met speculaaskruiden. Niet te verwarren met kruidnoten!</p>
-      </div>
-      <div class="bg-[#fff3c9] p-4 rounded-lg border border-[#F4CD60]/50">
-        <h4 class="font-bold text-red-900 mb-2 font-display">Kruidnoten</h4>
-        <p class="text-gray-800 text-sm">De ronde, knapperige koekjes die vaak pepernoten worden genoemd.</p>
-      </div>
-      <div class="bg-[#fff3c9] p-4 rounded-lg border border-[#F4CD60]/50">
-        <h4 class="font-bold text-red-900 mb-2 font-display">Chocoladeletters</h4>
-        <p class="text-gray-800 text-sm">Chocolade in de vorm van de eerste letter van je naam.</p>
-      </div>
-      <div class="bg-[#fff3c9] p-4 rounded-lg border border-[#F4CD60]/50">
-        <h4 class="font-bold text-red-900 mb-2 font-display">Marsepein</h4>
-        <p class="text-gray-800 text-sm">Figuren van amandelspijs, vaak in de vorm van fruit of dieren.</p>
-      </div>
-      <div class="bg-[#fff3c9] p-4 rounded-lg border border-[#F4CD60]/50">
-        <h4 class="font-bold text-red-900 mb-2 font-display">Taai-taai</h4>
-        <p class="text-gray-800 text-sm">Stevige koek met honing en anijs, vaak in de vorm van een pop.</p>
-      </div>
-      <div class="bg-[#fff3c9] p-4 rounded-lg border border-[#F4CD60]/50">
-        <h4 class="font-bold text-red-900 mb-2 font-display">Speculaas</h4>
-        <p class="text-gray-800 text-sm">Krokante koekjes met kruiden, vaak met figuren erin gestempeld.</p>
-      </div>
-    </div>
-
-    <h2 class="text-3xl font-bold mt-8 mb-4">Moderne aanpassingen</h2>
     <p class="leading-relaxed mb-4">
-      De Sinterklaas traditie evolueert met de tijd. Enkele moderne ontwikkelingen:
+      Je legt het feest het beste uit door het te omschrijven als een gezellige traditie vol humor en persoonlijke aandacht. Benadruk dat het niet draait om dure cadeaus, maar om de tijd en moeite die je in elkaar steekt.
     </p>
-
     <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
-      <li><strong>Duurzaamheid:</strong> Meer aandacht voor milieuvriendelijke surprises en verpakkingen</li>
-      <li><strong>Inclusiviteit:</strong> Aanpassingen in de traditionele representatie om meer inclusief te zijn</li>
-      <li><strong>Hulp van internet:</strong> websites (zoals SintGPT!) die helpen met lootjes trekken en gedichten schrijven</li>
-      <li><strong>Kleinere vieringen:</strong> Aanpassing aan moderne gezinsstructuren en drukke agenda's</li>
-      <li><strong>Internationale invloeden:</strong> Nederlandse expats die de traditie wereldwijd verspreiden</li>
+      <li>Leg uit dat gedichten bedoeld zijn om elkaar op een vriendelijke en grappige manier te plagen.</li>
+      <li>Vertel dat een surprise draait om de creatieve verpakking en de persoonlijke knipoog.</li>
+      <li>Laat gasten verschillende soorten traditioneel snoepgoed proeven, zoals kruidnoten, marsepein en taai-taai.</li>
+      <li>Houd de spelregels en cadeaubedragen eenvoudig wanneer er mensen meedoen die het feest nog niet kennen.</li>
     </ul>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Sinterklaas voor internationals</h2>
+    <h2 class="text-3xl font-bold mt-8 mb-4">Nieuwe manieren om het feest te vieren</h2>
     <p class="leading-relaxed mb-4">
-      Voor mensen die niet in Nederland of België zijn opgegroeid, kan Sinterklaas een bijzondere ervaring zijn. De combinatie van gedichten, surprises en de hele ceremonie rondom het uitpakken is uniek en zorgt voor een warme, persoonlijke sfeer die verschilt van andere feestdagen.
+      De sinterklaastradities bewegen voortdurend mee met de tijd. Veel vriendengroepen en collega's spelen tegenwoordig bijvoorbeeld het sinterklaas dobbelspel, waarbij cadeaus door middel van opdrachten en dobbelstenen van eigenaar wisselen.
     </p>
-
-    <div class="bg-red-50 border-l-4 border-red-600 p-6 my-6 rounded-r-lg">
-      <h3 class="text-xl font-bold text-red-900 mb-2 font-display">Tips voor beginners:</h3>
-      <ul class="text-red-800 space-y-2 list-disc pl-4 marker:text-red-600">
-        <li>Begin simpel met je gedicht - het hoeft niet perfect te rijmen</li>
-        <li>Een surprise hoeft niet ingewikkeld te zijn - creativiteit telt meer dan perfectie</li>
-        <li>Vraag om uitleg en stel vragen - Nederlanders delen hun traditie graag!</li>
-        <li>Proef alle lekkernijen - ze zijn onderdeel van de ervaring</li>
-        <li>Geniet van het persoonlijke aspect - dat maakt Sinterklaas zo speciaal</li>
-      </ul>
-    </div>
-
-    <h2 class="text-3xl font-bold mt-8 mb-4">Geen tijd voor een gedicht?</h2>
     <p class="leading-relaxed mb-4">
-      Het schrijven van een goed sinterklaasgedicht hoort bij de traditie, maar niet iedereen heeft de tijd of inspiratie. Gelukkig schrijft <strong>SintGPT</strong> in 30 seconden een persoonlijk gedicht dat past bij de Nederlandse traditie.
+      Ook de praktische voorbereiding verloopt steeds vaker digitaal. Lootjes trekken gebeurt eenvoudig via de smartphone, zodat niemand meer papieren briefjes hoeft te knippen. Wie weinig tijd heeft om zelf te dichten, kan met SintGPT binnen dertig seconden een persoonlijk sinterklaasgedicht laten schrijven. Zo blijft deze mooie traditie behouden, ook in een drukke agenda.
     </p>
 
     <div class="bg-red-50 border-2 border-red-600 rounded-xl p-8 my-8 text-center shadow-lg">
-      <h3 class="text-2xl font-bold text-red-900 mb-4 font-display">Vier Sinterklaas met een persoonlijk gedicht</h3>
-      <p class="text-red-800 mb-6 font-medium">Maak je eerste sinterklaasgedicht gratis met SintGPT en ervaar de traditie!</p>
+      <h3 class="text-2xl font-bold text-red-900 mb-4 font-display">Hulp nodig bij je sinterklaasgedicht?</h3>
+      <p class="text-red-800 mb-6 font-medium">
+        Laat SintGPT binnen dertig seconden een persoonlijk gedicht schrijven voor pakjesavond. Je eerste gedicht is gratis.
+      </p>
       <NuxtLink
         to="/"
         data-cta="blog:sinterklaas-tradities"
         class="inline-block px-8 py-3 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-transform transform hover:scale-105 text-lg border border-[#F4CD60]"
       >
-        Schrijf gratis een persoonlijk sinterklaasgedicht →
+        Schrijf een sinterklaasgedicht →
       </NuxtLink>
     </div>
-
-    <h2 class="text-3xl font-bold mt-8 mb-4">Conclusie</h2>
-    <p class="leading-relaxed mb-4">
-      Het Sinterklaasfeest is een rijke traditie die draait om creativiteit, persoonlijke aandacht en gezelligheid. Of je nu geboren en getogen bent met Sinterklaas of de traditie net leert kennen, de combinatie van gedichten, surprises en samen zijn maakt het tot een bijzondere tijd van het jaar.
-    </p>
-
-    <p class="leading-relaxed mb-4">
-      Het gedicht speelt hierin een centrale rol: het is het moment waarop de aandacht volledig naar de ontvanger gaat, waarbij humor en waardering samenkomen. Deze unieke traditie maakt het Nederlandse Sinterklaasfeest tot een van de meest persoonlijke en hartelijke feesten die er zijn.
-    </p>
-
-    <p class="text-red-900 leading-relaxed font-bold text-xl mt-8">
-      Fijne Sinterklaas!
-    </p>
   </BlogPost>
 </template>

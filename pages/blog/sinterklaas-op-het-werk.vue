@@ -1,134 +1,131 @@
 <template>
   <BlogPost
     slug="sinterklaas-op-het-werk"
-    lead="Een sinterklaasviering op het werk brengt collega's dichter bij elkaar. Maar collega's zijn geen familie. Met goede afspraken en een gedicht dat plaagt zonder te prikken, wordt het een feest waar iedereen graag aan meedoet."
-    seo-title="Sinterklaas op het werk: tips voor collega's | SintGPT"
-    seo-description="Sinterklaas vieren met collega's: vrijwillig meedoen, lootjes trekken, budget, een inclusieve toon en gedichten over collega's die leuk blijven."
+    lead="Sinterklaas vieren op het werk brengt ontspanning en versterkt het teamgevoel. Het schrijven van een passend sinterklaasgedicht voor een collega vraagt wel om een iets andere toon dan thuis bij familie. Met duidelijke werkafspraken en veilige onderwerpen blijft de viering voor iedereen leuk en respectvol."
+    seo-title="Sinterklaasgedicht collega: tips voor het werk | SintGPT"
+    seo-description="Leer hoe je een passend sinterklaasgedicht voor een collega schrijft. Bekijk praktische voorbeelden, geschikte onderwerpen en tips voor Sinterklaas op kantoor."
     og-image="blog-sinterklaas-op-het-werk"
   >
-    <h2 class="text-3xl font-bold mt-8 mb-4">Waarom vieren op het werk?</h2>
+    <h2 class="text-3xl font-bold mt-8 mb-4">Sinterklaasgedicht voor een collega: waar let je op?</h2>
     <p class="leading-relaxed mb-4">
-      Een sinterklaasviering is een van de weinige momenten waarop je collega's op een andere manier leert kennen. Iemand die in vergaderingen stil is, blijkt een geweldige surprise te maken. De collega van de andere afdeling heeft opeens een gedicht over jou geschreven. Dat schept een band die de rest van het jaar blijft.
+      Een sinterklaasviering op de werkvloer brengt een ontspannen sfeer in het team. Collega's die elkaar vooral kennen van formele overleggen, zien opeens een creatieve en speelse kant van elkaar. Toch vraagt een werkomgeving om andere grenzen dan een huiskamer vol familieleden. Een grap die thuis voor veel gelach zorgt, kan op kantoor verkeerd vallen of ongemakkelijk voelen. De volgende ochtend zit je immers weer samen aan de vergadertafel.
     </p>
     <p class="leading-relaxed mb-4">
-      Op het werk gelden wel andere regels dan thuis. Niet iedereen viert Sinterklaas, niet iedereen kent de traditie, en wat in de familie een grap is, kan op kantoor verkeerd vallen.
-    </p>
-
-    <h2 class="text-3xl font-bold mt-8 mb-4">Meedoen is vrijwillig</h2>
-    <p class="leading-relaxed mb-4">
-      Maak het een uitnodiging, geen verplichting. Sommige collega's vieren Sinterklaas niet, hebben er geen tijd voor of vinden het spannend om een gedicht voor te lezen. Vraag wie er mee wil doen, en laat het daarbij.
+      Vrijwilligheid vormt de basis van een geslaagde viering. Niet iedereen is opgegroeid met Sinterklaas, heeft tijd om uitgebreid te dichten of voelt zich op zijn gemak bij spreken voor een groep. Zorg er daarom voor dat meedoen altijd een vrije keuze is zonder sociale druk.
     </p>
     <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
-      <li><strong>Vraag het persoonlijk of via een lijst</strong>, niet in een groepsgesprek waar nee zeggen ongemakkelijk is.</li>
-      <li><strong>Leg de traditie uit</strong> voor collega's die hem niet kennen: lootjes, gedicht, surprise en het voorlezen.</li>
-      <li><strong>Maak niet-meedoen makkelijk.</strong> Wie niet meedoet, is natuurlijk wel welkom bij de borrel of de lunch.</li>
+      <li>Vraag vooraf via een intekenlijst of bericht wie wil meedoen, zodat niemand zich verplicht voelt.</li>
+      <li>Leg de traditie kort uit aan collega's die het feest niet kennen, inclusief het lootjes trekken en het voorlezen.</li>
+      <li>Nodig collega's die liever niet dichten wel gewoon uit voor de koffie, traktatie of gezamenlijke lunch.</li>
     </ul>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Lootjes trekken met collega's</h2>
+    <h2 class="text-3xl font-bold mt-8 mb-4">Lootjes trekken op het werk</h2>
     <p class="leading-relaxed mb-4">
-      Met een groep collega's is lootjes trekken bijna altijd de beste vorm. Iedereen koopt één cadeau en schrijft één gedicht. Een paar aandachtspunten:
+      Voor een team is lootjes trekken de meest overzichtelijke manier om pakjesavond te vieren. Ieder teamlid koopt één cadeau en schrijft één gedicht voor degene die op het lootje staat. Zo blijft de werkdruk beperkt en krijgt iedereen evenveel aandacht.
     </p>
+    <p class="leading-relaxed mb-4">
+      Lootjes trekken kan eenvoudig digitaal zonder papieren briefjes die kwijtraken. Via <NuxtLink to="/lootjes" class="text-red-700 underline underline-offset-2 hover:text-red-900">lootjes trekken</NuxtLink> voer je 3 tot 50 namen in op één telefoon. Het toestel gaat rond in de pauze, iedereen tikt op de eigen naam en ziet direct wie er getrokken is. Niemand trekt zichzelf, en bij drie of meer deelnemers trekken twee mensen elkaar nooit over en weer. Er zijn geen e-mailadressen of accounts nodig, waardoor de privacy van collega's gewaarborgd blijft. Meer praktische richtlijnen lees je in het artikel met <NuxtLink to="/blog/lootjes-trekken-tips" class="text-red-700 underline underline-offset-2 hover:text-red-900">tips voor lootjes trekken</NuxtLink>.
+    </p>
+    <div class="bg-[#fff3c9] p-6 rounded-lg my-6 border border-[#F4CD60]">
+      <h3 class="text-xl font-bold text-red-900 mb-3 font-display">Budget en cadeaurichtlijnen</h3>
+      <p class="text-red-800">Spreek vooraf een vast maximumbedrag af, bijvoorbeeld 5 tot 10 euro. Dat houdt meedoen toegankelijk voor iedereen, van stagiair tot leidinggevende. Geef ook meteen duidelijk aan of een surprise verplicht is of dat een gedicht met cadeau volstaat.</p>
+    </div>
+
+    <h2 class="text-3xl font-bold mt-8 mb-4">Geschikte onderwerpen voor het sinterklaasgedicht</h2>
+    <p class="leading-relaxed mb-4">
+      Het gedicht vormt het hart van de viering. De kunst is om een balans te vinden tussen een milde plaagstoot en collegiale waardering. Kies onderwerpen die herkenbaar zijn voor de hele afdeling en waar de collega zelf ook hartelijk om kan lachen.
+    </p>
+    <h3 class="text-2xl font-bold mt-6 mb-3">Veilige en herkenbare kantoorthema's</h3>
     <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
-      <li><strong>Trek als het team bij elkaar is</strong>, bijvoorbeeld na een overleg. Op onze gratis <NuxtLink to="/lootjes" class="text-red-700 underline underline-offset-4">lootjespagina</NuxtLink> gaat één telefoon rond, en tikt iedereen op de eigen naam. Niemand trekt zichzelf, en de namen blijven op die telefoon.</li>
-      <li><strong>Werkt het team op afstand?</strong> Laat dan iemand trekken die zelf niet meedoet, bijvoorbeeld een collega van een ander team. Die stuurt ieder lootje privé door.</li>
-      <li><strong>Groot team?</strong> Trek per team of per afdeling, zodat je iemand trekt die je kent. Een gedicht over een onbekende is lastig te schrijven.</li>
+      <li>Vaste gewoontes rondom koffie, thee of een opvallende eigen beker.</li>
+      <li>Kleine kantoorkwaaltjes, zoals steevast zoeken naar een rustige vergaderruimte of een werkende kabel.</li>
+      <li>De bureauplant die dankzij trouwe verzorging al jaren dapper overleeft.</li>
+      <li>Herkenbare hobby's, sportactiviteiten of verhalen waar de collega in de lunchpauze graag over vertelt.</li>
+      <li>Typische uitspraken tijdens online vergaderingen, zoals praten terwijl de microfoon nog uitstaat.</li>
     </ul>
-    <p class="leading-relaxed mb-4">
-      Meer tips over eerlijk trekken lees je in <NuxtLink to="/blog/lootjes-trekken-tips" class="text-red-700 underline underline-offset-4">Lootjes trekken: zo organiseer je het eerlijk</NuxtLink>.
-    </p>
+    <h3 class="text-2xl font-bold mt-6 mb-3">Onderwerpen die je beter vermijdt</h3>
+    <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
+      <li>Werkprestaties, gemaakte fouten, gemiste deadlines of beoordelingsgesprekken.</li>
+      <li>Salaris, arbeidsvoorwaarden en persoonlijke geldzaken.</li>
+      <li>Relaties, het gezinsleven en de medische situatie van de collega.</li>
+      <li>Uiterlijk, kledingkeuzes, gewicht of fysieke eigenschappen.</li>
+      <li>Kantoorroddels en vertrouwelijke zaken die niet voor de hele groep bestemd zijn.</li>
+    </ul>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Het budget: laag en voor iedereen gelijk</h2>
+    <h2 class="text-3xl font-bold mt-8 mb-4">Opbouw en rijmschema van het sinterklaasgedicht</h2>
     <p class="leading-relaxed mb-4">
-      Kies een bescheiden bedrag, zodat het voor iedereen in het team haalbaar is, van stagiair tot directeur. Een vast maximum voorkomt dat de ene collega veel meer uitgeeft dan de andere. Spreek ook af of een surprise verplicht is. Niet iedereen heeft de tijd om naast het werk te knutselen.
+      Een goed sinterklaasgedicht voor een collega heeft een duidelijke opbouw. Begin met een vriendelijke begroeting van de Sint waarin je de werkplek of de rol van de collega noemt. Werk in het midden toe naar een herkenbare anekdote of opvallende werkgewoonte. Sluit af met een compliment of een warme wens, gevolgd door een hint naar het cadeau.
+    </p>
+    <p class="leading-relaxed mb-4">
+      Houd het metrum strak zodat het gedicht vlot voorleest. Het rijmschema AABB (waarbij steeds twee opeenvolgende regels op elkaar rijmen) is het makkelijkst te schrijven en klinkt prettig voor een groep. Zorg altijd voor echt volrijm vanaf de laatste beklemtoonde klinker. Halfrijm zoals 'tas' en 'bad' klinkt houterig wanneer je het hardop uitspreekt.
+    </p>
+    <div class="bg-[#fff3c9] p-6 rounded-lg my-6 border border-[#F4CD60]">
+      <h3 class="text-xl font-bold text-red-900 mb-3 font-display">Lees het gedicht hardop voor</h3>
+      <p class="text-red-800">Lees je regels hardop voor tijdens het schrijven. Struikel je over een zin of klopt het ritme niet? Pas dan de woordvolgorde aan of vervang lange woorden door kortere synoniemen.</p>
+    </div>
+
+    <h2 class="text-3xl font-bold mt-8 mb-4">Voorbeelden van een sinterklaasgedicht voor een collega</h2>
+    <p class="leading-relaxed mb-4">
+      Hieronder vind je twee voorbeeldgedichten voor fictieve collega's. Ze laten zien hoe je alledaagse werksituaties op een sympathieke manier verwerkt in rijm.
     </p>
     <div class="bg-red-50 border-l-4 border-red-600 p-6 my-6 rounded-r-lg">
-      <h3 class="text-xl font-bold text-red-900 mb-2 font-display">Tip voor de organisator</h3>
-      <p class="text-red-800">
-        Zet alle afspraken in één bericht: de datum van de viering, het budget, of er een surprise bij hoort, en tot wanneer je je kunt aanmelden. Zo hoeft niemand te raden.
+      <p class="font-bold text-red-900 mb-2">Gedicht voor de spraakzame collega</p>
+      <p class="font-text text-lg text-red-900 leading-relaxed mb-3 last:mb-0">
+        Bij elk teamoverleg roept collega Jan heel luid,<br>
+        dat hij binnen twee tellen zijn praatje besluit.<br>
+        Toch duurt elk agendapunt minstens een uur,<br>
+        en kijkt iedereen naar de klok op de muur.
       </p>
-    </div>
-
-    <h2 class="text-3xl font-bold mt-8 mb-4">Een gedicht over een collega</h2>
-    <p class="leading-relaxed mb-4">
-      Het gedicht is het hoogtepunt, en ook het lastigste deel. Je wilt plagen, maar je moet maandag weer samenwerken. Houd het bij het werk en bij dingen die iedereen ziet.
-    </p>
-
-    <div class="grid md:grid-cols-2 gap-4 my-6">
-      <div class="bg-[#fff3c9] p-5 rounded-lg border border-[#F4CD60]">
-        <h3 class="font-bold text-red-900 mb-3 font-display text-xl">Goede onderwerpen</h3>
-        <ul class="text-gray-800 space-y-1 list-disc pl-5 marker:text-red-600">
-          <li>De vaste plek bij het raam</li>
-          <li>Het aantal koppen koffie per dag</li>
-          <li>"Je staat op mute!"</li>
-          <li>De bureauplant die al jaren overleeft</li>
-          <li>De beroemde mail van vrijdagmiddag</li>
-          <li>Een hobby waar de collega vaak over vertelt</li>
-        </ul>
-      </div>
-      <div class="bg-red-50 p-5 rounded-lg border border-red-300">
-        <h3 class="font-bold text-red-900 mb-3 font-display text-xl">Laat liggen</h3>
-        <ul class="text-gray-800 space-y-1 list-disc pl-5 marker:text-red-600">
-          <li>Prestaties, beoordelingen en fouten in het werk</li>
-          <li>Salaris en promoties</li>
-          <li>Privéleven, relaties en gezondheid</li>
-          <li>Uiterlijk en kleding</li>
-          <li>Roddels en dingen die je in vertrouwen hoorde</li>
-        </ul>
-      </div>
-    </div>
-
-    <p class="leading-relaxed mb-4">
-      Een voorbeeld van een plaagstoot die op elk kantoor goed valt:
-    </p>
-    <div class="bg-red-50 border-l-4 border-red-600 p-6 my-6 rounded-r-lg">
-      <p class="font-text text-lg text-red-900 leading-relaxed">
-        Bij elk overleg zegt Linda: "Ik hou het heel kort",<br>
-        maar na een uur weet nog niemand wat het wordt.<br>
-        Daarom geeft de Sint haar een zandloper erbij:<br>
-        tien minuten praten, en dan is iedereen vrij.
+      <p class="font-text text-lg text-red-900 leading-relaxed mb-3 last:mb-0">
+        De Sint zag het aan en bedacht een cadeau:<br>
+        een kookwekker voor op je eigen bureau!
       </p>
     </div>
     <p class="leading-relaxed mb-4">
-      Het plaagt een herkenbare werkgewoonte, en niemand wordt er slechter van. Wil je weten hoe ver je kunt gaan? Lees dan <NuxtLink to="/blog/roast-sinterklaasgedicht-zonder-te-kwetsen" class="text-red-700 underline underline-offset-4">Een roast-gedicht schrijven zonder iemand te kwetsen</NuxtLink>.
+      Het tweede voorbeeld speelt in op een situatie die veel teams met thuiswerkers zullen herkennen.
+    </p>
+    <div class="bg-red-50 border-l-4 border-red-600 p-6 my-6 rounded-r-lg">
+      <p class="font-bold text-red-900 mb-2">Gedicht voor de thuiswerker</p>
+      <p class="font-text text-lg text-red-900 leading-relaxed mb-3 last:mb-0">
+        Bij ieder overleg klinkt steeds weer de vraag,<br>
+        waarom je microfoon niet werkte vandaag.<br>
+        Je praat honderduit en vertelt je verhaal,<br>
+        maar niemand hoort iets in de digitale zaal.
+      </p>
+      <p class="font-text text-lg text-red-900 leading-relaxed mb-3 last:mb-0">
+        De Sint hoopt dat dit kleine pakje bevalt,<br>
+        zodat jouw stem straks weer helder door de speakers knalt!
+      </p>
+    </div>
+    <p class="leading-relaxed mb-4">
+      Wil je een collega met een knipoog wat scherper aanspreken? Let erop dat de ondertoon altijd vriendelijk blijft en dat het gedicht hartelijk eindigt. In het artikel over een <NuxtLink to="/blog/roast-sinterklaasgedicht-zonder-te-kwetsen" class="text-red-700 underline underline-offset-2 hover:text-red-900">roast sinterklaasgedicht schrijven</NuxtLink> lees je hoe je die balans bewaakt.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Een inclusieve toon</h2>
+    <h2 class="text-3xl font-bold mt-8 mb-4">Draaiboek voor de sinterklaasviering op kantoor</h2>
     <p class="leading-relaxed mb-4">
-      Een team is vaak gemengder dan een familie. Een paar dingen helpen om iedereen erbij te betrekken:
+      Een goede planning zorgt voor rust en duidelijkheid op de werkvloer. Zorg dat de viering aansluit bij de samenstelling van je team. Werken er internationale collega's op de afdeling? Bied dan de mogelijkheid om een <NuxtLink to="/blog/sinterklaasgedicht-in-het-engels" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht in het Engels</NuxtLink> te schrijven.
     </p>
-    <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
-      <li><strong>Een gedicht in het Engels mag.</strong> Collega's die geen Nederlands spreken, kunnen in het Engels schrijven, of een Engels gedicht krijgen.</li>
-      <li><strong>Voorlezen is geen verplichting.</strong> Wie het spannend vindt, mag het gedicht laten voorlezen door een ander.</li>
-      <li><strong>Houd het eten en drinken voor iedereen.</strong> Zorg naast pepernoten en chocoladeletters ook voor iets zonder alcohol en iets voor wie bepaalde dingen niet eet.</li>
-      <li><strong>Leg grappen niet uit aan één persoon.</strong> Een grap die alleen een paar mensen snappen, sluit de rest buiten.</li>
-    </ul>
-
-    <h2 class="text-3xl font-bold mt-8 mb-4">De viering zelf</h2>
-    <p class="leading-relaxed mb-4">
-      Een lunch of een borrel in de laatste week voor 5 december werkt meestal het best. Veel mensen vieren pakjesavond zelf thuis. Plan de viering dus niet op de avond van 5 december.
-    </p>
-    <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
-      <li><strong>Reken op een paar minuten per persoon</strong> voor het gedicht en het uitpakken. Met twintig collega's is dat al gauw anderhalf uur.</li>
-      <li><strong>Hybride team?</strong> Laat collega's thuis hun gedicht voorlezen via een videogesprek, en stuur hun cadeau op of bewaar het tot ze weer op kantoor zijn.</li>
-      <li><strong>Maak er een spel van.</strong> Laat de ontvanger raden wie het gedicht schreef.</li>
-    </ul>
+    <ol class="list-decimal pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
+      <li>Prik minimaal drie weken van tevoren een datum, bijvoorbeeld tijdens een gezamenlijke lunch of aan het einde van de middag.</li>
+      <li>Trek de lootjes tijdig, zodat iedereen minstens twee weken de tijd heeft om een cadeau en rijm voor te bereiden.</li>
+      <li>Plan voldoende tijd in de agenda en reken ongeveer drie tot vier minuten per persoon voor het voorlezen en uitpakken.</li>
+      <li>Bied collega's die opzien tegen voorlezen de optie om hun gedicht door iemand anders te laten voordragen.</li>
+      <li>Verbind thuiswerkende collega's via een videoverbinding, zodat zij live kunnen meegenieten en hun cadeau kunnen openmaken.</li>
+      <li>Sluit de bijeenkomst gezamenlijk af en laat de ontvanger raden welke collega het gedicht heeft gemaakt.</li>
+    </ol>
 
     <div class="bg-red-50 border-2 border-red-600 rounded-xl p-8 my-8 text-center shadow-lg">
-      <h3 class="text-2xl font-bold text-red-900 mb-4 font-display">Een collega getrokken?</h3>
+      <h3 class="text-2xl font-bold text-red-900 mb-4 font-display">Direct een sinterklaasgedicht voor je collega schrijven</h3>
       <p class="text-red-800 mb-6 font-medium">
-        Vul een paar werkgewoontes in, kies de toon, en binnen 30 seconden heb je een gedicht dat het hele team laat lachen. In het Nederlands of het Engels. Je eerste gedicht is gratis.
+        Vul de naam, het cadeau en een paar leuke werkgewoontes in. Je eerste persoonlijke sinterklaasgedicht op SintGPT is gratis.
       </p>
       <NuxtLink
         to="/"
         data-cta="blog:sinterklaas-op-het-werk"
         class="inline-block px-8 py-3 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-transform transform hover:scale-105 text-lg border border-[#F4CD60]"
       >
-        Schrijf gratis een sinterklaasgedicht voor je collega →
+        Schrijf een sinterklaasgedicht voor je collega →
       </NuxtLink>
     </div>
-
-    <p class="text-red-900 leading-relaxed font-bold text-xl mt-8">
-      Een fijne viering met je collega's!
-    </p>
   </BlogPost>
 </template>

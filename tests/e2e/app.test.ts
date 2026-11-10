@@ -780,7 +780,7 @@ describe('SEO', () => {
   it('shows the update date when a post changed after it came out', async () => {
     const html = await (await fetch('/blog/hoe-schrijf-je-het-perfecte-sinterklaasgedicht')).text();
     expect(html).toContain('bijgewerkt');
-    expect(html).toContain('datetime="2026-11-08"');
+    expect(html).toContain('datetime="2026-11-10"');
   });
 
   it('lists every post on /blog with its title as the link text', async () => {
@@ -788,7 +788,7 @@ describe('SEO', () => {
     expect(html.match(/<h1[\s>]/g)).toHaveLength(1);
     expect(html).toContain('"@type":"Blog"');
     expect(html).not.toContain('<img');
-    expect(html).toMatch(/<a[^>]*href="\/blog\/lootjes-trekken-tips"[^>]*>Lootjes trekken: zo organiseer je het eerlijk en zonder gedoe<\/a>/);
+    expect(html).toMatch(/<a[^>]*href="\/blog\/lootjes-trekken-tips"[^>]*>Lootjes trekken voor Sinterklaas: regels, tips en valkuilen<\/a>/);
   });
 
   it('links the home page to blog posts', async () => {
@@ -1296,7 +1296,7 @@ describe('lootjes trekken', () => {
     expect(res.status).toBe(200);
     const html = await res.text();
     expect(html).toContain('<link rel="canonical" href="https://sintgpt.com/lootjes"');
-    expect(html).toMatch(/<h1[^>]*>\s*Lootjes trekken\s*<\/h1>/);
+    expect(html).toMatch(/<h1[^>]*>\s*Lootjes trekken voor Sinterklaas\s*<\/h1>/);
   });
 
   it('asks for at least three names', async () => {

@@ -22,7 +22,7 @@ export default {
     hint: 'Op het laatste moment? Binnen 30 seconden heb je een gedicht.',
   },
   form: {
-    title: 'Schrijf je gedicht in drie stappen',
+    title: 'Schrijf je sinterklaasgedicht in drie stappen',
     steps: {
       who: 'Voor wie is het?',
       special: 'Wat maakt hen bijzonder?',
@@ -212,8 +212,8 @@ export default {
     retry: 'Probeer opnieuw',
   },
   seo: {
-    title: "Sinterklaasgedicht maken met AI | SintGPT",
-    description: "Een persoonlijk sinterklaasgedicht dat echt rijmt, in 30 seconden. Je eerste gedicht is gratis. SintGPT rijmt wél in het Nederlands, anders dan ChatGPT.",
+    title: "Sinterklaasgedicht maken met AI: gratis generator | SintGPT",
+    description: "Maak in 30 seconden een persoonlijk sinterklaasgedicht dat echt rijmt: grappig, klassiek of een roast, in het Nederlands of Engels. Je eerste gedicht is gratis.",
     ogTitle: 'SintGPT: je sinterklaasgedicht in 30 seconden',
     ogDescription:
       'Persoonlijke sinterklaasgedichten die echt rijmen. Klaar in 30 seconden, en je eerste gedicht is gratis.',
@@ -221,7 +221,7 @@ export default {
       'SintGPT: ChatGPT kan niet rijmen, SintGPT wél',
   },
   tips: {
-    title: 'Tips voor je gedicht',
+    title: 'Tips voor je sinterklaasgedicht',
     all: 'Alle tips op het blog →',
   },
   faq: {
@@ -242,6 +242,16 @@ export default {
           'Welke stijlen sinterklaasgedichten zijn beschikbaar?',
         answer:
           "Je kiest uit 6 stijlen: Grappig (met humor en woordspelingen), Klassiek (traditioneel en sfeervol), Ironisch (met een knipoog en sarcasme), Ouderwets (in oude Nederlandse stijl), Pikant (met gewaagde knipogen) en Roast (neem je vrienden flink op de hak). Je kunt ook kiezen uit verschillende rijmschema's zoals AABB, ABBA of Limerick.",
+      },
+      {
+        question: 'Voor wie kan ik een sinterklaasgedicht maken?',
+        answer:
+          'Voor iedereen over wie je iets kunt vertellen: je opa of oma, je partner, een kind, een collega of de buren. Vul ook in wie het gedicht schrijft en voor welk publiek het is. Dan past SintGPT de toon daarop aan. Bij de voorbeelden zie je gedichten voor opa, een kind, een collega en de buurman.',
+      },
+      {
+        question: 'Kan ik een kort sinterklaasgedicht maken?',
+        answer:
+          'Ja. Je kiest zelf de lengte, van 8 tot 40 regels. Een gedicht van 8 regels lees je in een halve minuut voor. Handig als er veel pakjes zijn. Kies je een limerick, dan bestaat het gedicht uit coupletten van 5 regels.',
       },
       {
         question: 'Hoe persoonlijk worden de gedichten?',
@@ -401,15 +411,26 @@ export default {
     more: 'Bekijk alle voorbeelden',
     cta: 'Schrijf je eigen gedicht',
     pageTitle: 'Voorbeelden van sinterklaasgedichten',
-    seoTitle: 'Voorbeelden van sinterklaasgedichten | SintGPT',
-    description: 'Lees voorbeelden van sinterklaasgedichten in zes stijlen: grappig, klassiek, ironisch, ouderwets, pikant en roast.',
+    seoTitle: 'Voorbeelden van sinterklaasgedichten: grappig tot roast | SintGPT',
+    description: 'Acht voorbeelden van sinterklaasgedichten: grappig voor opa, klassiek voor een kind, ironisch voor een collega, een roast voor je broer en meer. Met de gegevens erbij.',
+    indexTitle: 'Kies een voorbeeld',
+    headings: {
+      'opa-kees': 'Grappig sinterklaasgedicht voor opa',
+      lotte: 'Klassiek sinterklaasgedicht voor een kind',
+      mark: 'Ironisch sinterklaasgedicht voor een collega',
+      'tante-els': 'Ouderwets sinterklaasgedicht voor je tante',
+      daan: 'Roast-gedicht voor je broer',
+      jeroen: 'Pikant sinterklaasgedicht voor je vriend',
+      'buurman-gerrit': 'Grappig sinterklaasgedicht voor de buurman',
+      emma: 'Sinterklaasgedicht in het Engels',
+    },
     pageIntro: 'SintGPT schreef deze gedichten met de gegevens die erbij staan. De mensen zijn verzonnen. Zo zie je wat elke stijl doet.',
     ctaText: 'Je eerste gedicht is gratis. Daarna schrijf je voor eenmalig €6,99 gedichten voor het hele gezin, of 3 gedichten voor €3,99.',
   },
   lootjes: {
-    seoTitle: 'Lootjes trekken voor Sinterklaas | SintGPT',
-    description: 'Trek gratis lootjes voor Sinterklaas. Vul de namen in, geef de telefoon door, en iedereen ziet alleen zijn eigen lootje.',
-    title: 'Lootjes trekken',
+    seoTitle: 'Lootjes trekken online: gratis en zonder e-mail | SintGPT',
+    description: 'Trek gratis lootjes voor Sinterklaas, zonder account of e-mailadressen. Niemand trekt zichzelf. Geef de telefoon door: iedereen ziet alleen zijn eigen lootje.',
+    title: 'Lootjes trekken voor Sinterklaas',
     intro: 'Vul de namen in en trek de lootjes. Geef dan de telefoon door: iedereen tikt op zijn eigen naam en ziet alleen zijn eigen lootje.',
     namesLabel: 'Namen, één per regel',
     namesHelp: 'Minstens 3 namen. Niemand trekt zichzelf.',

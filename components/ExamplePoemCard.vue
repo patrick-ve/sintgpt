@@ -2,7 +2,13 @@
 import type { ExamplePoem } from '~/utils/examplePoems';
 
 const props = withDefaults(
-  defineProps<{ example: ExamplePoem; headingLevel?: 'h2' | 'h3' | 'h4'; showDetails?: boolean }>(),
+  defineProps<{
+    example: ExamplePoem;
+    headingLevel?: 'h2' | 'h3' | 'h4';
+    showDetails?: boolean;
+    /** A descriptive heading (on /voorbeelden). The recipient then moves to the line above it. */
+    heading?: string;
+  }>(),
   { headingLevel: 'h3', showDetails: true },
 );
 
@@ -24,13 +30,13 @@ const lines = computed(() => props.example.poem.split('\n'));
 <template>
   <article class="example-letter" :lang="request.language === 'english' ? 'en' : 'nl'">
     <p class="text-[0.8125rem] font-bold tracking-[0.06em] uppercase text-[#8b1538]">
-      {{ t(`form.style.${styleKeys[request.style]}`) }}
+      {{ heading ? t('poem.title', { name: request.name }) : t(`form.style.${styleKeys[request.style]}`) }}
     </p>
     <component
       :is="headingLevel"
       class="font-display font-bold text-[1.75rem] leading-tight text-[#8b1538] break-words"
     >
-      {{ t('poem.title', { name: request.name }) }}
+      {{ heading ?? t('poem.title', { name: request.name }) }}
     </component>
 
     <p class="example-text"><span v-for="(line, index) in lines" :key="index" class="example-line">{{ line }}</span></p>
