@@ -10,6 +10,13 @@ Never paste an API key or webhook secret in a chat, a commit or this file.
 The live business is **`bus_Gg5xzOyhmXu3Tcx2bBzxQ`** (the owner confirmed it). It is the
 business from last season: it had live payments of €1,99 in December 2025.
 
+**Dodo accounts:**
+- `patrick@sintgpt.com` owns the live business `bus_Gg5xzOyhmXu3Tcx2bBzxQ` and shows last
+  season's payments. Use this address for Dodo support and for the MCP login.
+- `patrick@careerdeck.ai` is a Dodo account that was created by mistake. It has no
+  transaction history. It is probably the business `bus_0NrUOZUWrAz7AYEqANsEb` with the three
+  **test** products of 9 November (not verified). Do not use it for SintGPT.
+
 | Tier | Env variable | Live product ID | Price | Tax |
 |---|---|---|---|---|
 | 3 gedichten | `NUXT_DODO_PRODUCT_ID_DRIE` | `pdt_0NreeKYxYPEDUUK8Mo8MK` | €3,99 | saas |
@@ -29,6 +36,8 @@ not enabled for merchant"). The Dodo MCP login cannot create checkout sessions (
 Not known: which business the Worker's live key belongs to (`wrangler secret list` shows
 names only). The Cloudflare dashboard → Workers → sintgpt → Logs shows the full Dodo
 message on "Dodo refused the checkout".
+
+What was tried so far, and the support email: `docs/dodo-support.md`.
 
 ## Background (9 November 2026, test mode)
 

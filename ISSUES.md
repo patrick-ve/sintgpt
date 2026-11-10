@@ -9,8 +9,8 @@ findings worth keeping. Newest information first within each section.
   `docs/pricing-tiers.md`.
 - Never put API keys, webhook secrets or gift codes in this file.
 
-Last updated: 10 November 2026. Live version: `e0b74a0d-e416-4933-ade4-43dc1e53e2c8`
-(commit `4ada558`, on GitHub).
+Last updated: 10 November 2026. Live version: `03b783e6-9347-4d6f-929f-7690ce73ad1e`
+(commit `d0db20d`, on GitHub).
 
 ## Priorities
 
@@ -54,6 +54,10 @@ Last updated: 10 November 2026. Live version: `e0b74a0d-e416-4933-ade4-43dc1e53e
 - **Checked 10 November, 16:57:** a Gezin checkout on the live site still gave `dodo 403`.
   The live business is `bus_Gg5xzOyhmXu3Tcx2bBzxQ` (last season's, with live payments in
   December 2025); the live products for all three tiers now exist there (#3).
+- **Dodo account:** `patrick@sintgpt.com` owns the live business. A second account,
+  `patrick@careerdeck.ai`, was created by mistake and has no transactions; do not use it.
+- **Support:** urgent email drafted on 10 November, to send from patrick@sintgpt.com.
+  Everything tried so far, and the email: `docs/dodo-support.md`.
 - **Next step:** get live payments approved by Dodo. Then do #3.
 - **Plan B (suggested 10 November):** if Dodo has not approved by about 15 November,
   consider Mollie or Stripe Payment Links (1–2 days of work). Then you are the
@@ -99,15 +103,16 @@ Last updated: 10 November 2026. Live version: `e0b74a0d-e416-4933-ade4-43dc1e53e
 
 ### #4 Gift link for a test user
 
-- **Status:** in progress. Code live since 9 November; `NUXT_GIFT_CODES` is set.
-- **Next steps:**
-  1. Open `https://sintgpt.com/?cadeau=<code>` in a private window. Expect
-     "Je hebt Hele familie cadeau gekregen".
-  2. Send the link to the test user in a private message.
-  3. After the test (planned: about 24 hours), end the access:
-     `! npx wrangler secret delete NUXT_GIFT_CODES --name sintgpt`.
-- **Notes:** anyone with the link gets Hele familie, in any number of browsers,
-  with the 100-per-day cap. Gift users count as paid poems in analytics
+- **Status:** done. The owner deleted `NUXT_GIFT_CODES` on 10 November 2026, so the
+  test user's gift link no longer works. The same evening the owner set a new code for
+  their own use only (to write poems while Dodo payments are off, #1). Delete it when
+  it is no longer needed.
+- **For a new gift link:** `openssl rand -hex 16`, then
+  `printf %s <code> | npx wrangler secret put NUXT_GIFT_CODES --name sintgpt`, and
+  delete the secret again after the test.
+- **Notes:** an old code stays in the gift users' browser history, but it does nothing once removed. While a code
+  is set, anyone with the link gets Hele familie, in any number of browsers, with the
+  100-per-day cap. Gift users count as paid poems in analytics
   (event `Gift claimed`, tier `familie`). How it works: `docs/pricing-tiers.md`.
 
 ### #5 Legal checks
@@ -344,7 +349,7 @@ Last updated: 10 November 2026. Live version: `e0b74a0d-e416-4933-ade4-43dc1e53e
 
 ### #25 SEO audit
 
-- **Status:** live on 10 November 2026 (version `e0b74a0d`, commit `4ada558`). Checked live: http, www, `/BLOG` and `/blog/` give a 301; HSTS on HTML; 7-day cache on public files; 404 page, "Lees ook" and the lootjes FAQ are there. Lighthouse mobile after the deploy: `/blog` 96 (was 79), `/lootjes` 97, home 84–98 over three runs (noise from server response time through the company proxy), no iconify requests. Open for the owner: S1 (dashboard part), S13, S15 (author), S24, S25. Deferred: S9, S11.
+- **Status:** live on 10 November 2026 (version `e0b74a0d`, commit `4ada558`). Checked live: http, www, `/BLOG` and `/blog/` give a 301; HSTS on HTML; 7-day cache on public files; 404 page, "Lees ook" and the lootjes FAQ are there. Lighthouse mobile after the deploy: `/blog` 96 (was 79), `/lootjes` 97, home 84–98 over three runs (noise from server response time through the company proxy), no iconify requests. Open for the owner: S1 (dashboard part), S13, S15 (author), S24 (Search Console verified as a Domain property on 10 November 2026; sitemap, indexing requests and Bing still to do), S25. Deferred: S9, S11.
 - **Result:** nothing blocks Google from finding or indexing a page (no
   priority 1). Robots.txt, sitemap (14 URLs, no orphans), canonicals, titles,
   one H1 per page, no broken internal links, no near-duplicates (max 7 %
@@ -380,7 +385,7 @@ Last updated: 10 November 2026. Live version: `e0b74a0d-e416-4933-ade4-43dc1e53e
 | S21 | 5 | 0.25 | Title Case in Dutch titles; "…in 2026" post shows 17 november 2025 | Live: sentence case in titles and headings; the post shows "bijgewerkt 8 november 2026" |
 | S22 | 5 | 0.1 | Home H1: no space between the two spans in the HTML | Live |
 | S23 | 5 | 1 | `/voorbeelden`, `/lootjes`, legal pages share the home `og:image` | Live: own images for `/voorbeelden` and `/lootjes`; legal pages keep the home image on purpose |
-| S24 | – | – | Search Console: excluded pages and why (no access); add Bing Webmaster Tools. See #12 | Owner |
+| S24 | – | – | Search Console: Domain property verified 10 Nov 2026. To do: submit the sitemap, request indexing of /, /voorbeelden, /lootjes, /blog, check excluded pages after about a week, import into Bing Webmaster Tools. See #12 | Owner |
 | S25 | – | – | PageSpeed Insights and field data from outside the company network (Cato proxy forces HTTP/1.1 locally) | Owner |
 
 ## Findings
