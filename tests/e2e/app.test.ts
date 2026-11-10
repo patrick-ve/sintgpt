@@ -1192,14 +1192,34 @@ describe('days until pakjesavond', () => {
 });
 
 describe('example poems', () => {
-  it('shows an example per style on the home page', async () => {
+  it('compares ChatGPT and SintGPT per style on the home page', async () => {
     const page = await createPage();
+    await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto(url('/'), { waitUntil: 'networkidle' });
     const section = page.locator('section[aria-labelledby="examples-title"]');
     await section.getByRole('heading', { name: 'Gedicht voor Opa Kees' }).waitFor();
+    // Wide screens show both poems; the ChatGPT poem answers the same request.
+    const chatgpt = section.getByRole('article', { name: 'Gedicht van ChatGPT' });
+    await chatgpt.getByText('Schrijf een grappig sinterklaasgedicht voor Opa Kees.').waitFor();
+    expect(await chatgpt.locator('.chatgpt-fault').count()).toBeGreaterThan(0);
     await section.getByRole('button', { name: /Roast/ }).click();
     await section.getByRole('heading', { name: 'Gedicht voor Daan', exact: true }).waitFor();
+    await chatgpt.getByText(/roast sinterklaasgedicht voor Daan/).waitFor();
     expect(await section.getByRole('button', { name: /Roast/ }).getAttribute('aria-pressed')).toBe('true');
+    await page.close();
+  }, 30_000);
+
+  it('shows one poem at a time on a phone', async () => {
+    const page = await createPage('/', { viewport: { width: 390, height: 844 } });
+    const section = page.locator('section[aria-labelledby="examples-title"]');
+    const chatgpt = section.getByRole('article', { name: 'Gedicht van ChatGPT' });
+    const sintgpt = section.getByRole('heading', { name: 'Gedicht voor Opa Kees' });
+    await chatgpt.waitFor();
+    expect(await sintgpt.isVisible()).toBe(false);
+    await section.getByRole('button', { name: 'Lees het gedicht van SintGPT' }).click();
+    await sintgpt.waitFor();
+    expect(await chatgpt.isVisible()).toBe(false);
+    expect(await section.getByRole('button', { name: 'SintGPT', exact: true }).getAttribute('aria-pressed')).toBe('true');
     await page.close();
   }, 30_000);
 

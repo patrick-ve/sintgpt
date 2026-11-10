@@ -312,6 +312,17 @@ Last updated: 10 November 2026. Live version: `f7e6c57b-7b7e-4658-89e0-15bf3e609
   - The H1 names ChatGPT ("Wil het rijmen met ChatGPT maar niet lukken?"), while
     the Persuasion rules in `CLAUDE.md` say visible text does not name AI. Decide
     which one holds.
+  - The home page now compares ChatGPT's poems with SintGPT's ("ChatGPT vs SintGPT",
+    `utils/chatgptPoems.ts`). Comparative advertising must be objective and
+    verifiable. Points to weigh:
+    - The poems came from the API (GPT-5.6 Luna, the free ChatGPT default),
+      not from the ChatGPT app, which adds its own instructions.
+    - Each one is the worst of five runs, chosen by hand.
+    - The page does not say where the poems come from. A short source note
+      (model, date, "niet bewerkt") or the same poems from the ChatGPT app
+      with screenshots kept would make the comparison checkable.
+    - It names a competitor, which the Persuasion rule about naming AI
+      also touches.
   - The legal checks in #5.
 
 ### #24 After the season

@@ -125,6 +125,8 @@ Notes:
 ### Example poems
 `utils/examplePoems.ts` holds poems that SintGPT wrote with `scripts/generate-example-poems.ts`, each next to the input it came from. The people are made up, and the page says so. They show on the home page (`components/ExamplePoems.vue`, one per style) and on `/voorbeelden` (all).
 
+On the home page the section is "ChatGPT vs SintGPT": per style, ChatGPT's poem for the same request next to SintGPT's (side by side from 1024 px, a ChatGPT/SintGPT switch below that). ChatGPT's poems are in `utils/chatgptPoems.ts`, one per example the home page shows, with the request that was sent and the lines the page underlines (`faults`). They came from GPT-5.6 Luna, the default model of free ChatGPT in Nov 2026, through the API with only the request; the site owner chose one of five versions per style. Do not edit them, and do not put the model name in a string there (a unit test checks). The page does not say where they came from or that they were chosen; see #23 in `ISSUES.md`. When an example poem changes, ask ChatGPT again with the new input.
+
 ### Lootjes trekken
 `/lootjes` draws names in the browser (`utils/lootjes.ts`, Sattolo's shuffle: one circle, nobody draws themselves). One phone goes round; each person taps their name to see their lootje. The draw stays in localStorage (`sintgpt-lootjes`) until "Nieuwe trekking". Nothing goes to the server. The blog post `/blog/lootjes-trekken-tips` describes this behaviour, so change both together.
 

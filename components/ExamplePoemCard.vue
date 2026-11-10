@@ -2,8 +2,8 @@
 import type { ExamplePoem } from '~/utils/examplePoems';
 
 const props = withDefaults(
-  defineProps<{ example: ExamplePoem; headingLevel?: 'h2' | 'h3' }>(),
-  { headingLevel: 'h3' },
+  defineProps<{ example: ExamplePoem; headingLevel?: 'h2' | 'h3' | 'h4'; showDetails?: boolean }>(),
+  { headingLevel: 'h3', showDetails: true },
 );
 
 const { t } = useI18n();
@@ -35,7 +35,7 @@ const lines = computed(() => props.example.poem.split('\n'));
 
     <p class="example-text"><span v-for="(line, index) in lines" :key="index" class="example-line">{{ line }}</span></p>
 
-    <dl class="example-details">
+    <dl v-if="showDetails" class="example-details">
       <div v-if="request.present">
         <dt>{{ t('examples.present') }}</dt>
         <dd>

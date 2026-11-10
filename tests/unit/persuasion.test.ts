@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { CHATGPT_POEMS } from '../../utils/chatgptPoems';
 import { EXAMPLE_POEMS } from '../../utils/examplePoems';
 import {
   clearFormDraft,
@@ -126,5 +127,44 @@ describe('example poems', () => {
 
   it('has unique ids', () => {
     expect(new Set(EXAMPLE_POEMS.map(example => example.id)).size).toBe(EXAMPLE_POEMS.length);
+  });
+});
+
+describe('ChatGPT comparison poems', () => {
+  // The home page shows the first Dutch example of each style next to ChatGPT's poem.
+  const shown = [...new Set(EXAMPLE_POEMS.map(example => example.request.style))].map(style =>
+    EXAMPLE_POEMS.find(example => example.request.style === style && example.request.language === 'dutch')!,
+  );
+
+  it('has a ChatGPT poem for every example the home page shows', () => {
+    for (const example of shown) {
+      expect(CHATGPT_POEMS.filter(poem => poem.exampleId === example.id), example.id).toHaveLength(1);
+    }
+    expect(CHATGPT_POEMS).toHaveLength(shown.length);
+  });
+
+  it('asks ChatGPT with the same input as SintGPT', () => {
+    for (const poem of CHATGPT_POEMS) {
+      const { request } = EXAMPLE_POEMS.find(example => example.id === poem.exampleId)!;
+      expect(poem.prompt, poem.exampleId).toContain(request.name);
+      expect(poem.prompt, poem.exampleId).toContain(`${request.lines} regels`);
+      expect(poem.prompt, poem.exampleId).toContain(`rijmschema ${request.rhymeScheme}`);
+    }
+  });
+
+  it('underlines only lines that exist and hold text', () => {
+    for (const poem of CHATGPT_POEMS) {
+      const lines = poem.poem.split('\n');
+      expect(poem.faults.length, poem.exampleId).toBeGreaterThan(0);
+      for (const fault of poem.faults) {
+        expect(lines[fault.line]?.trim(), `${poem.exampleId} line ${fault.line}`).toBeTruthy();
+      }
+    }
+  });
+
+  it('never names the model in text that reaches the page', () => {
+    for (const poem of CHATGPT_POEMS) {
+      expect(`${poem.prompt} ${poem.poem}`).not.toMatch(/gpt-|luna|openai|gemini/i);
+    }
   });
 });
