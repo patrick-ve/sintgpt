@@ -84,6 +84,26 @@ export default defineNuxtConfig({
     // Icons are handled by @nuxt/icon module
   },
 
+  // Put the icons in the client bundle, so the browser never asks
+  // api.iconify.design (a third party) for them. The scan finds the heroicons
+  // in our code; the lucide ones are Nuxt UI's own (select, slideover, loading).
+  icon: {
+    clientBundle: {
+      scan: true,
+      icons: ['lucide:check', 'lucide:chevron-down', 'lucide:x', 'lucide:loader-circle'],
+    },
+  },
+
+  // Files in public/ without a hash in the name: cache for a week, then check.
+  // Nitro writes these into Cloudflare's _headers file.
+  routeRules: Object.fromEntries(
+    [
+      '/sint-hero-400.webp', '/sint-hero-600.webp', '/sint-hero-800.webp', '/sint-352.webp', '/sint.png',
+      '/sinterklaas_message.mp4', '/og/**', '/pdf/**',
+      '/favicon.ico', '/favicon-16x16.png', '/favicon-32x32.png', '/favicon-192x192.png', '/apple-touch-icon.png',
+    ].map(path => [path, { headers: { 'cache-control': 'public, max-age=604800, stale-while-revalidate=86400' } }]),
+  ),
+
   hooks: {
     // pdf-lib is about 490 KB. Only people who save a poem should download it.
     'build:manifest': (manifest) => {

@@ -18,6 +18,8 @@ export interface OgArticleImage {
   kind: 'article';
   title: string;
   subtitle: string;
+  /** The word after the logo; defaults to "Blog". */
+  label?: string;
 }
 
 export type OgImageSpec = OgHomeImage | OgArticleImage;
@@ -29,6 +31,20 @@ export const OG_IMAGES: OgImageSpec[] = [
     hook: 'ChatGPT kan niet rijmen…',
     headline: 'SintGPT wél!',
     claim: 'Gedicht klaar in 30 seconden',
+  },
+  {
+    name: 'voorbeelden',
+    kind: 'article',
+    label: 'Voorbeelden',
+    title: 'Voorbeelden van sinterklaas\u00ADgedichten',
+    subtitle: 'Grappig, klassiek, ironisch, ouderwets, pikant en roast',
+  },
+  {
+    name: 'lootjes',
+    kind: 'article',
+    label: 'Lootjes',
+    title: 'Lootjes trekken voor Sinterklaas',
+    subtitle: 'Gratis, op één telefoon, en niemand trekt zichzelf',
   },
   {
     name: 'blog',

@@ -128,16 +128,20 @@ Notes:
 On the home page the section is "ChatGPT vs SintGPT": per style, ChatGPT's poem for the same request next to SintGPT's (side by side from 1024 px, a ChatGPT/SintGPT switch below that). ChatGPT's poems are in `utils/chatgptPoems.ts`, one per example the home page shows, with the request that was sent and the lines the page underlines (`faults`). They came from GPT-5.6 Luna, the default model of free ChatGPT in Nov 2026, through the API with only the request; the site owner chose one of five versions per style. Do not edit them, and do not put the model name in a string there (a unit test checks). The page does not say where they came from or that they were chosen; see #23 in `ISSUES.md`. When an example poem changes, ask ChatGPT again with the new input.
 
 ### Lootjes trekken
-`/lootjes` draws names in the browser (`utils/lootjes.ts`, Sattolo's shuffle: one circle, nobody draws themselves). One phone goes round; each person taps their name to see their lootje. The draw stays in localStorage (`sintgpt-lootjes`) until "Nieuwe trekking". Nothing goes to the server. The blog post `/blog/lootjes-trekken-tips` describes this behaviour, so change both together.
+`/lootjes` draws names in the browser (`utils/lootjes.ts`, Sattolo's shuffle: one circle, nobody draws themselves, and with 3 or more names nobody draws each other). One phone goes round; each person taps their name to see their lootje. The draw stays in localStorage (`sintgpt-lootjes`) until "Nieuwe trekking". Nothing goes to the server. The page's own "Zo werkt het" and FAQ (`lootjes.steps`, `lootjes.faq`, also in its FAQPage JSON-LD) and the blog post `/blog/lootjes-trekken-tips` describe this behaviour, so change them together.
 
 ### Blog
-New posts use `components/BlogPost.vue` (layout, SEO meta, OG image, canonical, Article JSON-LD). Add each post to `pages/blog/index.vue`, `public/sitemap.xml`, `public/llms.txt` and `scripts/og-images.ts`, then run `npm run build:og`. Give the link to the poem form `data-cta="blog:<slug>"`, so analytics sees which post brings writers.
+`utils/blogPosts.ts` is the one list of posts: title (the h1), card text, dates, reading time and `related` (the "Lees ook" block). Every post uses `components/BlogPost.vue` (layout, "Lees ook", footer, SEO meta, OG image, canonical, Article + BreadcrumbList JSON-LD), which reads the title, dates and reading time from that list. A post with `modified` shows "bijgewerkt <date>". The blog index and the three tip links under the home page FAQ read the same list.
+- New post: add it to `utils/blogPosts.ts` (newest first, and as `related` of 2 or more others), create the page with `<BlogPost slug=…>`, and add it to `public/sitemap.xml`, `public/llms.txt` and `scripts/og-images.ts`, then run `npm run build:og`. `tests/unit/blogPosts.test.ts` checks all of this.
+- Give the link to the poem form `data-cta="blog:<slug>"`, so analytics sees which post brings writers, and descriptive link text ("Schrijf gratis een grappig sinterklaasgedicht →"), not "klik hier".
 
 ### Privacy and terms
 `/privacy` and `/voorwaarden` render `components/LegalPage.vue` from `legal.*` in the locales. They state the limits (1/day, 3/day while payments do not work, 100/day for buyers), the 90-day storage of short links, the 24-hour counters and the €6.99 price. Change them when the code changes; an e2e test checks the numbers.
 - There is no cookie banner. The site sets only the functional `sintgpt-access` cookie after payment, analytics uses no cookies (Workers Analytics Engine, written by the server) and the rest is localStorage for features the visitor uses. Do not add tracking cookies or third-party embeds without consent handling.
 
 ### SEO
+- `server/middleware/canonical-host.ts` (rules in `server/utils/canonicalHost.ts`) sends a 301 for `www` → `https://sintgpt.com`, for `http` → `https` (only when Cloudflare's `x-forwarded-proto` or `cf-visitor` says `http`, so a missing header cannot loop), and, for GET/HEAD, to page paths without a trailing slash and in lowercase. `/g/<id>` keeps its case: the IDs are case-sensitive. HTML on sintgpt.com gets HSTS (6 months). Static files are served by Workers Assets without the Worker, so Cloudflare's "Always Use HTTPS" is still the full fix for them.
+- Pages without the big footer (`/lootjes`, `/voorbeelden`, privacy, terms) end with `components/SiteLinks.vue`, so every page links to the main sections. The 404 page (`error.vue`) has real links, not only buttons.
 - `public/llms.txt` (llmstxt.org format) describes the site, prices and pages for language models. It states prices, the free limit and features, so change it with them (same rules as Persuasion: no model name, no claims without data).
 - The main address is `https://sintgpt.com`. `server/middleware/canonical-host.ts` redirects `www` to it. Each page sets its own canonical link.
 - English is applied in the browser on the same URLs, so search engines see Dutch only. Do not add `hreflang` tags until English has its own URLs.
@@ -148,6 +152,11 @@ Only show numbers, reviews and ratings that come from real data. This includes t
 ### Open Graph images
 - Specs in `scripts/og-images.ts`, rendered by `scripts/build-og-image.ts` (Puppeteer + sharp) to `public/og/<name>.jpg`.
 - Pages call `useOgImage('<name>', alt)`, which sets absolute `og:image` URLs plus width/height/type/alt and Twitter tags. Re-run `npm run build:og` after changing a spec.
+
+### Icons and static files
+- Icons are in the client bundle (`icon.clientBundle` in `nuxt.config.ts`), so the browser never asks `api.iconify.design`. The scan finds the `i-heroicons-*` names in our code. Nuxt UI's own icons are Lucide (`@iconify-json/lucide`) and listed by hand: add one when a new Nuxt UI component needs it.
+- `routeRules` in `nuxt.config.ts` give the unversioned files in `public/` (hero images, video, `og/`, `pdf/`, favicons) a 7-day cache; Nitro writes them to Cloudflare's `_headers`. Files under `/_nuxt/` and `/_fonts/` have a hash and are cached for a year.
+- The hero photo has 400, 600 and 800 px versions (`scripts/build-sint-images.ts`).
 
 ### Typography
 Three families, declared in `nuxt.config.ts` (`fonts.families`), self-hosted by `@nuxt/fonts` and exposed as Tailwind tokens in `assets/css/main.css`:

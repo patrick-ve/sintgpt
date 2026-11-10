@@ -143,12 +143,47 @@ describe('share image', () => {
 });
 
 describe('canonicalRedirect', () => {
+  const live = (path: string, extra: Partial<Parameters<typeof canonicalRedirect>[0]> = {}) =>
+    canonicalRedirect({ host: 'sintgpt.com', path, protocol: 'https', ...extra });
+
   it('sends www to the main address and keeps the path and query', () => {
-    expect(canonicalRedirect('www.sintgpt.com', '/blog?a=1')).toBe('https://sintgpt.com/blog?a=1');
+    expect(canonicalRedirect({ host: 'www.sintgpt.com', path: '/blog?a=1', protocol: 'https' })).toBe('https://sintgpt.com/blog?a=1');
+    expect(canonicalRedirect({ host: 'www.sintgpt.com', path: '/', protocol: 'http' })).toBe('https://sintgpt.com/');
   });
 
-  it.each(['sintgpt.com', 'localhost:3000', 'sintgpt.patrick.workers.dev'])('leaves %s alone', (host) => {
-    expect(canonicalRedirect(host, '/')).toBeNull();
+  it('sends http to https on the live site', () => {
+    expect(live('/blog?x=1', { protocol: 'http' })).toBe('https://sintgpt.com/blog?x=1');
+    expect(live('/', { protocol: 'http' })).toBe('https://sintgpt.com/');
+  });
+
+  it('removes a trailing slash and lowercases page paths', () => {
+    expect(live('/blog/')).toBe('https://sintgpt.com/blog');
+    expect(live('/BLOG')).toBe('https://sintgpt.com/blog');
+    expect(live('/Voorbeelden/?a=B')).toBe('https://sintgpt.com/voorbeelden?a=B');
+    expect(live('/blog/Sinterklaas-Tradities/')).toBe('https://sintgpt.com/blog/sinterklaas-tradities');
+  });
+
+  it('keeps the case of short-link IDs and other paths', () => {
+    expect(live('/g/AbC_dEf-12')).toBeNull();
+    expect(live('/g/AbC_dEf-12/')).toBe('https://sintgpt.com/g/AbC_dEf-12');
+    expect(live('/_nuxt/BfSc3-lo.js')).toBeNull();
+  });
+
+  it('does not redirect a POST for the path rules', () => {
+    expect(live('/api/events/', { method: 'POST' })).toBeNull();
+  });
+
+  it.each([
+    ['sintgpt.com', 'https'],
+    ['localhost:3000', 'http'],
+    ['sintgpt.patrick.workers.dev', 'https'],
+  ])('leaves %s over %s alone', (host, protocol) => {
+    expect(canonicalRedirect({ host, path: '/', protocol })).toBeNull();
+    expect(canonicalRedirect({ host, path: '/blog', protocol })).toBeNull();
+  });
+
+  it('fixes the path on localhost without changing the protocol', () => {
+    expect(canonicalRedirect({ host: 'localhost:3000', path: '/blog/', protocol: 'http' })).toBe('http://localhost:3000/blog');
   });
 });
 

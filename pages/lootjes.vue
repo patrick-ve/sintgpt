@@ -11,9 +11,38 @@ useSeoMeta({
   ogTitle: () => t('lootjes.title'),
   ogDescription: () => t('lootjes.description'),
 });
-useOgImage('home', 'SintGPT');
+useOgImage('lootjes', 'Lootjes trekken voor Sinterklaas op SintGPT');
 useHead({
   link: [{ rel: 'canonical', href: 'https://sintgpt.com/lootjes' }],
+  script: [
+    {
+      type: 'application/ld+json',
+      // Dutch, like the server-rendered page that search engines read.
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'WebApplication',
+            name: 'Lootjes trekken op SintGPT',
+            url: 'https://sintgpt.com/lootjes',
+            description: t('lootjes.description'),
+            applicationCategory: 'UtilitiesApplication',
+            operatingSystem: 'Web Browser',
+            inLanguage: 'nl',
+            offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+          },
+          {
+            '@type': 'FAQPage',
+            mainEntity: (t('lootjes.faq') as { question: string; answer: string }[]).map(item => ({
+              '@type': 'Question',
+              name: item.question,
+              acceptedAnswer: { '@type': 'Answer', text: item.answer },
+            })),
+          },
+        ],
+      }),
+    },
+  ],
 });
 
 // The draw stays in this browser, so a reload or a locked phone does not
@@ -177,14 +206,37 @@ const startAgain = () => {
 
       <p class="mt-6 text-sm text-[#6b5545]">{{ t('lootjes.privacy') }}</p>
 
+      <section aria-labelledby="lootjes-how" class="mt-12">
+        <h2 id="lootjes-how" class="font-display font-bold text-2xl text-[#8b1538]">{{ t('lootjes.howTitle') }}</h2>
+        <ol class="mt-4 flex flex-col gap-2 list-decimal pl-6 font-text text-lg leading-relaxed marker:font-bold marker:text-[#8b1538]">
+          <li v-for="(step, index) in t('lootjes.steps')" :key="index">{{ step }}</li>
+        </ol>
+      </section>
+
+      <section aria-labelledby="lootjes-faq" class="mt-12">
+        <h2 id="lootjes-faq" class="font-display font-bold text-2xl text-[#8b1538]">{{ t('lootjes.faqTitle') }}</h2>
+        <div class="mt-4 flex flex-col gap-5">
+          <div v-for="(item, index) in t('lootjes.faq')" :key="index">
+            <h3 class="font-bold text-lg text-[#5c0f26]">{{ item.question }}</h3>
+            <p class="mt-1 font-text text-lg leading-relaxed text-pretty">{{ item.answer }}</p>
+          </div>
+        </div>
+        <p class="mt-6 font-text text-lg leading-relaxed">
+          {{ t('lootjes.moreTips') }}
+          <NuxtLink to="/blog/lootjes-trekken-tips" class="inline-link">{{ t('lootjes.moreTipsLink') }}</NuxtLink>.
+        </p>
+      </section>
+
       <div class="mt-12 flex flex-col items-start gap-4 rounded-xl border-2 border-[#d4a853] bg-white/70 p-6">
         <h2 class="font-display font-bold text-2xl text-[#8b1538]">{{ t('lootjes.ctaTitle') }}</h2>
         <p class="font-text text-lg">{{ t('examples.ctaText') }}</p>
         <NuxtLink to="/#poem-form" data-cta="lootjes" class="btn-festive inline-flex items-center min-h-12 px-6 text-lg">
           {{ t('lootjes.cta') }}
         </NuxtLink>
+        <NuxtLink to="/voorbeelden" class="inline-link">{{ t('examples.more') }}</NuxtLink>
       </div>
     </main>
+    <SiteLinks />
   </div>
 </template>
 
@@ -193,6 +245,13 @@ const startAgain = () => {
   display: inline-flex;
   align-items: center;
   min-height: 2.75rem;
+  font-weight: 700;
+  color: #8b1538;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.inline-link {
   font-weight: 700;
   color: #8b1538;
   text-decoration: underline;

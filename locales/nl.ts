@@ -190,6 +190,10 @@ export default {
     count: '{count} gedicht | {count} gedichten',
     previous: 'Eerdere gedichten',
   },
+  siteLinks: {
+    home: 'Sinterklaasgedicht maken',
+    blog: 'Blog',
+  },
   footer: {
     copyright: 'Copyright {year} SintGPT. Alle rechten voorbehouden.',
     contact: 'Neem contact op',
@@ -209,12 +213,16 @@ export default {
   },
   seo: {
     title: "Sinterklaasgedicht maken met AI | SintGPT",
-    description: "Maak in 30 seconden een persoonlijk sinterklaasgedicht dat echt rijmt. Eerste gedicht gratis. SintGPT rijmt wél in het Nederlands, in tegenstelling tot ChatGPT.",
+    description: "Een persoonlijk sinterklaasgedicht dat echt rijmt, in 30 seconden. Je eerste gedicht is gratis. SintGPT rijmt wél in het Nederlands, anders dan ChatGPT.",
     ogTitle: 'SintGPT: je sinterklaasgedicht in 30 seconden',
     ogDescription:
       'Persoonlijke sinterklaasgedichten die echt rijmen. Klaar in 30 seconden, en je eerste gedicht is gratis.',
     ogImageAlt:
       'SintGPT: ChatGPT kan niet rijmen, SintGPT wél',
+  },
+  tips: {
+    title: 'Tips voor je gedicht',
+    all: 'Alle tips op het blog →',
   },
   faq: {
     title: 'Veelgestelde vragen',
@@ -423,6 +431,42 @@ export default {
     ctaTitle: 'Lootje binnen? Nu nog een gedicht',
     cta: 'Schrijf een gedicht',
     privacy: 'De namen blijven op dit apparaat. We sturen ze niet naar een server.',
+    howTitle: 'Zo werkt lootjes trekken op SintGPT',
+    steps: [
+      'Vul de namen in, één per regel. Je hebt minstens 3 en hooguit 50 namen nodig.',
+      'Druk op "Trek lootjes". De pagina trekt in één keer voor iedereen een lootje.',
+      'Geef de telefoon door. Iedereen tikt op de eigen naam, ziet het lootje en verbergt het weer voor de volgende.',
+      'Achter elke naam die zijn lootje heeft gezien, staat "gezien". Zo weet je wanneer iedereen klaar is.',
+    ],
+    faqTitle: 'Vragen over lootjes trekken',
+    faq: [
+      {
+        question: 'Kan iemand zichzelf trekken?',
+        answer: 'Nee. Niemand trekt zichzelf, en twee mensen trekken nooit elkaar. Alle lootjes vormen samen één kring, dus opnieuw trekken is nooit nodig.',
+      },
+      {
+        question: 'Waar blijven de namen?',
+        answer: 'Op deze telefoon. We sturen de namen niet naar een server. De trekking blijft bewaard tot je op "Nieuwe trekking" drukt, ook als je de pagina sluit.',
+      },
+      {
+        question: 'Wat als iemand zijn lootje vergeet?',
+        answer: 'Open de pagina weer op dezelfde telefoon. De trekking staat er nog, dus die persoon tikt gewoon opnieuw op de eigen naam.',
+      },
+      {
+        question: 'Kunnen we partners uitsluiten?',
+        answer: 'Nee, de pagina let alleen op de regel dat niemand zichzelf trekt. Trekt een stel elkaar toch, trek dan voor de hele groep opnieuw, zodat niemand ziet wie het was.',
+      },
+      {
+        question: 'Kan het ook als we niet bij elkaar zijn?',
+        answer: 'De pagina werkt met één telefoon die rondgaat. Woont de familie verspreid, laat dan één persoon trekken die zelf niet meedoet en ieder lootje apart doorstuurt.',
+      },
+      {
+        question: 'Wat kost het?',
+        answer: 'Niets. Lootjes trekken is gratis, en je hoeft geen account te maken.',
+      },
+    ],
+    moreTips: 'Meer over budget, afspraken en etiquette lees je in',
+    moreTipsLink: 'Lootjes trekken: zo organiseer je het eerlijk',
   },
   video: {
     title: 'Sinterklaas over sintgpt.com',

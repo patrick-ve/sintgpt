@@ -190,6 +190,10 @@ export default {
     count: '{count} poem | {count} poems',
     previous: 'Earlier poems',
   },
+  siteLinks: {
+    home: 'Write a Sinterklaas poem',
+    blog: 'Blog',
+  },
   footer: {
     copyright: 'Copyright {year} SintGPT. All rights reserved.',
     contact: 'Contact us',
@@ -215,6 +219,10 @@ export default {
       'Personal Sinterklaas poems that really rhyme. Ready in 30 seconds, and your first poem is free.',
     ogImageAlt:
       'SintGPT: ChatGPT cannot rhyme, SintGPT can',
+  },
+  tips: {
+    title: 'Tips for your poem (in Dutch)',
+    all: 'All tips on the blog →',
   },
   faq: {
     title: 'Frequently Asked Questions',
@@ -421,6 +429,42 @@ export default {
     ctaTitle: 'Got your name? Now write a poem',
     cta: 'Write a poem',
     privacy: 'The names stay on this device. We do not send them to a server.',
+    howTitle: 'How drawing names works on SintGPT',
+    steps: [
+      'Enter the names, one per line. You need at least 3 and at most 50 names.',
+      'Press "Draw names". The page draws a name for everyone at once.',
+      'Pass the phone round. Everyone taps their own name, sees who they drew and hides it again for the next person.',
+      'Each name that has seen their draw shows "seen". That way you know when everyone is done.',
+    ],
+    faqTitle: 'Questions about drawing names',
+    faq: [
+      {
+        question: 'Can someone draw themselves?',
+        answer: 'No. Nobody draws themselves, and two people never draw each other. All draws form one circle, so you never need to draw again.',
+      },
+      {
+        question: 'Where do the names go?',
+        answer: 'They stay on this phone. We do not send the names to a server. The draw stays until you press "New draw", also when you close the page.',
+      },
+      {
+        question: 'What if someone forgets who they drew?',
+        answer: 'Open the page again on the same phone. The draw is still there, so that person taps their own name again.',
+      },
+      {
+        question: 'Can we keep partners apart?',
+        answer: 'No, the page only makes sure nobody draws themselves. If a couple draws each other, draw again for the whole group, so nobody sees who it was.',
+      },
+      {
+        question: 'Does it work when we are not together?',
+        answer: 'The page works with one phone that goes round. If the family lives far apart, let one person who does not take part draw the names and send each one privately.',
+      },
+      {
+        question: 'What does it cost?',
+        answer: 'Nothing. Drawing names is free, and you do not need an account.',
+      },
+    ],
+    moreTips: 'More about budget, agreements and etiquette (in Dutch):',
+    moreTipsLink: 'Lootjes trekken: zo organiseer je het eerlijk',
   },
   video: {
     title: 'Sinterklaas talks about sintgpt.com',

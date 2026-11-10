@@ -40,6 +40,7 @@ Last updated: 10 November 2026. Live version: `f7e6c57b-7b7e-4658-89e0-15bf3e609
 | [#22](#22-offer-for-work-groups) | Low | Offer for work groups | Idea, needs a decision |
 | [#23](#23-brand-and-legal-risks) | Low | Brand and legal risks | Later |
 | [#24](#24-after-the-season) | Low | After the season | Later |
+| [#25](#25-seo-audit) | Medium | SEO audit (10 November 2026) | Fixes built, not deployed; owner steps open |
 
 ## Open
 
@@ -334,6 +335,47 @@ Last updated: 10 November 2026. Live version: `f7e6c57b-7b7e-4658-89e0-15bf3e609
   - Other occasions through the year: birthdays, retirements, weddings. Gezin
     buyers have 365 days of access.
   - A "remind me next year" list. Needs explicit consent and a privacy update.
+
+### #25 SEO audit
+
+- **Status:** fixes built and tested on 10 November 2026, not committed or deployed. Open for the owner: S1 (dashboard part), S13, S15 (author), S24, S25. Deferred: S9, S11. After the deploy, run Lighthouse again on `/blog`.
+- **Result:** nothing blocks Google from finding or indexing a page (no
+  priority 1). Robots.txt, sitemap (14 URLs, no orphans), canonicals, titles,
+  one H1 per page, no broken internal links, no near-duplicates (max 7 %
+  overlap), raw HTML equal to the rendered page. Lighthouse SEO, accessibility
+  and best practices 100 on all templates; performance 92–99, `/blog` 79.
+- **How:** own crawler with the Googlebot smartphone user agent and no
+  JavaScript (Nuxt renders on the server), checked against Chrome renders of 7
+  templates. Lighthouse 12.8.2 mobile with `/api/events` blocked.
+- **Checklist** (priority 1 = blocks Google; S = SEO item):
+
+| ID | Prio | Hours | Item | Status |
+|---|---|---|---|---|
+| S1 | 2 | 0.25 | `http://` gives 200 without a redirect to https; no HSTS | Fixed in code, not deployed: 301 to https when Cloudflare says http, HSTS 6 months on HTML. **Owner:** also turn on "Always Use HTTPS" (static files skip the Worker) |
+| S2 | 2 | 3 | Blog posts get 1 internal link each (only from `/blog`); the home page links to none | Fixed, not deployed: "Lees ook" (3 posts) under every post, 3 post links under the home FAQ; every post gets 2+ links (unit test) |
+| S3 | 2 | 1 | `/voorbeelden` gets 1 internal link (home page); not in the footer | Fixed, not deployed: in the footer of every page (`SiteLinks.vue`, blog footer) and under "Lees ook" |
+| S4 | 2 | 2 | `/lootjes` is thin (87 words) for the search "lootjes trekken" | Fixed, not deployed: "Zo werkt het", 6 questions, FAQPage + WebApplication JSON-LD, link to the blog post |
+| S5 | 2 | 1 | Links to the home page use generic text ("Schrijf je eerste gedicht gratis →" 8×) | Fixed, not deployed: each post CTA names the topic ("Schrijf gratis een grappig sinterklaasgedicht →"); footers say "Sinterklaasgedicht maken" |
+| S6 | 3 | 1 | `/blog` LCP 3.9 s: 8 copies of one photo, no width/height, alt repeats the title | Fixed, not deployed: the photo is gone from the cards; the title is the link |
+| S7 | 3 | 1 | `/blog/`, `/BLOG`, `/Voorbeelden` give 200 (canonical is right) | Fixed, not deployed: 301 to lowercase, no trailing slash (GET/HEAD; `/g/<id>` keeps its case) |
+| S8 | 3 | 0.5 | 404 page has no links ("Terug naar Home" is a JavaScript button) | Fixed, not deployed: real links, site colours, Dutch message |
+| S9 | 3 | 2 | Render-blocking `entry.css` (41 KB), 23–31 KiB unused CSS | Deferred: inlining 41 KB of global CSS in every page costs caching; gain about 0.15–0.3 s |
+| S10 | 3 | 0.5 | Hero image 795×1000 shown at about 300×375 on a phone (65 KiB waste) | Fixed, not deployed: 600w version added for 2× phones |
+| S11 | 3 | 2 | 22–41 KiB unused JavaScript per page | Deferred: the chunk is shared Nuxt UI code (select, dialog, slideover); splitting it is a larger change for about 40 KiB |
+| S12 | 3 | 0.5 | Icons load at runtime from `api.iconify.design` (third party) | Fixed, not deployed: icons in the client bundle; no request to iconify in a local check |
+| S13 | 3 | 0.25 | Cloudflare injects its Web Analytics beacon; not on the privacy page | **Owner:** Cloudflare dashboard → Web Analytics → sintgpt.com: turn off automatic setup, or name it on the privacy page |
+| S14 | 3 | 1 | No `BreadcrumbList`; no JSON-LD on `/blog` and `/voorbeelden` | Fixed, not deployed: BreadcrumbList on posts and `/voorbeelden`, Blog on `/blog`, CollectionPage on `/voorbeelden` |
+| S15 | 4 | 0.5 | Article JSON-LD: Organization as author, no `inLanguage`, headline ≠ H1 on 3 posts | Partly fixed, not deployed: `inLanguage`, headline = H1 (all posts use BlogPost now). **Owner decision:** a person as author would publish a name |
+| S16 | 4 | 0.25 | Home JSON-LD: no free `Offer`, empty `sameAs` | Fixed, not deployed: free Offer (price 0), empty `sameAs` removed |
+| S17 | 4 | 0.25 | `sinterklaas_message.mp4` and images have `max-age=0` | Fixed, not deployed: 7-day cache through `routeRules` → `_headers` |
+| S18 | 4 | 0.5 | 10 KiB legacy JavaScript | Comes only from the Cloudflare beacon; goes away with S13 |
+| S19 | 5 | 0.25 | `/blog`: H1 "SintGPT Blog", title in English Title Case | Fixed, not deployed: H1 "Tips voor je sinterklaasgedicht", title "Tips voor sinterklaasgedichten en surprises" |
+| S20 | 5 | 0.25 | 3 meta descriptions over 155 characters | Fixed, not deployed: 152, 153 and 148 characters |
+| S21 | 5 | 0.25 | Title Case in Dutch titles; "…in 2026" post shows 17 november 2025 | Fixed, not deployed: sentence case in titles and headings; the post shows "bijgewerkt 8 november 2026" |
+| S22 | 5 | 0.1 | Home H1: no space between the two spans in the HTML | Fixed, not deployed |
+| S23 | 5 | 1 | `/voorbeelden`, `/lootjes`, legal pages share the home `og:image` | Fixed, not deployed: own images for `/voorbeelden` and `/lootjes`; legal pages keep the home image on purpose |
+| S24 | – | – | Search Console: excluded pages and why (no access); add Bing Webmaster Tools. See #12 | Owner |
+| S25 | – | – | PageSpeed Insights and field data from outside the company network (Cato proxy forces HTTP/1.1 locally) | Owner |
 
 ## Findings
 

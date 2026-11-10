@@ -5,6 +5,7 @@ import { saveFormDraft, takeFormDraft } from '~/utils/formDraft';
 import { pakjesavondCountdown } from '~/utils/pakjesavond';
 import { PDF_DESIGNS, type PdfDesignId } from '~/utils/pdfDesigns';
 import { fillSeasons, TIERS, type TierId } from '~/utils/pricingTiers';
+import { findBlogPost } from '~/utils/blogPosts';
 import type { PoemHistoryEntry } from '~/composables/usePoemHistory';
 import type { PaymentTrigger } from '~/components/PaymentModal.vue';
 
@@ -30,6 +31,10 @@ const {
 } = usePaymentTracking();
 const poemHistory = usePoemHistory();
 const { track } = useAnalytics();
+
+// Three posts linked under the FAQ, so the home page passes links to the blog.
+const tipPosts = ['rijm-en-ritme-sinterklaasgedicht', 'grappige-sinterklaasgedichten-tips', 'lootjes-trekken-tips']
+  .map(slug => findBlogPost(slug)!);
 const historyEntries = poemHistory.entries;
 const route = useRoute();
 
@@ -832,8 +837,16 @@ const structuredData = computed(() => ({
       description: t('seo.description'),
       applicationCategory: 'UtilitiesApplication',
       operatingSystem: 'Web Browser',
-      // The real tiers and prices, after 1 free poem.
-      offers: (['drie', 'gezin', 'familie'] as const).map(id => ({
+      // The free poem, then the real tiers and prices.
+      offers: [
+        {
+          '@type': 'Offer',
+          name: locale.value === 'nl' ? 'Eerste gedicht' : 'First poem',
+          price: '0',
+          priceCurrency: 'EUR',
+          description: locale.value === 'nl' ? '1 gedicht gratis' : '1 free poem',
+        },
+        ...(['drie', 'gezin', 'familie'] as const).map(id => ({
         '@type': 'Offer',
         name: t(`payment.tiers.${id}.name`),
         price: (TIERS[id].priceCents / 100).toFixed(2),
@@ -842,7 +855,8 @@ const structuredData = computed(() => ({
           locale.value === 'nl'
             ? `${fillSeasons(t(`payment.tiers.${id}.features`).join(', '))}; na 1 gratis gedicht`
             : `${fillSeasons(t(`payment.tiers.${id}.features`).join(', '))}; after 1 free poem`,
-      })),
+        })),
+      ],
       featureList:
         locale.value === 'nl'
           ? "Persoonlijke sinterklaasgedichten, Zes stijlen (grappig, klassiek, ironisch, ouderwets, pikant, roast), Nederlands en Engels, Verschillende rijmschema's"
@@ -867,7 +881,6 @@ const structuredData = computed(() => ({
       url: 'https://sintgpt.com',
       logo: 'https://sintgpt.com/favicon-192x192.png',
       description: t('seo.description'),
-      sameAs: [],
     },
   ],
 }));
@@ -1084,8 +1097,7 @@ useHead({
             id="hero-title"
             class="font-display font-bold text-[2.25rem] sm:text-5xl lg:text-[clamp(2.5rem,3.6vw,3.25rem)] leading-[1.08] tracking-[-0.01em] text-balance"
           >
-            <span class="block">{{ t('hero.question') }}</span>
-            <span class="block mt-3 lg:mt-2 text-[#f4cd60]">{{ t('hero.answer') }}</span>
+            <span class="block">{{ t('hero.question') }}</span>{{ ' ' }}<span class="block mt-3 lg:mt-2 text-[#f4cd60]">{{ t('hero.answer') }}</span>
           </h1>
 
           <p class="text-lg md:text-xl leading-normal text-[#f7e6c0] max-w-[32em] text-pretty">
@@ -1117,7 +1129,7 @@ useHead({
         <figure class="flex-[1_1_400px] lg:flex-none min-w-0 max-w-[300px] sm:max-w-[500px] lg:max-w-none mx-auto flex flex-col gap-3 lg:gap-2">
           <img
             src="/sint-hero-800.webp"
-            srcset="/sint-hero-400.webp 400w, /sint-hero-800.webp 800w"
+            srcset="/sint-hero-400.webp 400w, /sint-hero-600.webp 600w, /sint-hero-800.webp 800w"
             sizes="(min-width: 640px) 500px, 300px"
             width="800"
             height="1000"
@@ -1835,6 +1847,24 @@ useHead({
               </p>
             </div>
           </details>
+        </div>
+
+        <div class="mt-10 border-t-2 border-[#d4a853]/30 pt-6">
+          <h2 class="text-xl md:text-2xl font-bold text-[#8b1538] mb-4 font-display">
+            {{ t('tips.title') }}
+          </h2>
+          <ul class="flex flex-col gap-3">
+            <li v-for="post in tipPosts" :key="post.slug">
+              <NuxtLink
+                :to="`/blog/${post.slug}`"
+                class="font-bold text-[#8b1538] underline decoration-[#d4a853] underline-offset-4"
+              >{{ post.title }}</NuxtLink>
+            </li>
+          </ul>
+          <NuxtLink
+            to="/blog"
+            class="inline-flex items-center min-h-11 mt-2 text-[#5c0f26] underline underline-offset-4"
+          >{{ t('tips.all') }}</NuxtLink>
         </div>
       </div>
     </section>

@@ -1,55 +1,43 @@
 <script setup lang="ts">
+import { findBlogPost, formatDutchDate, relatedBlogPosts } from '~/utils/blogPosts';
+
 /**
- * Layout for a blog article: header, article card and footer, plus the SEO
- * tags every article needs (meta, Open Graph image, canonical link and
- * Article JSON-LD). The article body goes in the default slot, starting at h2.
+ * Layout for a blog article: header, article card, "Lees ook" and footer, plus
+ * the SEO tags every article needs (meta, Open Graph image, canonical link,
+ * Article and BreadcrumbList JSON-LD). Title, dates and reading time come from
+ * utils/blogPosts.ts. The article body goes in the default slot, starting at h2.
  */
 const props = defineProps<{
-  /** The part after /blog/. */
+  /** The part after /blog/; must be in utils/blogPosts.ts. */
   slug: string;
-  /** The h1 of the article. */
-  title: string;
   /** The opening paragraph under the title. */
   lead: string;
-  /** Publication date as YYYY-MM-DD. */
-  published: string;
-  /** Last change as YYYY-MM-DD; defaults to the publication date. */
-  modified?: string;
-  readMinutes: number;
   seoTitle: string;
   seoDescription: string;
   /** A name from scripts/og-images.ts. */
   ogImage: string;
 }>();
 
-const { locale } = useI18n();
+const post = findBlogPost(props.slug);
+if (!post) throw new Error(`Blog post ${props.slug} is missing from utils/blogPosts.ts`);
 
+const related = relatedBlogPosts(props.slug);
 const pageUrl = `https://sintgpt.com/blog/${props.slug}`;
-const modified = props.modified ?? props.published;
-
-const MONTHS = [
-  'januari', 'februari', 'maart', 'april', 'mei', 'juni',
-  'juli', 'augustus', 'september', 'oktober', 'november', 'december',
-];
-
-// Formatted from the string itself, so the server and the browser agree
-// whatever their time zone.
-const publishedLabel = computed(() => {
-  const [year, month, day] = props.published.split('-').map(Number);
-  return `${day} ${MONTHS[month! - 1]} ${year}`;
-});
+const modified = post.modified ?? post.published;
+const publishedLabel = formatDutchDate(post.published);
+const modifiedLabel = post.modified && post.modified !== post.published ? formatDutchDate(post.modified) : null;
 
 useSeoMeta({
   title: props.seoTitle,
   description: props.seoDescription,
   ogTitle: props.seoTitle,
   ogDescription: props.seoDescription,
-  articlePublishedTime: props.published,
+  articlePublishedTime: post.published,
   articleModifiedTime: modified,
   ogType: 'article',
 });
 
-useOgImage(props.ogImage, `SintGPT Blog: ${props.title}`);
+useOgImage(props.ogImage, `SintGPT Blog: ${post.title}`);
 
 useHead({
   link: [{ rel: 'canonical', href: pageUrl }],
@@ -58,23 +46,36 @@ useHead({
       type: 'application/ld+json',
       innerHTML: JSON.stringify({
         '@context': 'https://schema.org',
-        '@type': 'Article',
-        headline: props.title,
-        description: props.seoDescription,
-        image: `https://sintgpt.com/og/${props.ogImage}.jpg`,
-        datePublished: props.published,
-        dateModified: modified,
-        author: {
-          '@type': 'Organization',
-          name: 'SintGPT',
-          url: 'https://sintgpt.com',
-        },
-        publisher: {
-          '@type': 'Organization',
-          name: 'SintGPT',
-          logo: { '@type': 'ImageObject', url: 'https://sintgpt.com/favicon-192x192.png' },
-        },
-        mainEntityOfPage: pageUrl,
+        '@graph': [
+          {
+            '@type': 'Article',
+            headline: post.title,
+            description: props.seoDescription,
+            image: `https://sintgpt.com/og/${props.ogImage}.jpg`,
+            datePublished: post.published,
+            dateModified: modified,
+            inLanguage: 'nl',
+            author: {
+              '@type': 'Organization',
+              name: 'SintGPT',
+              url: 'https://sintgpt.com',
+            },
+            publisher: {
+              '@type': 'Organization',
+              name: 'SintGPT',
+              logo: { '@type': 'ImageObject', url: 'https://sintgpt.com/favicon-192x192.png' },
+            },
+            mainEntityOfPage: pageUrl,
+          },
+          {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'SintGPT', item: 'https://sintgpt.com/' },
+              { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://sintgpt.com/blog' },
+              { '@type': 'ListItem', position: 3, name: post.title, item: pageUrl },
+            ],
+          },
+        ],
       }),
     },
   ],
@@ -100,13 +101,17 @@ useHead({
         <div class="absolute top-4 right-4 text-4xl opacity-50" aria-hidden="true">🌙</div>
 
         <header class="mb-8 border-b-2 border-red-100 pb-8">
-          <div class="flex items-center gap-4 text-sm text-red-700 mb-4 font-bold">
-            <time :datetime="published">{{ publishedLabel }}</time>
+          <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-red-700 mb-4 font-bold">
+            <time :datetime="post.published">{{ publishedLabel }}</time>
+            <template v-if="modifiedLabel">
+              <span aria-hidden="true">•</span>
+              <span>bijgewerkt <time :datetime="post.modified">{{ modifiedLabel }}</time></span>
+            </template>
             <span aria-hidden="true">•</span>
-            <span>{{ readMinutes }} minuten lezen</span>
+            <span>{{ post.readMinutes }} minuten lezen</span>
           </div>
           <h1 class="text-4xl md:text-5xl font-bold text-red-900 mb-6 leading-tight font-display text-balance">
-            {{ title }}
+            {{ post.title }}
           </h1>
           <p class="text-xl text-gray-800 leading-relaxed font-medium text-pretty">
             {{ lead }}
@@ -119,6 +124,28 @@ useHead({
       </div>
     </article>
 
+    <section v-if="related.length" aria-labelledby="related-title" class="container mx-auto px-6">
+      <div class="max-w-4xl mx-auto">
+        <h2 id="related-title" class="text-3xl font-bold text-white mb-6 font-display drop-shadow-md">Lees ook</h2>
+        <ul class="grid gap-4 md:grid-cols-3">
+          <li v-for="item in related" :key="item.slug">
+            <NuxtLink
+              :to="`/blog/${item.slug}`"
+              class="related-card flex h-full flex-col gap-2 rounded-xl bg-[#fffdf0] p-5 border-2 border-[#F4CD60]"
+            >
+              <span class="font-display text-lg font-bold leading-snug text-red-900 text-balance">{{ item.title }}</span>
+              <span class="text-sm leading-relaxed text-gray-700">{{ item.description }}</span>
+            </NuxtLink>
+          </li>
+        </ul>
+        <p class="mt-6 text-lg text-[#F4CD60] font-medium">
+          Op zoek naar inspiratie? Lees de
+          <NuxtLink to="/voorbeelden" class="font-bold underline underline-offset-4">voorbeelden van sinterklaasgedichten</NuxtLink>
+          in zes stijlen.
+        </p>
+      </div>
+    </section>
+
     <footer class="bg-red-900 mt-12 border-t-4 border-[#F4CD60] relative">
       <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-900 border-4 border-[#F4CD60] rounded-full p-3" aria-hidden="true">
         <div class="text-2xl">🎁</div>
@@ -130,9 +157,12 @@ useHead({
           <span>🥕</span>
         </div>
         <nav class="mb-6 flex flex-wrap justify-center gap-x-6 gap-y-3 font-bold" aria-label="Voettekst">
+          <NuxtLink to="/" class="underline underline-offset-4">Sinterklaasgedicht maken</NuxtLink>
+          <NuxtLink to="/voorbeelden" class="underline underline-offset-4">Voorbeelden</NuxtLink>
+          <NuxtLink to="/blog" class="underline underline-offset-4">Blog</NuxtLink>
           <NuxtLink to="/lootjes" class="underline underline-offset-4">Lootjes trekken</NuxtLink>
           <NuxtLink to="/privacy" class="underline underline-offset-4">Privacy</NuxtLink>
-          <NuxtLink to="/voorwaarden" class="underline underline-offset-4">{{ locale === 'nl' ? 'Voorwaarden' : 'Terms' }}</NuxtLink>
+          <NuxtLink to="/voorwaarden" class="underline underline-offset-4">Voorwaarden</NuxtLink>
         </nav>
         <p class="font-bold text-lg">
           Copyright {{ new Date().getFullYear() }} SintGPT. Alle rechten voorbehouden.
@@ -151,6 +181,20 @@ useHead({
   background-size: 50px 50px;
   background-position: 0 0, 25px 25px;
   background-attachment: fixed;
+}
+
+.related-card {
+  transition-property: border-color;
+  transition-duration: 150ms;
+}
+@media (hover: hover) {
+  .related-card:hover {
+    border-color: #7f1d1d;
+  }
+}
+.related-card:focus-visible {
+  outline: 3px solid #F4CD60;
+  outline-offset: 3px;
 }
 
 .sint-border {

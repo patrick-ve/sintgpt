@@ -1,10 +1,7 @@
 <template>
   <BlogPost
     slug="roast-sinterklaasgedicht-zonder-te-kwetsen"
-    title="Een roast-gedicht schrijven zonder iemand te kwetsen"
     lead="Een sinterklaasgedicht dat iemand flink op de hak neemt, levert de grootste lach van de avond op. Mits de ontvanger zelf het hardst lacht. Zo plaag je stevig, maar met liefde."
-    published="2026-10-18"
-    :read-minutes="6"
     seo-title="Roast-sinterklaasgedicht zonder te kwetsen | SintGPT"
     seo-description="Hoe je in een sinterklaasgedicht iemand stevig plaagt zonder te kwetsen: waar je wel en niet grappen over maakt, de check vooraf en een warm slot."
     og-image="blog-roast-sinterklaasgedicht-zonder-te-kwetsen"
@@ -131,7 +128,7 @@
         data-cta="blog:roast-sinterklaasgedicht-zonder-te-kwetsen"
         class="inline-block px-8 py-3 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-transform transform hover:scale-105 text-lg border border-[#F4CD60]"
       >
-        Schrijf je eerste gedicht gratis →
+        Schrijf gratis een roast-sinterklaasgedicht →
       </NuxtLink>
     </div>
 

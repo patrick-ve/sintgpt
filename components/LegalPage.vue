@@ -58,6 +58,7 @@ useHead({
         <a href="mailto:patrick@sintgpt.com" class="back-link" @click="track('Contact')">patrick@sintgpt.com</a>
       </p>
     </main>
+    <SiteLinks />
   </div>
 </template>
 

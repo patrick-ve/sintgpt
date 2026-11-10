@@ -1,12 +1,9 @@
 <template>
   <BlogPost
     slug="surprise-maken-ideeen"
-    title="Een surprise maken: materialen, technieken en ideeën per persoon"
     lead="Een goede surprise laat zien dat je aan de ander hebt gedacht. Hij hoeft niet groot of ingewikkeld te zijn. Met een slim idee, de juiste materialen en een gedicht dat erbij past, maak je er het moment van de avond van."
-    published="2026-10-09"
-    :read-minutes="7"
     seo-title="Surprise maken voor Sinterklaas: tips en ideeën | SintGPT"
-    seo-description="Zo maak je een sinterklaassurprise: het idee, de materialen, papier-maché, planning en ideeën per type ontvanger. En hoe je surprise en gedicht laat samenwerken."
+    seo-description="Zo maak je een sinterklaassurprise: het idee, de materialen, papier-maché, planning en ideeën per ontvanger. En hoe surprise en gedicht samenwerken."
     og-image="blog-surprise-maken-ideeen"
   >
     <h2 class="text-3xl font-bold mt-8 mb-4">Wat maakt een surprise goed?</h2>
@@ -156,7 +153,7 @@
         data-cta="blog:surprise-maken-ideeen"
         class="inline-block px-8 py-3 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-transform transform hover:scale-105 text-lg border border-[#F4CD60]"
       >
-        Schrijf je eerste gedicht gratis →
+        Schrijf gratis het gedicht bij je surprise →
       </NuxtLink>
     </div>
 

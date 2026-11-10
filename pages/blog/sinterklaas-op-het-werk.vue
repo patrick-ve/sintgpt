@@ -1,10 +1,7 @@
 <template>
   <BlogPost
     slug="sinterklaas-op-het-werk"
-    title="Sinterklaas op het werk: lootjes, gedichten en een feest voor iedereen"
     lead="Een sinterklaasviering op het werk brengt collega's dichter bij elkaar. Maar collega's zijn geen familie. Met goede afspraken en een gedicht dat plaagt zonder te prikken, wordt het een feest waar iedereen graag aan meedoet."
-    published="2026-10-27"
-    :read-minutes="6"
     seo-title="Sinterklaas op het werk: tips voor collega's | SintGPT"
     seo-description="Sinterklaas vieren met collega's: vrijwillig meedoen, lootjes trekken, budget, een inclusieve toon en gedichten over collega's die leuk blijven."
     og-image="blog-sinterklaas-op-het-werk"
@@ -126,7 +123,7 @@
         data-cta="blog:sinterklaas-op-het-werk"
         class="inline-block px-8 py-3 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-transform transform hover:scale-105 text-lg border border-[#F4CD60]"
       >
-        Schrijf je eerste gedicht gratis →
+        Schrijf gratis een sinterklaasgedicht voor je collega →
       </NuxtLink>
     </div>
 

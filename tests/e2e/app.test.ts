@@ -766,6 +766,61 @@ describe('SEO', () => {
     expect(html).toContain(`<link rel="canonical" href="https://sintgpt.com/blog/${slug}"`);
     expect(html.match(/rel="canonical"/g)).toHaveLength(1);
   });
+
+  it('gives each article an Article and a breadcrumb, and links to related posts and the examples', async () => {
+    const html = await (await fetch('/blog/rijm-en-ritme-sinterklaasgedicht')).text();
+    expect(html).toContain('"@type":"Article"');
+    expect(html).toContain('"@type":"BreadcrumbList"');
+    expect(html).toContain('"inLanguage":"nl"');
+    expect(html).toContain('Lees ook');
+    expect(html).toContain('href="/blog/hoe-schrijf-je-het-perfecte-sinterklaasgedicht"');
+    expect(html).toContain('href="/voorbeelden"');
+  });
+
+  it('shows the update date when a post changed after it came out', async () => {
+    const html = await (await fetch('/blog/hoe-schrijf-je-het-perfecte-sinterklaasgedicht')).text();
+    expect(html).toContain('bijgewerkt');
+    expect(html).toContain('datetime="2026-11-08"');
+  });
+
+  it('lists every post on /blog with its title as the link text', async () => {
+    const html = await (await fetch('/blog')).text();
+    expect(html.match(/<h1[\s>]/g)).toHaveLength(1);
+    expect(html).toContain('"@type":"Blog"');
+    expect(html).not.toContain('<img');
+    expect(html).toMatch(/<a[^>]*href="\/blog\/lootjes-trekken-tips"[^>]*>Lootjes trekken: zo organiseer je het eerlijk en zonder gedoe<\/a>/);
+  });
+
+  it('links the home page to blog posts', async () => {
+    const html = await (await fetch('/')).text();
+    expect(html).toContain('href="/blog/rijm-en-ritme-sinterklaasgedicht"');
+  });
+
+  it.each([
+    ['/blog/', '/blog'],
+    ['/BLOG', '/blog'],
+    ['/Voorbeelden/?a=1', '/voorbeelden?a=1'],
+  ])('redirects %s to %s', async (from, to) => {
+    const res = await fetch(from, { redirect: 'manual' });
+    expect(res.status).toBe(301);
+    expect(new URL(res.headers.get('location')!).pathname + new URL(res.headers.get('location')!).search).toBe(to);
+  });
+
+  it('gives a 404 page with links that work without JavaScript', async () => {
+    // A browser asks for HTML; without that, Nuxt answers with a JSON error.
+    const res = await fetch('/bestaat-niet', { headers: { accept: 'text/html' } });
+    expect(res.status).toBe(404);
+    const html = await res.text();
+    for (const path of ['/', '/voorbeelden', '/blog', '/lootjes']) expect(html).toContain(`href="${path}"`);
+  });
+
+  it('explains the lootjes page and links it to the blog', async () => {
+    const html = await (await fetch('/lootjes')).text();
+    expect(html).toContain('Vragen over lootjes trekken');
+    expect(html).toContain('"@type":"FAQPage"');
+    expect(html).toContain('href="/blog/lootjes-trekken-tips"');
+    expect(html).toContain('og/lootjes.jpg');
+  });
 });
 
 describe('poem links', () => {

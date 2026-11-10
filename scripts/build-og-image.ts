@@ -48,7 +48,7 @@ function body(spec: OgImageSpec): string {
       <p class="pill">${escape(spec.claim)}</p>`;
   }
   return `
-    <div class="brand brand-small">${giftIcon}<span>SintGPT</span><em>Blog</em></div>
+    <div class="brand brand-small">${giftIcon}<span>SintGPT</span><em>${escape(spec.label ?? 'Blog')}</em></div>
     <h1 class="title" data-fit>${escape(spec.title)}</h1>
     <p class="subtitle">${escape(spec.subtitle)}</p>`;
 }

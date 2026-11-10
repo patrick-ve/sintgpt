@@ -10,9 +10,43 @@ useSeoMeta({
   ogTitle: () => t('examples.pageTitle'),
   ogDescription: () => t('examples.description'),
 });
-useOgImage('home', 'SintGPT');
+useOgImage('voorbeelden', 'Voorbeelden van sinterklaasgedichten op SintGPT');
 useHead({
   link: [{ rel: 'canonical', href: 'https://sintgpt.com/voorbeelden' }],
+  script: [
+    {
+      type: 'application/ld+json',
+      // Dutch, like the server-rendered page that search engines read.
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'CollectionPage',
+            name: t('examples.pageTitle'),
+            url: 'https://sintgpt.com/voorbeelden',
+            description: t('examples.description'),
+            inLanguage: 'nl',
+            mainEntity: {
+              '@type': 'ItemList',
+              numberOfItems: EXAMPLE_POEMS.length,
+              itemListElement: EXAMPLE_POEMS.map((example, index) => ({
+                '@type': 'ListItem',
+                position: index + 1,
+                name: t('poem.title', { name: example.request.name }),
+              })),
+            },
+          },
+          {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'SintGPT', item: 'https://sintgpt.com/' },
+              { '@type': 'ListItem', position: 2, name: t('examples.pageTitle'), item: 'https://sintgpt.com/voorbeelden' },
+            ],
+          },
+        ],
+      }),
+    },
+  ],
 });
 </script>
 
@@ -45,6 +79,7 @@ useHead({
         </NuxtLink>
       </div>
     </main>
+    <SiteLinks />
   </div>
 </template>
 

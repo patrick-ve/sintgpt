@@ -52,7 +52,7 @@ async function main() {
     .webp({ quality: 80 })
     .toFile(path.join(root, 'public/sint-352.webp'));
 
-  for (const width of [400, 800]) {
+  for (const width of [400, 600, 800]) {
     await crop(SINT_HERO)
       .resize(width, Math.round(width * 1.25))
       .webp({ quality: 78 })
