@@ -9,8 +9,8 @@ findings worth keeping. Newest information first within each section.
   `docs/pricing-tiers.md`.
 - Never put API keys, webhook secrets or gift codes in this file.
 
-Last updated: 10 November 2026. Live version: `417bb32d-c619-463a-a960-65af023db212`
-(commit `0646247`, on GitHub).
+Last updated: 10 November 2026. Live version: `f7e6c57b-7b7e-4658-89e0-15bf3e609584`
+(commit `3f6a2ad`, on GitHub).
 
 ## Priorities
 
@@ -33,10 +33,10 @@ Last updated: 10 November 2026. Live version: `417bb32d-c619-463a-a960-65af023db
 | [#15](#15-small-ui-items) | Low | Small UI items | Open |
 | [#16](#16-wrangler-update) | Low | Wrangler update | Open |
 | [#17](#17-free-poems-from-a-new-ip-address) | Low | Free poems from a new IP address | Accepted risk |
-| [#18](#18-rewrite-with-a-wish-and-poem-rating) | Medium | Rewrite with a wish, and poem rating | Built, not deployed |
+| [#18](#18-rewrite-with-a-wish-and-poem-rating) | Medium | Rewrite with a wish, and poem rating | Live, one check open |
 | [#19](#19-ready-for-the-peak-on-4-5-december) | High | Ready for the peak on 4–5 December | Open |
 | [#20](#20-getting-visitors) | High | Getting visitors | Parked |
-| [#21](#21-edit-a-poem-before-sharing) | Medium | Edit a poem before sharing | Built, not deployed |
+| [#21](#21-edit-a-poem-before-sharing) | Medium | Edit a poem before sharing | Live, one check open |
 | [#22](#22-offer-for-work-groups) | Low | Offer for work groups | Idea, needs a decision |
 | [#23](#23-brand-and-legal-risks) | Low | Brand and legal risks | Later |
 | [#24](#24-after-the-season) | Low | After the season | Later |
@@ -232,7 +232,8 @@ Last updated: 10 November 2026. Live version: `417bb32d-c619-463a-a960-65af023db
 
 ### #18 Rewrite with a wish, and poem rating
 
-- **Status:** built and tested locally on 10 November; not committed or deployed.
+- **Status:** live since 10 November (commit `3f6a2ad`). Open: one real rewrite
+  with a wish (costs a few cents).
 - **What:**
   - "Zeg wat er anders moet" under "Herschrijf dit gedicht" opens a text field
     (200 characters) and chips: Korter, Grappiger, Liever, Meer over het cadeau,
@@ -278,7 +279,8 @@ Last updated: 10 November 2026. Live version: `417bb32d-c619-463a-a960-65af023db
 
 ### #21 Edit a poem before sharing
 
-- **Status:** built and tested locally on 10 November; not committed or deployed.
+- **Status:** live since 10 November (commit `3f6a2ad`). Open: edit a real poem
+  (with its live signature) and check that the short link shows the edit.
 - **Choice (10 November):** design A, edit in place ("Pas aan" on the poem card,
   same font, Klaar / Annuleren / Terug naar origineel). Small edits are signed
   again by the server.
