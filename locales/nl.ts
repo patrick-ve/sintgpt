@@ -380,8 +380,7 @@ export default {
     },
   },
   examples: {
-    kicker: 'ChatGPT vs SintGPT',
-    title: 'Dezelfde vraag, twee gedichten',
+    title: 'ChatGPT vs SintGPT',
     chatgpt: 'ChatGPT',
     sintgpt: 'SintGPT',
     chatgptPoem: 'Gedicht van ChatGPT',

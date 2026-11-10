@@ -1,11 +1,36 @@
 # Dodo Payments: to do for the pricing tiers
 
-Status on 9 November 2026. The code for the three tiers (`utils/pricingTiers.ts`)
+Status on 10 November 2026. The code for the three tiers (`utils/pricingTiers.ts`)
 is done. These steps in Dodo and Cloudflare are still open. Do them in order.
 
 Never paste an API key or webhook secret in a chat, a commit or this file.
 
-## Background
+## Live business and products (10 November 2026)
+
+The live business is **`bus_Gg5xzOyhmXu3Tcx2bBzxQ`** (the owner confirmed it). It is the
+business from last season: it had live payments of €1,99 in December 2025.
+
+| Tier | Env variable | Live product ID | Price | Tax |
+|---|---|---|---|---|
+| 3 gedichten | `NUXT_DODO_PRODUCT_ID_DRIE` | `pdt_0NreeKYxYPEDUUK8Mo8MK` | €3,99 | saas |
+| Gezin | `NUXT_DODO_PRODUCT_ID` | `pdt_k1w5aNEH5uiPQMhDT9oIE` ("Onbeperkt gedichten maken met SintGPT", from 2025) | €6,99 | saas |
+| Hele familie | `NUXT_DODO_PRODUCT_ID_FAMILIE` | `pdt_0NreeKbakzFxl4k6Nl9Zr` | €12,99 | saas |
+
+All one-time, EUR, VAT included. The two new ones have metadata `tier` = `drie` / `familie`,
+no description and no image. Gezin keeps its 2025 name and image; its name says
+"Onbeperkt", which the site no longer says (max 100 a day). Rename it in the dashboard
+if you want ("SintGPT – Gezin").
+
+Validation on 10 November 2026, 16:57: the live site's checkout for Gezin gave 503,
+cause `dodo 403` (Dodo refused the Worker's key; on 9 November the text was "Live payments
+not enabled for merchant"). The Dodo MCP login cannot create checkout sessions (no
+`checkout_sessions:write` scope), so it could not test the products directly.
+
+Not known: which business the Worker's live key belongs to (`wrangler secret list` shows
+names only). The Cloudflare dashboard → Workers → sintgpt → Logs shows the full Dodo
+message on "Dodo refused the checkout".
+
+## Background (9 November 2026, test mode)
 
 - The three tiers each have their own Dodo product. A tier without a product ID
   is not offered on the site, so the site keeps working while products are missing.
@@ -55,28 +80,21 @@ With `npm run dev` (or the local Worker preview), buy each tier with a Dodo test
 
 ## 3. Live mode: products
 
-The Dodo MCP login worked in test mode only. Live mode needs a new login in live mode.
-
-- [ ] Wait for Dodo to enable live payments for the business
-      (now: "403 Live payments not enabled for merchant").
-- [ ] Log in to the Dodo MCP in **live mode**, then ask Claude to create the same three
-      products (same names, prices, tax category and metadata as above). Claude asks
-      for confirmation before each live write.
-- [ ] Write the three live product IDs here:
-      - 3 gedichten: `pdt_…`
-      - Gezin: `pdt_…`
-      - Hele familie: `pdt_…`
-- [ ] In the live mode of the new business: create a live API key and a live webhook
-      for `https://sintgpt.com/api/webhooks/dodo-payments`.
+- [x] Live products for 3 gedichten and Hele familie created (10 November 2026, IDs above).
+- [ ] Wait for Dodo to enable live payments for `bus_Gg5xzOyhmXu3Tcx2bBzxQ`
+      (10 November: still `dodo 403`).
+- [ ] Make sure the Worker's live key and webhook secret come from this business. If not
+      sure: create a live API key and a live webhook for
+      `https://sintgpt.com/api/webhooks/dodo-payments` in this business, and set both secrets (step 4).
 
 ## 4. Cloudflare: Worker secrets
 
 Run these yourself; each asks for the value. Never put live values in `.env`.
 
 - [ ] `! npx wrangler secret put NUXT_DODO_PAYMENTS_API_KEY --name sintgpt` (new live key)
-- [ ] `! npx wrangler secret put NUXT_DODO_PRODUCT_ID --name sintgpt` (live Gezin)
-- [ ] `! npx wrangler secret put NUXT_DODO_PRODUCT_ID_DRIE --name sintgpt`
-- [ ] `! npx wrangler secret put NUXT_DODO_PRODUCT_ID_FAMILIE --name sintgpt`
+- [ ] `! printf %s pdt_k1w5aNEH5uiPQMhDT9oIE | npx wrangler secret put NUXT_DODO_PRODUCT_ID --name sintgpt` (live Gezin)
+- [ ] `! printf %s pdt_0NreeKYxYPEDUUK8Mo8MK | npx wrangler secret put NUXT_DODO_PRODUCT_ID_DRIE --name sintgpt`
+- [ ] `! printf %s pdt_0NreeKbakzFxl4k6Nl9Zr | npx wrangler secret put NUXT_DODO_PRODUCT_ID_FAMILIE --name sintgpt`
 - [ ] `! npx wrangler secret put NUXT_DODO_PAYMENTS_WEBHOOK_SECRET --name sintgpt` (new live secret)
 - [ ] `bash scripts/smoke-test.sh`: the lines "tier on sale" pass for all three tiers.
 

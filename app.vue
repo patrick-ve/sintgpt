@@ -50,5 +50,13 @@ function logClientError(error: unknown) {
   consola.error(error);
 }
 
+// A joke for the curious: opening the browser's devtools plays Rick Astley.
+// The event goes out with sendBeacon, which survives the page leaving.
+const { track } = useAnalytics();
+useDisableDevTools().config.onDetectOpen = () => {
+  track('Open devtools');
+  window.location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+};
+
 </script>
 

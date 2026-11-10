@@ -429,7 +429,7 @@
         { id: 'pdf', label: 'PDF designs', column: 'Saves', items: rows => byDetail(rows, 'Save as PDF') },
         { id: 'actions', label: 'Actions', column: 'Times',
           items: rows => [
-            ...eventItems(rows, ['Open history', 'Open poem from history', 'Delete poem', 'Clear history', 'Play video', 'Scroll to FAQ', 'Contact']),
+            ...eventItems(rows, ['Open history', 'Open poem from history', 'Delete poem', 'Clear history', 'Play video', 'Scroll to FAQ', 'Contact', 'Open devtools']),
             ...byDetail(rows, 'Show surprise ideas', 'surprise ideas: '),
             ...byDetail(rows, 'Switch language', 'language: '),
             ...byDetail(rows, 'Show example', 'example: '),

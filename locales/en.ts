@@ -378,8 +378,7 @@ export default {
     },
   },
   examples: {
-    kicker: 'ChatGPT vs SintGPT',
-    title: 'Same request, two poems',
+    title: 'ChatGPT vs SintGPT',
     chatgpt: 'ChatGPT',
     sintgpt: 'SintGPT',
     chatgptPoem: 'Poem by ChatGPT',

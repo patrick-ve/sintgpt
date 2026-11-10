@@ -62,17 +62,12 @@ const chatgpt = computed(() => {
     class="relative z-10 bg-[#fbf3e2] text-[#3d0716] px-4 sm:px-6 pb-16 md:pb-20"
   >
     <div class="mx-auto max-w-[760px] lg:max-w-[1120px] flex flex-col gap-6">
-      <div class="flex flex-col gap-2">
-        <p class="text-[0.8125rem] font-bold tracking-[0.06em] uppercase text-[#8b1538]">
-          {{ t('examples.kicker') }}
-        </p>
-        <h2
-          id="examples-title"
-          class="font-display font-bold text-[1.75rem] md:text-[2.5rem] leading-tight text-[#8b1538] text-balance"
-        >
-          {{ t('examples.title') }}
-        </h2>
-      </div>
+      <h2
+        id="examples-title"
+        class="font-display font-bold text-[1.75rem] md:text-[2.5rem] leading-tight text-[#8b1538] text-balance"
+      >
+        {{ t('examples.title') }}
+      </h2>
 
       <div role="group" :aria-label="t('examples.styleLabel')" class="flex flex-wrap gap-2">
         <button
