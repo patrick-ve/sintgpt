@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { buildShareUrl } from '~/utils/poemLink';
+import { buildShareUrl, type PoemShare } from '~/utils/poemLink';
 import { POEM_INPUT_LIMITS } from '~/utils/poemLimits';
 import { saveFormDraft, takeFormDraft } from '~/utils/formDraft';
 import { pakjesavondCountdown } from '~/utils/pakjesavond';
@@ -252,6 +252,42 @@ const scrollToFaq = () => {
 type PoemFormData = typeof formData.value;
 const lastRequest = ref<PoemFormData | null>(null);
 
+// "Zeg wat er anders moet": an optional wish for the rewrite, such as "korter".
+// With a wish the rewrite also sends the poem on screen, so the model changes
+// that poem instead of starting over. Without one it writes a new version.
+const rewriteHint = ref('');
+const hintOpen = ref(false);
+const hintInputRef = ref<HTMLInputElement | null>(null);
+const openHint = () => {
+  hintOpen.value = true;
+  nextTick(() => hintInputRef.value?.focus());
+};
+const closeHint = () => {
+  hintOpen.value = false;
+  rewriteHint.value = '';
+};
+const hintParts = () => rewriteHint.value.split(',').map(part => part.trim()).filter(Boolean);
+const hasChip = (chip: string) => hintParts().some(part => part.toLowerCase() === chip.toLowerCase());
+// A chip adds its wish to the text, or takes it out again.
+const toggleChip = (chip: string) => {
+  const parts = hintParts();
+  const next = hasChip(chip)
+    ? parts.filter(part => part.toLowerCase() !== chip.toLowerCase())
+    : [...parts, parts.length ? chip.toLowerCase() : chip];
+  const text = next.join(', ');
+  if (text.length > POEM_INPUT_LIMITS.rewriteHint) return;
+  rewriteHint.value = text;
+  // Typing after a chip goes on at the end of the text.
+  nextTick(() => {
+    const input = hintInputRef.value;
+    input?.setSelectionRange(text.length, text.length);
+  });
+};
+
+// 👍/👎 for the poem on screen. Only an analytics event, with the style, so we
+// see which styles disappoint. A 👎 opens the wish for a rewrite.
+const poemRating = ref<'up' | 'down' | null>(null);
+
 // Why the payment window opened (for analytics and its first line), and the
 // tier it selects.
 const paymentTrigger = ref<PaymentTrigger>('submit');
@@ -293,7 +329,7 @@ watch(showHistory, (open) => {
   if (open) track('Open history');
 });
 
-const runGeneration = async (request: PoemFormData, regenerate = false) => {
+const runGeneration = async (request: PoemFormData, regenerate = false, hint?: string) => {
   // Scroll to poem section on mobile immediately so user sees loading state
   if (window.innerWidth < 1024 && poemSectionRef.value) {
     poemSectionRef.value.scrollIntoView({
@@ -305,10 +341,15 @@ const runGeneration = async (request: PoemFormData, regenerate = false) => {
   poemAnnouncement.value = t('poem.loading');
 
   displayedRecipient.value = request.name.trim();
+  // The wish needs the poem it changes; read it before the new one replaces it.
+  const previousPoem = hint ? (poem.value ?? '').slice(0, POEM_INPUT_LIMITS.previousPoem) : '';
   activeHistoryId.value = null;
   lastRequest.value = { ...request };
+  poemRating.value = null;
+  stopEditing();
+  editStatus.value = '';
   resetSurprise();
-  await generatePoem({ ...request, regenerate });
+  await generatePoem({ ...request, regenerate, ...(hint ? { rewriteHint: hint, previousPoem } : {}) });
 
   // A rate limit shows the upgrade offer in the poem area.
   poemAnnouncement.value = poem.value ? t('poem.ready') : '';
@@ -330,7 +371,11 @@ const runGeneration = async (request: PoemFormData, regenerate = false) => {
     });
     activeHistoryId.value = saved.id;
     // How many poems this device has (the history keeps up to 50).
-    track('Poem ready', { detail: regenerate ? 'rewrite' : 'new', value: historyEntries.value.length });
+    track('Poem ready', {
+      detail: regenerate ? (hint ? 'rewrite hint' : 'rewrite') : 'new',
+      value: historyEntries.value.length,
+    });
+    if (hint) closeHint();
 
     // Save trial poem for unpaid users so it persists across page refreshes
     if (!isPaid.value) {
@@ -353,7 +398,106 @@ const handleSubmit = async () => {
 const regeneratePoem = async () => {
   if (!lastRequest.value || isLoading.value) return;
   if (!(await canStartGeneration('rewrite'))) return;
-  await runGeneration(lastRequest.value, true);
+  await runGeneration(lastRequest.value, true, rewriteHint.value.trim() || undefined);
+};
+
+const ratePoem = (vote: 'up' | 'down') => {
+  if (poemRating.value) return;
+  poemRating.value = vote;
+  const style = historyEntries.value.find(entry => entry.id === activeHistoryId.value)?.style
+    ?? lastRequest.value?.style;
+  track('Rate poem', { detail: style ? `${vote}:${style}` : vote });
+  if (vote === 'down' && lastRequest.value) openHint();
+};
+
+// "Pas aan": the visitor edits the poem on the paper. The history keeps the
+// poem SintGPT wrote (`original`) and its signature, so "Terug naar origineel"
+// works and the server always compares an edit with the poem it signed. Small
+// edits get a new signature and keep their share link; large ones lose it.
+const editing = ref(false);
+const editText = ref('');
+const editSaving = ref(false);
+const editError = ref('');
+const editStatus = ref('');
+const editRef = ref<HTMLTextAreaElement | null>(null);
+const editButtonRef = ref<HTMLButtonElement | null>(null);
+const activeEntry = computed(() => historyEntries.value.find(entry => entry.id === activeHistoryId.value));
+const originalPoem = computed(() => activeEntry.value?.original ?? null);
+// The poem was edited too much to sign again, so it has no share link.
+const editNoLink = computed(() => !!activeEntry.value?.original && !activeEntry.value.share && !!activeEntry.value.originalShare);
+const editRows = computed(() => Math.min(40, editText.value.split('\n').length + 2));
+
+const startEdit = () => {
+  if (!poem.value || isLoading.value) return;
+  editText.value = poem.value;
+  editError.value = '';
+  editStatus.value = '';
+  editing.value = true;
+  closeHint();
+  nextTick(() => editRef.value?.focus());
+};
+const stopEditing = () => {
+  editing.value = false;
+  editError.value = '';
+};
+const cancelEdit = () => {
+  stopEditing();
+  nextTick(() => editButtonRef.value?.focus());
+};
+const revertEdit = () => {
+  if (originalPoem.value) editText.value = originalPoem.value;
+  editRef.value?.focus();
+};
+
+const saveEdit = async () => {
+  const text = editText.value.trim();
+  if (!text) {
+    editError.value = t('poem.edit.empty');
+    editRef.value?.focus();
+    return;
+  }
+  if (text === poem.value?.trim()) {
+    cancelEdit();
+    return;
+  }
+  const entry = activeEntry.value;
+  const original = (entry?.original ?? entry?.poem ?? poem.value ?? '').trim();
+  const originalShare = (entry?.original ? entry.originalShare : entry?.share) ?? null;
+  const reverted = text === original;
+  let share: PoemShare | null = null;
+  let detail = reverted ? 'reverted' : 'saved';
+  if (reverted) {
+    share = originalShare;
+  } else if (originalShare) {
+    editSaving.value = true;
+    try {
+      const result = await $fetch<{ share: PoemShare | null; reason?: string }>('/api/share/edit', {
+        method: 'POST',
+        body: { share: originalShare, original, text },
+        timeout: 6000,
+      });
+      share = result.share;
+      if (!share) detail = result.reason === 'too-different' ? 'too different' : 'no link';
+    } catch {
+      detail = 'no link';
+    } finally {
+      editSaving.value = false;
+    }
+  } else {
+    detail = 'no link';
+  }
+
+  poem.value = text;
+  if (entry) {
+    poemHistory.update(entry.id, reverted
+      ? { poem: text, share: originalShare, original: undefined, originalShare: undefined }
+      : { poem: text, share, original, originalShare });
+  }
+  if (!isPaid.value) saveTrialPoem(text, displayedRecipient.value);
+  track('Edit poem', { detail });
+  stopEditing();
+  editStatus.value = t('poem.edit.saved');
+  nextTick(() => editButtonRef.value?.focus());
 };
 
 const copyToClipboard = async () => {
@@ -609,6 +753,10 @@ const openPoemFromHistory = (entry: PoemHistoryEntry) => {
   displayedRecipient.value = entry.recipient;
   activeHistoryId.value = entry.id;
   lastRequest.value = null;
+  poemRating.value = null;
+  closeHint();
+  stopEditing();
+  editStatus.value = '';
   track('Open poem from history');
   nextTick(() => {
     poemSectionRef.value?.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
@@ -1333,12 +1481,24 @@ useHead({
                 >
                   {{ t('poem.sample') }}
                 </p>
-                <h3
-                  id="poem-title"
-                  class="font-display font-bold text-[1.75rem] leading-tight text-[#8b1538] break-words"
-                >
-                  {{ poem || isLoading || error ? poemTitle : t('poem.sampleTitle') }}
-                </h3>
+                <div class="flex items-start justify-between gap-3">
+                  <h3
+                    id="poem-title"
+                    class="font-display font-bold text-[1.75rem] leading-tight text-[#8b1538] break-words min-w-0"
+                  >
+                    {{ poem || isLoading || error ? poemTitle : t('poem.sampleTitle') }}
+                  </h3>
+                  <button
+                    v-if="poem && !isLoading && !error && !editing"
+                    ref="editButtonRef"
+                    type="button"
+                    class="edit-button"
+                    @click="startEdit"
+                  >
+                    <UIcon name="i-heroicons-pencil-square" class="size-[1.125rem]" aria-hidden="true" />
+                    {{ t('poem.edit.open') }}
+                  </button>
+                </div>
 
                 <!-- Writing -->
                 <div v-if="isLoading && !poem" class="flex items-center justify-center py-6">
@@ -1355,6 +1515,45 @@ useHead({
                   icon="i-heroicons-exclamation-triangle"
                   class="border-2 border-red-300 bg-red-50/80 rounded-xl"
                 />
+
+                <!-- Editing the poem, in place and in the same font -->
+                <div v-else-if="poem && editing" class="poem-edit">
+                  <label for="poem-edit-text" class="sr-only">{{ t('poem.edit.label') }}</label>
+                  <textarea
+                    id="poem-edit-text"
+                    ref="editRef"
+                    v-model="editText"
+                    class="poem-text poem-edit-text"
+                    :rows="editRows"
+                    :maxlength="POEM_INPUT_LIMITS.previousPoem"
+                    :aria-invalid="editError ? 'true' : undefined"
+                    :aria-describedby="editError ? 'poem-edit-hint poem-edit-error' : 'poem-edit-hint'"
+                  />
+                  <p id="poem-edit-hint" class="m-0 text-sm text-[#5c0f26]">{{ t('poem.edit.hint') }}</p>
+                  <p v-if="editError" id="poem-edit-error" class="m-0 text-sm font-bold text-[#8b1538]">{{ editError }}</p>
+                  <div class="flex flex-wrap items-center justify-end gap-2">
+                    <button
+                      v-if="originalPoem && editText.trim() !== originalPoem.trim()"
+                      type="button"
+                      class="hint-toggle me-auto"
+                      @click="revertEdit"
+                    >
+                      <UIcon name="i-heroicons-arrow-uturn-left" class="size-[1.125rem]" aria-hidden="true" />
+                      {{ t('poem.edit.revert') }}
+                    </button>
+                    <button type="button" class="poem-action justify-center" @click="cancelEdit">
+                      {{ t('poem.edit.cancel') }}
+                    </button>
+                    <button
+                      type="button"
+                      class="poem-action poem-action-main px-6"
+                      :disabled="editSaving"
+                      @click="saveEdit"
+                    >
+                      {{ editSaving ? t('poem.edit.saving') : t('poem.edit.done') }}
+                    </button>
+                  </div>
+                </div>
 
                 <!-- The poem -->
                 <pre
@@ -1373,22 +1572,92 @@ useHead({
               </template>
             </div>
 
+            <!-- 👍/👎 for the poem on screen (analytics only). The status line
+                 stays in the page, so its thanks is announced. -->
+            <p role="status" class="sr-only">{{ editStatus }}</p>
+            <p v-if="editNoLink && poem && !isLoading && !editing" class="m-0 text-sm text-center text-[#5c0f26]">
+              {{ t('poem.edit.noLink') }}
+            </p>
+            <div v-if="poem && !isLoading && !error && !isRateLimitError && !editing" class="poem-rating">
+              <template v-if="!poemRating">
+                <span id="poem-rating-question">{{ t('poem.rating.question') }}</span>
+                <span role="group" aria-labelledby="poem-rating-question" class="flex gap-2">
+                  <button type="button" class="rating-button" :aria-label="t('poem.rating.up')" @click="ratePoem('up')">
+                    <UIcon name="i-heroicons-hand-thumb-up" class="size-5" aria-hidden="true" />
+                  </button>
+                  <button type="button" class="rating-button" :aria-label="t('poem.rating.down')" @click="ratePoem('down')">
+                    <UIcon name="i-heroicons-hand-thumb-down" class="size-5" aria-hidden="true" />
+                  </button>
+                </span>
+              </template>
+              <p role="status" class="m-0 text-center">
+                <template v-if="poemRating === 'up'">{{ t('poem.rating.thanksUp') }}</template>
+                <template v-else-if="poemRating === 'down'">
+                  {{ lastRequest ? t('poem.rating.thanksDown') : t('poem.rating.thanksDownNoRewrite') }}
+                </template>
+              </p>
+            </div>
+
             <!-- Actions. Disabled on the example, hidden while writing. -->
             <div
-              v-if="!isRateLimitError && !error"
+              v-if="!isRateLimitError && !error && !editing"
               class="grid grid-cols-[repeat(auto-fill,minmax(12.5rem,1fr))] gap-2"
               :class="{ invisible: isLoading }"
             >
-              <button
-                v-if="lastRequest || !poem"
-                type="button"
-                class="poem-action poem-action-main col-span-full"
-                :disabled="!poem"
-                @click="regeneratePoem"
-              >
-                <UIcon name="i-heroicons-arrow-path" class="size-5" aria-hidden="true" />
-                {{ t('poem.regenerate') }}
-              </button>
+              <div v-if="lastRequest || !poem" class="col-span-full grid gap-2">
+                <!-- The wish for the rewrite: above the button that sends it. -->
+                <div v-if="hintOpen && poem" class="rewrite-hint">
+                  <div class="flex items-center justify-between gap-2">
+                    <label for="rewrite-hint-input" class="font-bold text-[#5c0f26]">{{ t('poem.hint.label') }}</label>
+                    <button type="button" class="hint-close" :aria-label="t('poem.hint.close')" @click="closeHint">
+                      <UIcon name="i-heroicons-x-mark" class="size-5" aria-hidden="true" />
+                    </button>
+                  </div>
+                  <input
+                    id="rewrite-hint-input"
+                    ref="hintInputRef"
+                    v-model="rewriteHint"
+                    type="text"
+                    class="hint-input"
+                    autocomplete="off"
+                    enterkeyhint="send"
+                    :maxlength="POEM_INPUT_LIMITS.rewriteHint"
+                    :placeholder="t('poem.hint.placeholder')"
+                    @keydown.enter.prevent="regeneratePoem"
+                  >
+                  <div role="group" :aria-label="t('poem.hint.suggestions')" class="flex flex-wrap gap-2">
+                    <button
+                      v-for="chip in (t('poem.hint.chips') as string[])"
+                      :key="chip"
+                      type="button"
+                      class="hint-chip"
+                      :aria-pressed="hasChip(chip)"
+                      @click="toggleChip(chip)"
+                    >
+                      {{ chip }}
+                    </button>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  class="poem-action poem-action-main"
+                  :disabled="!poem"
+                  @click="regeneratePoem"
+                >
+                  <UIcon name="i-heroicons-arrow-path" class="size-5" aria-hidden="true" />
+                  {{ rewriteHint.trim() ? t('poem.regenerateWithHint') : t('poem.regenerate') }}
+                </button>
+                <button
+                  v-if="poem && !hintOpen"
+                  type="button"
+                  class="hint-toggle"
+                  aria-expanded="false"
+                  @click="openHint"
+                >
+                  <UIcon name="i-heroicons-pencil-square" class="size-[1.125rem]" aria-hidden="true" />
+                  {{ t('poem.hint.open') }}
+                </button>
+              </div>
               <button
                 v-if="shareUrl || !poem"
                 type="button"
@@ -1453,7 +1722,7 @@ useHead({
 
             <!-- Surprise ideas (Hele familie) for the poem from the form -->
             <div
-              v-if="poem && lastRequest && !isLoading && !error && !isRateLimitError"
+              v-if="poem && lastRequest && !isLoading && !error && !isRateLimitError && !editing"
               class="surprise"
             >
               <button
@@ -1937,6 +2206,123 @@ useHead({
   border: 2px solid #8b1538;
   background: #fffaf0;
   font-size: 1.0625rem;
+}
+
+/* Editing the poem in place. */
+.edit-button {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 2.75rem;
+  padding: 0 0.875rem;
+  border: 1.5px solid #d9c49a;
+  border-radius: 999px;
+  background: #fff;
+  color: #8b1538;
+  font-weight: 700;
+}
+.poem-edit {
+  display: grid;
+  gap: 0.75rem;
+}
+.poem-edit-text {
+  width: 100%;
+  min-height: 12rem;
+  field-sizing: content;
+  padding: 0.75rem;
+  border: 1.5px solid #b8a274;
+  border-radius: 10px;
+  background: #fffdf7;
+  resize: vertical;
+}
+@media (hover: hover) {
+  .edit-button:hover {
+    border-color: #8b1538;
+    background: #fdf3dc;
+  }
+}
+
+/* The wish for a rewrite, and the 👍/👎 row. */
+.poem-rating {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem 0.75rem;
+  color: #5c0f26;
+  font-weight: 600;
+}
+.rating-button,
+.hint-close {
+  display: inline-grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1.5px solid #d9c49a;
+  border-radius: 999px;
+  background: #fff;
+  color: #8b1538;
+}
+.hint-close {
+  border-color: transparent;
+  background: transparent;
+}
+.rewrite-hint {
+  display: grid;
+  gap: 0.625rem;
+  padding: 0.875rem;
+  border: 1.5px solid #d9c49a;
+  border-radius: 12px;
+  background: #fffaf0;
+}
+.hint-input {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0 0.75rem;
+  border: 1.5px solid #b8a274;
+  border-radius: 10px;
+  background: #fff;
+  color: #2b0a14;
+  /* 16px: iOS zooms in on smaller input text. */
+  font-size: 1rem;
+}
+.hint-chip {
+  min-height: 2.25rem;
+  padding: 0 0.875rem;
+  border: 1.5px solid #d9c49a;
+  border-radius: 999px;
+  background: #fff;
+  color: #8b1538;
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+.hint-chip[aria-pressed='true'] {
+  border-color: #8b1538;
+  background: #8b1538;
+  color: #fff;
+}
+.hint-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-self: center;
+  gap: 0.375rem;
+  min-height: 2.75rem;
+  padding: 0 0.5rem;
+  color: #8b1538;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+@media (hover: hover) {
+  .rating-button:hover,
+  .hint-chip:hover {
+    border-color: #8b1538;
+    background: #fdf3dc;
+  }
+  .hint-chip[aria-pressed='true']:hover {
+    background: #6f0f2c;
+  }
 }
 @media (hover: hover) {
   .poem-action:enabled:hover {

@@ -12,6 +12,9 @@ export interface PoemHistoryEntry {
   lines: number;
   /** Signature for a share link. Poems from before this feature have none. */
   share?: PoemShare | null;
+  /** Set once the visitor edits the poem: the poem SintGPT wrote, and its signature. */
+  original?: string;
+  originalShare?: PoemShare | null;
 }
 
 export type NewPoemHistoryEntry = Omit<PoemHistoryEntry, 'id' | 'createdAt'>;
@@ -54,6 +57,10 @@ export const usePoemHistory = createSharedComposable(() => {
     return saved;
   };
 
+  const update = (id: string, patch: Partial<Omit<PoemHistoryEntry, 'id' | 'createdAt'>>) => {
+    stored.value = entries.value.map(e => (e.id === id ? { ...e, ...patch } : e));
+  };
+
   const remove = (id: string) => {
     stored.value = entries.value.filter(e => e.id !== id);
   };
@@ -62,5 +69,5 @@ export const usePoemHistory = createSharedComposable(() => {
     stored.value = [];
   };
 
-  return { entries, add, remove, clear };
+  return { entries, add, update, remove, clear };
 });

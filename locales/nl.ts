@@ -130,6 +130,35 @@ export default {
     sampleTitle: 'Gedicht voor Daan (7)',
     sampleSignature: 'Sint en Piet',
     regenerate: 'Herschrijf dit gedicht',
+    regenerateWithHint: 'Herschrijf met deze wens',
+    hint: {
+      open: 'Zeg wat er anders moet',
+      label: 'Wat moet er anders?',
+      placeholder: 'Bijv. korter, of meer over zijn nieuwe fiets',
+      suggestions: 'Snelle wensen',
+      chips: ['Korter', 'Grappiger', 'Liever', 'Meer over het cadeau', 'Beter rijm'],
+      close: 'Sluiten',
+    },
+    edit: {
+      open: 'Pas aan',
+      label: 'Gedicht aanpassen',
+      hint: 'Verander gerust een woord of een regel. Verander je veel, dan krijgt het gedicht geen deellink meer. Kopiëren en opslaan als PDF blijven werken.',
+      done: 'Klaar',
+      cancel: 'Annuleren',
+      revert: 'Terug naar origineel',
+      saving: 'Bewaren…',
+      empty: 'Het gedicht is leeg. Schrijf iets, of kies Annuleren.',
+      noLink: 'Dit gedicht is te veel veranderd voor een deellink. Je kunt het wel kopiëren, als tekst delen of opslaan als PDF.',
+      saved: 'Je aanpassing is bewaard.',
+    },
+    rating: {
+      question: 'Hoe vind je dit gedicht?',
+      up: 'Goed gedicht',
+      down: 'Niet goed gedicht',
+      thanksUp: 'Fijn! Dank je wel.',
+      thanksDown: 'Jammer. Zeg wat er anders moet en laat het herschrijven.',
+      thanksDownNoRewrite: 'Jammer. Dank je wel, hiermee maken we SintGPT beter.',
+    },
     surprise: {
       button: 'Bedenk een surprise',
       loading: 'De Sint denkt na…',
@@ -409,7 +438,7 @@ export default {
         {
           heading: 'Wat je invult voor een gedicht',
           body: [
-            'Om een gedicht te schrijven sturen we wat je in het formulier invult (zoals de naam, het cadeau en de weetjes) naar onze AI-diensten: Vercel AI Gateway en het AI-model van Google. Bij een storing gebruiken we het model van OpenAI. Deze diensten kunnen de gegevens buiten de Europese Unie verwerken.',
+            'Om een gedicht te schrijven sturen we wat je in het formulier invult (zoals de naam, het cadeau en de weetjes, en bij herschrijven je wens en het vorige gedicht) naar onze AI-diensten: Vercel AI Gateway en het AI-model van Google. Bij een storing gebruiken we het model van OpenAI. Deze diensten kunnen de gegevens buiten de Europese Unie verwerken.',
             'SintGPT bewaart wat je invult niet op een server. We schrijven het ook niet in onze logs. Vul geen gevoelige gegevens in, zoals gezondheid, geloof of adressen.',
             'Grondslag: het uitvoeren van de dienst waar je om vraagt.',
           ],
@@ -425,7 +454,7 @@ export default {
         {
           heading: 'Gedeelde gedichten',
           body: [
-            'Deel je een gedicht met een korte link, dan bewaren we het gedicht 90 dagen bij Cloudflare (Workers KV). Daarna verdwijnt het vanzelf. Iedereen met de link kan het lezen. Bij een lange link staat het gedicht in de link zelf. De eerste regels kunnen dan in de serverlogs komen.',
+            'Deel je een gedicht met een korte link, dan bewaren we het gedicht 90 dagen bij Cloudflare (Workers KV). Daarna verdwijnt het vanzelf. Iedereen met de link kan het lezen. Bij een lange link staat het gedicht in de link zelf. De eerste regels kunnen dan in de serverlogs komen. Pas je een gedicht aan, dan stuurt je browser het aangepaste en het oorspronkelijke gedicht naar onze server, zodat de deellink blijft werken. We bewaren ze daarbij niet.',
           ],
         },
         {
@@ -447,7 +476,7 @@ export default {
         {
           heading: 'Statistieken',
           body: [
-            'We tellen bezoeken en een paar handelingen, zoals "gedicht gemaakt" en "PDF opgeslagen". Dat doen we zelf, met Cloudflare Workers Analytics Engine. Per handeling bewaren we wat het was, de pagina, je taalkeuze, je land, de website waar je vandaan kwam, de campagnecode in de link (zoals utm_source), de instellingen van het gedicht (zoals stijl en lengte), of je velden zoals de weetjes hebt ingevuld (niet wat erin staat), hoe lang het schrijven duurde, het hoeveelste gedicht op je apparaat het is, of je betaald hebt en wat je kocht. Cloudflare leidt je land af uit je IP-adres; het IP-adres zelf bewaren we niet.',
+            'We tellen bezoeken en een paar handelingen, zoals "gedicht gemaakt" en "PDF opgeslagen". Dat doen we zelf, met Cloudflare Workers Analytics Engine. Per handeling bewaren we wat het was, de pagina, je taalkeuze, je land, de website waar je vandaan kwam, de campagnecode in de link (zoals utm_source), de instellingen van het gedicht (zoals stijl en lengte), of je velden zoals de weetjes hebt ingevuld (niet wat erin staat), hoe lang het schrijven duurde, of je het gedicht goed of niet goed vond, het hoeveelste gedicht op je apparaat het is, of je betaald hebt en wat je kocht. Cloudflare leidt je land af uit je IP-adres; het IP-adres zelf bewaren we niet.',
             'We bewaren geen namen, geen ingevulde teksten, geen betalings-ID en geen IP-adres. We gebruiken er geen cookies voor en volgen je niet over andere websites. Cloudflare wist deze gegevens na 3 maanden.',
             'Grondslag: ons gerechtvaardigd belang om de website te verbeteren.',
           ],

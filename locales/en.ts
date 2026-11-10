@@ -130,6 +130,35 @@ export default {
     sampleTitle: 'Poem for Mark',
     sampleSignature: 'Sinterklaas and Pete',
     regenerate: 'Rewrite this poem',
+    regenerateWithHint: 'Rewrite with this wish',
+    hint: {
+      open: 'Say what should change',
+      label: 'What should change?',
+      placeholder: 'For example shorter, or more about his new bike',
+      suggestions: 'Quick wishes',
+      chips: ['Shorter', 'Funnier', 'Kinder', 'More about the present', 'Better rhyme'],
+      close: 'Close',
+    },
+    edit: {
+      open: 'Edit',
+      label: 'Edit poem',
+      hint: 'Feel free to change a word or a line. If you change a lot, the poem no longer gets a share link. Copy and save as PDF still work.',
+      done: 'Done',
+      cancel: 'Cancel',
+      revert: 'Back to the original',
+      saving: 'Saving…',
+      empty: 'The poem is empty. Write something, or choose Cancel.',
+      noLink: 'This poem changed too much for a share link. You can still copy it, share it as text or save it as a PDF.',
+      saved: 'Your change is saved.',
+    },
+    rating: {
+      question: 'What do you think of this poem?',
+      up: 'Good poem',
+      down: 'Not a good poem',
+      thanksUp: 'Great! Thank you.',
+      thanksDown: 'Too bad. Say what should change and have it rewritten.',
+      thanksDownNoRewrite: 'Too bad. Thank you, this helps us make SintGPT better.',
+    },
     surprise: {
       button: 'Think of a surprise',
       loading: 'The Sint is thinking…',
@@ -407,7 +436,7 @@ export default {
         {
           heading: 'What you fill in for a poem',
           body: [
-            'To write a poem, we send what you fill in (such as the name, the present and the fun facts) to our AI services: Vercel AI Gateway and Google\'s AI model. During an outage we use OpenAI\'s model. These services can process the data outside the European Union.',
+            'To write a poem, we send what you fill in (such as the name, the present and the fun facts, and for a rewrite your wish and the previous poem) to our AI services: Vercel AI Gateway and Google\'s AI model. During an outage we use OpenAI\'s model. These services can process the data outside the European Union.',
             'SintGPT does not keep what you fill in on a server. We also do not write it to our logs. Do not fill in sensitive data, such as health, religion or addresses.',
             'Legal basis: providing the service you ask for.',
           ],
@@ -423,7 +452,7 @@ export default {
         {
           heading: 'Shared poems',
           body: [
-            'When you share a poem with a short link, we keep the poem at Cloudflare (Workers KV) for 90 days. After that it removes itself. Anyone with the link can read it. With a long link, the poem is in the link itself. Its first lines can then end up in server logs.',
+            'When you share a poem with a short link, we keep the poem at Cloudflare (Workers KV) for 90 days. After that it removes itself. Anyone with the link can read it. With a long link, the poem is in the link itself. Its first lines can then end up in server logs. When you edit a poem, your browser sends the edited and the original poem to our server, so the share link keeps working. We do not keep them.',
           ],
         },
         {
@@ -445,7 +474,7 @@ export default {
         {
           heading: 'Statistics',
           body: [
-            'We count visits and a few actions, such as "poem made" and "PDF saved". We do this ourselves, with Cloudflare Workers Analytics Engine. For each action we keep what it was, the page, your language choice, your country, the website you came from, the campaign code in the link (such as utm_source), the poem settings (such as style and length), whether you filled in fields such as the fun facts (not what you wrote), how long the writing took, which poem on your device it is, whether you paid and what you bought. Cloudflare works out your country from your IP address; we do not keep the IP address itself.',
+            'We count visits and a few actions, such as "poem made" and "PDF saved". We do this ourselves, with Cloudflare Workers Analytics Engine. For each action we keep what it was, the page, your language choice, your country, the website you came from, the campaign code in the link (such as utm_source), the poem settings (such as style and length), whether you filled in fields such as the fun facts (not what you wrote), how long the writing took, whether you found the poem good or not, which poem on your device it is, whether you paid and what you bought. Cloudflare works out your country from your IP address; we do not keep the IP address itself.',
             'We keep no names, no text you fill in, no payment ID and no IP address. We use no cookies for this and do not follow you across other websites. Cloudflare deletes this data after 3 months.',
             'Legal basis: our legitimate interest in improving the website.',
           ],

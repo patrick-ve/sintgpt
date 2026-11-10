@@ -22,6 +22,8 @@ export const CLIENT_EVENTS = [
   'Form started',
   'Form refused',
   'Poem ready',
+  'Rate poem',
+  'Edit poem',
   'Poem stream failed',
   'Open poem from history',
   'Open history',

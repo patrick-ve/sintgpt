@@ -13,6 +13,9 @@ interface PoemRequest {
   language: 'dutch' | 'english';
   /** Write a new version with the larger model. */
   regenerate?: boolean;
+  /** With regenerate: what should change, and the poem on screen. */
+  rewriteHint?: string;
+  previousPoem?: string;
 }
 
 export const usePoemGenerator = () => {

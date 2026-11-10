@@ -372,6 +372,18 @@
           items: rows => [
             ['Fun facts', 'facts'], ['Present', 'present'], ['Written by', 'wby'], ['Audience', 'aud'],
           ].flatMap(([title, key]) => group(rows, r => POEM.has(r.e), r => r[key] || '(none)').map(item => ({ ...item, group: title }))) },
+        { id: 'ratings', label: 'Ratings', column: 'Votes',
+          items: rows => [
+            ...group(rows, r => r.e === 'Rate poem' && r.detail.startsWith('up'), r => r.detail.split(':')[1] || '(no style)').map(item => ({ ...item, group: 'Good' })),
+            ...group(rows, r => r.e === 'Rate poem' && r.detail.startsWith('down'), r => r.detail.split(':')[1] || '(no style)').map(item => ({ ...item, group: 'Not good' })),
+            ...group(rows, r => r.e === 'Poem ready' && r.detail.startsWith('rewrite'), r => (r.detail === 'rewrite hint' ? 'with a wish' : 'without a wish')).map(item => ({ ...item, group: 'Rewrites' })),
+          ],
+          note: (rows) => {
+            const votes = rows.filter(r => r.e === 'Rate poem');
+            const n = sum(votes.map(r => r.n));
+            const up = sum(votes.filter(r => r.detail.startsWith('up')).map(r => r.n));
+            return n ? `${Math.round((100 * up) / n)}% of ${int(n)} votes were good.` : 'Votes come from the thumbs under each poem.';
+          } },
       ],
     },
     {

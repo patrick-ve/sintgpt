@@ -9,7 +9,7 @@ findings worth keeping. Newest information first within each section.
   `docs/pricing-tiers.md`.
 - Never put API keys, webhook secrets or gift codes in this file.
 
-Last updated: 9 November 2026. Live version: `417bb32d-c619-463a-a960-65af023db212`
+Last updated: 10 November 2026. Live version: `417bb32d-c619-463a-a960-65af023db212`
 (commit `0646247`, on GitHub).
 
 ## Priorities
@@ -33,17 +33,29 @@ Last updated: 9 November 2026. Live version: `417bb32d-c619-463a-a960-65af023db2
 | [#15](#15-small-ui-items) | Low | Small UI items | Open |
 | [#16](#16-wrangler-update) | Low | Wrangler update | Open |
 | [#17](#17-free-poems-from-a-new-ip-address) | Low | Free poems from a new IP address | Accepted risk |
+| [#18](#18-rewrite-with-a-wish-and-poem-rating) | Medium | Rewrite with a wish, and poem rating | Built, not deployed |
+| [#19](#19-ready-for-the-peak-on-4-5-december) | High | Ready for the peak on 4–5 December | Open |
+| [#20](#20-getting-visitors) | High | Getting visitors | Parked |
+| [#21](#21-edit-a-poem-before-sharing) | Medium | Edit a poem before sharing | Built, not deployed |
+| [#22](#22-offer-for-work-groups) | Low | Offer for work groups | Idea, needs a decision |
+| [#23](#23-brand-and-legal-risks) | Low | Brand and legal risks | Later |
+| [#24](#24-after-the-season) | Low | After the season | Later |
 
 ## Open
 
 ### #1 Dodo refuses live payments
 
-- **Status:** waiting for Dodo.
+- **Status:** waiting for Dodo. You are working on the account verification (10 November).
 - **What:** live checkouts fail with "403 Live payments not enabled for merchant".
   The site catches this: it stores a flag for 15 minutes, shows "Betalen lukt nu
   even niet" and allows 3 free poems a day per connection (otherwise 1).
 - **Effect:** nobody can pay. This is the largest block in the funnel.
 - **Next step:** get live payments approved by Dodo. Then do #3.
+- **Plan B (suggested 10 November):** if Dodo has not approved by about 15 November,
+  consider Mollie or Stripe Payment Links (1–2 days of work). Then you are the
+  seller: you handle BTW yourself and need a KvK number. Dodo, as merchant of
+  record, handles that for you.
+- **Check:** that the Dodo checkout offers iDEAL. Most Dutch buyers expect it.
 
 ### #2 The site describes tiers that are not on sale
 
@@ -162,7 +174,11 @@ Last updated: 9 November 2026. Live version: `417bb32d-c619-463a-a960-65af023db2
   mismatches" on the home page. In dev mode Vue reports a "Hydration text
   mismatch". Probably text that differs between server and browser (for example
   the countdown or the language).
-- **Next step:** find the node in dev mode and make the server and browser render the same text.
+- **Cause (found 10 November):** the counter under the form. The server renders
+  "1 gratis gedicht over"; the browser reads the count from localStorage and
+  renders "0 gratis gedichten over" for a visitor who used the free poem.
+- **Fix:** render the counter only after mount (`<ClientOnly>` or an `onMounted`
+  flag), so the server and the first browser render agree.
 
 ### #12 Search Console sitemap
 
@@ -213,6 +229,98 @@ Last updated: 9 November 2026. Live version: `417bb32d-c619-463a-a960-65af023db2
      not people. It is a third-party script: update the privacy page.
   2. Count IPv6 per /56 instead of /64. Stricter, but can join neighbours on
      some mobile networks.
+
+### #18 Rewrite with a wish, and poem rating
+
+- **Status:** built and tested locally on 10 November; not committed or deployed.
+- **What:**
+  - "Zeg wat er anders moet" under "Herschrijf dit gedicht" opens a text field
+    (200 characters) and chips: Korter, Grappiger, Liever, Meer over het cadeau,
+    Beter rijm. With a wish, the rewrite sends the poem on screen too, so the
+    model changes it instead of writing a new one.
+  - 👍/👎 under each poem: event `Rate poem` (`up:<style>` / `down:<style>`).
+    A 👎 opens the wish field when a rewrite is possible.
+  - Dashboard: Poems → Ratings.
+  - Privacy text: names the wish, the previous poem and the rating.
+- **Tests:** 5 new unit tests (prompt, tag escaping, limits); manual check at
+  390 px with a mocked poem stream. Not tested with a real AI call: check one
+  rewrite with a wish after the deploy (costs a few cents).
+- **Note:** a free visitor who taps 👎 and rewrites sees the payment window,
+  because a rewrite counts as a poem.
+
+### #19 Ready for the peak on 4–5 December
+
+- **Status:** open.
+- **Points:**
+  - Check the Cloudflare plan. On the Free plan, Workers KV allows 1,000 writes a
+    day (short links fall back to long links) and Workers 100,000 requests a day.
+    Workers Paid ($5 a month) lifts these.
+  - Set a spending limit in AI Gateway. A fallback model exists already
+    (`FALLBACK_POEM_MODEL`, OpenAI).
+  - An alert when `Poem generation failed` or Worker errors go up (a Cloudflare
+    notification, or a daily check of the dashboard).
+  - No large refactors from about 25 November. `pages/index.vue` (2,200 lines)
+    and `PaymentModal.vue` (1,200 lines) can be split after the season.
+
+### #20 Getting visitors
+
+- **Status:** parked (10 November).
+- **Context:** 29 page views and 2 poems in 2 days (9–10 November), mostly own
+  testing. The product is ready; few people know it.
+- **Ideas:**
+  - Shared poems are free adverts: a clear "Maak zelf een gedicht" button above
+    the fold on `/g/<id>`. Measure `Open shared poem` → `Form started`.
+  - Word of mouth: friends, family, colleagues, parent groups on Facebook.
+  - Search ads on "sinterklaasgedicht maken" / "sinterklaasgedicht generator"
+    from late November; organic SEO is too slow for this season.
+  - Search Console (#12): see which terms bring impressions; write posts for them.
+  - AI assistants: one visit came from chatgpt.com. Keep `llms.txt` current.
+
+### #21 Edit a poem before sharing
+
+- **Status:** built and tested locally on 10 November; not committed or deployed.
+- **Choice (10 November):** design A, edit in place ("Pas aan" on the poem card,
+  same font, Klaar / Annuleren / Terug naar origineel). Small edits are signed
+  again by the server.
+- **How:** `POST /api/share/edit` signs an edit when the original matches its
+  signature and the edit changes at most 25% of the words and of the opening
+  (`server/utils/poemEdit.ts`). A larger edit keeps no link; the page says so.
+  The history keeps the original. Event `Edit poem`.
+- **Tests:** 11 unit tests (distance, limits, forged originals); manual check at
+  390 px with a signed mock poem: small edit keeps the link, large edit loses it,
+  revert brings it back.
+- **Risk accepted:** within 25% of a long poem, someone can add a few lines of
+  their own text to a signed link. The opening (preview and share image) is held
+  to the same limit.
+
+### #22 Offer for work groups
+
+- **Status:** idea. Needs a decision on price and product.
+- **What:** offices draw lootjes and write many poems (blog post
+  `sinterklaas-op-het-werk`). A group offer could fit. The lootjes page already
+  links to the poem form (`data-cta="lootjes"`).
+
+### #23 Brand and legal risks
+
+- **Status:** later.
+- **Points:**
+  - The name "SintGPT": OpenAI's brand guidelines ask others not to use "GPT" in
+    product names. Not urgent for this season; think about it before investing
+    more in the brand.
+  - The H1 names ChatGPT ("Wil het rijmen met ChatGPT maar niet lukken?"), while
+    the Persuasion rules in `CLAUDE.md` say visible text does not name AI. Decide
+    which one holds.
+  - The legal checks in #5.
+
+### #24 After the season
+
+- **Status:** later.
+- **Ideas:**
+  - Christmas comes right after 5 December: a "kerstgedicht" or Christmas-card
+    text uses the same engine.
+  - Other occasions through the year: birthdays, retirements, weddings. Gezin
+    buyers have 365 days of access.
+  - A "remind me next year" list. Needs explicit consent and a privacy update.
 
 ## Findings
 
