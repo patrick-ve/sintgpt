@@ -44,26 +44,30 @@ Last updated: 10 November 2026. Live version: `03b783e6-9347-4d6f-929f-7690ce73a
 
 ## Open
 
-### #1 Dodo refuses live payments
+### #1 Live payments through Dodo
 
-- **Status:** waiting for Dodo. You are working on the account verification (10 November).
-- **What:** live checkouts fail with "403 Live payments not enabled for merchant".
-  The site catches this: it stores a flag for 15 minutes, shows "Betalen lukt nu
-  even niet" and allows 3 free poems a day per connection (otherwise 1).
-- **Effect:** nobody can pay. This is the largest block in the funnel.
-- **Checked 10 November, 16:57:** a Gezin checkout on the live site still gave `dodo 403`.
-  The live business is `bus_Gg5xzOyhmXu3Tcx2bBzxQ` (last season's, with live payments in
-  December 2025); the live products for all three tiers now exist there (#3).
-- **Dodo account:** `patrick@sintgpt.com` owns the live business. A second account,
-  `patrick@careerdeck.ai`, was created by mistake and has no transactions; do not use it.
-- **Support:** urgent email drafted on 10 November, to send from patrick@sintgpt.com.
-  Everything tried so far, and the email: `docs/dodo-support.md`.
-- **Next step:** get live payments approved by Dodo. Then do #3.
-- **Plan B (suggested 10 November):** if Dodo has not approved by about 15 November,
-  consider Mollie or Stripe Payment Links (1–2 days of work). Then you are the
-  seller: you handle BTW yourself and need a KvK number. Dodo, as merchant of
-  record, handles that for you.
-- **Check:** that the Dodo checkout offers iDEAL. Most Dutch buyers expect it.
+- **Status:** solved on 11 November 2026 (about 09:55) by switching to the other Dodo
+  business. A real purchase from start to finish (return, access, webhook) is still to do.
+- **Now in use:** business `bus_0NrUOZUWrAz7AYEqANsEb` (account `patrick@careerdeck.ai`),
+  live mode. Products made on 11 November: drie `pdt_0Nrhkxf4vJf5ynevsPHK3` (€3.99),
+  gezin `pdt_0NrhkxiUQYJFJOJ7Y9GRb` (€6.99, "SintGPT – Gezin"), familie
+  `pdt_0NrhkxlsT5qqHb4fn4ZHO` (€12.99); tax `saas`, tax included. Webhook
+  `ep_3LxE0vOc7DgJjc07acocOsGh41K` to `/api/webhooks/dodo-payments`, all events. The Worker
+  secrets (key, three product IDs, webhook secret) were set the same morning. A checkout
+  through the site then opened Dodo's page with "SintGPT – 3 gedichten", €3.99 incl. €0.69 BTW,
+  and the shop name "SintGPT".
+- **Key:** the owner pasted the live key in the chat and allowed Claude to use it. Replace it
+  with a new key (Developer → API Keys, scopes `checkout_sessions:write` and `payments:read`
+  or `payments:write`) and set that with the `pbpaste | grep '^dodo_live_'` command.
+- **Old business** `bus_Gg5xzOyhmXu3Tcx2bBzxQ` (account `patrick@sintgpt.com`): Dodo emailed
+  at 09:06 that live payments were enabled, but every live request (from the site, and
+  through the Dodo MCP without the Worker key) still gave `403 MERCHANT_NOT_LIVE`. Last
+  season's payments (December 2025) are in this business, so their payment IDs can no
+  longer be restored on the site. Access already in a browser cookie keeps working.
+- **History:** live checkouts failed with `dodo 403` from 9 November. The site caught this
+  with a 15-minute flag, "Betalen lukt nu even niet" and 3 free poems a day. Support email:
+  `docs/dodo-support.md`.
+- **Check:** that the Dodo checkout offers iDEAL (after the address step).
 
 ### #2 The site describes tiers that are not on sale
 
