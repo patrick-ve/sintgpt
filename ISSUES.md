@@ -390,7 +390,7 @@ Last updated: 10 November 2026. Live version: `03b783e6-9347-4d6f-929f-7690ce73a
 
 ### #26 Keywords and blog content
 
-- **Status:** keywords and the 10 November posts live on 11 November 2026 (Worker version `aec2119f`, commit `e1938b9`); style posts and the SEO pass in git, deploy pending.
+- **Status:** keywords and the 10 November posts live on 11 November 2026 (Worker version `aec2119f`, commit `e1938b9`); style posts and the SEO pass live on 11 November 2026 (version `60b2909d`, commit `a1edc21`).
 - **What changed:**
   - Keyword map per page: `docs/seo-keywords.md`.
   - Home: title tag "Sinterklaasgedicht maken met AI: gratis generator", a new meta
