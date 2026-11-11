@@ -285,3 +285,13 @@ kbd { padding: 0 4px; border: 1px solid var(--border-strong); border-radius: 4px
 @media (prefers-reduced-motion: reduce) {
   * { transition-duration: 0ms !important; }
 }
+
+/* Emojis before labels: decoration, kept from shrinking and out of the text colour. */
+.emoji {
+  display: inline-block;
+  margin-inline-end: 0.5em;
+  font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1;
+}

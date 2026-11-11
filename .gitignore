@@ -30,3 +30,6 @@ logs
 
 # Analytics dashboards (scripts/analytics-dashboard.ts)
 reports/
+
+# Rendered stickers (31 MB of PNG and PDF); npx tsx scripts/build-stickers.ts renders them again
+marketing/stickers/

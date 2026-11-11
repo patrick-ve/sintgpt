@@ -231,6 +231,74 @@
   const byDetail = (rows, event, prefix = '') => group(rows, r => r.e === event, r => `${prefix}${r.detail || '(none)'}`);
   const eventItems = (rows, events) => events.map(event => ({ label: event, n: count(rows, event) }));
 
+  // ------------------------------------------------------------ emojis
+  // Decoration only: every emoji sits next to its text and is aria-hidden.
+  const EVENT_EMOJI = {
+    'Generate poem': '📝', 'Regenerate poem': '🔁', 'Poem generation failed': '💥', 'Rate limited': '🚦',
+    'Proceed to payment': '🛒', 'Payments unavailable': '🚫', 'Poem aborted': '🏃', 'Payment verified': '✅',
+    'Payment webhook': '🪝', 'Surprise ideas': '💡', 'Surprise ideas failed': '🫥', 'Gift claimed': '🎁',
+    'Page view': '👀', 'Form started': '✏️', 'Form refused': '⛔', 'Poem ready': '📜', 'Rate poem': '👍',
+    'Edit poem': '✂️', 'Poem stream failed': '📡', 'Open poem from history': '📖', 'Open history': '📚',
+    'Delete poem': '🗑️', 'Clear history': '🧹', 'Switch language': '🌐', 'Payment succeeded': '💳',
+    'Payment returned': '↩️', 'Access restored': '🔓', 'Restore failed': '🔒', 'Show payment modal': '💶',
+    'Close payment modal': '❌', 'Continue after payment': '▶️', 'Go to poem form': '👉', 'Contact': '✉️',
+    'PDF failed': '🧾', 'Copy failed': '📋', 'Copy share link': '🔗', 'Copy to clipboard': '📋',
+    'Save as PDF': '📄', 'Shared via WhatsApp': '💬', 'Shared via Email': '📧', 'Shared via Facebook': '👥',
+    'Open shared poem': '📨', 'Shared poem to form': '↪️', 'Scroll to poem form': '🖱️', 'Scroll to FAQ': '❓',
+    'Play video': '🎬', 'Show example': '🔍', 'Draw lootjes': '🎟️', 'Show surprise ideas': '🎉', 'Open devtools': '🕵️',
+  };
+  const LABEL_EMOJI = {
+    // styles, languages, plans
+    'funny': '😄', 'classic': '📜', 'ironic': '😏', 'old-fashioned': '🎩', 'spicy': '🌶️', 'roast': '🔥',
+    'dutch': '🇳🇱', 'english': '🇬🇧', 'Dutch': '🇳🇱', 'English': '🇬🇧',
+    'free': '🆓', 'paid': '💶', 'of which rewrites': '🔁', 'with a wish': '💬', 'without a wish': '🔁',
+    // form use
+    'empty': '⚪', 'short': '🔹', 'long': '🔷', 'none': '➖', 'named': '🏷️', 'secret': '🤫', 'yes': '✅', 'no': '➖',
+    // reasons and window details
+    'limit': '🚧', 'credits': '🎟️', 'debounce': '⏱️', 'fair-use': '⚖️', 'tier': '🔐',
+    'submit': '✏️', 'rewrite': '🔁', 'surprise': '🎉', 'design': '📄',
+    'button': '❌', 'backdrop': '🖱️', 'escape': '⌨️', 'continue free': '🆓',
+    // tiers rows and results
+    'Checkouts started': '🛒', 'Payments verified': '✅', 'Poems written': '📝',
+    'Payment succeeded (browser)': '💳', 'Payment verified (server)': '✅', 'from a shared poem': '↪️',
+    // PDF designs
+    'perkament': '🪶', 'pakjesavond': '🌙', 'cadeaupapier': '🎁', 'schoolschrift': '📓', 'goudfolie': '✨', 'stoomboot': '🚢',
+    // pages
+    '/': '🏠', '/blog': '📰', '/lootjes': '🎟️', '/voorbeelden': '📚', '/gedicht': '📨', '/g/:id': '📨',
+    '/privacy': '🔒', '/voorwaarden': '📃',
+  };
+  const PREFIX_EMOJI = [
+    ['link: ', '👉'], ['scroll: ', '🖱️'], ['verified via: ', '✅'], ['returned: ', '↩️'], ['restore failed: ', '🔒'],
+    ['gift: ', '🎁'], ['surprise ideas: ', '🎉'], ['language: ', '🌐'], ['poem no. ', '📜'],
+    ['/blog/', '📰'], ['before', '⏳'], ['during', '✂️'],
+  ];
+  const GROUP_EMOJI = {
+    'Good': '👍', 'Not good': '👎', 'Rewrites': '🔁', 'Payments': '💶', 'Access': '🔑', 'Payments unavailable': '🚫',
+    '3 gedichten': '3️⃣', 'Gezin': '👨‍👩‍👧', 'Hele familie': '👨‍👩‍👧‍👦',
+    'Fun facts': '💡', 'Present': '🎁', 'Written by': '✍️', 'Audience': '👥',
+    'Rate limited': '🚦', 'Poem aborted (visitor left)': '🏃', 'Generation failed': '💥', 'Stream failed': '📡',
+    'Other': '⚠️', 'Form refused': '⛔',
+  };
+  const METRIC_EMOJI = { views: '👀', poems: '📝', checkouts: '🛒', payments: '✅', revenue: '💶', conversion: '🎯', cost: '🤖' };
+  const PANEL_EMOJI = { sources: '🧭', pages: '📄', countries: '🌍', poems: '📜', payments: '💶', engagement: '✨' };
+  const STAT_EMOJI = { 'Seconds to first text': '⏱️', 'Seconds per poem': '⌛', 'Failed poems': '💥', 'Rate limited': '🚦' };
+
+  const emoji = value => (value ? `<span class="emoji" aria-hidden="true">${value}</span>` : '');
+  function labelEmoji(label) {
+    const text = String(label);
+    if (LABEL_EMOJI[text]) return LABEL_EMOJI[text];
+    if (EVENT_EMOJI[text]) return EVENT_EMOJI[text];
+    if (text.endsWith(' people')) return '🎟️';
+    if (/^payment\.succeeded/.test(text)) return '✅';
+    if (/^refund\./.test(text)) return '↩️';
+    if (/^dispute\./.test(text)) return '⚖️';
+    if (/^payment\.(failed|cancelled)/.test(text)) return '❌';
+    if (/^payment\./.test(text)) return '⏳';
+    // "example: funny" shows the style; other prefixes show their own emoji.
+    if (text.startsWith('example: ')) return LABEL_EMOJI[text.slice(9)] ?? '🔍';
+    return PREFIX_EMOJI.find(([start]) => text.startsWith(start))?.[1] ?? '';
+  }
+
   // ------------------------------------------------------------ icons
   const ICON = {
     up: '<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M5 1.5 9 7.5H1z" fill="currentColor"/></svg>',
@@ -295,17 +363,17 @@
         </section>
         <div class="grid">
           <section class="panel wide" aria-labelledby="funnel-title">
-            <div class="panel-head"><h2 class="panel-title" id="funnel-title">Funnel: from visit to payment</h2></div>
+            <div class="panel-head"><h2 class="panel-title" id="funnel-title"><span class="emoji" aria-hidden="true">🔻</span>Funnel: from visit to payment</h2></div>
             <div class="panel-body" id="funnel"></div>
           </section>
           ${PANELS.map(panelShell).join('')}
           <section class="panel" aria-labelledby="problems-title">
-            <div class="panel-head"><h2 class="panel-title" id="problems-title">Health</h2></div>
+            <div class="panel-head"><h2 class="panel-title" id="problems-title"><span class="emoji" aria-hidden="true">🩺</span>Health</h2></div>
             <div class="panel-body" id="problems"></div>
           </section>
           <section class="panel wide" aria-labelledby="events-title">
             <div class="panel-head">
-              <h2 class="panel-title" id="events-title">All events</h2>
+              <h2 class="panel-title" id="events-title"><span class="emoji" aria-hidden="true">📋</span>All events</h2>
               <label class="sr-only" for="event-search">Search events</label>
               <input class="search" id="event-search" type="search" placeholder="Search events or details" autocomplete="off">
             </div>
@@ -447,7 +515,7 @@
       ? `<div class="tabs" role="tablist" aria-label="${esc(panel.title)}">${panel.tabs.map((tab, i) => `<button type="button" role="tab" id="tab-${panel.id}-${tab.id}" aria-controls="body-${panel.id}" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}" data-panel="${panel.id}" data-tab="${tab.id}">${esc(tab.label)}</button>`).join('')}</div>`
       : '';
     return `<section class="panel" aria-labelledby="title-${panel.id}">
-      <div class="panel-head"><h2 class="panel-title" id="title-${panel.id}">${esc(panel.title)}</h2>${tabs}</div>
+      <div class="panel-head"><h2 class="panel-title" id="title-${panel.id}">${emoji(PANEL_EMOJI[panel.id])}${esc(panel.title)}</h2>${tabs}</div>
       <div class="panel-body" id="body-${panel.id}"${panel.tabs.length > 1 ? ` role="tabpanel" aria-labelledby="tab-${panel.id}-${panel.tabs[0].id}"` : ''}></div>
     </section>`;
   }
@@ -475,13 +543,13 @@
     let html = `<div class="list-head"><span>${esc(tab.label)}</span><span>${esc(tab.column ?? 'Count')}</span></div><ul class="list">`;
     for (const item of items) {
       if (item.group && item.group !== lastGroup) {
-        html += `<li class="list-group">${esc(item.group)}</li>`;
+        html += `<li class="list-group">${emoji(GROUP_EMOJI[item.group])}${esc(item.group)}</li>`;
         lastGroup = item.group;
       }
       const groupTotal = item.group ? sum(items.filter(other => other.group === item.group).map(other => other.n)) : total;
       const small = item.note ?? (tab.noShare ? '' : share(item.n, groupTotal));
       const width = ((item.n / max) * 100).toFixed(2);
-      const inner = `<span class="bar" style="width:${width}%"></span><span class="label" title="${esc(item.label)}">${esc(item.label)}</span><span class="value">${int(item.n)}${small ? `<small>${esc(small)}</small>` : ''}</span>`;
+      const inner = `<span class="bar" style="width:${width}%"></span><span class="label" title="${esc(item.label)}">${tab.filter ? '' : emoji(labelEmoji(item.label))}${esc(item.label)}</span><span class="value">${int(item.n)}${small ? `<small>${esc(small)}</small>` : ''}</span>`;
       html += tab.filter && item.value !== undefined
         ? `<li><button type="button" class="item" data-country="${esc(item.value)}" aria-label="${esc(`${item.label}: ${int(item.n)}. Filter by this country`)}">${inner}</button></li>`
         : `<li class="item">${inner}</li>`;
@@ -530,7 +598,7 @@
       if (metric.id === 'cost' && poems.total) foot += `<span>${usd4.format(s.total / poems.total)}/poem</span>`;
       if (metric.id === 'conversion') foot += '<span>payments ÷ views</span>';
       return `<button type="button" class="kpi" data-metric="${metric.id}" aria-pressed="${metric.id === state.metric}">
-        <span class="kpi-label">${esc(metric.label)}</span>
+        <span class="kpi-label">${emoji(METRIC_EMOJI[metric.id])}${esc(metric.label)}</span>
         <span class="kpi-value">${esc(value)}</span>
         <span class="kpi-foot">${foot}</span>
       </button>`;
@@ -698,7 +766,7 @@
         html += `<li class="fdrop"><span></span><span>↓ ${esc(text)}${i === worst ? `<span class="flag">${ICON.down}Biggest drop</span>` : ''}</span></li>`;
       }
       html += `<li class="fstep">
-        <span class="fstep-name">${i + 1}. ${esc(step.name)}<small>${esc(step.hint)} event</small></span>
+        <span class="fstep-name">${i + 1}. ${emoji(EVENT_EMOJI[step.event])}${esc(step.name)}<small>${esc(step.hint)} event</small></span>
         <span class="fstep-track" role="img" aria-label="${esc(`${step.name}: ${int(step.n)}`)}"><span class="fstep-fill" style="display:block;width:${step.n ? ((step.n / max) * 100).toFixed(2) : 0}%"></span></span>
         <span class="fstep-count">${int(step.n)}<small>${i === 0 ? 'start' : `${esc(share(step.n, first) || '–')} of views`}</small></span>
       </li>`;
@@ -728,7 +796,7 @@
       ...byDetail(rows, 'Form refused', '').map(item => ({ ...item, group: 'Form refused' })),
     ].filter(item => item.n > 0);
     document.getElementById('problems').innerHTML = `
-      <div class="stats">${stats.map(([label, value]) => `<div class="stat"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`).join('')}</div>
+      <div class="stats">${stats.map(([label, value]) => `<div class="stat"><span>${emoji(STAT_EMOJI[label])}${esc(label)}</span><strong>${esc(value)}</strong></div>`).join('')}</div>
       ${items.length ? listHtml(items, { label: 'Problem', column: 'Count', noShare: true }) : '<p class="empty">No problems in this period.</p>'}
       <p class="panel-note">"Rate limited: limit" includes second free poems from the same connection, such as a private window.</p>`;
   }
@@ -760,7 +828,7 @@
     document.getElementById('events').innerHTML = rows.length
       ? `<div class="table-scroll"><table>
           <thead><tr><th>Event</th><th class="num">Count</th>${showPrev ? `<th class="num">${esc(view.period.prevName)}</th><th class="num">Change</th>` : ''}<th>Top details</th></tr></thead>
-          <tbody>${rows.map(row => `<tr><td>${esc(row.name)}</td><td class="num">${int(row.n)}</td>${showPrev ? `<td class="num">${int(row.prev)}</td><td class="num">${deltaHtml(fakeMetric, row.n, row.prev)}</td>` : ''}<td class="details">${esc(row.top)}</td></tr>`).join('')}</tbody>
+          <tbody>${rows.map(row => `<tr><td>${emoji(EVENT_EMOJI[row.name])}${esc(row.name)}</td><td class="num">${int(row.n)}</td>${showPrev ? `<td class="num">${int(row.prev)}</td><td class="num">${deltaHtml(fakeMetric, row.n, row.prev)}</td>` : ''}<td class="details">${esc(row.top)}</td></tr>`).join('')}</tbody>
         </table></div>${!query && silent.length ? `<p class="panel-note">No data in this period: ${esc(silent.join(', '))}.</p>` : ''}`
       : `<p class="empty">${query ? 'No events match.' : 'No events in this period.'}</p>`;
   }

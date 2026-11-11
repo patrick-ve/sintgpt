@@ -20,6 +20,7 @@ Package manager: **npm** (not yarn).
 - `npm run build:pdf-paper` - Re-render the PDF background from the CSS of `PaperScroll.vue`. Run after changing that component
 - `npx tsx scripts/build-sint-images.ts` - Crop `public/sint.png` to the avatar, favicons and share image. Run `build:og` after it
 - `npx tsx --env-file=.env scripts/generate-example-poems.ts <out.json> [id ...]` - Write the example poems again with the live prompt (costs a few cents). Review them, then copy the ones you keep into `utils/examplePoems.ts`
+- `npx tsx scripts/build-stickers.ts [out-dir] [id ...]` - Render the guerrilla QR stickers (`scripts/stickers.ts`: the 9 Pikant and Roast designs chosen out of 30, plus 2 "ChatGPT vs Sint" designs chosen out of 5, on eleven layouts in `build-stickers.ts`, 90 mm at 300 dpi) to `marketing/stickers/`. Each QR links to the home page with `utm_campaign=ams-<id>`
 - `npm run typecheck` - `vue-tsc --noEmit`
 - `npm test` - All tests (`test:unit`, `test:e2e`)
 
