@@ -18,7 +18,8 @@
     "build:pdf-previews": "tsx scripts/build-pdf-previews.ts",
     "build:pdf-paper": "tsx scripts/build-pdf-paper.ts",
     "deploy": "npm run build:cloudflare && wrangler --cwd .output deploy",
-    "analytics": "tsx scripts/analytics-dashboard.ts"
+    "analytics": "tsx scripts/analytics-dashboard.ts",
+    "build:pdf-showcase": "tsx scripts/build-pdf-showcase.ts"
   },
   "dependencies": {
     "@nuxt/image": "^2.2.1",

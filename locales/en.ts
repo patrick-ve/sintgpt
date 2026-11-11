@@ -387,6 +387,12 @@ export default {
       after: '.',
     },
   },
+  pdfShowcase: {
+    title: 'Print your poem in a beautiful design',
+    intro: 'Download your poem as a PDF, in one of these designs.',
+    alt: 'The {design} design with the poem for {name}',
+    cta: 'Write your poem',
+  },
   examples: {
     title: 'ChatGPT vs SintGPT',
     chatgpt: 'ChatGPT',

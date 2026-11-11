@@ -214,6 +214,32 @@ Met koffie gezet,
 Want een robotmaaier klaart de klus vol van lust!`,
   },
   {
+    id: 'sem',
+    request: {
+      name: 'Sem',
+      present: 'een speelgoedstoomboot',
+      funFacts: 'Is 6 jaar. Zet elke avond zijn schoen met een wortel voor het paard. Wil later Pietje op de stoomboot worden en oefent al met klimmen op de bank.',
+      style: 'classic',
+      rhymeScheme: 'AABB',
+      lines: 12,
+      language: 'dutch',
+    },
+    poem: `Lieve Sem, zes jaar oud en altijd blij,
+De Sint rijdt jouw huisje zeker niet voorbij.
+Elke avond zet jij je schoentje al klaar,
+Met een wortel voor het paard, wat een mooi gebaar!
+
+Je klautert en klimt al dapper op de bank,
+Het paard eet alles op met grote dank.
+Want jij wilt later een echte Pietje zijn,
+Mee op de stoomboot, stoer en reuzefijn.
+
+Daarom brengt Sint jou vandaag iets mee,
+Voor al jouw dromen over de grote zee.
+Pak deze speelgoedstoomboot nu maar uit,
+En vaar met volle kracht vooruit!`,
+  },
+  {
     id: 'emma',
     request: {
       name: 'Emma',

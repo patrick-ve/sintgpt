@@ -389,6 +389,12 @@ export default {
       after: '.',
     },
   },
+  pdfShowcase: {
+    title: 'Print je gedicht in een mooi ontwerp',
+    intro: 'Download je gedicht als PDF, in een van deze ontwerpen.',
+    alt: 'Ontwerp {design} met het gedicht voor {name}',
+    cta: 'Schrijf je gedicht',
+  },
   examples: {
     title: 'ChatGPT vs SintGPT',
     chatgpt: 'ChatGPT',

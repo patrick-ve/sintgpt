@@ -113,6 +113,7 @@ Notes:
 - Previews in the dialog (`public/pdf/previews/`) are page 1 of a real PDF of an example poem: `npm run build:pdf-previews` (needs `pdftoppm` from Poppler). Run it after changing a design. `npx tsx scripts/build-pdf-previews.ts <dir>` writes full-size PDFs and PNGs to review.
 - Fonts in `public/pdf/` (SIL OFL): Alegreya and Texturina, like the site, and Caveat for the notebook. pdf-lib cannot subset Caveat or lay out its contextual alternates, so that design sets `plainFont` (embedded whole, no alternates).
 - `Save as PDF` and `PDF failed` carry the design in `detail`.
+- Home page carousel (`components/PdfShowcase.vue`, between the form and "ChatGPT vs SintGPT"): the four designs without a tier, each with a different AABB example poem (`utils/pdfShowcase.ts`). It shows no extra designs of Hele familie and names no tier. The pictures in `public/pdf/showcase/` are page 1 of a real PDF: run `npm run build:pdf-showcase` after changing a design or one of those poems. The row moves endlessly (stops on hover and focus) and is a row to scroll by hand with reduced motion.
 
 ### Persuasion: what the page may say
 - Three tiers, Gezin in the middle (compromise effect), with "Aanbevolen" on it. Never write "meest gekozen" or "populair" without real data. Never show a struck-through "old" price.

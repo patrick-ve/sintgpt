@@ -325,6 +325,11 @@ const onFormActivity = () => {
   track('Form started');
 };
 
+const startFromShowcase = () => {
+  track('Scroll to poem form', { detail: 'pdf designs' });
+  scrollToForm();
+};
+
 const startFromExamples = () => {
   track('Scroll to poem form', { detail: 'examples' });
   scrollToForm();
@@ -1795,6 +1800,9 @@ useHead({
         </div>
       </div>
     </section>
+
+    <!-- The PDF designs, each with a different example poem -->
+    <PdfShowcase @start="startFromShowcase" />
 
     <!-- Example poems in every style -->
     <ExamplePoems @start="startFromExamples" />
