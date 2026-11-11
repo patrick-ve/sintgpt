@@ -313,6 +313,9 @@ const canStartGeneration = async (trigger: 'submit' | 'rewrite'): Promise<boolea
   }
   if (import.meta.dev || canGeneratePoem.value) return true;
   if (!isPaid.value && !(await refreshPaymentsStatus())) return true;
+  // No poems left: the free poem is used, or Drie's 3 poems are. The event
+  // counts the attempt; the window that follows has its own event.
+  track('No poems left', { detail: `${creditsUsed.value ? 'credits' : 'free'}:${trigger}` });
   openPaymentModal(creditsUsed.value ? 'credits' : trigger);
   return false;
 };

@@ -237,7 +237,7 @@
     'Generate poem': '📝', 'Regenerate poem': '🔁', 'Poem generation failed': '💥', 'Rate limited': '🚦',
     'Proceed to payment': '🛒', 'Payments unavailable': '🚫', 'Poem aborted': '🏃', 'Payment verified': '✅',
     'Payment webhook': '🪝', 'Surprise ideas': '💡', 'Surprise ideas failed': '🫥', 'Gift claimed': '🎁',
-    'Page view': '👀', 'Form started': '✏️', 'Form refused': '⛔', 'Poem ready': '📜', 'Rate poem': '👍',
+    'Page view': '👀', 'Form started': '✏️', 'Form refused': '⛔', 'No poems left': '🚧', 'Poem ready': '📜', 'Rate poem': '👍',
     'Edit poem': '✂️', 'Poem stream failed': '📡', 'Open poem from history': '📖', 'Open history': '📚',
     'Delete poem': '🗑️', 'Clear history': '🧹', 'Switch language': '🌐', 'Payment succeeded': '💳',
     'Payment returned': '↩️', 'Access restored': '🔓', 'Restore failed': '🔒', 'Show payment modal': '💶',
@@ -277,7 +277,7 @@
     '3 gedichten': '3️⃣', 'Gezin': '👨‍👩‍👧', 'Hele familie': '👨‍👩‍👧‍👦',
     'Fun facts': '💡', 'Present': '🎁', 'Written by': '✍️', 'Audience': '👥',
     'Rate limited': '🚦', 'Poem aborted (visitor left)': '🏃', 'Generation failed': '💥', 'Stream failed': '📡',
-    'Other': '⚠️', 'Form refused': '⛔',
+    'Other': '⚠️', 'Form refused': '⛔', 'No poems left': '🚧',
   };
   const METRIC_EMOJI = { views: '👀', poems: '📝', checkouts: '🛒', payments: '✅', revenue: '💶', conversion: '🎯', cost: '🤖' };
   const PANEL_EMOJI = { sources: '🧭', pages: '📄', countries: '🌍', poems: '📜', payments: '💶', engagement: '✨' };
@@ -794,11 +794,12 @@
       ...byDetail(rows, 'Poem stream failed', '').map(item => ({ ...item, group: 'Stream failed' })),
       ...eventItems(rows, ['PDF failed', 'Copy failed', 'Surprise ideas failed']).map(item => ({ ...item, group: 'Other' })),
       ...byDetail(rows, 'Form refused', '').map(item => ({ ...item, group: 'Form refused' })),
+      ...byDetail(rows, 'No poems left', '').map(item => ({ ...item, group: 'No poems left' })),
     ].filter(item => item.n > 0);
     document.getElementById('problems').innerHTML = `
       <div class="stats">${stats.map(([label, value]) => `<div class="stat"><span>${emoji(STAT_EMOJI[label])}${esc(label)}</span><strong>${esc(value)}</strong></div>`).join('')}</div>
       ${items.length ? listHtml(items, { label: 'Problem', column: 'Count', noShare: true }) : '<p class="empty">No problems in this period.</p>'}
-      <p class="panel-note">"Rate limited: limit" includes second free poems from the same connection, such as a private window.</p>`;
+      <p class="panel-note">"Rate limited: limit" includes second free poems from the same connection, such as a private window. "No poems left" counts each try to write a poem without poems left (free:… the free poem is used, credits:… the 3 poems of Drie are; :server when the server refused it).</p>`;
   }
 
   // ------------------------------------------------------------ all events

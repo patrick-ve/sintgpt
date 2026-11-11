@@ -1430,6 +1430,8 @@ describe('analytics funnel events', () => {
 
     await expect.poll(() => named(events, 'Close payment modal')).toHaveLength(1);
     expect(named(events, 'Form started')).toHaveLength(1);
+    expect(named(events, 'No poems left')).toHaveLength(1);
+    expect(named(events, 'No poems left')[0]).toMatchObject({ detail: 'free:submit' });
     expect(named(events, 'Show payment modal')[0]).toMatchObject({ detail: 'submit' });
     expect(named(events, 'Close payment modal')[0]).toMatchObject({ detail: 'escape' });
     expect(JSON.stringify(events)).not.toContain('Oma Truus');

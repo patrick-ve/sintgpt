@@ -36,7 +36,7 @@ const QUERIES: Record<string, string> = {
   'Funnel': `
     SELECT blob1 AS step, SUM(_sample_interval) AS count
     FROM ${DATASET}
-    WHERE ${since} AND blob1 IN ('Page view', 'Form started', 'Form refused', 'Generate poem',
+    WHERE ${since} AND blob1 IN ('Page view', 'Form started', 'Form refused', 'No poems left', 'Generate poem',
       'Poem ready', 'Show payment modal', 'Close payment modal', 'Proceed to payment',
       'Payment returned', 'Payment verified', 'Continue after payment', 'Payments unavailable')
     GROUP BY step ORDER BY count DESC`,

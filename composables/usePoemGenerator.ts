@@ -60,9 +60,12 @@ export const usePoemGenerator = () => {
         } else if (data?.reason === 'fair-use') {
           error.value = t('poem.fairUse');
         } else {
+          // The page did not know (another device, cleared site data): the
+          // server counted the attempt against a visitor without poems left.
           isRateLimitError.value = true;
           rateLimitReason.value = data?.reason === 'credits' ? 'credits' : 'limit';
           error.value = null;
+          track('No poems left', { detail: `${rateLimitReason.value === 'credits' ? 'credits' : 'free'}:server` });
         }
         return;
       }
