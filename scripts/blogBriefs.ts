@@ -20,6 +20,7 @@ export const SITE_FACTS = `
 - SintGPT (sintgpt.com) schrijft in ongeveer 30 seconden een persoonlijk sinterklaasgedicht, in het Nederlands of het Engels.
 - Je vult in: de naam van de ontvanger, het cadeau (en of het cadeau geheim blijft), weetjes over de ontvanger, wie het gedicht schrijft en voor welk publiek het is.
 - Zes stijlen: Grappig, Klassiek, Ironisch, Ouderwets, Pikant en Roast. Rijmschema's: AABB, ABAB, ABBA en limerick. Lengte: 8 tot 40 regels.
+- Wat elke stijl op SintGPT schrijft: Grappig is speels en luchtig; Klassiek is traditioneel, warm en respectvol; Ironisch is geestig en subtiel sarcastisch; Ouderwets is formeel en traditioneel in taal en toon; Pikant heeft suggestieve dubbelzinnigheden en gewaagde knipogen, maar blijft smaakvol en is nooit expliciet; Roast is een genadeloze maar liefdevolle roast.
 - De stijl Roast neemt de ontvanger flink op de hak op basis van wat jij invult, en maakt geen grappen over afkomst, geloof, geaardheid, gender, handicap, ziekte, lichaam, gewicht, overleden naasten of geldzorgen. Een roast eindigt warm.
 - Je eerste gedicht is gratis. Noem geen andere prijzen.
 - Je kunt een gedicht delen met een link, kopiëren of opslaan als PDF.
@@ -70,8 +71,46 @@ Gecontroleerde rijmwoorden (volrijm). Gebruik deze lijsten en voeg alleen woorde
 Lastig om op te rijmen: "december", "pakjesavond", "surprise". Zet zulke woorden niet aan het eind van een regel.
 `.trim();
 
+const AABB_ONLY = 'Schrijf elk voorbeeldgedicht en elk voorbeeldcouplet in rijmschema AABB (rijmparen), want dat kiezen de meeste mensen.';
+
 export const BLOG_BRIEFS: BlogBrief[] = [
-  // New posts.
+  // Posts about the poem styles (November 2026).
+  {
+    slug: 'sinterklaasgedicht-stijlen',
+    keyword: 'soorten sinterklaasgedichten',
+    secondary: ['stijl sinterklaasgedicht', 'welke toon voor een sinterklaasgedicht', 'sinterklaasgedicht grappig of klassiek'],
+    angle: `Een overzicht van de zes stijlen die SintGPT kent: Grappig, Klassiek, Ironisch, Ouderwets, Pikant en Roast. Per stijl: hoe hij klinkt, voor wie en welk publiek hij past, waar je op let, en een kort voorbeeld van vier regels voor dezelfde verzonnen ontvanger (Tante Ria, 58, die elke week een nieuwe hobby begint en een fondueset krijgt), zodat de lezer de stijlen kan vergelijken. Daarna: hoe je kiest (wie is de ontvanger, wie luistert er mee, hoe goed ken je elkaar), en welke stijlen je beter niet kiest voor kinderen, collega's of schoonfamilie. Link bij elke stijl naar het artikel over die stijl: /blog/grappige-sinterklaasgedichten-tips, /blog/klassiek-sinterklaasgedicht, /blog/ironisch-sinterklaasgedicht, /blog/ouderwets-sinterklaasgedicht, /blog/pikant-sinterklaasgedicht en /blog/roast-sinterklaasgedicht-zonder-te-kwetsen. Je mag voor dit artikel 6 tot 8 links gebruiken. ${AABB_ONLY}`,
+    cta: '/',
+  },
+  {
+    slug: 'klassiek-sinterklaasgedicht',
+    keyword: 'klassiek sinterklaasgedicht',
+    secondary: ['traditioneel sinterklaasgedicht', 'lief sinterklaasgedicht', 'sinterklaasgedicht voorbeeld klassiek'],
+    angle: `Het klassieke gedicht: de Sint spreekt, met het grote boek, Piet en de stoomboot, warm en respectvol, met een compliment en een kleine plagerij. Wanneer het past (kinderen die nog geloven, opa en oma, een gemengd gezelschap). Vaste onderdelen: de Sint die alles weet, wat goed ging dit jaar, een klein werkpuntje, het cadeau. Hoe je het persoonlijk maakt in plaats van een rijtje clichés, en hoe je het niet stoffig laat klinken. Met een compleet voorbeeldgedicht van 12 tot 16 regels en een paar losse coupletten. ${AABB_ONLY}`,
+    cta: '/',
+  },
+  {
+    slug: 'ironisch-sinterklaasgedicht',
+    keyword: 'ironisch sinterklaasgedicht',
+    secondary: ['sarcastisch sinterklaasgedicht', 'droog sinterklaasgedicht', 'sinterklaasgedicht met een knipoog'],
+    angle: `Het ironische gedicht: zeggen wat je niet bedoelt, droog en subtiel. Technieken: overdreven lof voor iets kleins, doen alsof een slechte gewoonte een talent is, understatement, een droge slotregel. Het verschil met grappig en met roast. Voor wie het werkt (volwassenen, collega's, vrienden die je goed kent) en voor wie niet (jonge kinderen begrijpen ironie vaak niet). Hoe je het voorleest zodat de ironie aankomt. Met voorbeelden per techniek en een compleet voorbeeldgedicht van 12 tot 16 regels. ${AABB_ONLY}`,
+    cta: '/',
+  },
+  {
+    slug: 'ouderwets-sinterklaasgedicht',
+    keyword: 'ouderwets sinterklaasgedicht',
+    secondary: ['sinterklaasgedicht in oude stijl', 'deftig sinterklaasgedicht', 'formeel sinterklaasgedicht'],
+    angle: `Het ouderwetse gedicht: formele, plechtige taal zoals vroeger, met aanspreekvormen als "Gij" en "Uwe", "Hooggeachte", "alzo" en "derhalve". Waarom het grappig werkt als contrast met een modern onderwerp (een smartphone, een sportschool, een thuiswerkdag). Woorden en zinswendingen die je kunt gebruiken, hoe je het niet onleesbaar maakt, en hoe je voorleest met een plechtige stem. Voor wie het past. Met een woordenlijstje, losse voorbeeldcoupletten en een compleet voorbeeldgedicht van 12 tot 16 regels. ${AABB_ONLY}`,
+    cta: '/',
+  },
+  {
+    slug: 'pikant-sinterklaasgedicht',
+    keyword: 'pikant sinterklaasgedicht',
+    secondary: ['ondeugend sinterklaasgedicht', 'sinterklaasgedicht voor volwassenen', 'dubbelzinnig sinterklaasgedicht'],
+    angle: `Het pikante gedicht: suggestief en dubbelzinnig, een knipoog, nooit expliciet. Dubbelzinnigheid werkt doordat de luisteraar zelf de tweede betekenis invult. Voor wie het past (je partner, een vriendengroep van volwassenen) en wanneer niet (kinderen erbij, collega's, schoonfamilie, iemand die zich ongemakkelijk voelt). Een check vooraf: zou de ontvanger dit zelf ook grappig vinden met dit publiek erbij? Technieken: dubbelzinnige woorden rond het cadeau, een onschuldige tweede betekenis, de suggestie stoppen voordat het grof wordt. Geef voorbeeldcoupletten die netjes genoeg zijn voor een gemengd volwassen gezelschap. Niets seksueel expliciets, geen lichaamsdelen. ${AABB_ONLY}`,
+    cta: '/',
+  },
+  // Posts from 10 November 2026.
   {
     slug: 'sinterklaasgedicht-beginnen-en-afsluiten',
     keyword: 'begin sinterklaasgedicht',
@@ -104,7 +143,7 @@ export const BLOG_BRIEFS: BlogBrief[] = [
   {
     slug: 'sinterklaasgedicht-partner',
     keyword: 'sinterklaasgedicht voor je partner',
-    secondary: ['sinterklaasgedicht vriend', 'sinterklaasgedicht vriendin', 'romantisch sinterklaasgedicht', 'pikant sinterklaasgedicht'],
+    secondary: ['sinterklaasgedicht vriend', 'sinterklaasgedicht vriendin', 'romantisch sinterklaasgedicht'],
     angle: 'Een gedicht voor je vriend, vriendin, man of vrouw. Lief, grappig of een beetje pikant: wat past bij welk publiek (alleen samen, met de kinderen erbij, met schoonfamilie). Hoe je gedeelde herinneringen en kleine gewoontes gebruikt. Waar de grens ligt bij pikant als er anderen meeluisteren. Geef minstens 3 voorbeeldcoupletten in verschillende tonen, nooit expliciet.',
     cta: '/',
   },

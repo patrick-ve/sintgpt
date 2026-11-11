@@ -3,7 +3,7 @@
     slug="hoe-schrijf-je-het-perfecte-sinterklaasgedicht"
     lead="Een persoonlijk sinterklaasgedicht schrijven lijkt soms lastig als je voor een leeg vel papier zit. Met een goede voorbereiding en een duidelijk plan zet je herinneringen snel om in soepele, rijmende regels. In deze handleiding lees je stap voor stap hoe je een pakkend gedicht maakt dat prettig voorleest op pakjesavond."
     seo-title="Sinterklaasgedicht schrijven: tips en stappen | SintGPT"
-    seo-description="Leer hoe je zelf een persoonlijk sinterklaasgedicht schrijft. Met praktische tips over rijm, ritme, het cadeau en voorbeelden om direct te starten."
+    seo-description="Sinterklaasgedicht schrijven in stappen: tips voor rijm, ritme en het cadeau, met een compleet voorbeeldgedicht om meteen te beginnen."
     og-image="blog-hoe-schrijf-je-het-perfecte-sinterklaasgedicht"
   >
     <h2 class="text-3xl font-bold mt-8 mb-4">Sinterklaasgedicht schrijven: begin bij de voorbereiding</h2>
@@ -32,7 +32,7 @@
       <li><strong>Limerick</strong> (AABBA): Een vaste vorm van vijf regels met een strak metrum en een humoristische clou aan het einde.</li>
     </ol>
     <p class="leading-relaxed mb-4">
-      Denk naast de vorm ook na over de toon. Een traditioneel gedicht is warm en waarderend, terwijl een ironische stijl ruimte biedt voor droge humor. Kies je voor een roast, neem de ontvanger dan flink op de hak met herkenbare eigenschappen, maar sluit altijd af met een vriendelijke en warme noot.
+      Denk naast de vorm ook na over de toon. Een traditioneel gedicht is warm en waarderend, terwijl een ironische stijl ruimte biedt voor droge humor. Kies je voor een roast, neem de ontvanger dan flink op de hak met herkenbare eigenschappen, maar sluit altijd af met een vriendelijke en warme noot. In het <NuxtLink to="/blog/sinterklaasgedicht-stijlen" class="text-red-700 underline underline-offset-2 hover:text-red-900">overzicht van de zes stijlen voor een sinterklaasgedicht</NuxtLink> zie je per stijl een voorbeeld.
     </p>
 
     <h2 class="text-3xl font-bold mt-8 mb-4">Het cadeau verwerken: direct noemen of geheim houden</h2>

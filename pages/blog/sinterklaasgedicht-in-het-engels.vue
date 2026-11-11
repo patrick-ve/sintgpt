@@ -2,7 +2,7 @@
   <BlogPost
     slug="sinterklaasgedicht-in-het-engels"
     lead="Vier je pakjesavond met buitenlandse vrienden, een expatcollega of een internationale partner? Dan is een sinterklaasgedicht in het Engels een fijne manier om iedereen bij het feest te betrekken. In dit artikel lees je hoe je de traditie kort uitlegt, hoe Engels rijmen werkt en vind je voorbeelden voor een tweetalig of volledig Engels gedicht."
-    seo-title="Sinterklaasgedicht in het Engels: tips en gids | SintGPT"
+    seo-title="Sinterklaasgedicht in het Engels met voorbeelden | SintGPT"
     seo-description="Schrijf een sinterklaasgedicht in het Engels. Lees praktische tips voor rijm en ritme, bekijk tweetalige voorbeelden en leg de traditie helder uit."
     og-image="blog-sinterklaasgedicht-in-het-engels"
   >
@@ -16,7 +16,7 @@
 
     <h2 class="text-3xl font-bold mt-8 mb-4">Sinterklaas uitleggen aan internationale gasten in het gedicht</h2>
     <p class="leading-relaxed mb-4">
-      Voor wie niet in Nederland is opgegroeid, kan het sinterklaasfeest verwarrend zijn. Mensen uit andere landen denken bij een man met een witte baard en een rood gewaad al snel aan de Kerstman. Daarom is het verhelderend om in het begin van het gedicht kort een knipoog te maken naar de traditie. Zo weet de ontvanger direct wie de afzender is en waarom er een gedicht bij het cadeau zit.
+      Voor wie niet in Nederland is opgegroeid, kan het sinterklaasfeest verwarrend zijn. Mensen uit andere landen denken bij een man met een witte baard en een rood gewaad al snel aan de Kerstman. Daarom is het verhelderend om in het begin van het gedicht kort een knipoog te maken naar de traditie. Zo weet de ontvanger direct wie de afzender is en waarom er een gedicht bij het cadeau zit. Een uitgebreidere uitleg staat in het artikel over <NuxtLink to="/blog/sinterklaas-tradities" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaas tradities</NuxtLink>.
     </p>
     <h3 class="text-2xl font-bold mt-6 mb-3">Vaste elementen die je kort kunt benoemen</h3>
     <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">

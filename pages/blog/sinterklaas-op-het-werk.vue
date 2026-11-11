@@ -3,7 +3,7 @@
     slug="sinterklaas-op-het-werk"
     lead="Sinterklaas vieren op het werk brengt ontspanning en versterkt het teamgevoel. Het schrijven van een passend sinterklaasgedicht voor een collega vraagt wel om een iets andere toon dan thuis bij familie. Met duidelijke werkafspraken en veilige onderwerpen blijft de viering voor iedereen leuk en respectvol."
     seo-title="Sinterklaasgedicht collega: tips voor het werk | SintGPT"
-    seo-description="Leer hoe je een passend sinterklaasgedicht voor een collega schrijft. Bekijk praktische voorbeelden, geschikte onderwerpen en tips voor Sinterklaas op kantoor."
+    seo-description="Zo schrijf je een sinterklaasgedicht voor een collega: geschikte onderwerpen, voorbeelden en tips voor Sinterklaas op kantoor."
     og-image="blog-sinterklaas-op-het-werk"
   >
     <h2 class="text-3xl font-bold mt-8 mb-4">Sinterklaasgedicht voor een collega: waar let je op?</h2>

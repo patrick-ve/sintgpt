@@ -390,7 +390,7 @@ Last updated: 10 November 2026. Live version: `03b783e6-9347-4d6f-929f-7690ce73a
 
 ### #26 Keywords and blog content
 
-- **Status:** in git on 10 November 2026, not yet deployed.
+- **Status:** keywords and the 10 November posts live on 11 November 2026 (Worker version `aec2119f`, commit `e1938b9`); style posts and the SEO pass in git, deploy pending.
 - **What changed:**
   - Keyword map per page: `docs/seo-keywords.md`.
   - Home: title tag "Sinterklaasgedicht maken met AI: gratis generator", a new meta
@@ -407,8 +407,21 @@ Last updated: 10 November 2026. Live version: `03b783e6-9347-4d6f-929f-7690ce73a
     errors by hand (a nonsense word, an invented claim, a wrong rhyme rule, an
     absolute claim about Roast, three broken lines). URLs and publication dates are
     unchanged; the rewritten posts show "bijgewerkt 10 november 2026".
-- **Next steps:** deploy, then request indexing for the new posts in Search Console
-  (S24). From late November, check Performance → Queries and adjust the briefs.
+  - Style posts (in git on 11 November 2026, not yet deployed): an overview of the six
+    styles (`sinterklaasgedicht-stijlen`) and one post each for Klassiek, Ironisch,
+    Ouderwets and Pikant (Grappig and Roast already had one). Same script and model;
+    example poems in AABB only. Claude fixed by hand: an invented claim ("meest
+    gekozen"), three rhymes with the stress on another syllable, "binnen dertig
+    seconden" (now "ongeveer"), and the missing links from the overview. At the owner's
+    request the publication dates are spread over 5 October to 3 November 2026,
+    between the existing posts, although the posts went online on a later date.
+  - SEO pass on all 20 posts (11 November 2026): every post now has at least 2 links
+    from the text of other posts (the overview had 0, `sinterklaas-tradities` 0, five
+    others 1); title tags for the overview, Engels, partner and opa en oma; meta
+    descriptions for werk (was 159 characters), schrijven, rijmschema, opa en oma and the
+    overview. The overview's main term is now "soorten sinterklaasgedichten". Sitemap
+    `lastmod` is 11 November for every blog page that changed.
+- **Next steps:** request indexing for the new posts in Search Console (S24). From late November, check Performance → Queries and adjust the briefs.
 - **Notes:** no keyword tool was used, so the map has no search volumes.
 
 ## Findings

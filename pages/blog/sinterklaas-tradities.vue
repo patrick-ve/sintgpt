@@ -116,7 +116,7 @@
 
     <h2 class="text-3xl font-bold mt-8 mb-4">Hoe leg je de sinterklaas tradities uit aan nieuwkomers?</h2>
     <p class="leading-relaxed mb-4">
-      Voor vrienden, collega's of internationale familieleden kan het sinterklaasfeest even wennen zijn. De combinatie van schoenen zetten, knutselwerken en persoonlijke rijmen komt in weinig andere culturen voor.
+      Voor vrienden, collega's of internationale familieleden kan het sinterklaasfeest even wennen zijn. De combinatie van schoenen zetten, knutselwerken en persoonlijke rijmen komt in weinig andere culturen voor. Wil je het feest in een gedicht uitleggen? Lees hoe je een <NuxtLink to="/blog/sinterklaasgedicht-in-het-engels" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht in het Engels</NuxtLink> schrijft.
     </p>
     <p class="leading-relaxed mb-4">
       Je legt het feest het beste uit door het te omschrijven als een gezellige traditie vol humor en persoonlijke aandacht. Benadruk dat het niet draait om dure cadeaus, maar om de tijd en moeite die je in elkaar steekt.

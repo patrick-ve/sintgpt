@@ -16,7 +16,7 @@
 
     <h2 class="text-3xl font-bold mt-8 mb-4">Sinterklaasgedicht voor een peuter of kleuter</h2>
     <p class="leading-relaxed mb-4">
-      Voor peuters en kleuters is pakjesavond een feest vol gezonde spanning, liedjes zingen en verwondering. Jonge kinderen begrijpen abstracte beeldspraak of ingewikkelde zinnen nog niet. Houd de zinnen daarom kort en gebruik eenvoudige woorden die aansluiten bij wat ze elke dag meemaken, zoals buiten spelen, blokken stapelen of het zetten van de schoen.
+      Voor peuters en kleuters is pakjesavond een feest vol gezonde spanning, liedjes zingen en verwondering. Jonge kinderen begrijpen abstracte beeldspraak of ingewikkelde zinnen nog niet. Houd de zinnen daarom kort en gebruik eenvoudige woorden die aansluiten bij wat ze elke dag meemaken, zoals buiten spelen, blokken stapelen of het zetten van de schoen. Een <NuxtLink to="/blog/kort-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">kort sinterklaasgedicht</NuxtLink> van vier tot acht regels is voor deze leeftijd vaak genoeg.
     </p>
     <p class="leading-relaxed mb-4">
       In een gedicht voor deze leeftijd vertel je dat de Sint en zijn Pieten het kind hebben zien spelen. Noem iets heel tastbaars wat het kind graag doet. Dat zorgt voor een glimlach van herkenning en trots. Houd het verhaal altijd positief en vriendelijk.

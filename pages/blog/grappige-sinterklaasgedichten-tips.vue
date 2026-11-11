@@ -51,7 +51,7 @@
     </p>
     <h3 class="text-2xl font-bold mt-6 mb-3">4. Zelfspot en plagen met respect</h3>
     <p class="leading-relaxed mb-4">
-      Iemand een beetje plagen hoort bij het sinterklaasfeest, zolang je gevoelige onderwerpen vermijdt. Wil je de ontvanger iets steviger aanpakken? Lees dan onze tips voor een <NuxtLink to="/blog/roast-sinterklaasgedicht-zonder-te-kwetsen" class="text-red-700 underline underline-offset-2 hover:text-red-900">roast sinterklaasgedicht</NuxtLink> waarin je scherp blijft zonder te kwetsen.
+      Iemand een beetje plagen hoort bij het sinterklaasfeest, zolang je gevoelige onderwerpen vermijdt. Wil je de ontvanger iets steviger aanpakken? Lees dan onze tips voor een <NuxtLink to="/blog/roast-sinterklaasgedicht-zonder-te-kwetsen" class="text-red-700 underline underline-offset-2 hover:text-red-900">roast sinterklaasgedicht</NuxtLink> waarin je scherp blijft zonder te kwetsen. Wil je alle stijlen vergelijken? Lees het <NuxtLink to="/blog/sinterklaasgedicht-stijlen" class="text-red-700 underline underline-offset-2 hover:text-red-900">overzicht van soorten sinterklaasgedichten</NuxtLink>.
     </p>
     <h3 class="text-2xl font-bold mt-6 mb-3">5. De limerick als snelle grap</h3>
     <p class="leading-relaxed mb-4">

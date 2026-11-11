@@ -2,8 +2,8 @@
   <BlogPost
     slug="sinterklaasgedicht-opa-oma"
     lead="Wil je dit jaar een warm sinterklaasgedicht voor opa en oma schrijven? Met herkenbare gewoontes, verhalen van vroeger en een rustig ritme maak je een tekst die echt raakt. In dit artikel lees je hoe je de juiste toon vindt en waar je op let bij het voorlezen."
-    seo-title="Sinterklaasgedicht opa en oma: praktische tips | SintGPT"
-    seo-description="Schrijf een warm sinterklaasgedicht voor opa en oma. Praktische tips voor herkenbare anekdotes, rustig ritme en heldere voorbeeldgedichten."
+    seo-title="Sinterklaasgedicht voor opa en oma met voorbeelden | SintGPT"
+    seo-description="Tips en voorbeelden voor een sinterklaasgedicht voor opa en oma: herkenbare verhalen, een warme toon en een rustig ritme dat fijn voorleest."
     og-image="blog-sinterklaasgedicht-opa-oma"
   >
     <h2 class="text-3xl font-bold mt-8 mb-4">Wat maakt een sinterklaasgedicht voor opa en oma bijzonder?</h2>

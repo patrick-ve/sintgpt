@@ -85,7 +85,7 @@
     </p>
     <h3 class="text-2xl font-bold mt-6 mb-3">In de familiekring</h3>
     <p class="leading-relaxed mb-4">
-      Binnen het gezin of met hechte familieleden is de onderlinge band vaak sterk genoeg voor scherpe grappen. Let wel op wie er in de kamer zitten. Zijn er jonge kinderen bij, houd de onderwerpen dan netjes en begrijpelijk. Schuiven er nieuwe partners of schoonfamilie aan? Wees dan iets terughoudender, zodat zij zich niet ongemakkelijk voelen bij oude familieverhalen.
+      Binnen het gezin of met hechte familieleden is de onderlinge band vaak sterk genoeg voor scherpe grappen. Let wel op wie er in de kamer zitten. Zijn er jonge kinderen bij, houd de onderwerpen dan netjes en begrijpelijk. Schuiven er nieuwe partners of schoonfamilie aan? Wees dan iets terughoudender, zodat zij zich niet ongemakkelijk voelen bij oude familieverhalen. Een roast voor je eigen geliefde? Lees eerst de tips voor een <NuxtLink to="/blog/sinterklaasgedicht-partner" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht voor je partner</NuxtLink>.
     </p>
     <h3 class="text-2xl font-bold mt-6 mb-3">Op de werkvloer</h3>
     <p class="leading-relaxed mb-4">

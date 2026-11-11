@@ -3,7 +3,7 @@
     slug="rijm-en-ritme-sinterklaasgedicht"
     lead="Een goed sinterklaasgedicht leest soepel voor en heeft een duidelijke cadans. Door een passend rijmschema voor je sinterklaasgedicht te kiezen, valt elke clou precies op het juiste moment. In deze gids leer je hoe ritme, klemtonen en vaste rijmvormen zorgen voor een gedicht dat zonder haperen overkomt op pakjesavond."
     seo-title="Rijmschema sinterklaasgedicht: 4 vormen en tips | SintGPT"
-    seo-description="Leer hoe een rijmschema je sinterklaasgedicht lekker laat lopen. Bekijk voorbeelden van AABB, ABAB, ABBA en de limerick, en voorkom haperingen."
+    seo-description="Welk rijmschema kies je voor je sinterklaasgedicht? Voorbeelden van AABB, ABAB, ABBA en de limerick, plus tips voor ritme en klemtoon."
     og-image="blog-rijm-en-ritme-sinterklaasgedicht"
   >
     <h2 class="text-3xl font-bold mt-8 mb-4">Waarom het rijmschema van je sinterklaasgedicht het ritme bepaalt</h2>

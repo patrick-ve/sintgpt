@@ -62,7 +62,7 @@
 
     <h2 class="text-3xl font-bold mt-8 mb-4">Surprise-ideeën per type ontvanger</h2>
     <p class="leading-relaxed mb-4">
-      Zoek je nog inspiratie voor een herkenbaar ontwerp? Kijk naar de gewoontes en hobby's van degene op je lootje.
+      Zoek je nog inspiratie voor een herkenbaar ontwerp? Kijk naar de gewoontes en hobby's van degene op je lootje. Moet er nog geloot worden? Lees eerst de tips voor <NuxtLink to="/blog/lootjes-trekken-tips" class="text-red-700 underline underline-offset-2 hover:text-red-900">lootjes trekken voor Sinterklaas</NuxtLink>.
     </p>
     <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
       <li><strong>De sporter:</strong> een reuzenschoen van een schoenendoos, een halter van twee ronde doosjes en een stok, of een voetbal van papier-maché.</li>

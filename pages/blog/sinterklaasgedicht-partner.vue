@@ -2,7 +2,7 @@
   <BlogPost
     slug="sinterklaasgedicht-partner"
     lead="Zoek je een sinterklaasgedicht voor je partner dat echt raak is? Of je nu kiest voor een romantische boodschap of een gedicht met een ondeugende knipoog, de juiste toon maakt het verschil. In dit artikel lees je hoe je herinneringen verwerkt, het ritme strak houdt en rekening houdt met wie er meeluistert."
-    seo-title="Sinterklaasgedicht voor je partner | SintGPT"
+    seo-title="Sinterklaasgedicht voor je partner met voorbeelden | SintGPT"
     seo-description="Leer hoe je een sinterklaasgedicht voor je partner schrijft. Met tips over de juiste toon, herinneringen en rijmende voorbeeldgedichten."
     og-image="blog-sinterklaasgedicht-partner"
   >

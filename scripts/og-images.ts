@@ -142,4 +142,34 @@ export const OG_IMAGES: OgImageSpec[] = [
     title: 'De bekendste sinterklaas tradities',
     subtitle: 'Alles over schoen zetten, surprises en pakjesavond',
   },
+  {
+    name: 'blog-sinterklaasgedicht-stijlen',
+    kind: 'article',
+    title: 'Welke stijl past bij je gedicht?',
+    subtitle: 'Zes stijlen vergeleken, met voorbeelden',
+  },
+  {
+    name: 'blog-klassiek-sinterklaasgedicht',
+    kind: 'article',
+    title: 'Klassiek sinterklaasgedicht schrijven',
+    subtitle: 'Tips, vaste onderdelen en voorbeelden in rijm',
+  },
+  {
+    name: 'blog-ironisch-sinterklaasgedicht',
+    kind: 'article',
+    title: 'Ironisch sinterklaasgedicht schrijven',
+    subtitle: 'Tips, technieken en voorbeelden voor droge humor',
+  },
+  {
+    name: 'blog-ouderwets-sinterklaasgedicht',
+    kind: 'article',
+    title: 'Ouderwets sinterklaasgedicht schrijven',
+    subtitle: 'Tips en voorbeelden voor een deftig rijm in oude stijl',
+  },
+  {
+    name: 'blog-pikant-sinterklaasgedicht',
+    kind: 'article',
+    title: 'Pikant sinterklaasgedicht schrijven',
+    subtitle: 'Tips en voorbeelden voor een ondeugend gedicht',
+  },
 ];

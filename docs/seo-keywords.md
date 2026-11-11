@@ -28,6 +28,7 @@ Rules that apply everywhere:
 
 All posts are written by the default poem model with `scripts/write-blog-posts.ts`
 from the briefs in `scripts/blogBriefs.ts`; the brief names the main term.
+Example poems in the posts use rhyme scheme AABB only (the owner's choice, 11 Nov 2026).
 
 | Post | Main term |
 |---|---|
@@ -36,10 +37,15 @@ from the briefs in `scripts/blogBriefs.ts`; the brief names the main term.
 | `rijmwoorden-sinterklaas` | rijmwoorden sinterklaas (wat rijmt op Sint, Piet, cadeau) |
 | `rijm-en-ritme-sinterklaasgedicht` | rijmschema sinterklaasgedicht |
 | `kort-sinterklaasgedicht` | kort sinterklaasgedicht |
+| `sinterklaasgedicht-stijlen` | soorten sinterklaasgedichten (stijl sinterklaasgedicht) |
 | `grappige-sinterklaasgedichten-tips` | grappig sinterklaasgedicht |
+| `klassiek-sinterklaasgedicht` | klassiek sinterklaasgedicht (traditioneel, lief) |
+| `ironisch-sinterklaasgedicht` | ironisch sinterklaasgedicht (sarcastisch, droog) |
+| `ouderwets-sinterklaasgedicht` | ouderwets sinterklaasgedicht (deftig, formeel, oude stijl) |
+| `pikant-sinterklaasgedicht` | pikant sinterklaasgedicht (ondeugend, voor volwassenen) |
 | `roast-sinterklaasgedicht-zonder-te-kwetsen` | roast sinterklaasgedicht |
 | `sinterklaasgedicht-opa-oma` | sinterklaasgedicht opa en oma |
-| `sinterklaasgedicht-partner` | sinterklaasgedicht voor je partner (vriend, vriendin) |
+| `sinterklaasgedicht-partner` | sinterklaasgedicht voor je partner (vriend, vriendin; "pikant" goes to `pikant-sinterklaasgedicht`) |
 | `sinterklaasgedicht-voor-kinderen` | sinterklaasgedicht voor kinderen |
 | `sinterklaas-op-het-werk` | sinterklaasgedicht collega |
 | `sinterklaasgedicht-in-het-engels` | sinterklaasgedicht in het Engels |
