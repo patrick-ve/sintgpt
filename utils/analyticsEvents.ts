@@ -48,6 +48,7 @@ export const CLIENT_EVENTS = [
   'Shared via WhatsApp',
   'Shared via Email',
   'Shared via Facebook',
+  'Shared via share sheet',
   'Open shared poem',
   'Shared poem to form',
   'Scroll to poem form',

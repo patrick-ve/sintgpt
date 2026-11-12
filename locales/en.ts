@@ -119,6 +119,8 @@ export default {
     },
     linkCopied: 'Link copied!',
     linkPrivacy: 'Anyone with the link can read this poem. We keep it for 90 days for this.',
+    share: 'Share poem',
+    shareAgain: 'Tap again to share',
     shareWhatsApp: 'Share on WhatsApp',
     shareEmail: 'Send via email',
     shareFacebook: 'Share on Facebook',

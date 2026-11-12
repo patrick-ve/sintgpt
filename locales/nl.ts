@@ -119,6 +119,8 @@ export default {
     },
     linkCopied: 'Link gekopieerd!',
     linkPrivacy: 'Iedereen met de link kan dit gedicht lezen. We bewaren het daarvoor 90 dagen.',
+    share: 'Deel gedicht',
+    shareAgain: 'Tik nog eens om te delen',
     shareWhatsApp: 'Deel op WhatsApp',
     shareEmail: 'Verstuur via e-mail',
     shareFacebook: 'Deel op Facebook',

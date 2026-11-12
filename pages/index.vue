@@ -737,6 +737,59 @@ const shareViaFacebook = () => {
   );
 };
 
+// Phones and tablets get the system share sheet (WhatsApp, Signal, Mail, ...)
+// instead of the three buttons. Only the browser knows, so the server renders
+// the buttons and the page switches after it loads.
+const canNativeShare = ref(false);
+onMounted(() => {
+  canNativeShare.value = typeof navigator.share === 'function'
+    && window.matchMedia('(pointer: coarse)').matches;
+});
+
+// The browser allows the sheet only right after the tap, so the short link
+// gets at most 1 s; after that the long link goes. If Safari still refuses
+// after the wait, the short link is ready by then and a second tap shares it
+// at once.
+const SHORT_LINK_WAIT_MS = 1000;
+const shareRetry = ref(false);
+watch(poem, () => {
+  shareRetry.value = false;
+});
+
+const shareNative = async () => {
+  const text = poem.value;
+  if (!text) return;
+  let link: string | null = shortLinks.get(text) ?? null;
+  let waited = false;
+  if (!link && shareUrl.value) {
+    waited = true;
+    const longLink = shareUrl.value;
+    link = await Promise.race([
+      resolveShareLink(),
+      new Promise<string>(resolve => setTimeout(() => resolve(longLink), SHORT_LINK_WAIT_MS)),
+    ]);
+  }
+  const data: ShareData = link
+    ? { title: poemTitle.value, text: poemTitle.value, url: link }
+    : { title: poemTitle.value, text: getPoemWithAttribution() };
+  try {
+    await navigator.share(data);
+    shareRetry.value = false;
+    track('Shared via share sheet', { detail: 'done' });
+  } catch (error) {
+    const name = (error as DOMException)?.name;
+    if (name === 'AbortError') {
+      track('Shared via share sheet', { detail: 'cancelled' });
+    } else if (name === 'NotAllowedError' && waited) {
+      shareRetry.value = true;
+      track('Shared via share sheet', { detail: 'refused' });
+    } else {
+      console.error('Share failed:', error);
+      track('Shared via share sheet', { detail: 'failed' });
+    }
+  }
+};
+
 const isFormValid = computed(() => {
   return formData.value.name.trim() !== '';
 });
@@ -1708,6 +1761,17 @@ useHead({
                 {{ t('poem.savePdf') }}
               </button>
               <button
+                v-if="canNativeShare"
+                type="button"
+                class="poem-action"
+                :disabled="!poem"
+                @click="shareNative"
+              >
+                <UIcon name="i-heroicons-arrow-up-on-square" class="size-[1.125rem]" aria-hidden="true" />
+                {{ shareRetry ? t('poem.shareAgain') : t('poem.share') }}
+              </button>
+              <template v-else>
+              <button
                 type="button"
                 class="poem-action"
                 :disabled="!poem"
@@ -1738,6 +1802,7 @@ useHead({
                 </svg>
                 {{ t('poem.shareFacebook') }}
               </button>
+              </template>
             </div>
 
             <!-- Surprise ideas (Hele familie) for the poem from the form -->

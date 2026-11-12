@@ -41,6 +41,7 @@ Last updated: 10 November 2026. Live version: `03b783e6-9347-4d6f-929f-7690ce73a
 | [#23](#23-brand-and-legal-risks) | Low | Brand and legal risks | Later |
 | [#24](#24-after-the-season) | Low | After the season | Later |
 | [#25](#25-seo-audit) | Medium | SEO audit (10 November 2026) | Live; owner steps open |
+| [#27](#27-share-sheet-on-phones) | Medium | Share sheet on phones | Built, not deployed; phone check open |
 
 ## Open
 
@@ -427,6 +428,24 @@ Last updated: 10 November 2026. Live version: `03b783e6-9347-4d6f-929f-7690ce73a
     `lastmod` is 11 November for every blog page that changed.
 - **Next steps:** request indexing for the new posts in Search Console (S24). From late November, check Performance → Queries and adjust the briefs.
 - **Notes:** no keyword tool was used, so the map has no search volumes.
+
+### #27 Share sheet on phones
+
+- **Status (12 November):** built and tested in the e2e build; not deployed. Open:
+  check on a real iPhone and Android phone (with the live button):
+  does the sheet open after the short-link wait, and how often does `refused` show
+  in analytics?
+- **What:** phones and tablets (`navigator.share` and `(pointer: coarse)`) get one
+  "Deel gedicht" button instead of WhatsApp/E-mail/Facebook. Desktop keeps the three
+  buttons. The sheet gets the title and the link, not the whole poem.
+- **Link:** the short link gets 1 s after the tap, then the long link goes. If the
+  browser refuses after the wait (`NotAllowedError`), the button says "Tik nog eens om
+  te delen"; the second tap uses the short link at once. The short link is never made
+  before the visitor shares (privacy text).
+- **Analytics:** `Shared via share sheet` with `done`/`cancelled`/`refused`/`failed`.
+  The browser does not say which app, so `Shared via WhatsApp/Facebook` drop on phones.
+- **Later:** share the PDF through the sheet (`navigator.share({ files })`). The PDF
+  takes time to build, so the same tap rule applies; test first.
 
 ## Findings
 

@@ -1469,6 +1469,70 @@ describe('analytics funnel events', () => {
     ]);
     await page.close();
   }, 30_000);
+
+  /** A phone with the share sheet; each call takes the next outcome ('ok' or an error name). */
+  async function phoneWithShareSheet(outcomes: string[]) {
+    const page = await createPage(undefined, { viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+    await page.addInitScript((list: string[]) => {
+      const w = window as unknown as { shares: ShareData[] };
+      w.shares = [];
+      Object.defineProperty(navigator, 'share', {
+        configurable: true,
+        value: async (data: ShareData) => {
+          w.shares.push(data);
+          const outcome = list.shift() ?? 'ok';
+          if (outcome !== 'ok') throw new DOMException('test', outcome);
+        },
+      });
+    }, outcomes);
+    const poem = 'De Sint zag oma Truus met een taart op het plein,\nzij at hem alleen op, want hij was nogal klein.';
+    const share = await signPoemShare(poem, 'nl', 'e2e-access-secret');
+    const chunks = poem.match(/\S+\s*/g)!.map(delta => ({ type: 'text-delta', id: '0', delta }));
+    const sse = [...chunks, { type: 'data-share', data: share }]
+      .map(chunk => `data: ${JSON.stringify(chunk)}\n\n`).join('') + 'data: [DONE]\n\n';
+    await page.route('**/api/poem/generate', route =>
+      route.fulfill({ status: 200, contentType: 'text/event-stream', body: sse }));
+    const events = await collectEvents(page);
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+    await page.fill('#poem-name', 'Oma Truus');
+    await page.locator('#poem-form button[type=submit]').click();
+    await page.getByRole('button', { name: 'Kopieer gedicht' }).waitFor({ timeout: 15_000 });
+    const shares = () => page.evaluate(() => (window as unknown as { shares: ShareData[] }).shares);
+    return { page, events, shares };
+  }
+
+  it('shares a poem through the share sheet on a phone', async () => {
+    const { page, events, shares } = await phoneWithShareSheet(['AbortError', 'ok']);
+    for (const name of ['Deel op WhatsApp', 'Verstuur via e-mail', 'Deel op Facebook']) {
+      expect(await page.getByRole('button', { name }).count(), name).toBe(0);
+    }
+    const button = page.getByRole('button', { name: 'Deel gedicht' });
+    await button.click();
+    await expect.poll(() => named(events, 'Shared via share sheet')).toHaveLength(1);
+    await button.click();
+    await expect.poll(() => named(events, 'Shared via share sheet')).toHaveLength(2);
+
+    expect(named(events, 'Shared via share sheet').map(event => event.detail)).toEqual(['cancelled', 'done']);
+    const [first] = await shares();
+    // This build has no KV, so the sheet gets the long link.
+    expect(first).toMatchObject({ title: 'Gedicht voor Oma Truus', text: 'Gedicht voor Oma Truus' });
+    expect(first?.url).toContain('/gedicht?s=');
+    expect(JSON.stringify(events)).not.toContain('Oma Truus');
+    await page.close();
+  }, 45_000);
+
+  it('asks for a second tap when the browser refuses the sheet after the wait', async () => {
+    const { page, events, shares } = await phoneWithShareSheet(['NotAllowedError', 'ok']);
+    await page.getByRole('button', { name: 'Deel gedicht' }).click();
+    const again = page.getByRole('button', { name: 'Tik nog eens om te delen' });
+    await again.waitFor();
+    await again.click();
+    await page.getByRole('button', { name: 'Deel gedicht' }).waitFor();
+    await expect.poll(() => named(events, 'Shared via share sheet').map(event => event.detail))
+      .toEqual(['refused', 'done']);
+    expect(await shares()).toHaveLength(2);
+    await page.close();
+  }, 45_000);
 });
 
 describe('pricing tiers', () => {
