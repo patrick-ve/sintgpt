@@ -896,6 +896,34 @@ describe('poem links', () => {
     await page.close();
   }, 45_000);
 
+  it('copies the poem as plain text and as HTML', async () => {
+    const chunks = POEM.match(/\S+\s*/g)!.map(delta => ({ type: 'text-delta', id: '0', delta }));
+    const sse = chunks.map(chunk => `data: ${JSON.stringify(chunk)}\n\n`).join('') + 'data: [DONE]\n\n';
+    const page = await createPage();
+    await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
+    await page.route('**/api/poem/generate', route =>
+      route.fulfill({ status: 200, contentType: 'text/event-stream', body: sse }));
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+    await page.fill('#poem-name', 'Oma Truus');
+    await page.locator('#poem-form button[type=submit]').click();
+    await page.getByRole('button', { name: 'Kopieer gedicht' }).click({ timeout: 15_000 });
+    await page.getByRole('button', { name: 'Gekopieerd!' }).waitFor();
+
+    const copied = await page.evaluate(async () => {
+      const [item] = await navigator.clipboard.read();
+      return {
+        types: item!.types,
+        text: await (await item!.getType('text/plain')).text(),
+        html: await (await item!.getType('text/html')).text(),
+      };
+    });
+    expect(copied.text).toBe(POEM);
+    expect(copied.html).toContain('<h2>Gedicht voor Oma Truus</h2>');
+    expect(copied.html).toContain('zo lief en zo fijn,<br>zij bakt');
+    expect(copied.html).toContain('</p><p>Haar taart is een feest,');
+    await page.close();
+  }, 45_000);
+
   it('saves a generated poem as a PDF', async () => {
     const chunks = POEM.match(/\S+\s*/g)!.map(delta => ({ type: 'text-delta', id: '0', delta }));
     const sse = chunks.map(chunk => `data: ${JSON.stringify(chunk)}\n\n`).join('') + 'data: [DONE]\n\n';
@@ -1484,6 +1512,7 @@ describe('analytics funnel events', () => {
           if (outcome !== 'ok') throw new DOMException('test', outcome);
         },
       });
+      Object.defineProperty(navigator, 'canShare', { configurable: true, value: () => true });
     }, outcomes);
     const poem = 'De Sint zag oma Truus met een taart op het plein,\nzij at hem alleen op, want hij was nogal klein.';
     const share = await signPoemShare(poem, 'nl', 'e2e-access-secret');
@@ -1518,6 +1547,27 @@ describe('analytics funnel events', () => {
     expect(first).toMatchObject({ title: 'Gedicht voor Oma Truus', text: 'Gedicht voor Oma Truus' });
     expect(first?.url).toContain('/gedicht?s=');
     expect(JSON.stringify(events)).not.toContain('Oma Truus');
+    await page.close();
+  }, 45_000);
+
+  it('shares the PDF through the share sheet on a phone', async () => {
+    const { page, events, shares } = await phoneWithShareSheet(['ok']);
+    await page.getByRole('button', { name: 'Opslaan als PDF' }).click();
+    const dialog = page.getByRole('dialog', { name: 'Kies een ontwerp' });
+    await dialog.waitFor();
+    await dialog.getByText('Schoolschrift', { exact: true }).click();
+    expect(await dialog.getByRole('button', { name: 'Downloaden' }).count()).toBe(1);
+    await dialog.getByRole('button', { name: 'Deel PDF' }).click();
+    await dialog.waitFor({ state: 'hidden' });
+
+    await expect.poll(() => named(events, 'Share PDF').map(event => event.detail)).toEqual(['schoolschrift:done']);
+    const shared = await page.evaluate(async () => {
+      const data = (window as unknown as { shares: ShareData[] }).shares[0];
+      const file = data?.files?.[0];
+      return file && { name: file.name, type: file.type, start: await file.slice(0, 5).text() };
+    });
+    expect(shared).toEqual({ name: 'sinterklaasgedicht-oma-truus-sintgpt.com.pdf', type: 'application/pdf', start: '%PDF-' });
+    expect(await shares()).toHaveLength(1);
     await page.close();
   }, 45_000);
 

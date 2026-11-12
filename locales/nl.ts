@@ -108,6 +108,8 @@ export default {
       title: 'Kies een ontwerp',
       intro: 'Zo komt je gedicht in de PDF te staan.',
       download: 'PDF opslaan',
+      share: 'Deel PDF',
+      downloadOnly: 'Downloaden',
       cancel: 'Annuleren',
       perkament: { name: 'Perkament', description: 'Een klassieke rol met lakzegel' },
       pakjesavond: { name: 'Pakjesavond', description: 'Sterren en daken bij nacht' },

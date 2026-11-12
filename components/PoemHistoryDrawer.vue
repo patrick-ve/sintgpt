@@ -73,6 +73,7 @@ const clearAll = () => {
     :title="t('history.title')"
     :description="t('history.description')"
     :ui="{
+      overlay: 'bg-black/40 backdrop-blur-sm',
       content: 'max-w-md bg-[#fdf6e7] divide-[#d4a853]/30',
       header: 'border-b-2 border-[#d4a853]/30',
       title: 'text-xl font-bold text-[#8b1538]',

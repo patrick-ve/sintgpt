@@ -11,9 +11,24 @@ import {
 // Lets the visitor pick the look of the poem PDF. The page builds the file and
 // closes the window when the download starts. The extra designs belong to
 // Hele familie: without it, choosing one offers that tier instead.
+// With `canShare` (a phone that can share files), the main button opens the
+// share sheet and a second button downloads. The window asks the page to
+// build the chosen design in advance (`prepare`), because the share sheet
+// opens only right after a tap.
 const isOpen = defineModel<boolean>({ default: false });
-const props = defineProps<{ busy: boolean; failed: boolean; extraUnlocked: boolean }>();
-const emit = defineEmits<{ save: [design: PdfDesignId]; upgrade: [] }>();
+const props = defineProps<{
+  busy: boolean;
+  failed: boolean;
+  extraUnlocked: boolean;
+  canShare?: boolean;
+  shareRetry?: boolean;
+}>();
+const emit = defineEmits<{
+  save: [design: PdfDesignId];
+  share: [design: PdfDesignId];
+  prepare: [design: PdfDesignId];
+  upgrade: [];
+}>();
 
 const { t } = useI18n();
 const dialogRef = ref<HTMLDialogElement | null>(null);
@@ -30,24 +45,44 @@ onMounted(() => {
   }
 });
 
-watch(isOpen, (open) => {
-  if (open) dialogRef.value?.showModal();
-  else dialogRef.value?.close();
-});
-
 const locked = (id: PdfDesignId) => isExtraPdfDesign(id) && !props.extraUnlocked;
 const selectedLocked = computed(() => locked(selected.value));
+const sharing = computed(() => Boolean(props.canShare) && !selectedLocked.value);
 
-const save = () => {
-  if (selectedLocked.value) {
-    emit('upgrade');
-    return;
+const prepare = () => {
+  if (isOpen.value && sharing.value) emit('prepare', selected.value);
+};
+
+watch(isOpen, (open) => {
+  if (open) {
+    dialogRef.value?.showModal();
+    prepare();
+  } else {
+    dialogRef.value?.close();
   }
+});
+watch(selected, prepare);
+
+const remember = () => {
   try {
     localStorage.setItem(STORAGE_KEY, selected.value);
   } catch {
     // Only a convenience.
   }
+};
+
+const submit = () => {
+  if (selectedLocked.value) {
+    emit('upgrade');
+    return;
+  }
+  remember();
+  if (sharing.value) emit('share', selected.value);
+  else emit('save', selected.value);
+};
+
+const download = () => {
+  remember();
   emit('save', selected.value);
 };
 
@@ -64,7 +99,7 @@ const onBackdropClick = (event: MouseEvent) => {
     @close="isOpen = false"
     @click="onBackdropClick"
   >
-    <form class="pdf-dialog-body" method="dialog" @submit.prevent="save">
+    <form class="pdf-dialog-body" method="dialog" @submit.prevent="submit">
       <h2 id="pdf-dialog-title" class="font-display font-bold text-2xl leading-tight text-[#8b1538]">
         {{ t('poem.pdfDesign.title') }}
       </h2>
@@ -96,14 +131,21 @@ const onBackdropClick = (event: MouseEvent) => {
         <button type="button" class="pdf-cancel" @click="isOpen = false">
           {{ t('poem.pdfDesign.cancel') }}
         </button>
+        <button v-if="sharing" type="button" class="pdf-cancel" :disabled="busy" @click="download">
+          {{ t('poem.pdfDesign.downloadOnly') }}
+        </button>
         <button type="submit" class="btn-festive inline-flex items-center gap-2 min-h-12 px-6 text-lg" :disabled="busy">
           <UIcon
-            :name="busy ? 'i-heroicons-arrow-path' : selectedLocked ? 'i-heroicons-gift' : 'i-heroicons-arrow-down-tray'"
+            :name="busy ? 'i-heroicons-arrow-path'
+              : selectedLocked ? 'i-heroicons-gift'
+                : sharing ? 'i-heroicons-arrow-up-on-square' : 'i-heroicons-arrow-down-tray'"
             class="size-5"
             :class="{ 'motion-safe:animate-spin': busy }"
             aria-hidden="true"
           />
-          {{ selectedLocked ? t('poem.pdfDesign.unlock') : t('poem.pdfDesign.download') }}
+          {{ selectedLocked ? t('poem.pdfDesign.unlock')
+            : !sharing ? t('poem.pdfDesign.download')
+              : shareRetry ? t('poem.shareAgain') : t('poem.pdfDesign.share') }}
         </button>
       </div>
     </form>

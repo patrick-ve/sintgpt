@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { buildShareUrl, type PoemShare } from '~/utils/poemLink';
+import { poemHtml } from '~/utils/poemHtml';
 import { POEM_INPUT_LIMITS } from '~/utils/poemLimits';
 import { saveFormDraft, takeFormDraft } from '~/utils/formDraft';
 import { pakjesavondCountdown } from '~/utils/pakjesavond';
@@ -513,11 +514,23 @@ const saveEdit = async () => {
   nextTick(() => editButtonRef.value?.focus());
 };
 
+// Plain text for chat apps, and HTML so Word and Google Docs keep the title
+// and the stanzas. Browsers without ClipboardItem get the plain text only.
 const copyToClipboard = async () => {
   if (!poem.value) return;
+  const text = poem.value;
 
   try {
-    await navigator.clipboard.writeText(poem.value);
+    try {
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          'text/plain': new Blob([text], { type: 'text/plain' }),
+          'text/html': new Blob([poemHtml(poemTitle.value, text)], { type: 'text/html' }),
+        }),
+      ]);
+    } catch {
+      await navigator.clipboard.writeText(text);
+    }
     copySuccess.value = true;
     track('Copy to clipboard');
     setTimeout(() => {
@@ -668,12 +681,44 @@ const fetchBytes = async (path: string) => {
   return new Uint8Array(await response.arrayBuffer());
 };
 
-// The PDF never names the site; only the file name does.
-const savePoemPdf = async (designId: PdfDesignId) => {
-  if (!import.meta.client || !poem.value || isSavingPdf.value) return;
-  isSavingPdf.value = true;
-  pdfFailed.value = false;
+// Phones and tablets that can share files get "Deel PDF" in the PDF window.
+// The browser builds the PDF, so it costs no Worker CPU.
+const canSharePdf = ref(false);
+onMounted(() => {
   try {
+    canSharePdf.value = typeof navigator.share === 'function'
+      && typeof navigator.canShare === 'function'
+      && window.matchMedia('(pointer: coarse)').matches
+      && navigator.canShare({ files: [new File([''], 'test.pdf', { type: 'application/pdf' })] });
+  } catch {
+    canSharePdf.value = false;
+  }
+});
+
+// Like the link: when the PDF was not ready and the browser refuses the sheet
+// after the wait, the button asks for a second tap, which shares at once.
+const pdfShareRetry = ref(false);
+
+// Built PDFs for the poem on screen, per design. The share sheet opens only
+// right after a tap, so the page builds the chosen design before the tap.
+const pdfBuilds = new Map<string, Promise<File>>();
+const pdfFiles = new Map<string, File>();
+watch(poem, () => {
+  pdfBuilds.clear();
+  pdfFiles.clear();
+  pdfShareRetry.value = false;
+});
+const pdfKey = (designId: PdfDesignId) => `${designId}\n${poemTitle.value}\n${poem.value}`;
+
+// The PDF never names the site; only the file name does.
+const buildPdfFile = (designId: PdfDesignId): Promise<File> => {
+  const key = pdfKey(designId);
+  const known = pdfBuilds.get(key);
+  if (known) return known;
+  const text = poem.value ?? '';
+  const title = poemTitle.value;
+  const recipient = displayedRecipient.value;
+  const build: Promise<File> = (async () => {
     const design = PDF_DESIGNS[designId];
     const [{ buildPoemPdf, poemPdfFileName }, background, textFont, capFont] = await Promise.all([
       import('~/utils/poemPdf'),
@@ -681,18 +726,39 @@ const savePoemPdf = async (designId: PdfDesignId) => {
       fetchBytes(design.textFont),
       design.capFont ? fetchBytes(design.capFont) : Promise.resolve(undefined),
     ]);
-    const bytes = await buildPoemPdf({
-      poem: poem.value,
-      title: poemTitle.value,
-      design,
-      background,
-      textFont,
-      capFont,
-    });
-    const href = URL.createObjectURL(new Blob([bytes as BlobPart], { type: 'application/pdf' }));
+    const bytes = await buildPoemPdf({ poem: text, title, design, background, textFont, capFont });
+    const file = new File([bytes as BlobPart], poemPdfFileName(recipient), { type: 'application/pdf' });
+    return file;
+  })();
+  build.then((file) => {
+    if (pdfBuilds.get(key) === build) pdfFiles.set(key, file);
+  }, () => {
+    if (pdfBuilds.get(key) === build) pdfBuilds.delete(key);
+  });
+  pdfBuilds.set(key, build);
+  return build;
+};
+
+// The PDF window asks for this when it opens and when the visitor picks a
+// design, so "Deel PDF" can open the share sheet at once.
+const preparePdf = (designId: PdfDesignId) => {
+  pdfShareRetry.value = false;
+  if (!canSharePdf.value || !poem.value) return;
+  buildPdfFile(designId).catch(() => {
+    // The tap builds it again and reports a failure.
+  });
+};
+
+const savePoemPdf = async (designId: PdfDesignId) => {
+  if (!import.meta.client || !poem.value || isSavingPdf.value) return;
+  isSavingPdf.value = true;
+  pdfFailed.value = false;
+  try {
+    const file = await buildPdfFile(designId);
+    const href = URL.createObjectURL(file);
     const link = document.createElement('a');
     link.href = href;
-    link.download = poemPdfFileName(displayedRecipient.value);
+    link.download = file.name;
     link.click();
     setTimeout(() => URL.revokeObjectURL(href), 60_000);
     track('Save as PDF', { detail: designId });
@@ -703,6 +769,44 @@ const savePoemPdf = async (designId: PdfDesignId) => {
     pdfFailed.value = true;
   } finally {
     isSavingPdf.value = false;
+  }
+};
+
+const sharePoemPdf = async (designId: PdfDesignId) => {
+  if (!import.meta.client || !poem.value || isSavingPdf.value) return;
+  pdfFailed.value = false;
+  let file = pdfFiles.get(pdfKey(designId));
+  const waited = !file;
+  if (!file) {
+    isSavingPdf.value = true;
+    try {
+      file = await buildPdfFile(designId);
+    } catch (error) {
+      console.error('Failed to build PDF:', error);
+      track('PDF failed', { detail: designId });
+      pdfFailed.value = true;
+      return;
+    } finally {
+      isSavingPdf.value = false;
+    }
+  }
+  try {
+    await navigator.share({ files: [file], title: poemTitle.value });
+    pdfShareRetry.value = false;
+    track('Share PDF', { detail: `${designId}:done` });
+    pdfDialogOpen.value = false;
+  } catch (error) {
+    const name = (error as DOMException)?.name;
+    if (name === 'AbortError') {
+      track('Share PDF', { detail: `${designId}:cancelled` });
+    } else if (name === 'NotAllowedError' && waited) {
+      pdfShareRetry.value = true;
+      track('Share PDF', { detail: `${designId}:refused` });
+    } else {
+      console.error('PDF share failed:', error);
+      track('Share PDF', { detail: `${designId}:failed` });
+      pdfFailed.value = true;
+    }
   }
 };
 
@@ -2056,7 +2160,11 @@ useHead({
         :busy="isSavingPdf"
         :failed="pdfFailed"
         :extra-unlocked="hasFeature('extraDesigns')"
+        :can-share="canSharePdf"
+        :share-retry="pdfShareRetry"
         @save="savePoemPdf"
+        @share="sharePoemPdf"
+        @prepare="preparePdf"
         @upgrade="upgradeForDesign"
       />
     </ClientOnly>

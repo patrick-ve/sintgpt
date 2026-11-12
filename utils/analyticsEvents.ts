@@ -45,6 +45,7 @@ export const CLIENT_EVENTS = [
   'Copy share link',
   'Copy to clipboard',
   'Save as PDF',
+  'Share PDF',
   'Shared via WhatsApp',
   'Shared via Email',
   'Shared via Facebook',

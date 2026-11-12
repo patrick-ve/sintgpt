@@ -243,7 +243,7 @@
     'Payment returned': '↩️', 'Access restored': '🔓', 'Restore failed': '🔒', 'Show payment modal': '💶',
     'Close payment modal': '❌', 'Continue after payment': '▶️', 'Go to poem form': '👉', 'Contact': '✉️',
     'PDF failed': '🧾', 'Copy failed': '📋', 'Copy share link': '🔗', 'Copy to clipboard': '📋',
-    'Save as PDF': '📄', 'Shared via WhatsApp': '💬', 'Shared via Email': '📧', 'Shared via Facebook': '👥', 'Shared via share sheet': '📤',
+    'Save as PDF': '📄', 'Share PDF': '📤', 'Shared via WhatsApp': '💬', 'Shared via Email': '📧', 'Shared via Facebook': '👥', 'Shared via share sheet': '📤',
     'Open shared poem': '📨', 'Shared poem to form': '↪️', 'Scroll to poem form': '🖱️', 'Scroll to FAQ': '❓',
     'Play video': '🎬', 'Show example': '🔍', 'Draw lootjes': '🎟️', 'Show surprise ideas': '🎉', 'Open devtools': '🕵️',
   };
@@ -493,7 +493,7 @@
       id: 'engagement', title: 'Engagement',
       tabs: [
         { id: 'sharing', label: 'Sharing', column: 'Times',
-          items: rows => eventItems(rows, ['Copy share link', 'Copy to clipboard', 'Save as PDF', 'Shared via WhatsApp', 'Shared via Email', 'Shared via Facebook', 'Shared via share sheet', 'Open shared poem']) },
+          items: rows => eventItems(rows, ['Copy share link', 'Copy to clipboard', 'Save as PDF', 'Share PDF', 'Shared via WhatsApp', 'Shared via Email', 'Shared via Facebook', 'Shared via share sheet', 'Open shared poem']) },
         { id: 'pdf', label: 'PDF designs', column: 'Saves', items: rows => byDetail(rows, 'Save as PDF') },
         { id: 'actions', label: 'Actions', column: 'Times',
           items: rows => [

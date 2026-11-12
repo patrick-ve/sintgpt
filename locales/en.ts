@@ -108,6 +108,8 @@ export default {
       title: 'Choose a design',
       intro: 'This is how your poem looks in the PDF.',
       download: 'Save PDF',
+      share: 'Share PDF',
+      downloadOnly: 'Download',
       cancel: 'Cancel',
       perkament: { name: 'Parchment', description: 'A classic scroll with a wax seal' },
       pakjesavond: { name: 'Pakjesavond', description: 'Stars and rooftops at night' },

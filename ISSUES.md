@@ -41,7 +41,7 @@ Last updated: 10 November 2026. Live version: `03b783e6-9347-4d6f-929f-7690ce73a
 | [#23](#23-brand-and-legal-risks) | Low | Brand and legal risks | Later |
 | [#24](#24-after-the-season) | Low | After the season | Later |
 | [#25](#25-seo-audit) | Medium | SEO audit (10 November 2026) | Live; owner steps open |
-| [#27](#27-share-sheet-on-phones) | Medium | Share sheet on phones | Built, not deployed; phone check open |
+| [#27](#27-share-sheet-on-phones) | Medium | Share sheet on phones | Link live; PDF built; phone check open |
 
 ## Open
 
@@ -431,7 +431,7 @@ Last updated: 10 November 2026. Live version: `03b783e6-9347-4d6f-929f-7690ce73a
 
 ### #27 Share sheet on phones
 
-- **Status (12 November):** built and tested in the e2e build; not deployed. Open:
+- **Status (12 November):** link share live (version `84e5b44b`). Open:
   check on a real iPhone and Android phone (with the live button):
   does the sheet open after the short-link wait, and how often does `refused` show
   in analytics?
@@ -444,8 +444,10 @@ Last updated: 10 November 2026. Live version: `03b783e6-9347-4d6f-929f-7690ce73a
   before the visitor shares (privacy text).
 - **Analytics:** `Shared via share sheet` with `done`/`cancelled`/`refused`/`failed`.
   The browser does not say which app, so `Shared via WhatsApp/Facebook` drop on phones.
-- **Later:** share the PDF through the sheet (`navigator.share({ files })`). The PDF
-  takes time to build, so the same tap rule applies; test first.
+- **PDF (12 November, not deployed):** "Deel PDF" in the PDF window on phones that can
+  share files, with "Downloaden" next to it. The page builds the chosen design when the
+  window opens and when the visitor picks another one, so the tap shares at once.
+  Event `Share PDF` (`<design>:done/cancelled/refused/failed`). Check on a real phone.
 
 ## Findings
 
