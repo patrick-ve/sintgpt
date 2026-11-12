@@ -563,7 +563,7 @@ export default {
         {
           heading: 'Cookies',
           body: [
-            'SintGPT uses no tracking or advertising cookies. The only cookie is "sintgpt-access", after a payment or a gift link. That is why we show no cookie notice.',
+            'SintGPT uses no tracking or advertising cookies. The only cookie for visitors is "sintgpt-access", after a payment or a gift link. The site owner sets the cookie "sintgpt-intern" in their own browser, so their own visits stay out of the statistics; visitors do not get it. That is why we show no cookie notice.',
           ],
         },
         {

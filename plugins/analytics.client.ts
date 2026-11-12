@@ -1,10 +1,26 @@
 import { CAMPAIGN_PATTERN } from '~/utils/analyticsEvents';
+import { INTERNAL_COOKIE, INTERNAL_MAX_AGE, INTERNAL_PARAM, internalParam } from '~/utils/internalTraffic';
 
 // One "Page view" event per page the visitor sees. The first one also carries
 // the domain they came from and the campaign tags of the landing URL. The
 // path never includes the query or the hash, so payment IDs and shared poems
 // do not end up in analytics.
 export default defineNuxtPlugin((nuxtApp) => {
+  // `?intern=1` marks this browser as the site owner's, `?intern=0` removes
+  // the mark. It runs before the first page view, which then is not sent.
+  const internal = internalParam(window.location.search);
+  if (internal) {
+    document.cookie = internal === 'on'
+      ? `${INTERNAL_COOKIE}=1; Max-Age=${INTERNAL_MAX_AGE}; Path=/; SameSite=Lax; Secure`
+      : `${INTERNAL_COOKIE}=; Max-Age=0; Path=/; SameSite=Lax; Secure`;
+    // Through the router: it would put back an address changed behind its back.
+    nuxtApp.hook('app:mounted', () => {
+      const router = useRouter();
+      const { [INTERNAL_PARAM]: _, ...query } = router.currentRoute.value.query;
+      router.replace({ query, hash: router.currentRoute.value.hash });
+    });
+  }
+
   const { track } = useAnalytics();
   const route = useRoute();
   let lastPath: string | null = null;

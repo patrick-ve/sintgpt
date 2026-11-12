@@ -1,4 +1,5 @@
 import type { ClientEventName, ClientEventProps } from '~/utils/analyticsEvents';
+import { isInternalCookie } from '../utils/internalTraffic';
 
 const ENDPOINT = '/api/events';
 
@@ -18,6 +19,8 @@ export const useAnalytics = () => {
 
   const track = (name: ClientEventName, props: ClientEventProps = {}) => {
     if (import.meta.server) return;
+    // The site owner's own browser (`?intern=1`, utils/internalTraffic.ts).
+    if (isInternalCookie(document.cookie)) return;
     const body = JSON.stringify({
       name,
       path: analyticsPath(window.location.pathname),

@@ -565,7 +565,7 @@ export default {
         {
           heading: 'Cookies',
           body: [
-            'SintGPT gebruikt geen tracking- of advertentiecookies. Het enige cookie is "sintgpt-access", na een betaling of een cadeaulink. Daarom tonen we geen cookiemelding.',
+            'SintGPT gebruikt geen tracking- of advertentiecookies. Het enige cookie voor bezoekers is "sintgpt-access", na een betaling of een cadeaulink. In de browsers van de beheerder staat het cookie "sintgpt-intern", zodat die bezoeken niet in de statistieken komen; bezoekers krijgen het niet. Daarom tonen we geen cookiemelding.',
           ],
         },
         {

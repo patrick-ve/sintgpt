@@ -10,6 +10,7 @@ import {
   type AnalyticsEventName,
 } from '../../utils/analyticsEvents';
 import type { TierId } from '../../utils/pricingTiers';
+import { isInternalCookie } from '../../utils/internalTraffic';
 
 /**
  * Events go to Workers Analytics Engine (binding `ANALYTICS`, dataset
@@ -125,6 +126,8 @@ export function requestCountry(event: H3Event): string {
 export function trackServerEvent(event: H3Event, name: AnalyticsEventName, fields: AnalyticsFields = {}): void {
   const analytics = binding(event);
   if (!analytics) return;
+  // The site owner's own browser (`?intern=1`, utils/internalTraffic.ts).
+  if (isInternalCookie((event as { headers?: Headers }).headers?.get('cookie'))) return;
   try {
     analytics.writeDataPoint(analyticsDataPoint(name, { country: requestCountry(event), ...fields }));
   } catch (error: any) {

@@ -84,6 +84,16 @@ describe('trackServerEvent', () => {
     expect(() => trackServerEvent(broken, 'Proceed to payment')).not.toThrow();
   });
 
+  it('writes nothing for the site owner\'s own browser (sintgpt-intern=1)', () => {
+    const writeDataPoint = vi.fn();
+    const own = cloudflareEvent({ ANALYTICS: { writeDataPoint } }, { cookie: 'sintgpt-access=v2.x; sintgpt-intern=1' });
+    trackServerEvent(own, 'Generate poem');
+    expect(writeDataPoint).not.toHaveBeenCalled();
+    const other = cloudflareEvent({ ANALYTICS: { writeDataPoint } }, { cookie: 'sintgpt-intern=0; xsintgpt-intern=1' });
+    trackServerEvent(other, 'Generate poem');
+    expect(writeDataPoint).toHaveBeenCalledOnce();
+  });
+
   it('ignores a country header that is not a country code', () => {
     const writeDataPoint = vi.fn();
     trackServerEvent(cloudflareEvent({ ANALYTICS: { writeDataPoint } }, { 'cf-ipcountry': '<script>' }), 'Proceed to payment');

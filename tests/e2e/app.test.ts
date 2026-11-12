@@ -1498,6 +1498,23 @@ describe('analytics funnel events', () => {
     await page.close();
   }, 30_000);
 
+  it('sends no events from a browser marked with ?intern=1, until ?intern=0', async () => {
+    const page = await createPage();
+    const events = await collectEvents(page);
+    await page.goto(url('/?intern=1&utm_source=test'), { waitUntil: 'networkidle' });
+    expect(new URL(page.url()).search).toBe('?utm_source=test');
+    const cookies = await page.context().cookies();
+    expect(cookies.find(cookie => cookie.name === 'sintgpt-intern')?.value).toBe('1');
+    await page.goto(url('/lootjes'), { waitUntil: 'networkidle' });
+    expect(events).toEqual([]);
+
+    await page.goto(url('/?intern=0'), { waitUntil: 'load' });
+    await expect.poll(() => new URL(page.url()).search).toBe('');
+    expect((await page.context().cookies()).some(cookie => cookie.name === 'sintgpt-intern')).toBe(false);
+    await expect.poll(() => named(events, 'Page view')).toHaveLength(1);
+    await page.close();
+  }, 30_000);
+
   /** A phone with the share sheet; each call takes the next outcome ('ok' or an error name). */
   async function phoneWithShareSheet(outcomes: string[]) {
     const page = await createPage(undefined, { viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
