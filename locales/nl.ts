@@ -217,7 +217,7 @@ export default {
   },
   seo: {
     title: "Sinterklaasgedicht maken met AI: gratis generator | SintGPT",
-    description: "Maak in 30 seconden een persoonlijk sinterklaasgedicht dat echt rijmt: grappig, klassiek of een roast, in het Nederlands of Engels. Je eerste gedicht is gratis.",
+    description: "Maak in 30 seconden een persoonlijk sinterklaasgedicht dat echt rijmt: grappig, klassiek of een roast, in het Nederlands of Engels. Eerste gedicht gratis.",
     ogTitle: 'SintGPT: je sinterklaasgedicht in 30 seconden',
     ogDescription:
       'Persoonlijke sinterklaasgedichten die echt rijmen. Klaar in 30 seconden, en je eerste gedicht is gratis.',
@@ -421,8 +421,8 @@ export default {
     more: 'Bekijk alle voorbeelden',
     cta: 'Schrijf je eigen gedicht',
     pageTitle: 'Voorbeelden van sinterklaasgedichten',
-    seoTitle: 'Voorbeelden van sinterklaasgedichten: grappig tot roast | SintGPT',
-    description: 'Acht voorbeelden van sinterklaasgedichten: grappig voor opa, klassiek voor een kind, ironisch voor een collega, een roast voor je broer en meer. Met de gegevens erbij.',
+    seoTitle: 'Sinterklaasgedicht voorbeelden: grappig tot roast | SintGPT',
+    description: 'Acht voorbeelden van sinterklaasgedichten: grappig voor opa, klassiek voor een kind, ironisch voor een collega, een roast voor je broer en meer.',
     indexTitle: 'Kies een voorbeeld',
     headings: {
       'opa-kees': 'Grappig sinterklaasgedicht voor opa',
@@ -439,7 +439,7 @@ export default {
   },
   lootjes: {
     seoTitle: 'Lootjes trekken online: gratis en zonder e-mail | SintGPT',
-    description: 'Trek gratis lootjes voor Sinterklaas, zonder account of e-mailadressen. Niemand trekt zichzelf. Geef de telefoon door: iedereen ziet alleen zijn eigen lootje.',
+    description: 'Trek gratis lootjes voor Sinterklaas, zonder account of e-mail. Niemand trekt zichzelf. Geef de telefoon door: iedereen ziet alleen het eigen lootje.',
     title: 'Lootjes trekken voor Sinterklaas',
     intro: 'Vul de namen in en trek de lootjes. Geef dan de telefoon door: iedereen tikt op zijn eigen naam en ziet alleen zijn eigen lootje.',
     namesLabel: 'Namen, één per regel',

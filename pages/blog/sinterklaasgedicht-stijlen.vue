@@ -1,27 +1,27 @@
 <template>
   <BlogPost
     slug="sinterklaasgedicht-stijlen"
-    lead="Bij het schrijven van een sinterklaasgedicht bepaalt de toon hoe je boodschap aankomt. De juiste stijl voor een sinterklaasgedicht sluit aan bij het karakter van de ontvanger en houdt rekening met het gezelschap. In dit overzicht vergelijken we zes soorten sinterklaasgedichten, met een voorbeeld per stijl."
+    lead="Je schrijft een sinterklaasgedicht grappig, klassiek, ironisch, ouderwets, pikant of als roast: dat zijn de zes soorten sinterklaasgedichten in dit overzicht. Welke stijl past, hangt af van de ontvanger, van wie er meeluistert en van hoe goed jullie elkaar kennen. Per stijl zie je een voorbeeld voor dezelfde ontvanger."
     seo-title="Soorten sinterklaasgedichten: 6 stijlen vergeleken | SintGPT"
     seo-description="Soorten sinterklaasgedichten vergeleken: grappig, klassiek, ironisch, ouderwets, pikant en roast, met een voorbeeld per stijl en hulp bij kiezen."
     og-image="blog-sinterklaasgedicht-stijlen"
   >
-    <h2 class="text-3xl font-bold mt-8 mb-4">Welke stijl voor een sinterklaasgedicht past bij jouw situatie?</h2>
+    <h2 class="text-3xl font-bold mt-8 mb-4">Welke soorten sinterklaasgedichten zijn er?</h2>
     <p class="leading-relaxed mb-4">
-      Ieder gezelschap op pakjesavond is anders. Een vriendengroep vraagt om een andere sfeer dan een middag met jonge kinderen of een avond met je schoonfamilie. Wanneer je vooraf nadenkt over de toon, voorkom je ongemakkelijke momenten en zorg je voor een gedicht dat met plezier wordt voorgelezen.
+      Dit overzicht vergelijkt zes stijlen: <strong>Grappig</strong>, <strong>Klassiek</strong>, <strong>Ironisch</strong>, <strong>Ouderwets</strong>, <strong>Pikant</strong> en <strong>Roast</strong>. Uit die zes stijlen kies je ook op SintGPT. Elke stijl heeft een eigen woordkeuze en toon.
     </p>
     <p class="leading-relaxed mb-4">
-      Op SintGPT kies je uit zes verschillende stijlen: <strong>Grappig</strong>, <strong>Klassiek</strong>, <strong>Ironisch</strong>, <strong>Ouderwets</strong>, <strong>Pikant</strong> en <strong>Roast</strong>. Elke stijl heeft een eigen ritme, woordkeuze en dynamiek. Om de verschillen goed te laten horen, vergelijken we hieronder steeds hetzelfde personage: Tante Ria (58 jaar), die elke week met een nieuwe hobby begint en dit jaar een fondueset uitpakt.
+      Welke stijl past, hangt ook af van wie er meeluistert. Een vriendengroep vraagt om een andere toon dan een middag met jonge kinderen of een avond met je schoonfamilie. Om de verschillen te laten horen, krijgt steeds dezelfde verzonnen ontvanger een gedicht: Tante Ria (58 jaar), die elke week met een nieuwe hobby begint en dit jaar een fondueset uitpakt. Met de weetjes van je eigen ontvanger kun je <NuxtLink to="/" data-cta="blog:sinterklaasgedicht-stijlen:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">alle zes stijlen zelf uitproberen</NuxtLink>.
     </p>
     <div class="bg-[#fff3c9] p-6 rounded-lg my-6 border border-[#F4CD60]">
       <h3 class="text-xl font-bold text-red-900 mb-3 font-display">Eén personage als meetlat</h3>
-      <p class="text-red-800">Door hetzelfde personage in verschillende vormen te gieten, zie je direct hoe woordkeuze en perspectief de hele sfeer van een gedicht bepalen.</p>
+      <p class="text-red-800">Vier regels over dezelfde Tante Ria laten zien wat alleen de woordkeuze en de toon aan een gedicht veranderen.</p>
     </div>
 
     <h2 class="text-3xl font-bold mt-8 mb-4">Klassiek en Ouderwets: traditioneel en warm</h2>
     <h3 class="text-2xl font-bold mt-6 mb-3">Het klassieke sinterklaasgedicht</h3>
     <p class="leading-relaxed mb-4">
-      Een klassiek gedicht is traditioneel, warm en respectvol. De toon is vriendelijk en legt de nadruk op gezelligheid, dankbaarheid en de fijne eigenschappen van de ontvanger. Deze stijl is geschikt voor ouders, grootouders, buren en situaties waarin je de ander niet heel intiem kent. Lees meer over de kenmerken van een <NuxtLink to="/blog/klassiek-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">klassiek sinterklaasgedicht</NuxtLink>.
+      Een klassiek gedicht is traditioneel, warm en respectvol. Je noemt wat de ontvanger goed doet en bedankt voor het jaar. Deze stijl past bij ouders, grootouders, buren en mensen die je niet zo goed kent. Lees meer over de kenmerken van een <NuxtLink to="/blog/klassiek-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">klassiek sinterklaasgedicht</NuxtLink>.
     </p>
     <div class="bg-red-50 border-l-4 border-red-600 p-6 my-6 rounded-r-lg">
       <p class="font-bold text-red-900 mb-2">Klassiek voorbeeld voor Tante Ria</p>
@@ -34,7 +34,7 @@
     </div>
     <h3 class="text-2xl font-bold mt-6 mb-3">Het ouderwetse sinterklaasgedicht</h3>
     <p class="leading-relaxed mb-4">
-      De stijl Ouderwets is formeel en traditioneel in taal en toon. Sinterklaas treedt hier op als de statige Goedheiligman die de ontvanger plechtig toespreekt met deftige formuleringen. Dit past goed bij liefhebbers van nostalgie en tradities. Lees hoe je een <NuxtLink to="/blog/ouderwets-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">ouderwets sinterklaasgedicht</NuxtLink> schrijft. Lees hoe je een <NuxtLink to="/blog/ouderwets-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">ouderwets sinterklaasgedicht</NuxtLink> schrijft.
+      De stijl Ouderwets is formeel en traditioneel in taal en toon. De Sint spreekt de ontvanger plechtig toe, met woorden als 'Gij', 'Hooggeachte' en 'derhalve'. Dit past bij wie van tradities houdt. Lees hoe je een <NuxtLink to="/blog/ouderwets-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">ouderwets sinterklaasgedicht</NuxtLink> schrijft.
     </p>
     <div class="bg-red-50 border-l-4 border-red-600 p-6 my-6 rounded-r-lg">
       <p class="font-bold text-red-900 mb-2">Ouderwets voorbeeld voor Tante Ria</p>
@@ -62,7 +62,7 @@
     </div>
     <h3 class="text-2xl font-bold mt-6 mb-3">Het ironische sinterklaasgedicht</h3>
     <p class="leading-relaxed mb-4">
-      De stijl Ironisch is geestig en subtiel sarcastisch. Je zegt ogenschijnlijk het ene, maar bedoelt met een ondeugende ondertoon het andere. Dit werkt goed bij vrienden, broers of zussen die van een scherpe grap houden. Lees meer over het <NuxtLink to="/blog/ironisch-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">ironisch sinterklaasgedicht</NuxtLink>. Lees meer over het <NuxtLink to="/blog/ironisch-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">ironisch sinterklaasgedicht</NuxtLink>.
+      De stijl Ironisch is geestig en subtiel sarcastisch. Je zegt het ene en bedoelt het andere, zoals overdreven lof voor een hobby die na een week alweer stopt. Dit werkt goed bij vrienden, broers of zussen die van een scherpe grap houden. Lees meer over het <NuxtLink to="/blog/ironisch-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">ironisch sinterklaasgedicht</NuxtLink>.
     </p>
     <div class="bg-red-50 border-l-4 border-red-600 p-6 my-6 rounded-r-lg">
       <p class="font-bold text-red-900 mb-2">Ironisch voorbeeld voor Tante Ria</p>
@@ -77,7 +77,7 @@
     <h2 class="text-3xl font-bold mt-8 mb-4">Pikant en Roast: gewaagd en direct</h2>
     <h3 class="text-2xl font-bold mt-6 mb-3">Het pikante sinterklaasgedicht</h3>
     <p class="leading-relaxed mb-4">
-      De stijl Pikant heeft suggestieve dubbelzinnigheden en gewaagde knipogen, maar blijft smaakvol en is nooit expliciet. Deze stijl is bedoeld voor partners of een volwassen vriendengroep waar iedereen deze vorm van humor waardeert. Lees waar de grens ligt bij een <NuxtLink to="/blog/pikant-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">pikant sinterklaasgedicht</NuxtLink>. Lees waar de grens ligt bij een <NuxtLink to="/blog/pikant-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">pikant sinterklaasgedicht</NuxtLink>.
+      De stijl Pikant heeft suggestieve dubbelzinnigheden en gewaagde knipogen, maar blijft smaakvol en is nooit expliciet. Deze stijl past bij je partner of bij een vriendengroep van volwassenen die van zulke grappen houdt. Lees waar de grens ligt bij een <NuxtLink to="/blog/pikant-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">pikant sinterklaasgedicht</NuxtLink>.
     </p>
     <div class="bg-red-50 border-l-4 border-red-600 p-6 my-6 rounded-r-lg">
       <p class="font-bold text-red-900 mb-2">Pikant voorbeeld voor Tante Ria</p>
@@ -90,7 +90,7 @@
     </div>
     <h3 class="text-2xl font-bold mt-6 mb-3">Het roast sinterklaasgedicht</h3>
     <p class="leading-relaxed mb-4">
-      De stijl Roast is een genadeloze maar liefdevolle roast. Deze stijl neemt de ontvanger flink op de hak op basis van wat jij invult over gewoontes of flaters. Er worden geen grappen gemaakt over afkomst, geloof, geaardheid, gender, handicap, ziekte, lichaam, gewicht, overleden naasten of geldzorgen. Een roast eindigt altijd warm. Lees hoe je een <NuxtLink to="/blog/roast-sinterklaasgedicht-zonder-te-kwetsen" class="text-red-700 underline underline-offset-2 hover:text-red-900">roast sinterklaasgedicht zonder te kwetsen</NuxtLink> schrijft.
+      De stijl Roast is een genadeloze maar liefdevolle roast. Deze stijl neemt de ontvanger flink op de hak op basis van wat jij invult over gewoontes of flaters. Hij maakt geen grappen over afkomst, geloof, geaardheid, gender, handicap, ziekte, lichaam, gewicht, overleden naasten of geldzorgen. Een roast eindigt altijd warm. Lees hoe je een <NuxtLink to="/blog/roast-sinterklaasgedicht-zonder-te-kwetsen" class="text-red-700 underline underline-offset-2 hover:text-red-900">roast sinterklaasgedicht zonder te kwetsen</NuxtLink> schrijft.
     </p>
     <div class="bg-red-50 border-l-4 border-red-600 p-6 my-6 rounded-r-lg">
       <p class="font-bold text-red-900 mb-2">Roast voorbeeld voor Tante Ria</p>
@@ -104,20 +104,20 @@
 
     <h2 class="text-3xl font-bold mt-8 mb-4">Hoe kies je de juiste toon voor een sinterklaasgedicht?</h2>
     <p class="leading-relaxed mb-4">
-      Twijfel je tussen de verschillende soorten sinterklaasgedichten? Door vooraf drie duidelijke criteria langs te lopen, maak je een veilige en doordachte keuze.
+      Kies de toon op basis van drie dingen: de ontvanger, wie er meeluistert en hoe goed jullie elkaar kennen.
     </p>
     <ol class="list-decimal pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
-      <li>Kijk naar de ontvanger: Hoe reageert deze persoon op plagerijen? Iemand met veel zelfspot kan een roast waarderen, terwijl een gevoeliger persoon liever een klassiek gedicht hoort.</li>
+      <li>Kijk naar de ontvanger: Hoe reageert deze persoon op plagerijen? Iemand met veel zelfspot kan een roast hebben. Een gevoeliger persoon hoort liever een klassiek gedicht.</li>
       <li>Kijk naar het publiek: Wie luistert er mee in de kamer? Als er kinderen of grootouders bij zijn, pas je gewaagde of pikante toespelingen aan.</li>
       <li>Kijk naar de onderlinge band: Hoe beter je elkaar kent, hoe scherper de grappen mogen zijn. Bij een prille band kies je voor warm en respectvol.</li>
     </ol>
     <p class="leading-relaxed mb-4">
-      Wanneer je aarzelt tussen grappig of klassiek, is een speelse, lichte stijl vaak het beste compromis. Zo blijft de sfeer ontspannen en feestelijk.
+      Twijfel je tussen Grappig en Klassiek? Kies dan Grappig en eindig met een warme regel. Dan lacht de kamer, en hoort de ontvanger ook iets liefs.
     </p>
 
     <h2 class="text-3xl font-bold mt-8 mb-4">Valkuilen: welke stijlen vermijd je bij wie?</h2>
     <p class="leading-relaxed mb-4">
-      Sommige combinaties van stijl en publiek leiden bijna altijd tot scheve gezichten. Let goed op bij de volgende groepen:
+      Bij deze groepen past niet elke stijl:
     </p>
     <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
       <li>Kinderen: Vermijd ironie, roasts en pikante toespelingen. Kinderen nemen plagerijen vaak letterlijk en begrijpen dubbele bodems nog niet. Kies voor hen een vriendelijk <NuxtLink to="/blog/sinterklaasgedicht-voor-kinderen" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht voor kinderen</NuxtLink>.</li>

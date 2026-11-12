@@ -1,33 +1,33 @@
 <template>
   <BlogPost
     slug="klassiek-sinterklaasgedicht"
-    lead="Zoek je een warm en respectvol gedicht voor pakjesavond? Een klassiek sinterklaasgedicht vertelt vanuit de Goedheiligman een herkenbaar verhaal met een compliment, een kleine plaagstoot en een passend cadeau. Met de juiste opbouw en persoonlijke details maak je een traditioneel gedicht dat iedereen bijblijft."
+    lead="Een klassiek sinterklaasgedicht is een warm en respectvol gedicht waarin de Sint zelf spreekt. Hij slaat zijn grote boek open, geeft een compliment, plaagt een klein beetje en kondigt het cadeau aan. Hieronder lees je die vaste opbouw, met losse coupletten en een compleet voorbeeld van zestien regels."
     seo-title="Klassiek sinterklaasgedicht: tips en voorbeelden | SintGPT"
     seo-description="Leer hoe je een warm, klassiek sinterklaasgedicht schrijft met de juiste opbouw, persoonlijke details en complete voorbeeldgedichten."
     og-image="blog-klassiek-sinterklaasgedicht"
   >
     <h2 class="text-3xl font-bold mt-8 mb-4">Wat is een klassiek sinterklaasgedicht precies?</h2>
     <p class="leading-relaxed mb-4">
-      In een <strong>klassiek sinterklaasgedicht</strong> neemt Sint-Nicolaas zelf het woord. Hij vertelt over zijn reis met de stoomboot uit Spanje, over Piet die over de daken sluipt en over het grote boek waarin alle belevenissen van het afgelopen jaar staan opgeschreven. De toon is altijd warm, vriendelijk en respectvol. Meer over deze gebruiken lees je bij de <NuxtLink to="/blog/sinterklaas-tradities" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaas tradities</NuxtLink>.
+      In een <strong>klassiek sinterklaasgedicht</strong> neemt Sint-Nicolaas zelf het woord. Hij vertelt over zijn reis met de stoomboot uit Spanje, over Piet die over de daken sluipt en over het grote boek met alles wat de ontvanger het afgelopen jaar deed. De toon is warm en respectvol. Meer over deze gebruiken lees je bij de <NuxtLink to="/blog/sinterklaas-tradities" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaas tradities</NuxtLink>.
     </p>
     <p class="leading-relaxed mb-4">
-      In tegenstelling tot een scherpe roast of een ironische tekst draait een traditioneel gedicht om gezelligheid en verbinding. De Sint deelt een welgemeend compliment uit en voegt daar hooguit een milde, herkenbare plagerij aan toe. Het doel is dat de ontvanger zich gezien voelt en met een glimlach het cadeau uitpakt. Twijfel je nog over de toon? Bekijk de <NuxtLink to="/blog/sinterklaasgedicht-stijlen" class="text-red-700 underline underline-offset-2 hover:text-red-900">zes stijlen voor een sinterklaasgedicht naast elkaar</NuxtLink>.
+      Een roast neemt de ontvanger flink op de hak. Een ironisch gedicht zegt het tegenovergestelde van wat het bedoelt. Een traditioneel gedicht doet geen van beide: de Sint geeft een gemeend compliment en plaagt hooguit een klein beetje. De ontvanger voelt zich gezien en pakt met een glimlach het cadeau uit. Twijfel je nog over de toon? Bekijk de <NuxtLink to="/blog/sinterklaasgedicht-stijlen" class="text-red-700 underline underline-offset-2 hover:text-red-900">zes stijlen voor een sinterklaasgedicht naast elkaar</NuxtLink>.
     </p>
 
     <h2 class="text-3xl font-bold mt-8 mb-4">Wanneer kies je voor deze traditionele stijl?</h2>
     <p class="leading-relaxed mb-4">
-      De klassieke vorm is een veilige en geliefde keuze voor veel verschillende gezelschappen. Er zijn situaties waarin deze stijl bijzonder goed tot zijn recht komt:
+      Kies de klassieke stijl als er kinderen of grootouders meeluisteren, of als niet iedereen in de kamer elkaar goed kent. Deze vier situaties vragen erom:
     </p>
     <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
-      <li>Kinderen die nog geloven: voor jonge kinderen brengt het perspectief van de Sint en Piet het feest tot leven. Lees meer over een passend <NuxtLink to="/blog/sinterklaasgedicht-voor-kinderen" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht voor kinderen</NuxtLink>.</li>
-      <li>Opa en oma: oudere familieleden waarderen vaak de hoffelijke toon en de herkenbare opbouw. Bekijk ook tips voor een <NuxtLink to="/blog/sinterklaasgedicht-opa-oma" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht voor opa en oma</NuxtLink>.</li>
+      <li>Kinderen die nog geloven: de Sint spreekt zelf en Piet heeft alles gezien. Zo kennen jonge kinderen het feest. Lees meer over een passend <NuxtLink to="/blog/sinterklaasgedicht-voor-kinderen" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht voor kinderen</NuxtLink>.</li>
+      <li>Opa en oma: de hoffelijke toon en de vaste opbouw zijn goed te volgen als je voorleest. Bekijk ook tips voor een <NuxtLink to="/blog/sinterklaasgedicht-opa-oma" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht voor opa en oma</NuxtLink>.</li>
       <li>Gemengde gezelschappen: vier je pakjesavond met schoonfamilie of nieuwe kennissen, dan voorkomt een klassieke toon dat grappen verkeerd vallen.</li>
       <li>Collega's en klasgenoten: op school of de werkvloer blijft het gedicht netjes en voor iedereen prettig om naar te luisteren.</li>
     </ul>
 
     <h2 class="text-3xl font-bold mt-8 mb-4">De vier vaste bouwstenen van het gedicht</h2>
     <p class="leading-relaxed mb-4">
-      Een traditioneel gedicht volgt een logische en beproefde volgorde. Door deze vier stappen aan te houden, bouw je vanzelf een prettig ritme op:
+      Een traditioneel gedicht heeft vier vaste onderdelen, in deze volgorde:
     </p>
     <ol class="list-decimal pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
       <li>De opening: de Sint vertelt dat hij in Spanje zat te bladeren in zijn grote boek, of dat Piet iets opvallends heeft gezien vanaf het dak.</li>
@@ -36,24 +36,24 @@
       <li>De ontknoping: sluit af met een wens voor een gezellige avond en geef een hint naar de surprise of het pakje.</li>
     </ol>
     <p class="leading-relaxed mb-4">
-      Door de plagerij klein en vriendelijk te houden, blijft het geheel een <strong>warm sinterklaasgedicht</strong>. Zorg dat het compliment altijd zwaarder weegt dan de plaagstoot.
+      Houd de plagerij klein en vriendelijk, dan blijft het een <strong>warm sinterklaasgedicht</strong>. Geef het compliment meer regels dan de plaagstoot, bijvoorbeeld vier regels lof tegen twee regels plagen. Zoek je die balans liever niet zelf, dan kun je met een paar weetjes ook <NuxtLink to="/?stijl=klassiek#poem-form" data-cta="blog:klassiek-sinterklaasgedicht:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">een klassiek sinterklaasgedicht laten maken</NuxtLink>.
     </p>
 
     <h2 class="text-3xl font-bold mt-8 mb-4">Hoe maak je het gedicht persoonlijk zonder clichés?</h2>
     <p class="leading-relaxed mb-4">
-      Veel mensen beginnen met bekende openingsregels. Dat mag natuurlijk, maar het wordt veel leuker als je concrete details gebruikt. Noem specifieke gewoontes, een grappige uitspraak of een echte gebeurtenis van het afgelopen jaar.
+      Een bekende openingsregel mag. Daarna maakt een concreet detail het gedicht persoonlijk: een gewoonte, een uitspraak die de ontvanger vaak doet of iets wat dit jaar echt gebeurde. "Je houdt van tuinieren" past bij duizend mensen. "Je hark lag drie nachten in de regen" past maar bij één.
     </p>
     <p class="leading-relaxed mb-4">
-      Om te voorkomen dat het gedicht stoffig klinkt, gebruik je duidelijke en hedendaagse taal. Combineer de traditionele rol van de Sint met moderne onderwerpen, zoals een drukke agenda, sportlessen of favoriete bezigheden. Zo behoud je de warme sfeer, terwijl de tekst fris en levendig aanvoelt.
+      Gebruik gewone taal van nu, dan klinkt het gedicht niet stoffig. Laat de Sint praten over onderwerpen van nu, zoals een drukke agenda of de sportschool. De Sint blijft de Sint, maar het gedicht gaat over het leven van de ontvanger.
     </p>
     <div class="bg-[#fff3c9] p-6 rounded-lg my-6 border border-[#F4CD60]">
       <h3 class="text-xl font-bold text-red-900 mb-3 font-display">Kies voor rijmparen (AABB)</h3>
-      <p class="text-red-800">Het rijmschema AABB is het meest natuurlijk om voor te dragen. Hierbij rijmen telkens twee opeenvolgende regels op elkaar. Lees meer over het juiste <NuxtLink to="/blog/rijm-en-ritme-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">rijmschema voor je sinterklaasgedicht</NuxtLink> om haperingen bij het voorlezen te voorkomen.</p>
+      <p class="text-red-800">Bij het rijmschema AABB rijmen steeds twee regels na elkaar. Luisteraars horen het rijm dan meteen. Lees meer over het juiste <NuxtLink to="/blog/rijm-en-ritme-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">rijmschema voor je sinterklaasgedicht</NuxtLink> om haperingen bij het voorlezen te voorkomen.</p>
     </div>
 
     <h2 class="text-3xl font-bold mt-8 mb-4">Voorbeeldcoupletten per onderdeel</h2>
     <p class="leading-relaxed mb-4">
-      Hieronder zie je hoe je de verschillende onderdelen uitwerkt in duidelijke rijmparen. Elk couplet heeft een vast ritme en zuiver volrijm.
+      Hieronder staan drie onderdelen uitgewerkt als rijmparen. Elk couplet heeft vier regels en volrijm.
     </p>
     <h3 class="text-2xl font-bold mt-6 mb-3">1. De binnenkomst van Sint en Piet</h3>
     <div class="bg-red-50 border-l-4 border-red-600 p-6 my-6 rounded-r-lg">
@@ -88,7 +88,7 @@
 
     <h2 class="text-3xl font-bold mt-8 mb-4">Compleet klassiek sinterklaasgedicht als voorbeeld</h2>
     <p class="leading-relaxed mb-4">
-      Dit complete voorbeeld van zestien regels is geschreven voor een verzonnen persoon genaamd Bram, die graag in de tuin werkt maar zijn gereedschap weleens buiten laat liggen. Het gedicht volgt het AABB-schema.
+      Dit voorbeeld van zestien regels gaat over Bram, een verzonnen tuinier die zijn gereedschap weleens buiten laat liggen. Het rijmschema is AABB.
     </p>
     <div class="bg-red-50 border-l-4 border-red-600 p-6 my-6 rounded-r-lg">
       <p class="font-bold text-red-900 mb-2">De bezige tuinier</p>
@@ -118,7 +118,7 @@
       </p>
     </div>
     <p class="leading-relaxed mb-4">
-      Wil je meer inspiratie opdoen voor andere thema's of personen? Bekijk dan ook de <NuxtLink to="/voorbeelden" class="text-red-700 underline underline-offset-2 hover:text-red-900">voorbeeldgedichten in verschillende stijlen</NuxtLink> om te zien wat er allemaal mogelijk is.
+      Zoek je een voorbeeld voor een andere ontvanger? Bekijk de <NuxtLink to="/voorbeelden" class="text-red-700 underline underline-offset-2 hover:text-red-900">voorbeeldgedichten in verschillende stijlen</NuxtLink>.
     </p>
 
     <h2 class="text-3xl font-bold mt-8 mb-4">Tips voor het schrijven en voordragen</h2>
@@ -126,10 +126,10 @@
       Begin met een kort lijstje van eigenschappen, gewoontes en hobby's van de ontvanger. Zoek rijmwoorden bij de belangrijkste begrippen en schrijf eerst de grote verhaallijn op.
     </p>
     <p class="leading-relaxed mb-4">
-      Lees je gedicht hardop voor tijdens het schrijven. Hapert je stem bij een bepaalde regel? Pas dan het aantal lettergrepen aan zodat de zinnen soepel in elkaar overlopen.
+      Lees je gedicht hardop voor tijdens het schrijven. Hapert je stem bij een bepaalde regel? Pas dan het aantal lettergrepen aan tot de regel soepel loopt.
     </p>
     <p class="leading-relaxed mb-4">
-      Heb je weinig tijd of vind je rijmen lastig? Op SintGPT kun je een sinterklaasgedicht laten schrijven. Je vult eenvoudig de naam, het cadeau en een paar weetjes in en kiest voor de stijl Klassiek om die vertrouwde, respectvolle toon op rijm te krijgen.
+      Heb je weinig tijd of vind je rijmen lastig? Op SintGPT kun je een sinterklaasgedicht laten schrijven. Je vult de naam, het cadeau en een paar weetjes in en kiest de stijl Klassiek.
     </p>
 
     <div class="bg-red-50 border-2 border-red-600 rounded-xl p-8 my-8 text-center shadow-lg">
@@ -138,7 +138,7 @@
         Vul de gegevens van de ontvanger in en kies de stijl Klassiek. In ongeveer dertig seconden heb je een warm en persoonlijk gedicht klaar voor pakjesavond.
       </p>
       <NuxtLink
-        to="/"
+        to="/?stijl=klassiek#poem-form"
         data-cta="blog:klassiek-sinterklaasgedicht"
         class="inline-block px-8 py-3 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-transform transform hover:scale-105 text-lg border border-[#F4CD60]"
       >

@@ -780,7 +780,7 @@ describe('SEO', () => {
   it('shows the update date when a post changed after it came out', async () => {
     const html = await (await fetch('/blog/hoe-schrijf-je-het-perfecte-sinterklaasgedicht')).text();
     expect(html).toContain('bijgewerkt');
-    expect(html).toContain('datetime="2026-11-10"');
+    expect(html).toContain('datetime="2026-11-12"');
   });
 
   it('lists every post on /blog with its title as the link text', async () => {
@@ -1512,6 +1512,21 @@ describe('analytics funnel events', () => {
     await expect.poll(() => new URL(page.url()).search).toBe('');
     expect((await page.context().cookies()).some(cookie => cookie.name === 'sintgpt-intern')).toBe(false);
     await expect.poll(() => named(events, 'Page view')).toHaveLength(1);
+    await page.close();
+  }, 30_000);
+
+  it('chooses the style from ?stijl= and removes it from the address', async () => {
+    const page = await createPage();
+    await page.goto(url('/?stijl=roast&utm_source=test#poem-form'), { waitUntil: 'load' });
+    await expect.poll(() => new URL(page.url()).search).toBe('?utm_source=test');
+    expect(new URL(page.url()).hash).toBe('#poem-form');
+    const checked = () => page.evaluate(() =>
+      (document.querySelector('input[name="poem-style"]:checked') as HTMLInputElement | null)?.value);
+    expect(await checked()).toBe('roast');
+
+    await page.goto(url('/?stijl=onbekend'), { waitUntil: 'load' });
+    await expect.poll(() => new URL(page.url()).search).toBe('');
+    expect(await checked()).toBe('funny');
     await page.close();
   }, 30_000);
 

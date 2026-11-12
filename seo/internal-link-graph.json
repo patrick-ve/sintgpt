@@ -1,0 +1,369 @@
+{
+  "generatedAt": "2026-11-12T15:56:36.682Z",
+  "orphanMoneyPages": [],
+  "pages": [
+    {
+      "route": "/gedicht",
+      "file": "pages/gedicht.vue",
+      "contextualInbound": 0,
+      "linkedFrom": [],
+      "inNavOrFooter": false,
+      "money": false
+    },
+    {
+      "route": "/blog",
+      "file": "pages/blog/index.vue",
+      "contextualInbound": 1,
+      "linkedFrom": [
+        "/"
+      ],
+      "inNavOrFooter": true,
+      "money": false
+    },
+    {
+      "route": "/blog/ironisch-sinterklaasgedicht",
+      "file": "pages/blog/ironisch-sinterklaasgedicht.vue",
+      "contextualInbound": 1,
+      "linkedFrom": [
+        "/blog/sinterklaasgedicht-stijlen"
+      ],
+      "inNavOrFooter": false,
+      "money": false
+    },
+    {
+      "route": "/blog/kort-sinterklaasgedicht",
+      "file": "pages/blog/kort-sinterklaasgedicht.vue",
+      "contextualInbound": 1,
+      "linkedFrom": [
+        "/blog/sinterklaasgedicht-voor-kinderen"
+      ],
+      "inNavOrFooter": false,
+      "money": false
+    },
+    {
+      "route": "/blog/ouderwets-sinterklaasgedicht",
+      "file": "pages/blog/ouderwets-sinterklaasgedicht.vue",
+      "contextualInbound": 1,
+      "linkedFrom": [
+        "/blog/sinterklaasgedicht-stijlen"
+      ],
+      "inNavOrFooter": false,
+      "money": false
+    },
+    {
+      "route": "/blog/pikant-sinterklaasgedicht",
+      "file": "pages/blog/pikant-sinterklaasgedicht.vue",
+      "contextualInbound": 1,
+      "linkedFrom": [
+        "/blog/sinterklaasgedicht-stijlen"
+      ],
+      "inNavOrFooter": false,
+      "money": false
+    },
+    {
+      "route": "/blog/klassiek-sinterklaasgedicht",
+      "file": "pages/blog/klassiek-sinterklaasgedicht.vue",
+      "contextualInbound": 2,
+      "linkedFrom": [
+        "/blog/ouderwets-sinterklaasgedicht",
+        "/blog/sinterklaasgedicht-stijlen"
+      ],
+      "inNavOrFooter": false,
+      "money": false
+    },
+    {
+      "route": "/blog/rijmwoorden-sinterklaas",
+      "file": "pages/blog/rijmwoorden-sinterklaas.vue",
+      "contextualInbound": 2,
+      "linkedFrom": [
+        "/blog/hoe-schrijf-je-het-perfecte-sinterklaasgedicht",
+        "/blog/rijm-en-ritme-sinterklaasgedicht"
+      ],
+      "inNavOrFooter": false,
+      "money": false
+    },
+    {
+      "route": "/blog/sinterklaas-tradities",
+      "file": "pages/blog/sinterklaas-tradities.vue",
+      "contextualInbound": 2,
+      "linkedFrom": [
+        "/blog/klassiek-sinterklaasgedicht",
+        "/blog/sinterklaasgedicht-in-het-engels"
+      ],
+      "inNavOrFooter": false,
+      "money": false
+    },
+    {
+      "route": "/blog/sinterklaasgedicht-in-het-engels",
+      "file": "pages/blog/sinterklaasgedicht-in-het-engels.vue",
+      "contextualInbound": 2,
+      "linkedFrom": [
+        "/blog/sinterklaas-op-het-werk",
+        "/blog/sinterklaas-tradities"
+      ],
+      "inNavOrFooter": false,
+      "money": false
+    },
+    {
+      "route": "/blog/sinterklaasgedicht-opa-oma",
+      "file": "pages/blog/sinterklaasgedicht-opa-oma.vue",
+      "contextualInbound": 2,
+      "linkedFrom": [
+        "/blog/klassiek-sinterklaasgedicht",
+        "/blog/ouderwets-sinterklaasgedicht"
+      ],
+      "inNavOrFooter": false,
+      "money": false
+    },
+    {
+      "route": "/blog/sinterklaasgedicht-partner",
+      "file": "pages/blog/sinterklaasgedicht-partner.vue",
+      "contextualInbound": 2,
+      "linkedFrom": [
+        "/blog/pikant-sinterklaasgedicht",
+        "/blog/roast-sinterklaasgedicht-zonder-te-kwetsen"
+      ],
+      "inNavOrFooter": false,
+      "money": false
+    },
+    {
+      "route": "/blog/surprise-maken-ideeen",
+      "file": "pages/blog/surprise-maken-ideeen.vue",
+      "contextualInbound": 2,
+      "linkedFrom": [
+        "/blog/lootjes-trekken-tips",
+        "/blog/sinterklaas-tradities"
+      ],
+      "inNavOrFooter": false,
+      "money": false
+    },
+    {
+      "route": "/privacy",
+      "file": "pages/privacy.vue",
+      "contextualInbound": 2,
+      "linkedFrom": [
+        "/",
+        "/blog"
+      ],
+      "inNavOrFooter": true,
+      "money": false
+    },
+    {
+      "route": "/voorwaarden",
+      "file": "pages/voorwaarden.vue",
+      "contextualInbound": 2,
+      "linkedFrom": [
+        "/",
+        "/blog"
+      ],
+      "inNavOrFooter": true,
+      "money": false
+    },
+    {
+      "route": "/blog/lootjes-trekken-tips",
+      "file": "pages/blog/lootjes-trekken-tips.vue",
+      "contextualInbound": 3,
+      "linkedFrom": [
+        "/blog/sinterklaas-op-het-werk",
+        "/blog/surprise-maken-ideeen",
+        "/lootjes"
+      ],
+      "inNavOrFooter": false,
+      "money": false
+    },
+    {
+      "route": "/blog/sinterklaasgedicht-beginnen-en-afsluiten",
+      "file": "pages/blog/sinterklaasgedicht-beginnen-en-afsluiten.vue",
+      "contextualInbound": 3,
+      "linkedFrom": [
+        "/blog/hoe-schrijf-je-het-perfecte-sinterklaasgedicht",
+        "/blog/rijmwoorden-sinterklaas",
+        "/blog/roast-sinterklaasgedicht-zonder-te-kwetsen"
+      ],
+      "inNavOrFooter": false,
+      "money": false
+    },
+    {
+      "route": "/blog/hoe-schrijf-je-het-perfecte-sinterklaasgedicht",
+      "file": "pages/blog/hoe-schrijf-je-het-perfecte-sinterklaasgedicht.vue",
+      "contextualInbound": 5,
+      "linkedFrom": [
+        "/blog/lootjes-trekken-tips",
+        "/blog/rijmwoorden-sinterklaas",
+        "/blog/sinterklaasgedicht-beginnen-en-afsluiten",
+        "/blog/sinterklaasgedicht-opa-oma",
+        "/blog/sinterklaasgedicht-partner"
+      ],
+      "inNavOrFooter": false,
+      "money": false
+    },
+    {
+      "route": "/blog/roast-sinterklaasgedicht-zonder-te-kwetsen",
+      "file": "pages/blog/roast-sinterklaasgedicht-zonder-te-kwetsen.vue",
+      "contextualInbound": 5,
+      "linkedFrom": [
+        "/blog/grappige-sinterklaasgedichten-tips",
+        "/blog/ironisch-sinterklaasgedicht",
+        "/blog/sinterklaas-op-het-werk",
+        "/blog/sinterklaasgedicht-stijlen",
+        "/blog/sinterklaasgedicht-voor-kinderen"
+      ],
+      "inNavOrFooter": false,
+      "money": false
+    },
+    {
+      "route": "/blog/sinterklaas-op-het-werk",
+      "file": "pages/blog/sinterklaas-op-het-werk.vue",
+      "contextualInbound": 5,
+      "linkedFrom": [
+        "/blog/ironisch-sinterklaasgedicht",
+        "/blog/pikant-sinterklaasgedicht",
+        "/blog/roast-sinterklaasgedicht-zonder-te-kwetsen",
+        "/blog/sinterklaasgedicht-beginnen-en-afsluiten",
+        "/blog/sinterklaasgedicht-in-het-engels"
+      ],
+      "inNavOrFooter": false,
+      "money": false
+    },
+    {
+      "route": "/blog/sinterklaasgedicht-voor-kinderen",
+      "file": "pages/blog/sinterklaasgedicht-voor-kinderen.vue",
+      "contextualInbound": 5,
+      "linkedFrom": [
+        "/blog/grappige-sinterklaasgedichten-tips",
+        "/blog/ironisch-sinterklaasgedicht",
+        "/blog/klassiek-sinterklaasgedicht",
+        "/blog/lootjes-trekken-tips",
+        "/blog/sinterklaasgedicht-stijlen"
+      ],
+      "inNavOrFooter": false,
+      "money": false
+    },
+    {
+      "route": "/blog/grappige-sinterklaasgedichten-tips",
+      "file": "pages/blog/grappige-sinterklaasgedichten-tips.vue",
+      "contextualInbound": 6,
+      "linkedFrom": [
+        "/blog/ironisch-sinterklaasgedicht",
+        "/blog/roast-sinterklaasgedicht-zonder-te-kwetsen",
+        "/blog/sinterklaasgedicht-beginnen-en-afsluiten",
+        "/blog/sinterklaasgedicht-opa-oma",
+        "/blog/sinterklaasgedicht-stijlen",
+        "/blog/surprise-maken-ideeen"
+      ],
+      "inNavOrFooter": false,
+      "money": false
+    },
+    {
+      "route": "/blog/sinterklaasgedicht-stijlen",
+      "file": "pages/blog/sinterklaasgedicht-stijlen.vue",
+      "contextualInbound": 6,
+      "linkedFrom": [
+        "/blog/grappige-sinterklaasgedichten-tips",
+        "/blog/hoe-schrijf-je-het-perfecte-sinterklaasgedicht",
+        "/blog/ironisch-sinterklaasgedicht",
+        "/blog/klassiek-sinterklaasgedicht",
+        "/blog/ouderwets-sinterklaasgedicht",
+        "/blog/pikant-sinterklaasgedicht"
+      ],
+      "inNavOrFooter": false,
+      "money": false
+    },
+    {
+      "route": "/lootjes",
+      "file": "pages/lootjes.vue",
+      "contextualInbound": 9,
+      "linkedFrom": [
+        "/",
+        "/blog",
+        "/blog/kort-sinterklaasgedicht",
+        "/blog/lootjes-trekken-tips",
+        "/blog/sinterklaas-op-het-werk",
+        "/blog/sinterklaas-tradities",
+        "/blog/sinterklaasgedicht-in-het-engels",
+        "/blog/sinterklaasgedicht-partner",
+        "/blog/surprise-maken-ideeen"
+      ],
+      "inNavOrFooter": true,
+      "money": true
+    },
+    {
+      "route": "/blog/rijm-en-ritme-sinterklaasgedicht",
+      "file": "pages/blog/rijm-en-ritme-sinterklaasgedicht.vue",
+      "contextualInbound": 12,
+      "linkedFrom": [
+        "/blog/grappige-sinterklaasgedichten-tips",
+        "/blog/hoe-schrijf-je-het-perfecte-sinterklaasgedicht",
+        "/blog/klassiek-sinterklaasgedicht",
+        "/blog/kort-sinterklaasgedicht",
+        "/blog/ouderwets-sinterklaasgedicht",
+        "/blog/pikant-sinterklaasgedicht",
+        "/blog/rijmwoorden-sinterklaas",
+        "/blog/sinterklaasgedicht-beginnen-en-afsluiten",
+        "/blog/sinterklaasgedicht-in-het-engels",
+        "/blog/sinterklaasgedicht-opa-oma",
+        "/blog/sinterklaasgedicht-partner",
+        "/blog/sinterklaasgedicht-voor-kinderen"
+      ],
+      "inNavOrFooter": false,
+      "money": false
+    },
+    {
+      "route": "/voorbeelden",
+      "file": "pages/voorbeelden.vue",
+      "contextualInbound": 16,
+      "linkedFrom": [
+        "/",
+        "/blog",
+        "/blog/grappige-sinterklaasgedichten-tips",
+        "/blog/hoe-schrijf-je-het-perfecte-sinterklaasgedicht",
+        "/blog/klassiek-sinterklaasgedicht",
+        "/blog/kort-sinterklaasgedicht",
+        "/blog/ouderwets-sinterklaasgedicht",
+        "/blog/pikant-sinterklaasgedicht",
+        "/blog/rijm-en-ritme-sinterklaasgedicht",
+        "/blog/rijmwoorden-sinterklaas",
+        "/blog/roast-sinterklaasgedicht-zonder-te-kwetsen",
+        "/blog/sinterklaas-tradities",
+        "/blog/sinterklaasgedicht-opa-oma",
+        "/blog/sinterklaasgedicht-partner",
+        "/blog/sinterklaasgedicht-voor-kinderen",
+        "/lootjes"
+      ],
+      "inNavOrFooter": true,
+      "money": true
+    },
+    {
+      "route": "/",
+      "file": "pages/index.vue",
+      "contextualInbound": 23,
+      "linkedFrom": [
+        "/blog",
+        "/blog/grappige-sinterklaasgedichten-tips",
+        "/blog/hoe-schrijf-je-het-perfecte-sinterklaasgedicht",
+        "/blog/ironisch-sinterklaasgedicht",
+        "/blog/klassiek-sinterklaasgedicht",
+        "/blog/kort-sinterklaasgedicht",
+        "/blog/lootjes-trekken-tips",
+        "/blog/ouderwets-sinterklaasgedicht",
+        "/blog/pikant-sinterklaasgedicht",
+        "/blog/rijm-en-ritme-sinterklaasgedicht",
+        "/blog/rijmwoorden-sinterklaas",
+        "/blog/roast-sinterklaasgedicht-zonder-te-kwetsen",
+        "/blog/sinterklaas-op-het-werk",
+        "/blog/sinterklaas-tradities",
+        "/blog/sinterklaasgedicht-beginnen-en-afsluiten",
+        "/blog/sinterklaasgedicht-in-het-engels",
+        "/blog/sinterklaasgedicht-opa-oma",
+        "/blog/sinterklaasgedicht-partner",
+        "/blog/sinterklaasgedicht-stijlen",
+        "/blog/sinterklaasgedicht-voor-kinderen",
+        "/blog/surprise-maken-ideeen",
+        "/lootjes",
+        "/voorbeelden"
+      ],
+      "inNavOrFooter": true,
+      "money": true
+    }
+  ]
+}

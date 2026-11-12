@@ -426,7 +426,8 @@ Last updated: 10 November 2026. Live version: `03b783e6-9347-4d6f-929f-7690ce73a
     descriptions for werk (was 159 characters), schrijven, rijmschema, opa en oma and the
     overview. The overview's main term is now "soorten sinterklaasgedichten". Sitemap
     `lastmod` is 11 November for every blog page that changed.
-- **Next steps:** request indexing for the new posts in Search Console (S24). From late November, check Performance → Queries and adjust the briefs.
+- **12 November 2026, SEO skills pass** (`.claude/skills/` from `Illyism/seo-skills`): `seo-roast` found no blocker (`seo/roast-roadmap.md`); all 20 posts cleaned of filler and given a direct answer first (`unslop-seo`); one link to the poem form in the upper 40% of each post (`internal-linking`, `seo/internal-links-report.md`); style posts link to `/?stijl=<stijl>#poem-form`; `/voorbeelden` title starts with its main term; weak or non-AABB example poems rewritten. `blog-refresher` (`seo/blog-refresh-plan.md`, approved by the owner): "sinterklaasgedicht schrijven", "grappig sinterklaasgedicht" and "rijmwoorden sinterklaas" rewritten to 1,500–1,770 words (above the 1,400 cap, approved), each with a FAQ. Posts now say "bijgewerkt 12 november". The 1,400-word cap in `STYLE_RULES` still applies to new posts; re-rendering a post from saved JSON would undo these edits.
+- **Next steps:** request indexing for the new posts in Search Console (S24). From late November, check Performance → Queries and adjust the briefs. Owner: check Cloudflare Security → Bots that search crawlers (OAI-SearchBot, PerplexityBot) are allowed.
 - **Notes:** no keyword tool was used, so the map has no search volumes.
 
 ### #27 Share sheet on phones

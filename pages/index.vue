@@ -7,6 +7,7 @@ import { pakjesavondCountdown } from '~/utils/pakjesavond';
 import { PDF_DESIGNS, type PdfDesignId } from '~/utils/pdfDesigns';
 import { fillSeasons, TIERS, type TierId } from '~/utils/pricingTiers';
 import { findBlogPost } from '~/utils/blogPosts';
+import { STYLE_PARAM, styleFromQuery } from '~/utils/stylePreset';
 import type { PoemHistoryEntry } from '~/composables/usePoemHistory';
 import type { PaymentTrigger } from '~/components/PaymentModal.vue';
 
@@ -74,6 +75,15 @@ onMounted(async () => {
   const paymentId = route.query.payment_id;
   if (draft && (typeof paymentId === 'string' || route.query.payment === 'cancelled')) {
     restoreForm(draft);
+  }
+
+  // A link from a blog post about one style (/?stijl=roast#poem-form) chooses
+  // that style, unless a restored draft already holds one.
+  if (STYLE_PARAM in route.query) {
+    const presetStyle = styleFromQuery(route.query[STYLE_PARAM]);
+    if (presetStyle && !restoredDraft.value) formData.value.style = presetStyle;
+    const { [STYLE_PARAM]: _stijl, ...rest } = route.query;
+    router.replace({ query: rest, hash: route.hash });
   }
 
   // A gift link: claim it, then take the code out of the address bar.
