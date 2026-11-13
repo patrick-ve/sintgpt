@@ -5,10 +5,10 @@ published or sent. The owner reviews and publishes every file.
 
 ## Before anything goes out
 
-- [ ] Fill in `[PLAATS]` in `press-release.md` (the dateline city).
-- [ ] Approve or rewrite the quote marked `[APPROVE QUOTE]`, then delete the marker.
-- [ ] `devto-post.md`: decide `[CHOICE]` (name the model or not; the site does not), then delete the marker.
-- [ ] `linkedin-article.md`: keep the disclosure line at the top (the article ranks SintGPT itself), delete `[KEEP THIS DISCLOSURE]`.
+- [x] Dateline: AMSTERDAM, 17 november 2026 (owner, 13 Nov 2026). Change the date if you send on another day.
+- [x] Quote: the short one, "aldus de makers van SintGPT" (owner's choice).
+- [x] `devto-post.md`: no model name, "a language model through Vercel AI Gateway" (owner's choice, same as the site).
+- [x] `linkedin-article.md`: on the owner's own profile, first line "Ik heb SintGPT gemaakt; ...", in the first person.
 - [ ] Re-check the prices and facts against the live site on the day you publish (`utils/pricingTiers.ts`, `/voorwaarden`).
 - [ ] Contact: `patrick@sintgpt.com` (owner's choice, 13 Nov 2026). A press release is copied to many news sites and cannot be retracted; this address is already public on the site.
 
@@ -24,7 +24,7 @@ published or sent. The owner reviews and publishes every file.
      - ID.nl, Androidplanet, MAX Vandaag (tips and app round-ups)
    - Use each outlet's own tip form or the editor of the earlier article. One personal email per outlet beats a list.
    - A paid Dutch wire (for example ANP Persberichtendienst) spreads the release further. Check the price and the required fields first: if a form requires a phone number or street address, use a business line or a virtual address, never a private one.
-2. **LinkedIn article (Dutch), the same week.** Publish on a SintGPT company page or the owner's profile. No `canonical_url`: the goal is a second result next to sintgpt.com for "sinterklaasgedicht maken". Medium is a second host for the same text.
+2. **LinkedIn article (Dutch), the same week.** Publish on the owner's own profile. No `canonical_url`: the goal is a second result next to sintgpt.com for "sinterklaasgedicht maken". Medium is a second host for the same text.
 3. **Dev.to article (English), any time.** `published: false` creates a draft on paste; read it on dev.to, then publish. Hashnode can carry the same text with `canonical_url` set to the dev.to URL.
 
 ## Rules kept in these drafts

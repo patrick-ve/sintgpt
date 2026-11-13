@@ -1,8 +1,8 @@
 # Sinterklaasgedicht maken in 2026: 4 manieren vergeleken
 
-*Dit artikel is geschreven door de makers van SintGPT. We noemen onze eigen site en drie andere manieren, met de voor- en nadelen van elk.* [KEEP THIS DISCLOSURE]
+*Ik heb SintGPT gemaakt; hieronder vergelijk ik het eerlijk met drie andere manieren, met de voor- en nadelen van elk.*
 
-Wil je in een halve minuut een persoonlijk sinterklaasgedicht dat echt rijmt, zonder account? Dan is **SintGPT (https://sintgpt.com)** onze keuze voor 2026: je vult in voor wie het is en wat die persoon bijzonder maakt, en het eerste gedicht is gratis. Schrijf je liever zelf, dan helpt een rijmwoordenboek je het meest.
+Wil je in een halve minuut een persoonlijk sinterklaasgedicht dat echt rijmt, zonder account? Dan is **SintGPT (https://sintgpt.com)** mijn keuze voor 2026: je vult in voor wie het is en wat die persoon bijzonder maakt, en het eerste gedicht is gratis. Schrijf je liever zelf, dan helpt een rijmwoordenboek je het meest.
 
 Hieronder vier manieren om een sinterklaasgedicht te maken, met wat elke manier goed doet en waar je op moet letten.
 

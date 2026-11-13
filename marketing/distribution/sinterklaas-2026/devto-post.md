@@ -11,7 +11,7 @@ tags: cloudflare, nuxt, webdev, ai
 
 ## Streaming without a waiting screen that lies
 
-The model reasons before it writes, so the first text arrives after a few seconds and then comes in uneven chunks. The server streams an AI SDK UI message stream (SSE) from Vercel AI Gateway [CHOICE: name the model or not; the site itself does not]. The browser does not print chunks as they arrive. A small `requestAnimationFrame` loop releases the text at a steady pace, so a burst of 40 words does not jump onto the screen. With reduced motion, or in a hidden tab, the whole text shows at once.
+The model reasons before it writes, so the first text arrives after a few seconds and then comes in uneven chunks. The server streams the answer of a language model through Vercel AI Gateway as an AI SDK UI message stream (SSE). The browser does not print chunks as they arrive. A small `requestAnimationFrame` loop releases the text at a steady pace, so a burst of 40 words does not jump onto the screen. With reduced motion, or in a hidden tab, the whole text shows at once.
 
 Two Cloudflare details mattered:
 
