@@ -422,7 +422,7 @@ export default {
     cta: 'Schrijf je eigen gedicht',
     pageTitle: 'Voorbeelden van sinterklaasgedichten',
     seoTitle: 'Sinterklaasgedicht voorbeelden: grappig tot roast | SintGPT',
-    description: 'Acht voorbeelden van sinterklaasgedichten: grappig voor opa, klassiek voor een kind, ironisch voor een collega, een roast voor je broer en meer.',
+    description: 'Negen voorbeelden van sinterklaasgedichten: grappig voor opa, klassiek voor een kind, ironisch voor een collega, een roast voor je broer en meer.',
     indexTitle: 'Kies een voorbeeld',
     headings: {
       'opa-kees': 'Grappig sinterklaasgedicht voor opa',
@@ -432,6 +432,7 @@ export default {
       daan: 'Roast-gedicht voor je broer',
       jeroen: 'Pikant sinterklaasgedicht voor je vriend',
       'buurman-gerrit': 'Grappig sinterklaasgedicht voor de buurman',
+      sem: 'Sinterklaasgedicht voor een jongen van 6',
       emma: 'Sinterklaasgedicht in het Engels',
     },
     pageIntro: 'SintGPT schreef deze gedichten met de gegevens die erbij staan. De mensen zijn verzonnen. Zo zie je wat elke stijl doet.',

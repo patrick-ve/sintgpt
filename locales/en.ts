@@ -430,6 +430,7 @@ export default {
       daan: 'Roast poem for a brother',
       jeroen: 'Spicy Sinterklaas poem for a boyfriend',
       'buurman-gerrit': 'Funny Sinterklaas poem for the neighbour',
+      sem: 'Sinterklaas poem for a 6-year-old boy',
       emma: 'Sinterklaas poem in English',
     },
     pageIntro: 'SintGPT wrote these poems from the details shown with them. The people are made up. This shows what each style does.',
