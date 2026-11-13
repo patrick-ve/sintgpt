@@ -347,19 +347,27 @@ describe('poem form', () => {
     expect(await reveal.isChecked()).toBe(true);
     expect(await reveal.evaluate(el => getComputedStyle(el).opacity)).toBe('1');
 
-    // The style buttons are radios too: arrow keys move the choice.
+    // The style buttons are radios too: arrow keys move the choice, in the
+    // order the buttons show (Grappig, Pikant, Roast on the first row).
     const funny = page.getByRole('radio', { name: /Grappig/ });
     await funny.focus();
     await page.keyboard.press('ArrowRight');
-    expect(await page.getByRole('radio', { name: /Klassiek/ }).isChecked()).toBe(true);
+    expect(await page.getByRole('radio', { name: /Pikant/ }).isChecked()).toBe(true);
     expect(await funny.isChecked()).toBe(false);
     await page.close();
   });
 
-  it('shows the poem styles with their emoji', async () => {
+  it('shows the poem styles with their emoji, in two rows of three', async () => {
     const page = await createPage('/');
-    for (const label of ['😄 Grappig', '📜 Klassiek', '😏 Ironisch', '🎩 Ouderwets', '🌶️ Pikant', '🔥 Roast']) {
-      expect(await page.getByRole('radio', { name: label }).count(), label).toBe(1);
+    const styles = [
+      ['😄', 'Grappig'], ['🌶️', 'Pikant'], ['🔥', 'Roast'],
+      ['📜', 'Klassiek'], ['😏', 'Ironisch'], ['🎩', 'Ouderwets'],
+    ];
+    const labels = page.locator('.style-choices label');
+    for (const [index, [emoji, name]] of styles.entries()) {
+      // The emoji shows, but the radio is called by its name only.
+      expect(await page.getByRole('radio', { name, exact: true }).count(), name).toBe(1);
+      expect((await labels.nth(index).innerText()).replace(/\s+/g, ' ').trim()).toBe(`${emoji} ${name}`);
     }
     await page.close();
   });

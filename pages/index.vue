@@ -1463,7 +1463,7 @@ useHead({
                   v-model="formData.funFacts"
                   aria-describedby="poem-facts-help"
                   :placeholder="t('form.funFacts.placeholder')"
-                  :rows="5"
+                  :rows="10"
                   size="xl"
                   :disabled="isLoading"
                   class="w-full input-festive"
