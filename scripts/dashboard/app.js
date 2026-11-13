@@ -239,7 +239,7 @@
     'Payment webhook': '🪝', 'Surprise ideas': '💡', 'Surprise ideas failed': '🫥', 'Gift claimed': '🎁',
     'Page view': '👀', 'Form started': '✏️', 'Form refused': '⛔', 'No poems left': '🚧', 'Poem ready': '📜', 'Rate poem': '👍',
     'Edit poem': '✂️', 'Poem stream failed': '📡', 'Open poem from history': '📖', 'Open history': '📚',
-    'Delete poem': '🗑️', 'Clear history': '🧹', 'Switch language': '🌐', 'Payment succeeded': '💳',
+    'Delete poem': '🗑️', 'Clear history': '🧹', 'New poem': '🆕', 'Switch language': '🌐', 'Payment succeeded': '💳',
     'Payment returned': '↩️', 'Access restored': '🔓', 'Restore failed': '🔒', 'Show payment modal': '💶',
     'Close payment modal': '❌', 'Continue after payment': '▶️', 'Go to poem form': '👉', 'Contact': '✉️',
     'PDF failed': '🧾', 'Copy failed': '📋', 'Copy share link': '🔗', 'Copy to clipboard': '📋',
@@ -497,7 +497,7 @@
         { id: 'pdf', label: 'PDF designs', column: 'Saves', items: rows => byDetail(rows, 'Save as PDF') },
         { id: 'actions', label: 'Actions', column: 'Times',
           items: rows => [
-            ...eventItems(rows, ['Open history', 'Open poem from history', 'Delete poem', 'Clear history', 'Play video', 'Scroll to FAQ', 'Contact', 'Open devtools']),
+            ...eventItems(rows, ['Open history', 'Open poem from history', 'Delete poem', 'Clear history', 'New poem', 'Play video', 'Scroll to FAQ', 'Contact', 'Open devtools']),
             ...byDetail(rows, 'Show surprise ideas', 'surprise ideas: '),
             ...byDetail(rows, 'Switch language', 'language: '),
             ...byDetail(rows, 'Show example', 'example: '),

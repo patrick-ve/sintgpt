@@ -134,6 +134,7 @@ export default {
     sampleTitle: 'Poem for Mark',
     sampleSignature: 'Sinterklaas and Pete',
     regenerate: 'Rewrite this poem',
+    newPoem: 'New poem',
     regenerateWithHint: 'Rewrite with this wish',
     hint: {
       open: 'Say what should change',

@@ -59,6 +59,7 @@ export const CLIENT_EVENTS = [
   'Draw lootjes',
   'Show surprise ideas',
   'Open devtools',
+  'New poem',
 ] as const;
 
 export type ServerEventName = (typeof SERVER_EVENTS)[number];

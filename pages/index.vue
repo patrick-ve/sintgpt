@@ -425,6 +425,26 @@ const regeneratePoem = async () => {
   await runGeneration(lastRequest.value, true, rewriteHint.value.trim() || undefined);
 };
 
+// "Nieuw gedicht": empties what the visitor typed about the recipient, so the
+// next poem starts from a clean form. The style, rhyme scheme, length and
+// language stay, because people often keep them for the whole family. The
+// poem on screen stays too (it is in the history), and so does its rewrite.
+const startNewPoem = () => {
+  formData.value = {
+    ...formData.value,
+    name: '',
+    present: '',
+    funFacts: '',
+    revealPresent: true,
+    writtenBy: '',
+    writtenForAudience: '',
+  };
+  showNameError.value = false;
+  track('New poem');
+  scrollToForm();
+  nextTick(() => document.getElementById('poem-name')?.focus({ preventScroll: true }));
+};
+
 const ratePoem = (vote: 'up' | 'down') => {
   if (poemRating.value) return;
   poemRating.value = vote;
@@ -1917,6 +1937,15 @@ useHead({
                 {{ t('poem.shareFacebook') }}
               </button>
               </template>
+              <button
+                v-if="poem"
+                type="button"
+                class="poem-action"
+                @click="startNewPoem"
+              >
+                <UIcon name="i-heroicons-plus" class="size-[1.125rem]" aria-hidden="true" />
+                {{ t('poem.newPoem') }}
+              </button>
             </div>
 
             <!-- Surprise ideas (Hele familie) for the poem from the form -->

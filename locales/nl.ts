@@ -134,6 +134,7 @@ export default {
     sampleTitle: 'Gedicht voor Daan (7)',
     sampleSignature: 'Sint en Piet',
     regenerate: 'Herschrijf dit gedicht',
+    newPoem: 'Nieuw gedicht',
     regenerateWithHint: 'Herschrijf met deze wens',
     hint: {
       open: 'Zeg wat er anders moet',
