@@ -8,7 +8,7 @@ export default {
   hero: {
     question: "Can't get ChatGPT to rhyme?",
     answer: 'SintGPT writes your Sinterklaas poem in 30 seconds.',
-    subtitle: 'Personal, funny or a proper roast. In Dutch or English, and it really rhymes.',
+    subtitle: 'A personal poem that really rhymes, in 30 seconds. Your first poem is free.',
     cta: 'Start rhyming',
     moreInfo: 'How does it work?',
     photoAlt: 'Sinterklaas winks and taps his temple',

@@ -67,6 +67,25 @@ const lines = computed(() => props.poem.split('\n'));
   padding-inline-start: 0;
   text-indent: 0;
 }
+/* A real hanging indent, without padding: the line beside the drop cap then
+   starts at the letter, like the first line. The padding trick above pulls
+   that line into the letter's space, so browsers without `hanging` give it no
+   indent at all. */
+@supports (text-indent: 1em hanging) {
+  .poem-line {
+    padding-inline-start: 0;
+    text-indent: 0.9em hanging;
+  }
+  .poem-line:first-child {
+    text-indent: 0;
+  }
+}
+@supports not (text-indent: 1em hanging) {
+  .has-dropcap .poem-line:nth-child(2) {
+    padding-inline-start: 0;
+    text-indent: 0;
+  }
+}
 
 /* Shows that the poem is still being written. */
 .stream-caret {
@@ -376,6 +395,18 @@ const lines = computed(() => props.poem.split('\n'));
   text-shadow:
     1px 1px 0 rgba(212, 168, 83, 0.3),
     2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Where the browser can, it sizes and places the drop cap itself: exactly two
+   lines high, its top on the first line. The float above is the fallback. */
+@supports (initial-letter: 2) or (-webkit-initial-letter: 2) {
+  .poem-text.has-dropcap::first-letter {
+    float: none;
+    line-height: normal;
+    margin: 0 0.15em 0 0;
+    -webkit-initial-letter: 2;
+    initial-letter: 2;
+  }
 }
 
 /* Responsive */

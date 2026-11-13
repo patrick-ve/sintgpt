@@ -289,14 +289,12 @@ describe('home page UI', () => {
     await page.close();
   }, 30_000);
 
-  it('shows a sample poem with every action, disabled, before the visitor has one', async () => {
+  it('shows a sample poem without any action before the visitor has one', async () => {
     const page = await createPage('/');
     await page.getByRole('heading', { name: 'Gedicht voor Daan (7)' }).waitFor();
     await page.getByText('Daan is al zeven en een held in het doel').waitFor();
-    for (const name of POEM_ACTIONS) {
-      const button = page.getByRole('button', { name });
-      expect(await button.count(), name).toBe(1);
-      expect(await button.isDisabled(), name).toBe(true);
+    for (const name of [...POEM_ACTIONS, 'Nieuw gedicht']) {
+      expect(await page.getByRole('button', { name }).count(), name).toBe(0);
     }
     await page.close();
   });

@@ -8,7 +8,7 @@ export default {
   hero: {
     question: 'Wil het rijmen met ChatGPT maar niet lukken?',
     answer: 'SintGPT schrijft je sinterklaasgedicht in 30 seconden.',
-    subtitle: 'Persoonlijk, grappig of flink op de hak. In het Nederlands of Engels, en het rijmt echt.',
+    subtitle: 'Een persoonlijk gedicht dat echt rijmt, in 30 seconden. Je eerste gedicht is gratis.',
     cta: 'Begin met rijmen',
     moreInfo: 'Hoe werkt het?',
     photoAlt: 'Sinterklaas wijst met een knipoog naar zijn slaap',

@@ -179,14 +179,23 @@ const formData = ref({
   language: getDefaultLanguage(),
 });
 
+// Two rows of three: the lively styles first, the calmer ones below.
 const styleOptions = computed(() => [
   { value: 'funny', label: t('form.style.funny') },
+  { value: 'spicy', label: t('form.style.spicy') },
+  { value: 'roast', label: t('form.style.roast') },
   { value: 'classic', label: t('form.style.classic') },
   { value: 'ironic', label: t('form.style.ironic') },
   { value: 'old-fashioned', label: t('form.style.oldFashioned') },
-  { value: 'spicy', label: t('form.style.spicy') },
-  { value: 'roast', label: t('form.style.roast') },
 ]);
+
+// "😄 Grappig" → emoji and text, so the button's gap puts a clear space
+// between them (a space in this font is very narrow). The emoji is hidden from
+// screen readers: the radio is called "Grappig", not "smiling face Grappig".
+const splitEmoji = (label: string) => {
+  const match = /^([^\p{L}\p{N}\s]+)\s+(.+)$/u.exec(label);
+  return match ? { icon: match[1], text: match[2] } : { icon: '', text: label };
+};
 
 const rhymeSchemeOptions = computed(() => [
   { value: 'AABB', label: t('form.rhymeScheme.aabb') },
@@ -1475,7 +1484,7 @@ useHead({
 
               <fieldset>
                 <legend class="field-label">{{ t('form.style.label') }}</legend>
-                <div class="grid grid-cols-[repeat(auto-fill,minmax(8.5rem,1fr))] gap-2">
+                <div class="style-choices grid grid-cols-3 gap-2">
                   <label
                     v-for="option in styleOptions"
                     :key="option.value"
@@ -1488,7 +1497,10 @@ useHead({
                       :value="option.value"
                       :disabled="isLoading"
                     />
-                    <span>{{ option.label }}</span>
+                    <span>
+                      <span v-if="splitEmoji(option.label).icon" aria-hidden="true">{{ splitEmoji(option.label).icon }}</span>
+                      {{ splitEmoji(option.label).text }}
+                    </span>
                   </label>
                 </div>
               </fieldset>
@@ -1529,7 +1541,10 @@ useHead({
                         :value="option.value"
                         :disabled="isLoading"
                       />
-                      <span class="whitespace-nowrap">{{ option.label }}</span>
+                      <span class="whitespace-nowrap">
+                        <span v-if="splitEmoji(option.label).icon" aria-hidden="true">{{ splitEmoji(option.label).icon }}</span>
+                        {{ splitEmoji(option.label).text }}
+                      </span>
                     </label>
                   </div>
                 </fieldset>
@@ -1805,15 +1820,15 @@ useHead({
               </p>
             </div>
 
-            <!-- Actions. Disabled on the example, hidden while writing. -->
+            <!-- Actions: only for a poem on screen, invisible while writing. -->
             <div
-              v-if="!isRateLimitError && !error && !editing"
+              v-if="poem && !isRateLimitError && !error && !editing"
               class="grid grid-cols-[repeat(auto-fill,minmax(12.5rem,1fr))] gap-2"
               :class="{ invisible: isLoading }"
             >
-              <div v-if="lastRequest || !poem" class="col-span-full grid gap-2">
+              <div v-if="lastRequest" class="col-span-full grid gap-2">
                 <!-- The wish for the rewrite: above the button that sends it. -->
-                <div v-if="hintOpen && poem" class="rewrite-hint">
+                <div v-if="hintOpen" class="rewrite-hint">
                   <div class="flex items-center justify-between gap-2">
                     <label for="rewrite-hint-input" class="font-bold text-[#5c0f26]">{{ t('poem.hint.label') }}</label>
                     <button type="button" class="hint-close" :aria-label="t('poem.hint.close')" @click="closeHint">
@@ -1848,14 +1863,13 @@ useHead({
                 <button
                   type="button"
                   class="poem-action poem-action-main"
-                  :disabled="!poem"
                   @click="regeneratePoem"
                 >
                   <UIcon name="i-heroicons-arrow-path" class="size-5" aria-hidden="true" />
                   {{ rewriteHint.trim() ? t('poem.regenerateWithHint') : t('poem.regenerate') }}
                 </button>
                 <button
-                  v-if="poem && !hintOpen"
+                  v-if="!hintOpen"
                   type="button"
                   class="hint-toggle"
                   aria-expanded="false"
@@ -1866,10 +1880,9 @@ useHead({
                 </button>
               </div>
               <button
-                v-if="shareUrl || !poem"
+                v-if="shareUrl"
                 type="button"
                 class="poem-action"
-                :disabled="!poem"
                 @click="copyShareLink"
               >
                 <UIcon name="i-heroicons-link" class="size-[1.125rem]" aria-hidden="true" />
@@ -1878,7 +1891,6 @@ useHead({
               <button
                 type="button"
                 class="poem-action"
-                :disabled="!poem"
                 @click="copyToClipboard"
               >
                 <UIcon name="i-heroicons-clipboard-document" class="size-[1.125rem]" aria-hidden="true" />
@@ -1887,7 +1899,6 @@ useHead({
               <button
                 type="button"
                 class="poem-action"
-                :disabled="!poem"
                 aria-haspopup="dialog"
                 @click="openPdfDialog"
               >
@@ -1898,7 +1909,6 @@ useHead({
                 v-if="canNativeShare"
                 type="button"
                 class="poem-action"
-                :disabled="!poem"
                 @click="shareNative"
               >
                 <UIcon name="i-heroicons-arrow-up-on-square" class="size-[1.125rem]" aria-hidden="true" />
@@ -1908,7 +1918,6 @@ useHead({
               <button
                 type="button"
                 class="poem-action"
-                :disabled="!poem"
                 @click="shareViaWhatsApp"
               >
                 <svg class="size-[1.125rem] shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -1919,7 +1928,6 @@ useHead({
               <button
                 type="button"
                 class="poem-action"
-                :disabled="!poem"
                 @click="shareViaEmail"
               >
                 <UIcon name="i-heroicons-envelope" class="size-[1.125rem]" aria-hidden="true" />
@@ -1928,7 +1936,6 @@ useHead({
               <button
                 type="button"
                 class="poem-action"
-                :disabled="!poem"
                 @click="shareViaFacebook"
               >
                 <svg class="size-[1.125rem] shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -1938,7 +1945,6 @@ useHead({
               </button>
               </template>
               <button
-                v-if="poem"
                 type="button"
                 class="poem-action"
                 @click="startNewPoem"
@@ -2334,9 +2340,10 @@ useHead({
 }
 .choice > span {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 0.375rem;
+  column-gap: 0.375rem;
   min-height: 2.75rem;
   padding: 0 0.75rem;
   border: 1.5px solid #d9c49a;
@@ -2349,6 +2356,18 @@ useHead({
   transition-property: background-color, border-color, color;
   transition-duration: 150ms;
   transition-timing-function: ease-out;
+}
+/* Three styles in a row: on a narrow form "🎩 Ouderwets" does not fit on one
+   line, so every style puts its emoji above the label, all the same way. */
+.style-choices {
+  container-type: inline-size;
+}
+@container (max-width: 26rem) {
+  .style-choices .choice > span {
+    flex-direction: column;
+    row-gap: 0.125rem;
+    padding-block: 0.375rem;
+  }
 }
 .choice input:checked + span {
   background: #5c0f26;
@@ -2414,6 +2433,25 @@ useHead({
 .poem-line:first-child {
   padding-inline-start: 0;
   text-indent: 0;
+}
+/* A real hanging indent, without padding: the line beside the drop cap then
+   starts at the letter, like the first line. The padding trick above pulls
+   that line into the letter's space, so browsers without `hanging` give it no
+   indent at all. */
+@supports (text-indent: 1em hanging) {
+  .poem-line {
+    padding-inline-start: 0;
+    text-indent: 0.9em hanging;
+  }
+  .poem-line:first-child {
+    text-indent: 0;
+  }
+}
+@supports not (text-indent: 1em hanging) {
+  .has-dropcap .poem-line:nth-child(2) {
+    padding-inline-start: 0;
+    text-indent: 0;
+  }
 }
 /* Shows that the poem is still being written. */
 .stream-caret {
@@ -2733,6 +2771,18 @@ useHead({
   margin: 0.1em 0.15em 0 0;
   color: #8b1538;
   text-shadow: 2px 2px 0px rgba(212, 168, 83, 0.4);
+}
+
+/* Where the browser can, it sizes and places the drop cap itself: exactly two
+   lines high, its top on the first line. The float above is the fallback. */
+@supports (initial-letter: 2) or (-webkit-initial-letter: 2) {
+  .poem-text.has-dropcap::first-letter {
+    float: none;
+    line-height: normal;
+    margin: 0 0.15em 0 0;
+    -webkit-initial-letter: 2;
+    initial-letter: 2;
+  }
 }
 
 .noselect {
