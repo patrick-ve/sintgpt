@@ -9,7 +9,7 @@ findings worth keeping. Newest information first within each section.
   `docs/pricing-tiers.md`.
 - Never put API keys, webhook secrets or gift codes in this file.
 
-Last updated: 10 November 2026. Live version: `03b783e6-9347-4d6f-929f-7690ce73ad1e`
+Last updated: 14 November 2026. Live version: `03b783e6-9347-4d6f-929f-7690ce73ad1e`
 (commit `d0db20d`, on GitHub).
 
 ## Priorities
@@ -42,6 +42,7 @@ Last updated: 10 November 2026. Live version: `03b783e6-9347-4d6f-929f-7690ce73a
 | [#24](#24-after-the-season) | Low | After the season | Later |
 | [#25](#25-seo-audit) | Medium | SEO audit (10 November 2026) | Live; owner steps open |
 | [#27](#27-share-sheet-on-phones) | Medium | Share sheet on phones | Link live; PDF built; phone check open |
+| [#28](#28-new-poem-prompt-wait-time-and-follow-ups) | Medium | New poem prompt: wait time and follow-ups | Prompt built; owner checks open |
 
 ## Open
 
@@ -450,7 +451,58 @@ Last updated: 10 November 2026. Live version: `03b783e6-9347-4d6f-929f-7690ce73a
   window opens and when the visitor picks another one, so the tap shares at once.
   Event `Share PDF` (`<design>:done/cancelled/refused/failed`). Check on a real phone.
 
+### #28 New poem prompt: wait time and follow-ups
+
+- **Status:** prompt rewritten on 14 November 2026 (`buildPrompt` in
+  `server/utils/poem.ts`). Open: the points below.
+- **What changed:** lines of about 10 syllables, rhyme without filler words, one
+  joke per rhyme pair, a closing punchline, one voice, no made-up traits, a tip
+  per style, example couplets, and a "Tempo" line. See the finding
+  "Poem prompt and reasoning effort" below for the test.
+- **Open:**
+  1. **Wait time.** The model reasons longer: first text after about 27 s in a
+     local test of 8 poems (one at a time), against about 14 s with the old
+     prompt. The site says "Klaar binnen 30 seconden" and "Gemiddeld 20 tot 30
+     seconden" (`locales/nl.ts`, `locales/en.ts`, `SITE_FACTS`, `llms.txt`).
+     Watch `Generate poem` (seconds to first text) and `Poem aborted` on the
+     dashboard after the deploy. If the average is above 30 s: change the
+     texts, or shorten the prompt.
+  2. **Cost.** About $0.011 to $0.014 per poem, was $0.008.
+  3. **Rewrites.** "Herschrijf dit gedicht" uses the same prompt with
+     `REGENERATE_POEM_MODEL`. The new prompt was tested with Gemini 3.7 Flash
+     only (one rewrite with a wish and one hostile wish: both correct). Do one
+     real rewrite after the deploy (also open in #18).
+  4. **Example poems.** The poems in `utils/examplePoems.ts` and the PDF
+     showcase come from the old prompt. The site now writes better poems than
+     its examples. Write them again (`scripts/generate-example-poems.ts`) and
+     review them.
+
 ## Findings
+
+### Poem prompt and reasoning effort (14 November 2026)
+
+- **Method:** 14 made-up requests that follow the real form use (mostly funny,
+  Dutch, AABB, long fun facts), 2 or 3 poems per request per prompt. Gemini 3.7
+  Flash wrote the poems and judged them in blind pairs, each pair in both
+  orders. Plus checks without a model (line count, name, present, syllables per
+  line) and 6 guard requests (prompt injection, sensitive facts, English, ABAB,
+  limerick). The judge prefers the first poem (60 to 70%) and two runs of the
+  same prompt scored 64% against 36%, so only large differences count.
+- **Prompt:** the new prompt won 82% of 84 judgements against the old one (the
+  final wording: 84% of 56). Lines went from 12.9 syllables (spread 0.95 within
+  a poem) to 10.3 (spread 0.4). Line count, name and present: 100%.
+- **Reasoning effort (`thinkingLevel`):** the default equals `medium` (52%
+  against 48%). At `low` the model mostly does not reason: 3 times cheaper and
+  faster, but it loses 2 of 3 comparisons with `medium` and is no better than
+  the old prompt. `high` was not tested in full (2 poems: twice the wait and
+  the cost). `thinkingBudget` does not work as a cap: the model then skips
+  reasoning or ignores the cap. `minimal` gives no output.
+- **Two traps:** a "work in steps" block in the prompt made the model write
+  its drafts into the answer when it did not reason (2 of 40 poems at `low`).
+  And the model borrows words from example couplets about the same subject as
+  the request, so the example is about courgettes.
+- **Not solved:** some filler words remain, and a poem without a present has
+  the weakest ending.
 
 ### Visitors on 9 November 2026
 
