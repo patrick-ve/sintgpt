@@ -9,8 +9,8 @@ findings worth keeping. Newest information first within each section.
   `docs/pricing-tiers.md`.
 - Never put API keys, webhook secrets or gift codes in this file.
 
-Last updated: 14 November 2026. Live version: `03b783e6-9347-4d6f-929f-7690ce73ad1e`
-(commit `d0db20d`, on GitHub).
+Last updated: 14 November 2026. Live version: `dfdbe138-2258-4f6c-81cf-0526bbed52cf`
+(commit `73bb578`, on GitHub).
 
 ## Priorities
 
@@ -42,7 +42,7 @@ Last updated: 14 November 2026. Live version: `03b783e6-9347-4d6f-929f-7690ce73a
 | [#24](#24-after-the-season) | Low | After the season | Later |
 | [#25](#25-seo-audit) | Medium | SEO audit (10 November 2026) | Live; owner steps open |
 | [#27](#27-share-sheet-on-phones) | Medium | Share sheet on phones | Link live; PDF built; phone check open |
-| [#28](#28-new-poem-prompt-wait-time-and-follow-ups) | Medium | New poem prompt: wait time and follow-ups | Prompt built; owner checks open |
+| [#28](#28-new-poem-prompt-wait-time-and-follow-ups) | Medium | New poem prompt: wait time and follow-ups | Live; owner checks open |
 
 ## Open
 
@@ -453,8 +453,9 @@ Last updated: 14 November 2026. Live version: `03b783e6-9347-4d6f-929f-7690ce73a
 
 ### #28 New poem prompt: wait time and follow-ups
 
-- **Status:** prompt rewritten on 14 November 2026 (`buildPrompt` in
-  `server/utils/poem.ts`). Open: the points below.
+- **Status:** live since 14 November 2026 (commit `73bb578`, `buildPrompt` in
+  `server/utils/poem.ts`). One live poem checked after the deploy: 12 of 12
+  lines, the name and the present in it, 22 s in total. Open: the points below.
 - **What changed:** lines of about 10 syllables, rhyme without filler words, one
   joke per rhyme pair, a closing punchline, one voice, no made-up traits, a tip
   per style, example couplets, and a "Tempo" line. See the finding
