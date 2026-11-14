@@ -291,8 +291,8 @@ describe('home page UI', () => {
 
   it('shows a sample poem without any action before the visitor has one', async () => {
     const page = await createPage('/');
-    await page.getByRole('heading', { name: 'Gedicht voor Daan (7)' }).waitFor();
-    await page.getByText('Daan is al zeven en een held in het doel').waitFor();
+    await page.getByRole('heading', { name: 'Gedicht voor Peter' }).waitFor();
+    await page.getByText('Beste Peter, wat zien we jou toch graag').waitFor();
     for (const name of [...POEM_ACTIONS, 'Nieuw gedicht']) {
       expect(await page.getByRole('button', { name }).count(), name).toBe(0);
     }

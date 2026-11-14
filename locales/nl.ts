@@ -131,7 +131,7 @@ export default {
     error: 'Dat ging mis',
     freeComplete: 'Dit gratis gedicht is helemaal van jou: deel het, kopieer het of bewaar het als PDF.',
     sample: 'Voorbeeld',
-    sampleTitle: 'Gedicht voor Daan (7)',
+    sampleTitle: 'Gedicht voor Peter',
     sampleSignature: 'Sint en Piet',
     regenerate: 'Herschrijf dit gedicht',
     newPoem: 'Nieuw gedicht',
@@ -174,7 +174,7 @@ export default {
     wait: 'Even geduld: je kunt over {seconds} seconden een nieuw gedicht maken.',
     fairUse: 'Je hebt de afgelopen 24 uur 100 gedichten gemaakt. Dat is het maximum per dag. Probeer het later opnieuw.',
     sampleText:
-      'Daan is al zeven en een held in het doel,\nals keeper bij de F-jes houd jij het hoofd koel.\nEn na elke wedstrijd eet jij voor de trek,\neen berg pannenkoeken met stroop tot je nek!\n\nDe Pieten stonden te juichen langs de lijn,\nwant ballen tegenhouden vind jij reuze fijn.\nDaarom brengt de Sint nu iets moois voor op het veld:\neen prachtige voetbal voor deze grote held!',
+      'Beste Peter, wat zien we jou toch graag,\nAl draag je weer hetzelfde shirt vandaag.\nKocht jij bij Uniqlo een heel dozijn,\nZodat er nooit meer keuzes hoeven zijn?\n\nEn start jij op kantoor een presentatie,\nDan zakt de hele zaal in meditatie.\nMet veertig slides vol tekst tot aan de rand,\nStuur jij ons moeiteloos naar dromenland.\n\nThuis met je Linda schiet het ook niet op,\nAl acht maanden staat alles op zijn kop.\nDie opknapper is immers nog niet klaar,\nJe sloopt en klust nu al een driekwart jaar.\n\nDus geven wij voor al jouw bouwplezier,\nEen nieuwe boormachine, kijk eens hier!\nKlus dat paleis maar af en werk voortaan,\nVeel sneller dan je presentaties gaan!',
   },
   share: {
     heading: 'Iemand deelde dit gedicht met je',
