@@ -70,6 +70,18 @@ export function unframePoem(poem: string, frame: PoemFrame): string {
   return lines.join('\n').trim();
 }
 
+/**
+ * True for a greeting line as `poemFrame` writes it ("Lieve Patrick,",
+ * "Dear Oma & Opa,"). The share image and link preview leave it out: it says
+ * nothing about the poem, and the image often travels on in group chats.
+ */
+export function isGreetingLine(line: string): boolean {
+  const match = /^(\S+) (.+),$/u.exec(line.trim());
+  return !!match
+    && Object.values(SALUTATIONS).includes(match[1]!)
+    && greetingName(match[2]!) === match[2];
+}
+
 /** True for the signature line, which the page sets apart from the verses. */
 export function isSignatureLine(line: string): boolean {
   const clean = line.trim();

@@ -3,6 +3,7 @@ import {
   framePoem,
   framePoemStream,
   greetingName,
+  isGreetingLine,
   isSignatureLine,
   poemFrame,
   unframePoem,
@@ -40,6 +41,14 @@ describe('framePoem and unframePoem', () => {
     expect(unframePoem(poem, frame)).toBe(poem);
     // A greeting for someone else is part of that poem.
     expect(unframePoem(`Lieve Piet,\n\n${poem}`, frame)).toBe(`Lieve Piet,\n\n${poem}`);
+  });
+
+  it('knows the greeting line', () => {
+    expect(isGreetingLine('Lieve Sanne,')).toBe(true);
+    expect(isGreetingLine(' Dear Oma & Opa, ')).toBe(true);
+    expect(isGreetingLine('Lieve Sanne, wat ben je toch fijn,')).toBe(false);
+    expect(isGreetingLine('Beste Sanne,')).toBe(false);
+    expect(isGreetingLine('Lieve evil.com,')).toBe(false);
   });
 
   it('knows the signature line', () => {

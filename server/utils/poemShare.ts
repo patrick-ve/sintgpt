@@ -5,6 +5,7 @@ import {
   encodeText,
   extractOpening,
   poemDigest,
+  shownOpening,
   type PoemLanguage,
   type PoemShare,
 } from '../../utils/poemLink';
@@ -31,6 +32,12 @@ export async function signPoemShare(
 }
 
 /**
+ * Raise this when the image of an existing link changes, so the edge cache
+ * draws it again. 2: the image leaves out the greeting (15 Nov 2026).
+ */
+const SHARE_IMAGE_VERSION = '2';
+
+/**
  * The cache key for a share image. It holds only the signed values, so extra
  * query parameters on a valid link cannot force a new render.
  */
@@ -40,6 +47,7 @@ export function shareImageCacheUrl(requestUrl: URL): string {
   for (const name of ['s', 'l', 'd', 'sig']) {
     query.set(name, searchParams.get(name) ?? '');
   }
+  query.set('v', SHARE_IMAGE_VERSION);
   return `${requestUrl.origin}${requestUrl.pathname}?${query}`;
 }
 
@@ -72,7 +80,7 @@ export async function verifyPoemShare(
       base64UrlToBytes(sig) as BufferSource,
       signedMessage(s, l, d),
     );
-    return valid ? { opening: decodeText(s), language: l, digest: d } : null;
+    return valid ? { opening: shownOpening(decodeText(s)), language: l, digest: d } : null;
   } catch {
     return null;
   }

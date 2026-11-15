@@ -1,3 +1,5 @@
+import { isGreetingLine } from './poemFrame';
+
 // A shared poem lives in its link, so no database is needed:
 //   /gedicht?s=<opening>&l=<language>&d=<digest>&sig=<signature>#<whole poem>
 // Browsers never send the part after # to a server, so the whole poem stays out
@@ -41,15 +43,33 @@ export function decodeText(value: string): string {
   return new TextDecoder('utf-8', { fatal: true }).decode(base64UrlToBytes(value));
 }
 
-/** The first two lines of the poem, for the preview text and image. */
+/** The lines without a greeting ("Lieve Thom,") above them. */
+function withoutGreeting(lines: string[]): string[] {
+  return lines.length > 1 && isGreetingLine(lines[0]!) ? lines.slice(1) : lines;
+}
+
+/**
+ * The first two lines of the poem itself, for the preview text and image:
+ * the greeting above the poem is not part of it.
+ */
 export function extractOpening(poem: string): string {
-  return poem
+  const lines = poem
     .split('\n')
     .map(line => line.trim())
-    .filter(Boolean)
+    .filter(Boolean);
+  return withoutGreeting(lines)
     .slice(0, OPENING_LINES)
     .join('\n')
     .slice(0, MAX_OPENING_CHARS);
+}
+
+/**
+ * The signed opening as the preview shows it. Links signed on 15 Nov 2026,
+ * before `extractOpening` skipped the greeting, have it as their first line;
+ * they show only the poem line after it.
+ */
+export function shownOpening(opening: string): string {
+  return withoutGreeting(opening.split('\n')).join('\n');
 }
 
 /** The bundled fonts have no emoji, and they would render as empty boxes. */

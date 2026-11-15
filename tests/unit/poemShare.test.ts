@@ -6,7 +6,9 @@ import {
   encodeText,
   extractOpening,
   poemDigest,
+  shownOpening,
 } from '../../utils/poemLink';
+import { framePoem, poemFrame } from '../../utils/poemFrame';
 import { parseStreamLine } from '../../utils/poemStream';
 import { shareImageCacheUrl, signPoemShare, verifyPoemShare } from '../../server/utils/poemShare';
 import {
@@ -34,6 +36,28 @@ describe('extractOpening', () => {
 
   it('caps the length', () => {
     expect(extractOpening('x'.repeat(500)).length).toBe(180);
+  });
+
+  it('skips the greeting above the poem, so the preview shows two poem lines', () => {
+    const framed = framePoem(POEM, poemFrame('Thom', 'dutch'));
+    expect(extractOpening(framed)).toBe('Sint zag oma Truus, zo lief en zo fijn,\nzij bakt elke zondag, heel klein.');
+    expect(extractOpening(framePoem(POEM, poemFrame('Thom', 'english')))).toBe(extractOpening(POEM));
+  });
+
+  it('keeps a first line that only starts like a greeting', () => {
+    expect(extractOpening('Lieve Thom, wat ben je toch fijn,\nje fietst naar school in de regen.'))
+      .toBe('Lieve Thom, wat ben je toch fijn,\nje fietst naar school in de regen.');
+  });
+});
+
+describe('shownOpening', () => {
+  it('drops the greeting of links signed before the opening skipped it', () => {
+    expect(shownOpening('Lieve Thom,\nSint zag Thom met zijn gitaar')).toBe('Sint zag Thom met zijn gitaar');
+  });
+
+  it('leaves other openings alone', () => {
+    expect(shownOpening('Regel een\nRegel twee')).toBe('Regel een\nRegel twee');
+    expect(shownOpening('Lieve Thom,')).toBe('Lieve Thom,');
   });
 });
 
@@ -210,10 +234,11 @@ describe('input limits', () => {
 });
 
 describe('shareImageCacheUrl', () => {
-  const canonical = 'https://sintgpt.com/gedicht/preview.png?s=abc&l=nl&d=def&sig=ghi';
+  const link = 'https://sintgpt.com/gedicht/preview.png?s=abc&l=nl&d=def&sig=ghi';
+  const canonical = `${link}&v=2`;
 
-  it('keeps only the signed values', () => {
-    const url = new URL(`${canonical}&x=1&utm_source=whatsapp`);
+  it('keeps only the signed values and the image version', () => {
+    const url = new URL(`${link}&x=1&utm_source=whatsapp&v=9`);
     expect(shareImageCacheUrl(url)).toBe(canonical);
   });
 
