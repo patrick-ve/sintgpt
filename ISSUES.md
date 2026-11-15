@@ -524,6 +524,16 @@ Owner steps:
 - The poems that timed out at every level but `low` were the longest (24
   lines) and the one written as a child of 8. Watch `Poem aborted` with
   `Regenerate poem` after the deploy.
+- **Flash (live default) against Pro `medium`**, same 14 requests, blind:
+  Pro 54%, Flash 46% (p=0.84), so no measurable difference. Pro wins on
+  rhythm (14 against 7) and language, Flash on using the facts (10 against
+  5). Flash finished all 14 (two of them are the ones Pro could not finish
+  in 5 minutes), at $0.013 per poem against $0.066. Decision: Flash stays
+  the default; Pro `medium` stays for rewrites.
+- **Lesson:** 7 to 21 parallel requests on the live gateway key made later
+  requests wait minutes (Flash: 14 to 38 s for the first 7, up to 255 s
+  after). Wait times from parallel lab runs are not reliable, and such runs
+  can slow down real visitors. Run lab tests 2 or 3 at a time.
 
 ### Poem prompt and reasoning effort (14 November 2026)
 
