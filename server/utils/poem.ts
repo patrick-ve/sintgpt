@@ -17,6 +17,31 @@ export const FALLBACK_POEM_MODEL = 'openai/gpt-6.1-terra';
 // About 3x the price of the default model per token, and slower.
 export const REGENERATE_POEM_MODEL = 'google/gemini-3.1-pro-preview';
 
+/**
+ * Provider options for a poem: the fallback model, and for the rewrite model
+ * its thinking level.
+ *
+ * Flash: no thinking level on purpose. Its default equals `medium` in a blind
+ * test (Nov 2026). At `low` it often does not reason at all: 3 times cheaper
+ * and faster, but the poems lose 2 of 3 comparisons, some miss the line count
+ * or the name. `high` doubles the wait and the cost.
+ *
+ * Pro (rewrites): `medium`. Its default reasons about 9,000 tokens: first
+ * text after about 2 minutes, and 3 of 14 poems took over 5 minutes. In a
+ * blind test on 14 requests (15 Nov 2026) the default and `medium` were not
+ * measurably different (59% against 41%, within the noise), while `medium`
+ * took 20 to 45% less time and 40% less money. `low` lost clearly to the
+ * default (27% against 73%, humor 3 against 17).
+ */
+export function poemProviderOptions(modelId: string) {
+  return {
+    gateway: { models: [FALLBACK_POEM_MODEL] },
+    ...(modelId === REGENERATE_POEM_MODEL
+      ? { google: { thinkingConfig: { thinkingLevel: 'medium' as const } } }
+      : {}),
+  };
+}
+
 // AI Gateway pricing (USD per 1M tokens). Output tokens include reasoning
 // tokens. The estimate is a log hint, not billing. Unknown models (an
 // NUXT_AI_GATEWAY_MODEL override) use the default model's price.

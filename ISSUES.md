@@ -497,6 +497,34 @@ Owner steps:
 
 ## Findings
 
+### Rewrite model and thinking level (15 November 2026)
+
+- **Decision:** rewrites use `medium` (`poemProviderOptions`), from the blind
+  test below.
+- **First probe:** Gemini 3.1 Pro (`REGENERATE_POEM_MODEL`), the live prompt, funny,
+  AABB, Dutch, 20 lines, 5 at a time, 240 to 300 s timeout. 10 poems at the
+  default level (what rewrites use now), 5 at `medium`, 5 at `low`.
+- **Default:** 4 of 10 timed out at 240 s. The other 6: first text after 117 s
+  on average (66 to 203 s), 10,500 reasoning tokens, $0.13 per poem.
+- **`medium`:** 5 of 5, first text after 62 s (44 to 83 s), 6,600 reasoning
+  tokens, $0.085.
+- **`low`:** 5 of 5, first text after 40 s (28 to 61 s), 3,900 reasoning
+  tokens, $0.052. Unlike Flash, Pro still reasons at `low`.
+- All finished poems had 20 lines in 5 stanzas, the name and the present, 9.6
+  to 10.4 syllables per line. Quality was only read, not judged blind.
+- **Blind test:** the 14 lab requests (all styles, 8 to 24 lines), one poem
+  per level, 14 at a time, 300 s timeout. Timeouts: default 3 of 14, `medium`
+  2, `low` 0. Means of the finished poems: default first text 123 s, 8,900
+  reasoning tokens, $0.111; `medium` 98 s, 5,100, $0.066; `low` 78 s, 2,800,
+  $0.038 (all slower than in the probe, because of the parallel load).
+  Gemini 3.7 Flash judged each pair blind in both orders:
+  - default against `medium`: 59% against 41% (p=0.52), within the noise.
+  - default against `low`: 73% against 27% (p=0.05); humor 17 against 3.
+  - `medium` against `low`: 58% against 42% (p=0.54).
+- The poems that timed out at every level but `low` were the longest (24
+  lines) and the one written as a child of 8. Watch `Poem aborted` with
+  `Regenerate poem` after the deploy.
+
 ### Poem prompt and reasoning effort (14 November 2026)
 
 - **Method:** 14 made-up requests that follow the real form use (mostly funny,

@@ -21,6 +21,7 @@ import {
   DEFAULT_POEM_MODEL,
   FALLBACK_POEM_MODEL,
   estimateCostUsd,
+  poemProviderOptions,
   PoemRequestSchema,
   REGENERATE_POEM_MODEL,
 } from '../../utils/poem';
@@ -148,14 +149,10 @@ export default defineEventHandler(async (event) => {
       // for minutes (15k+ tokens, ~$0.20 per poem) and can stream garbled
       // text instead of a poem.
       temperature: 1,
-      // No thinking level is set on purpose. The default equals `medium` in
-      // a blind test (Nov 2026). At `low` the model often does not reason at
-      // all: 3 times cheaper and faster, but the poems lose 2 of 3
-      // comparisons, some miss the line count or the name. `high` doubles
-      // the wait and the cost.
       maxRetries: 3,
-      // AI Gateway switches to this model if the primary one fails.
-      providerOptions: { gateway: { models: [FALLBACK_POEM_MODEL] } },
+      // The fallback model (AI Gateway switches to it if the primary one
+      // fails) and the thinking level: see poemProviderOptions.
+      providerOptions: poemProviderOptions(modelId),
       // Stop paying for tokens when the visitor leaves during generation.
       abortSignal: clientDisconnectSignal(event),
       // Models send text in bursts; release it word by word instead.

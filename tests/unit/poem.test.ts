@@ -4,6 +4,7 @@ import {
   buildPrompt,
   DEFAULT_POEM_MODEL,
   estimateCostUsd,
+  poemProviderOptions,
   PoemRequestSchema,
   REGENERATE_POEM_MODEL,
 } from '../../server/utils/poem';
@@ -368,5 +369,15 @@ describe('greeting and signature', () => {
     expect(prompt).toContain('<previous_poem>\nSanne fietst elke dag,\nZo hard als zij maar mag.\n</previous_poem>');
     expect(prompt).not.toContain('Lieve Sanne,');
     expect(prompt).not.toContain('Van Sint & Piet');
+  });
+});
+
+describe('poemProviderOptions', () => {
+  it('gives the rewrite model a medium thinking level and leaves the default model at its own', () => {
+    expect(poemProviderOptions(REGENERATE_POEM_MODEL)).toEqual({
+      gateway: { models: ['openai/gpt-6.1-terra'] },
+      google: { thinkingConfig: { thinkingLevel: 'medium' } },
+    });
+    expect(poemProviderOptions(DEFAULT_POEM_MODEL)).toEqual({ gateway: { models: ['openai/gpt-6.1-terra'] } });
   });
 });
