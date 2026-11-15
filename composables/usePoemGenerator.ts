@@ -11,6 +11,8 @@ interface PoemRequest {
   linkedinUrl?: string;
   jobTitle?: string;
   language: 'dutch' | 'english';
+  /** "Lieve <name>," above the poem and "Van Sint & Piet" below it. */
+  greeting?: boolean;
   /** Write a new version with the larger model. */
   regenerate?: boolean;
   /** With regenerate: what should change, and the poem on screen. */

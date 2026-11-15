@@ -35,6 +35,13 @@ export default {
       tone: 'How should it sound?',
     },
     more: 'More options: who writes it and for which audience?',
+    greeting: {
+      label: 'Greeting and signature',
+      namePlaceholder: '[name]',
+      help: 'They go above and below the poem and do not count towards the number of lines.',
+      noName: 'With this name we leave out the greeting. The signature stays.',
+      off: 'Only the poem, without a greeting and signature.',
+    },
     name: {
       label: 'Recipient name',
       placeholder: 'Saint Nicholas',
@@ -138,7 +145,7 @@ export default {
     ready: 'Your poem is ready.',
     sample: 'Example',
     sampleTitle: 'Poem for Mark',
-    sampleSignature: 'Sinterklaas and Pete',
+    sampleSignature: 'From Sinterklaas & Pete',
     regenerate: 'Rewrite this poem',
     newPoem: 'New poem',
     regenerateWithHint: 'Rewrite with this wish',

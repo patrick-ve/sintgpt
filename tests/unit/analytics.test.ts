@@ -37,6 +37,7 @@ describe('analyticsDataPoint', () => {
       writtenBy: 'yes',
       audience: 'no',
       tier: 'familie',
+      greeting: 'yes',
       firstTextSeconds: 2.4,
       totalSeconds: 18.1,
     })).toEqual({
@@ -44,6 +45,7 @@ describe('analyticsDataPoint', () => {
       blobs: [
         'Generate poem', '/', 'nl', 'NL', 'roast', 'AABB', 'dutch', 'paid', 'google/gemini-3.7-flash',
         'newsletter', 'email', 'pakjesavond', 'long', 'secret', 'yes', 'no', 'familie',
+        'yes',
       ],
       doubles: [12, 900, 400, 0.0021, 3, 2.4, 18.1],
     });
@@ -51,7 +53,7 @@ describe('analyticsDataPoint', () => {
 
   it('fills empty columns, so later columns never shift', () => {
     const point = analyticsDataPoint('Save as PDF', { detail: 'x' });
-    expect(point.blobs).toHaveLength(17);
+    expect(point.blobs).toHaveLength(18);
     expect(point.blobs[8]).toBe('x');
     expect(point.doubles).toEqual([0, 0, 0, 0, 0, 0, 0]);
   });
@@ -103,15 +105,16 @@ describe('trackServerEvent', () => {
 
 describe('formFacts', () => {
   it('says how much of the form was used, never what was typed', () => {
-    expect(formFacts({})).toEqual({ facts: 'empty', present: 'none', writtenBy: 'no', audience: 'no' });
+    expect(formFacts({})).toEqual({ facts: 'empty', present: 'none', writtenBy: 'no', audience: 'no', greeting: 'no' });
     const used = formFacts({
       funFacts: 'Houdt van paarden. '.repeat(10),
       present: 'sokken',
       revealPresent: false,
       writtenBy: 'zijn zus',
       writtenForAudience: '  ',
+      greeting: true,
     });
-    expect(used).toEqual({ facts: 'long', present: 'secret', writtenBy: 'yes', audience: 'no' });
+    expect(used).toEqual({ facts: 'long', present: 'secret', writtenBy: 'yes', audience: 'no', greeting: 'yes' });
     expect(JSON.stringify(used)).not.toMatch(/paarden|sokken|zus/);
     expect(formFacts({ funFacts: 'Houdt van paarden', present: 'sokken' })).toMatchObject({ facts: 'short', present: 'named' });
   });

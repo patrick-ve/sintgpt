@@ -25,6 +25,7 @@ import { isInternalCookie } from '../../utils/internalTraffic';
  *   blob11  utm_medium      blob14 present: none | named | secret
  *   blob12  utm_campaign    blob15 written by: yes | no   blob16 audience: yes | no
  *   blob17  tier: drie | gezin | familie, empty for free visitors
+ *   blob18  greeting ("Lieve <name>," and "Van Sint & Piet"): yes | no
  *   double1 poem lines      double3 output tokens   double5 value
  *   double2 input tokens    double4 estimated cost in USD
  *   double6 seconds to the first text               double7 seconds in total
@@ -49,6 +50,7 @@ export interface AnalyticsFields {
   writtenBy?: 'yes' | 'no';
   audience?: 'yes' | 'no';
   tier?: TierId;
+  greeting?: 'yes' | 'no';
   lines?: number;
   inputTokens?: number;
   outputTokens?: number;
@@ -92,6 +94,7 @@ export function analyticsDataPoint(name: AnalyticsEventName, fields: AnalyticsFi
     fields.writtenBy,
     fields.audience,
     fields.tier,
+    fields.greeting,
   ].map(value => (value ?? '').slice(0, BLOB_MAX));
   return {
     indexes: [name],
@@ -154,12 +157,14 @@ export function formFacts(request: {
   revealPresent?: boolean;
   writtenBy?: string;
   writtenForAudience?: string;
-}): Pick<AnalyticsFields, 'facts' | 'present' | 'writtenBy' | 'audience'> {
+  greeting?: boolean;
+}): Pick<AnalyticsFields, 'facts' | 'present' | 'writtenBy' | 'audience' | 'greeting'> {
   const facts = request.funFacts?.trim() ?? '';
   return {
     facts: !facts ? 'empty' : facts.length < 100 ? 'short' : 'long',
     present: !request.present?.trim() ? 'none' : request.revealPresent === false ? 'secret' : 'named',
     writtenBy: request.writtenBy?.trim() ? 'yes' : 'no',
     audience: request.writtenForAudience?.trim() ? 'yes' : 'no',
+    greeting: request.greeting ? 'yes' : 'no',
   };
 }

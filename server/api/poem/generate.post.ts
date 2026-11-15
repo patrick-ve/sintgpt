@@ -15,6 +15,7 @@ import { signPoemShare } from '../../utils/poemShare';
 import { paymentsAvailable } from '../../utils/paymentsStatus';
 import { BUYER_RATE_LIMIT, creditsRule, freeRateLimit } from '../../utils/rateLimit';
 import { TIERS } from '../../../utils/pricingTiers';
+import { framePoem, framePoemStream, poemFrame } from '../../../utils/poemFrame';
 import {
   buildPrompt,
   DEFAULT_POEM_MODEL,
@@ -104,6 +105,7 @@ export default defineEventHandler(async (event) => {
       lines: validatedData.lines,
       language: validatedData.language,
       regenerate: validatedData.regenerate ?? false,
+      greeting: validatedData.greeting,
       // Never log what visitors type: names and details are personal.
     });
 
@@ -196,21 +198,30 @@ export default defineEventHandler(async (event) => {
       },
     });
 
+    // "Lieve <name>," above the poem and "Van Sint & Piet" below it, added
+    // here so they are exact and outside the model's line count.
+    const frame = validatedData.greeting
+      ? poemFrame(validatedData.name, validatedData.language)
+      : null;
+    const poemStream = frame ? result.stream.pipeThrough(framePoemStream(frame)) : result.stream;
+
     return createUIMessageStreamResponse({
       // no-transform keeps Cloudflare from compressing the stream, even if a
       // Compression Rule on the zone would match it. Compression buffers.
       headers: { 'cache-control': 'no-cache, no-transform' },
       stream: createUIMessageStream({
         async execute({ writer }) {
-          writer.merge(toUIMessageStream({ stream: result.stream }));
+          writer.merge(toUIMessageStream({ stream: poemStream }));
 
           // Sign the finished poem, so the visitor can share it as a link.
           // Without a secret the app still works, only without poem links.
           const secret = runtimeConfig.accessCookieSecret;
           if (!secret) return;
           try {
-            const text = (await result.text).trim();
-            if (!text) return;
+            const poemText = (await result.text).trim();
+            if (!poemText) return;
+            // The same text the page received: the frame is part of it.
+            const text = frame ? framePoem(poemText, frame) : poemText;
             writer.write({
               type: 'data-share',
               data: await signPoemShare(

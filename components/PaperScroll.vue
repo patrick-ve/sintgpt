@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { isSignatureLine } from '~/utils/poemFrame';
+
 const props = defineProps<{
   poem: string;
   /** True while text is still arriving. */
@@ -6,6 +8,8 @@ const props = defineProps<{
 }>();
 
 const lines = computed(() => props.poem.split('\n'));
+// "Van Sint & Piet" under the poem stands apart from the verses.
+const isSignature = (index: number) => index === lines.value.length - 1 && isSignatureLine(lines.value[index]!);
 </script>
 
 <template>
@@ -35,7 +39,7 @@ const lines = computed(() => props.poem.split('\n'));
 
       <!-- Content area -->
       <div class="scroll-content">
-        <pre class="poem-text has-dropcap" :aria-busy="streaming || undefined"><span v-for="(line, index) in lines" :key="index" class="poem-line">{{ line }}<span v-if="streaming && index === lines.length - 1" class="stream-caret" aria-hidden="true"></span></span></pre>
+        <pre class="poem-text has-dropcap" :aria-busy="streaming || undefined"><span v-for="(line, index) in lines" :key="index" class="poem-line" :class="{ 'poem-signature': isSignature(index) }">{{ line }}<span v-if="streaming && index === lines.length - 1" class="stream-caret" aria-hidden="true"></span></span></pre>
       </div>
 
       <!-- Decorative corner flourishes -->
@@ -54,6 +58,13 @@ const lines = computed(() => props.poem.split('\n'));
 </template>
 
 <style scoped>
+/* "Van Sint & Piet" under the poem. */
+.poem-signature {
+  margin-top: 0.25em;
+  text-align: end;
+  font-style: italic;
+}
+
 /* A wrapped line hangs under its verse line, so each verse stays recognizable. */
 .poem-line {
   display: block;

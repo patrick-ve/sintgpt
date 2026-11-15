@@ -36,6 +36,13 @@ export default {
       tone: 'Hoe moet het klinken?',
     },
     more: 'Meer opties: wie schrijft het en voor welk publiek?',
+    greeting: {
+      label: 'Aanhef en ondertekening',
+      namePlaceholder: '[naam]',
+      help: 'Staat boven en onder het gedicht en telt niet mee in het aantal regels.',
+      noName: 'Bij deze naam laten we de aanhef weg. De ondertekening blijft.',
+      off: 'Alleen het gedicht, zonder aanhef en ondertekening.',
+    },
     name: {
       label: 'Naam ontvanger',
       placeholder: 'Sint Nicolaas',
@@ -139,7 +146,7 @@ export default {
     freeComplete: 'Dit gratis gedicht is helemaal van jou: deel het, kopieer het of bewaar het als PDF.',
     sample: 'Voorbeeld',
     sampleTitle: 'Gedicht voor Peter',
-    sampleSignature: 'Sint en Piet',
+    sampleSignature: 'Van Sint & Piet',
     regenerate: 'Herschrijf dit gedicht',
     newPoem: 'Nieuw gedicht',
     regenerateWithHint: 'Herschrijf met deze wens',

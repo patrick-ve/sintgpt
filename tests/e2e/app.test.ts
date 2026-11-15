@@ -348,8 +348,34 @@ describe('poem form', () => {
       rhymeScheme: 'ABAB',
       lines: 16,
       language: 'english',
+      greeting: true,
       regenerate: false,
     });
+    await page.close();
+  }, 30_000);
+
+  it('adds "Lieve <name>," and "Van Sint & Piet" unless the visitor turns them off', async () => {
+    const page = await createPage();
+    let sent: Record<string, unknown> | undefined;
+    await page.route('**/api/poem/generate', (route) => {
+      sent = route.request().postDataJSON();
+      return route.fulfill({ status: 200, contentType: 'text/event-stream', body: poemStream('Lieve Patrick,\n\nEen gedicht.\n\nVan Sint & Piet') });
+    });
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+
+    const toggle = page.getByRole('switch', { name: 'Aanhef en ondertekening' });
+    expect(await toggle.isChecked()).toBe(true);
+    await page.fill('#poem-name', 'Patrick');
+    expect(await page.locator('#poem-greeting-help').textContent()).toContain('Lieve Patrick, … Van Sint & Piet');
+
+    await page.locator('#poem-form button[type=submit]').click();
+    await expect.poll(() => sent?.greeting).toBe(true);
+    await page.locator('.poem-signature', { hasText: 'Van Sint & Piet' }).waitFor();
+
+    // Off: the next poem is only the poem.
+    await toggle.press('Space');
+    expect(await toggle.isChecked()).toBe(false);
+    expect(await page.locator('#poem-greeting-help').textContent()).toContain('zonder aanhef en ondertekening');
     await page.close();
   }, 30_000);
 

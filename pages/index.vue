@@ -9,6 +9,7 @@ import { fillSeasons, TIERS, type TierId } from '~/utils/pricingTiers';
 import { findBlogPost } from '~/utils/blogPosts';
 import { STYLE_PARAM, styleFromQuery } from '~/utils/stylePreset';
 import { hasOwnPhoto, sintStyleAvatar, sintStylePhoto, type SintStyle } from '~/utils/sintStyles';
+import { isSignatureLine, poemFrame, salutation } from '~/utils/poemFrame';
 import type { PoemHistoryEntry } from '~/composables/usePoemHistory';
 import type { PaymentTrigger } from '~/components/PaymentModal.vue';
 
@@ -180,6 +181,21 @@ const formData = ref({
   rhymeScheme: 'AABB' as 'AABB' | 'ABAB' | 'ABBA' | 'Limerick',
   lines: 12,
   language: getDefaultLanguage(),
+  // "Aanhef en ondertekening": the server adds "Lieve <name>," and "Van Sint
+  // & Piet" around the poem (utils/poemFrame.ts).
+  greeting: true,
+});
+
+// What the switch adds, in the language of the poem, with the name as typed.
+const greetingPreview = computed(() => {
+  const { name, language } = formData.value;
+  const frame = poemFrame(name, language);
+  return {
+    greeting: name.trim()
+      ? frame.greeting
+      : `${salutation(language)} ${t('form.greeting.namePlaceholder')},`,
+    signature: frame.signature,
+  };
 });
 
 // The hero photo shows the Sint in the style the visitor picked (also through
@@ -985,6 +1001,9 @@ const openPoemFromHistory = (entry: PoemHistoryEntry) => {
 
 // One element per verse line, so a wrapped line hangs under its verse.
 const poemLines = computed(() => (poem.value ?? '').split('\n'));
+// "Van Sint & Piet" under the poem stands apart from the verses.
+const isPoemSignature = (index: number) =>
+  index === poemLines.value.length - 1 && isSignatureLine(poemLines.value[index]!);
 
 const isLimerick = computed(
   () => formData.value.rhymeScheme === 'Limerick'
@@ -1603,6 +1622,31 @@ useHead({
                 </p>
               </div>
 
+              <!-- "Lieve Patrick," above the poem and "Van Sint & Piet" below it -->
+              <div>
+                <label class="greeting-switch">
+                  <input
+                    id="poem-greeting"
+                    v-model="formData.greeting"
+                    type="checkbox"
+                    role="switch"
+                    aria-describedby="poem-greeting-help"
+                    :disabled="isLoading"
+                  />
+                  <span class="greeting-track" aria-hidden="true"></span>
+                  <span class="font-bold text-[0.9375rem] text-[#8b1538]">{{ t('form.greeting.label') }}</span>
+                </label>
+                <p id="poem-greeting-help" class="text-sm text-[#5c0f26] mt-1.5">
+                  <template v-if="formData.greeting">
+                    <span v-if="greetingPreview.greeting" class="font-text italic text-base">{{ greetingPreview.greeting }} … {{ greetingPreview.signature }}</span>
+                    <span v-else class="font-text italic text-base">… {{ greetingPreview.signature }}</span>
+                    <br>
+                    {{ greetingPreview.greeting ? t('form.greeting.help') : t('form.greeting.noName') }}
+                  </template>
+                  <template v-else>{{ t('form.greeting.off') }}</template>
+                </p>
+              </div>
+
               <!-- Optional details -->
               <details class="form-more">
                 <summary>{{ t('form.more') }}</summary>
@@ -1809,12 +1853,12 @@ useHead({
                   v-else-if="poem"
                   class="poem-text has-dropcap noselect"
                   :aria-busy="isLoading || undefined"
-                ><span v-for="(line, index) in poemLines" :key="index" class="poem-line">{{ line }}<span v-if="isLoading && index === poemLines.length - 1" class="stream-caret" aria-hidden="true"></span></span></pre>
+                ><span v-for="(line, index) in poemLines" :key="index" class="poem-line" :class="{ 'poem-signature': isPoemSignature(index) }">{{ line }}<span v-if="isLoading && index === poemLines.length - 1" class="stream-caret" aria-hidden="true"></span></span></pre>
 
                 <!-- Example -->
                 <template v-else>
                   <p class="poem-text has-dropcap">{{ t('poem.sampleText') }}</p>
-                  <p class="font-text italic text-[1.0625rem] text-[#5c0f26] text-end">
+                  <p v-if="formData.greeting" class="font-text italic text-[1.0625rem] text-[#5c0f26] text-end">
                     {{ t('poem.sampleSignature') }}
                   </p>
                 </template>
@@ -2447,6 +2491,77 @@ useHead({
   font-weight: 700;
   font-size: 1.75rem;
   color: #f4b6c4;
+}
+
+/* "Van Sint & Piet" under the poem. */
+.poem-signature {
+  margin-top: 0.25em;
+  text-align: end;
+  font-style: italic;
+  color: #5c0f26;
+}
+
+/* The switch for "Aanhef en ondertekening": a checkbox that looks like a switch. */
+.greeting-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-height: 2.75rem;
+  cursor: pointer;
+}
+.greeting-switch input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  margin: 0;
+  cursor: pointer;
+}
+.greeting-track {
+  position: relative;
+  flex: none;
+  width: 2.75rem;
+  height: 1.5rem;
+  border: 1.5px solid #a08850;
+  border-radius: 999px;
+  background: #fff;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+.greeting-track::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  inset-inline-start: 0.1875rem;
+  width: 1.0625rem;
+  height: 1.0625rem;
+  border-radius: 50%;
+  background: #a08850;
+  transform: translateY(-50%);
+  transition: transform 150ms ease, background-color 150ms ease;
+}
+.greeting-switch input:checked + .greeting-track {
+  background: #5c0f26;
+  border-color: #5c0f26;
+}
+.greeting-switch input:checked + .greeting-track::after {
+  background: #f4cd60;
+  transform: translate(1.1875rem, -50%);
+}
+[dir='rtl'] .greeting-switch input:checked + .greeting-track::after {
+  transform: translate(-1.1875rem, -50%);
+}
+.greeting-switch input:focus-visible + .greeting-track {
+  outline: 2px solid #8b1538;
+  outline-offset: 2px;
+}
+.greeting-switch input:disabled + .greeting-track {
+  opacity: 0.6;
+}
+@media (prefers-reduced-motion: reduce) {
+  .greeting-track,
+  .greeting-track::after {
+    transition: none;
+  }
 }
 
 /* A wrapped line hangs under its verse line, so each verse stays recognizable. */

@@ -338,3 +338,35 @@ describe('rewrite with a wish', () => {
     expect(PoemRequestSchema.safeParse({ ...rewrite, previousPoem: 'x'.repeat(5001) }).success).toBe(false);
   });
 });
+
+describe('greeting and signature', () => {
+  it('is off for clients that do not send it, and keeps the old opening rule', () => {
+    const request = PoemRequestSchema.parse(validRequest);
+    expect(request.greeting).toBe(false);
+    const prompt = buildPrompt(request);
+    expect(prompt).toContain('noem de naam van de ontvanger in het eerste couplet, als aanspreking');
+    expect(prompt).not.toContain('Begin het gedicht dus niet met een aanhef');
+  });
+
+  it('tells the model not to write the lines the server adds', () => {
+    const prompt = buildPrompt(PoemRequestSchema.parse({ ...validRequest, greeting: true }));
+    expect(prompt).toContain('Begin het gedicht dus niet met een aanhef');
+    expect(prompt).toContain('zet er geen ondertekening onder');
+    expect(prompt).toContain('Ze tellen niet mee in het aantal regels');
+    expect(prompt).toContain('precies 12 regels');
+    expect(prompt).not.toContain('als aanspreking.');
+  });
+
+  it('removes them from the poem a rewrite changes', () => {
+    const prompt = buildPrompt(PoemRequestSchema.parse({
+      ...validRequest,
+      greeting: true,
+      regenerate: true,
+      rewriteHint: 'korter',
+      previousPoem: 'Lieve Sanne,\n\nSanne fietst elke dag,\nZo hard als zij maar mag.\n\nVan Sint & Piet',
+    }));
+    expect(prompt).toContain('<previous_poem>\nSanne fietst elke dag,\nZo hard als zij maar mag.\n</previous_poem>');
+    expect(prompt).not.toContain('Lieve Sanne,');
+    expect(prompt).not.toContain('Van Sint & Piet');
+  });
+});
