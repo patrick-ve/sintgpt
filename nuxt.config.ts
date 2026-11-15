@@ -160,6 +160,10 @@ export default defineNuxtConfig({
             { name: 'EVENTS_BURST', namespace_id: '1002', simple: { limit: 60, period: 60 } },
           ],
         } as Record<string, unknown>),
+        // Alerts to Telegram every 10 minutes (server/plugins/alerts.ts; keep
+        // in line with ALERT_CRON in server/utils/alerts.ts). Nitro does not
+        // write Cron Triggers itself.
+        triggers: { crons: ['*/10 * * * *'] },
         // The Worker serves the domain itself. www redirects to the apex in
         // server/middleware/canonical-host.ts.
         routes: [

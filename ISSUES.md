@@ -43,6 +43,7 @@ Last updated: 14 November 2026. Live version: `dfdbe138-2258-4f6c-81cf-0526bbed5
 | [#25](#25-seo-audit) | Medium | SEO audit (10 November 2026) | Live; owner steps open |
 | [#27](#27-share-sheet-on-phones) | Medium | Share sheet on phones | Link live; PDF built; phone check open |
 | [#28](#28-new-poem-prompt-wait-time-and-follow-ups) | Medium | New poem prompt: wait time and follow-ups | Live; owner checks open |
+| [#29](#29-error-alerts-to-telegram-and-a-waf-rule) | High | Error alerts to Telegram and a WAF rule | Built, not deployed; owner setup open |
 
 ## Open
 
@@ -450,6 +451,22 @@ Last updated: 14 November 2026. Live version: `dfdbe138-2258-4f6c-81cf-0526bbed5
   share files, with "Downloaden" next to it. The page builds the chosen design when the
   window opens and when the visitor picks another one, so the tap shares at once.
   Event `Share PDF` (`<design>:done/cancelled/refused/failed`). Check on a real phone.
+
+### #29 Error alerts to Telegram and a WAF rule
+
+Status (15 November 2026): code built and tested locally, not committed or
+deployed. See "Errors and alerts" in `CLAUDE.md`.
+
+Owner steps:
+1. Telegram: create a bot with @BotFather, send it one message, read the chat
+   ID from `https://api.telegram.org/bot<token>/getUpdates`.
+2. Cloudflare: create an API token with only Account Analytics Read.
+3. Set the three Worker secrets `NUXT_CLOUDFLARE_ANALYTICS_TOKEN`,
+   `NUXT_TELEGRAM_BOT_TOKEN`, `NUXT_TELEGRAM_CHAT_ID`, then deploy.
+4. Test: `npx tsx scripts/alerts-check.ts 0 --send`.
+5. WAF custom rule (Free plan, Block) against scanners for `/.env`, `/.git`,
+   WordPress and PHP paths. In the week to 15 Nov, about 99% of the HTML
+   requests came from such bots (13,090 requests, about 90 real page views).
 
 ### #28 New poem prompt: wait time and follow-ups
 

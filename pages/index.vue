@@ -8,6 +8,7 @@ import { PDF_DESIGNS, type PdfDesignId } from '~/utils/pdfDesigns';
 import { fillSeasons, TIERS, type TierId } from '~/utils/pricingTiers';
 import { findBlogPost } from '~/utils/blogPosts';
 import { STYLE_PARAM, styleFromQuery } from '~/utils/stylePreset';
+import { hasOwnPhoto, sintStyleAvatar, sintStylePhoto, type SintStyle } from '~/utils/sintStyles';
 import type { PoemHistoryEntry } from '~/composables/usePoemHistory';
 import type { PaymentTrigger } from '~/components/PaymentModal.vue';
 
@@ -126,8 +127,10 @@ const dismissPaymentStatus = () => {
 };
 
 // Keeps the form while the visitor pays, so they continue where they were.
+// The style is left out: every visit starts with Grappig.
 const saveFormForCheckout = () => {
-  saveFormDraft(localStorage, { ...formData.value });
+  const { style: _style, ...draft } = formData.value;
+  saveFormDraft(localStorage, draft);
 };
 
 // Copies only fields the form knows, with the right type.
@@ -178,6 +181,14 @@ const formData = ref({
   lines: 12,
   language: getDefaultLanguage(),
 });
+
+// The hero photo shows the Sint in the style the visitor picked (also through
+// a ?stijl= link or a restored draft). Until then it shows the usual photo.
+const heroStyle = ref<SintStyle | null>(null);
+watch(() => formData.value.style, (style) => {
+  heroStyle.value = style;
+});
+const heroPhoto = computed(() => sintStylePhoto(heroStyle.value));
 
 // Two rows of three: the lively styles first, the calmer ones below.
 const styleOptions = computed(() => [
@@ -1332,14 +1343,16 @@ useHead({
 
         <figure class="flex-[1_1_400px] lg:flex-none min-w-0 max-w-[300px] sm:max-w-[500px] lg:max-w-none mx-auto flex flex-col gap-3 lg:gap-2">
           <img
-            src="/sint-hero-800.webp"
-            srcset="/sint-hero-400.webp 400w, /sint-hero-600.webp 600w, /sint-hero-800.webp 800w"
+            :key="heroPhoto.src"
+            :src="heroPhoto.src"
+            :srcset="heroPhoto.srcset"
             sizes="(min-width: 640px) 500px, 300px"
             width="800"
             height="1000"
             fetchpriority="high"
-            :alt="t('hero.photoAlt')"
-            class="block w-full h-auto lg:w-auto lg:h-[clamp(360px,calc(100svh-300px),520px)] aspect-[4/5] object-cover rounded-[260px_260px_24px_24px] border-4 border-[#d4a853]"
+            :alt="hasOwnPhoto(heroStyle) ? t(`hero.photoAlts.${heroStyle}`) : t('hero.photoAlt')"
+            :class="{ 'photo-swap': hasOwnPhoto(heroStyle) }"
+            class="block w-full h-auto lg:w-auto lg:h-[clamp(360px,calc(100svh-300px),520px)] aspect-[4/5] object-cover rounded-[260px_260px_24px_24px] border-4 border-[#d4a853] bg-[#5c0f26]"
           />
           <figcaption class="text-center text-[0.9375rem] text-[#f7e6c0]">
             {{ t('hero.photoCaption') }}
@@ -1483,7 +1496,20 @@ useHead({
               </legend>
 
               <fieldset>
-                <legend class="field-label">{{ t('form.style.label') }}</legend>
+                <legend class="field-label">
+                  <span class="flex items-center gap-3">
+                    <img
+                      :key="formData.style"
+                      :src="sintStyleAvatar(formData.style)"
+                      width="44"
+                      height="44"
+                      loading="lazy"
+                      alt=""
+                      class="w-11 h-11 rounded-full object-cover ring-2 ring-[#d4a853]"
+                    />
+                    {{ t('form.style.label') }}
+                  </span>
+                </legend>
                 <div class="style-choices grid grid-cols-3 gap-2">
                   <label
                     v-for="option in styleOptions"
@@ -1494,6 +1520,7 @@ useHead({
                       v-model="formData.style"
                       type="radio"
                       name="poem-style"
+                      autocomplete="off"
                       :value="option.value"
                       :disabled="isLoading"
                     />
@@ -2792,6 +2819,17 @@ useHead({
 }
 
 /* Days until pakjesavond, above the hero title */
+/* The hero photo of a newly picked style fades in. */
+.photo-swap {
+  animation: photo-swap 250ms ease-out;
+}
+@keyframes photo-swap {
+  from { opacity: 0.3; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .photo-swap { animation: none; }
+}
+
 .countdown {
   padding: 0.5rem 1rem;
   border: 2px solid #d4a853;

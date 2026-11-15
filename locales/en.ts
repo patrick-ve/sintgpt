@@ -12,6 +12,12 @@ export default {
     cta: 'Start rhyming',
     moreInfo: 'How does it work?',
     photoAlt: 'Sinterklaas winks and taps his temple',
+    photoAlts: {
+      ironic: 'Sinterklaas raises an eyebrow and looks over his reading glasses',
+      'old-fashioned': 'Sinterklaas with a monocle in an old sepia photo',
+      spicy: 'Sinterklaas winks with a red rose between his teeth',
+      roast: 'Sinterklaas in pixel sunglasses and a gold chain',
+    },
     photoCaption: 'Even Sinterklaas finds rhyming hard sometimes.',
     note: 'Your first poem is free. After that, a one-time €6.99 covers poems for the whole family, or €3.99 buys 3 poems.',
   },
@@ -177,9 +183,13 @@ export default {
       "There once was a fellow named Mark,\nWho turned every meal pitch-black dark.\nHe'll even burn toast,\nTill it looks like a ghost,\nAnd fills the whole house with a spark.\n\nGood Saint Nick brought a cookbook with dread,\nTo ensure that you actually get fed.\nPlease read every page,\nAnd lower the gauge,\nBefore you burn charcoal instead!",
   },
   share: {
-    heading: 'Someone shared this poem with you',
+    heading: 'There is a poem for you!',
+    byline: 'Written with SintGPT, Sinterklaas\'s rhyming helper',
     partial: 'The rest of this poem could not be verified, so it is not shown.',
-    cta: 'Make your own poem',
+    ctaLead: 'Want a poem like this for someone else?',
+    cta: 'Write your own poem for free',
+    ctaNote: 'Ready in 30 seconds. Your first poem is free.',
+    bar: 'Write your own poem, for free',
   },
   history: {
     open: 'My poems',
@@ -557,7 +567,7 @@ export default {
         {
           heading: 'Statistics',
           body: [
-            'We count visits and a few actions, such as "poem made" and "PDF saved". We do this ourselves, with Cloudflare Workers Analytics Engine. For each action we keep what it was, the page, your language choice, your country, the website you came from, the campaign code in the link (such as utm_source), the poem settings (such as style and length), whether you filled in fields such as the fun facts (not what you wrote), how long the writing took, whether you found the poem good or not, which poem on your device it is, whether you paid and what you bought. Cloudflare works out your country from your IP address; we do not keep the IP address itself.',
+            'We count visits and a few actions, such as "poem made" and "PDF saved". We do this ourselves, with Cloudflare Workers Analytics Engine. For each action we keep what it was, the page, your language choice, your country, the website you came from, the campaign code in the link (such as utm_source), the poem settings (such as style and length), whether you filled in fields such as the fun facts (not what you wrote), how long the writing took, whether you found the poem good or not, which poem on your device it is, whether you paid and what you bought. When something goes wrong on the page, we keep the kind of error, never what you typed. Cloudflare works out your country from your IP address; we do not keep the IP address itself.',
             'We keep no names, no text you fill in, no payment ID and no IP address. We use no cookies for this and do not follow you across other websites. Cloudflare deletes this data after 3 months.',
             'Legal basis: our legitimate interest in improving the website.',
           ],

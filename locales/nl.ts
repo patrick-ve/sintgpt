@@ -12,6 +12,13 @@ export default {
     cta: 'Begin met rijmen',
     moreInfo: 'Hoe werkt het?',
     photoAlt: 'Sinterklaas wijst met een knipoog naar zijn slaap',
+    // The hero photo of a style with its own photo (utils/sintStyles.ts).
+    photoAlts: {
+      ironic: 'Sinterklaas trekt een wenkbrauw op en kijkt over zijn leesbril',
+      'old-fashioned': 'Sinterklaas met monocle op een oude sepiafoto',
+      spicy: 'Sinterklaas knipoogt met een rode roos tussen zijn tanden',
+      roast: 'Sinterklaas met een pixelzonnebril en een gouden ketting',
+    },
     photoCaption: 'Ook de Sint rijmt niet altijd vanzelf.',
     note: 'Je eerste gedicht is gratis. Daarna schrijf je voor eenmalig €6,99 gedichten voor het hele gezin, of 3 gedichten voor €3,99.',
   },
@@ -177,9 +184,13 @@ export default {
       'Beste Peter, wat zien we jou toch graag,\nAl draag je weer hetzelfde shirt vandaag.\nKocht jij bij Uniqlo een heel dozijn,\nZodat er nooit meer keuzes hoeven zijn?\n\nEn start jij op kantoor een presentatie,\nDan zakt de hele zaal in meditatie.\nMet veertig slides vol tekst tot aan de rand,\nStuur jij ons moeiteloos naar dromenland.\n\nThuis met je Linda schiet het ook niet op,\nAl acht maanden staat alles op zijn kop.\nDie opknapper is immers nog niet klaar,\nJe sloopt en klust nu al een driekwart jaar.\n\nDus geven wij voor al jouw bouwplezier,\nEen nieuwe boormachine, kijk eens hier!\nKlus dat paleis maar af en werk voortaan,\nVeel sneller dan je presentaties gaan!',
   },
   share: {
-    heading: 'Iemand deelde dit gedicht met je',
+    heading: 'Er is een gedicht voor je!',
+    byline: 'Geschreven met SintGPT, de rijmhulp van de Sint',
     partial: 'De rest van dit gedicht kon niet worden gecontroleerd en wordt daarom niet getoond.',
-    cta: 'Maak je eigen gedicht',
+    ctaLead: 'Ook zo\'n gedicht voor iemand anders?',
+    cta: 'Schrijf gratis je eigen gedicht',
+    ctaNote: 'Klaar in 30 seconden. Je eerste gedicht is gratis.',
+    bar: 'Schrijf je eigen gedicht, gratis',
   },
   history: {
     open: 'Mijn gedichten',
@@ -559,7 +570,7 @@ export default {
         {
           heading: 'Statistieken',
           body: [
-            'We tellen bezoeken en een paar handelingen, zoals "gedicht gemaakt" en "PDF opgeslagen". Dat doen we zelf, met Cloudflare Workers Analytics Engine. Per handeling bewaren we wat het was, de pagina, je taalkeuze, je land, de website waar je vandaan kwam, de campagnecode in de link (zoals utm_source), de instellingen van het gedicht (zoals stijl en lengte), of je velden zoals de weetjes hebt ingevuld (niet wat erin staat), hoe lang het schrijven duurde, of je het gedicht goed of niet goed vond, het hoeveelste gedicht op je apparaat het is, of je betaald hebt en wat je kocht. Cloudflare leidt je land af uit je IP-adres; het IP-adres zelf bewaren we niet.',
+            'We tellen bezoeken en een paar handelingen, zoals "gedicht gemaakt" en "PDF opgeslagen". Dat doen we zelf, met Cloudflare Workers Analytics Engine. Per handeling bewaren we wat het was, de pagina, je taalkeuze, je land, de website waar je vandaan kwam, de campagnecode in de link (zoals utm_source), de instellingen van het gedicht (zoals stijl en lengte), of je velden zoals de weetjes hebt ingevuld (niet wat erin staat), hoe lang het schrijven duurde, of je het gedicht goed of niet goed vond, het hoeveelste gedicht op je apparaat het is, of je betaald hebt en wat je kocht. Gaat er iets mis op de pagina, dan bewaren we het soort fout, nooit wat je typte. Cloudflare leidt je land af uit je IP-adres; het IP-adres zelf bewaren we niet.',
             'We bewaren geen namen, geen ingevulde teksten, geen betalings-ID en geen IP-adres. We gebruiken er geen cookies voor en volgen je niet over andere websites. Cloudflare wist deze gegevens na 3 maanden.',
             'Grondslag: ons gerechtvaardigd belang om de website te verbeteren.',
           ],

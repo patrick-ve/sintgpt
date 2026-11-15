@@ -19,7 +19,9 @@ const { data: share } = await useFetch<VerifiedShare>('/api/share/verify', {
 });
 
 if (!share.value) {
-  throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true });
+  // Fatal only in the browser: on the server a fatal error is logged as a
+  // request error, and a wrong link is not one.
+  throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: import.meta.client });
 }
 
 const verified = share.value;

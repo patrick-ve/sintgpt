@@ -9,9 +9,11 @@ interface SharedPoemMeta {
 
 /** The tags that apps read for a link preview. They run no JavaScript. */
 export function useSharedPoemMeta({ opening, language, imageQuery, url }: SharedPoemMeta) {
+  // Personal, because the person who opens the link is often the one the poem
+  // is for. The share image and the domain still show SintGPT.
   const title = language === 'nl'
-    ? 'Een sinterklaasgedicht van SintGPT'
-    : 'A Sinterklaas poem from SintGPT';
+    ? 'Er is een sinterklaasgedicht voor je'
+    : 'There is a Sinterklaas poem for you';
   const description = opening.replace(/\n/g, ' ');
   const image = `${useRequestURL().origin}/gedicht/preview.png?${imageQuery}`;
 

@@ -15,6 +15,8 @@ export const SERVER_EVENTS = [
   'Surprise ideas',
   'Surprise ideas failed',
   'Gift claimed',
+  // A 5xx or an unhandled error on the server (server/plugins/logging.ts).
+  'Server error',
 ] as const;
 
 export const CLIENT_EVENTS = [
@@ -60,6 +62,9 @@ export const CLIENT_EVENTS = [
   'Show surprise ideas',
   'Open devtools',
   'New poem',
+  // A script error in the browser (plugins/errors.client.ts); detail is the
+  // error type and the start of its message, without quoted text.
+  'Client error',
 ] as const;
 
 export type ServerEventName = (typeof SERVER_EVENTS)[number];

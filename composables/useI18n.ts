@@ -1,5 +1,6 @@
 import nlTranslations from '@/locales/nl';
 import enTranslations from '@/locales/en';
+import { browserLocale } from '@/utils/browserLocale';
 
 export type Locale = 'nl' | 'en';
 
@@ -11,12 +12,16 @@ const translations = {
 export const useI18n = () => {
   const locale = useState<Locale>('locale', () => 'nl');
 
-  // Load locale from localStorage on mount
+  // A language the visitor chose wins. Without one, the browser's languages
+  // decide (utils/browserLocale.ts); that is not saved, so a later choice or
+  // browser change still counts. The server always renders Dutch.
   onMounted(() => {
     if (import.meta.client) {
       const savedLocale = localStorage.getItem('locale') as Locale | null;
       if (savedLocale && (savedLocale === 'nl' || savedLocale === 'en')) {
         locale.value = savedLocale;
+      } else {
+        locale.value = browserLocale(navigator.languages ?? [navigator.language], navigator.userAgent, navigator.webdriver);
       }
     }
   });
