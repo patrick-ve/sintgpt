@@ -247,19 +247,18 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    // Handle API errors
+    // Never the provider's message in the answer: it can name models,
+    // gateways or limits. Workers Logs has it (logged above).
     if (error.name === 'APIError') {
       throw createError({
-        statusCode: error.status || 500,
-        statusMessage: `AI API Error: ${error.message}`,
+        statusCode: error.status >= 400 && error.status < 600 ? error.status : 502,
+        statusMessage: 'The poem service is not available',
       });
     }
 
-    // Generic error
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to generate poem',
-      data: { originalError: error.message },
     });
   }
 });

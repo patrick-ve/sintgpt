@@ -157,7 +157,14 @@ export default defineNuxtConfig({
         ...({
           ratelimits: [
             { name: 'POEM_BURST', namespace_id: '1001', simple: { limit: 1, period: 10 } },
-            { name: 'EVENTS_BURST', namespace_id: '1002', simple: { limit: 60, period: 60 } },
+            { name: 'EVENTS_BURST', namespace_id: '1002', simple: { limit: 30, period: 60 } },
+            // CLIENT_ERRORS_BURST: at most 3 `Client error` events a minute per
+            // IP, so fake ones cannot flood analytics and the alerts.
+            // PAYMENT_BURST and LINKS_BURST: routes without a limit of their
+            // own (server/middleware/api-guard.ts).
+            { name: 'CLIENT_ERRORS_BURST', namespace_id: '1003', simple: { limit: 3, period: 60 } },
+            { name: 'PAYMENT_BURST', namespace_id: '1004', simple: { limit: 10, period: 60 } },
+            { name: 'LINKS_BURST', namespace_id: '1005', simple: { limit: 60, period: 60 } },
           ],
         } as Record<string, unknown>),
         // Alerts to Telegram every 10 minutes (server/plugins/alerts.ts; keep

@@ -54,7 +54,7 @@ Then wait for the output. Do not continue without it.
 
 ## 5. Verify the live site
 
-From the user's deploy output, note `Current Version ID` and the bindings. The list must still have `RATE_LIMITER`, `POEM_LINKS`, `ANALYTICS`, `POEM_BURST`, `EVENTS_BURST` and `ASSETS`. A missing binding is a failure to report.
+From the user's deploy output, note `Current Version ID` and the bindings. The list must still have `RATE_LIMITER`, `POEM_LINKS`, `ANALYTICS`, `POEM_BURST`, `EVENTS_BURST`, `CLIENT_ERRORS_BURST`, `PAYMENT_BURST`, `LINKS_BURST` and `ASSETS`. The trigger list must have the cron `*/10 * * * *` (alerts). A missing binding is a failure to report.
 
 ```sh
 bash scripts/smoke-test.sh

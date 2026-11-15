@@ -1,5 +1,5 @@
 import { fileURLToPath } from 'node:url';
-import { createPage, fetch, setup, url } from '@nuxt/test-utils/e2e';
+import { createPage as createNuxtPage, fetch, setup, url } from '@nuxt/test-utils/e2e';
 import { Webhook } from 'standardwebhooks';
 import { describe, expect, it } from 'vitest';
 import { OG_IMAGES } from '../../scripts/og-images';
@@ -18,6 +18,19 @@ await setup({
   server: true,
   browser: true,
 });
+
+/**
+ * Every test page skips the home page video. Its request stays open in the
+ * test browser, so `networkidle` waited about 15 s on each page; with ~40
+ * such waits that was most of the suite's 13 minutes. No test plays it.
+ */
+async function createPage(path?: string, options?: Parameters<typeof createNuxtPage>[1]) {
+  const page = await createNuxtPage(undefined, options);
+  await page.route('**/*.mp4', route => route.abort());
+  // test-utils' own goto waits for hydration with this value.
+  if (path) await page.goto(url(path), options?.javaScriptEnabled === false ? {} : { waitUntil: 'hydration' as never });
+  return page;
+}
 
 const hasGatewayKey = Boolean(
   process.env.NUXT_AI_GATEWAY_API_KEY || process.env.AI_GATEWAY_API_KEY,
