@@ -520,9 +520,60 @@ export default {
   video: {
     title: 'Sinterklaas talks about sintgpt.com',
   },
+  contact: {
+    seoTitle: 'Contact: help, questions and complaints | SintGPT',
+    description: 'Need help with SintGPT, a question about your payment, or a complaint? Send us a message. We reply by email.',
+    title: 'Contact us',
+    intro: 'Need help, a question or a complaint? Send us a message. We reply by email.',
+    quickTitle: 'Maybe your answer is already here',
+    quick: [
+      {
+        question: 'I paid, but I cannot write more poems',
+        answer: 'Are you in another browser or on another device? Fill in the form and click "Write my poem". In the payment window that opens, choose "Already paid? Continue with your payment ID". Your payment ID starts with pay_ and is in the email from Dodo Payments.',
+      },
+      {
+        question: 'Where are my poems?',
+        answer: 'Under "My poems", in the browser where you wrote them. We do not keep them on a server, so another device does not show them.',
+      },
+      {
+        question: 'How many poems are free?',
+        answer: 'Your first poem is free. Each internet connection can make at most 1 free poem per 24 hours.',
+      },
+    ],
+    formTitle: 'Send a message',
+    topicLabel: 'What is it about?',
+    topics: {
+      help: 'I need help',
+      question: 'I have a question',
+      complaint: 'I have a complaint',
+    },
+    emailLabel: 'Your email address',
+    emailHelp: 'We send our reply to this address.',
+    emailInvalid: 'Enter a valid email address, such as name@example.com.',
+    messageLabel: 'Your message',
+    messageHelp: 'Did you pay? Then add your payment ID (pay_…).',
+    messageTooShort: 'Write a little more, at least {min} characters.',
+    count: '{count} / {max}',
+    honeypot: 'Leave this field empty',
+    submit: 'Send message',
+    sending: 'Sending…',
+    checking: 'Checking that you are not a robot…',
+    privacy: 'We use your email address and message only to help you. Cloudflare Turnstile checks that you are not a robot.',
+    privacyLink: 'Read the privacy statement',
+    sentTitle: 'Thank you, your message was sent!',
+    sentText: 'We reply by email to {email}. Also look in your spam folder.',
+    another: 'Send another message',
+    errors: {
+      captcha: 'The robot check did not work. Please try again.',
+      debounce: 'You just sent a message. Wait a few seconds and try again.',
+      limit: 'You already sent 5 messages today. Feel free to email us at {email}.',
+      unavailable: 'Sending does not work right now. Email your message to {email}. Your text is still in the form.',
+    },
+    mailInstead: 'Prefer email? Write to',
+  },
   legal: {
     back: 'Back to SintGPT',
-    updated: 'Last updated: 9 November 2026',
+    updated: 'Last updated: 15 November 2026',
     privacy: {
       title: 'Privacy statement',
       seoTitle: 'Privacy statement | SintGPT',
@@ -588,9 +639,12 @@ export default {
           ],
         },
         {
-          heading: 'Email',
+          heading: 'Email and contact form',
           body: [
-            'When you email us, we use your email address and your message only to help you. We delete the email when we no longer need it.',
+            'When you email us, or send a message with the contact form, we use your email address and your message only to help you. We delete them when we no longer need them.',
+            'A message from the form reaches us through Telegram. We add what you bought (or "free"), your language and the page you came from, so we can help you faster. We do not send your IP address or your payment ID. Per IP address we count at most 5 messages a day, in the same way as for poems: that counter disappears after 24 hours.',
+            'On the contact page, Cloudflare Turnstile checks that you are a person. It looks at your browser for this, without cookies for advertising or tracking. Do not put sensitive data in your message.',
+            'Legal basis: our legitimate interest in answering your question and keeping the website free of spam.',
           ],
         },
         {

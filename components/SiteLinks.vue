@@ -11,6 +11,7 @@ const links = computed(() => [
   { to: '/lootjes', label: t('footer.lootjes') },
   { to: '/privacy', label: t('footer.privacy') },
   { to: '/voorwaarden', label: t('footer.terms') },
+  { to: '/contact', label: t('footer.contact') },
 ].filter(link => link.to !== route.path));
 </script>
 

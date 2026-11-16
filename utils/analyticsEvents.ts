@@ -17,6 +17,11 @@ export const SERVER_EVENTS = [
   'Gift claimed',
   // A 5xx or an unhandled error on the server (server/plugins/logging.ts).
   'Server error',
+  // The contact form (server/api/contact.post.ts); detail is the topic, or
+  // why a message was refused or not sent. Never the message or the address.
+  'Contact sent',
+  'Contact refused',
+  'Contact failed',
 ] as const;
 
 export const CLIENT_EVENTS = [

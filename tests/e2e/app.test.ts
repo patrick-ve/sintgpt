@@ -83,6 +83,29 @@ function postPoem(body: unknown, ip: string) {
   });
 }
 
+describe('contact page', () => {
+  it('renders the form with its own canonical address, linked from the footer', async () => {
+    const res = await fetch('/contact');
+    expect(res.status).toBe(200);
+    const html = await res.text();
+    expect(html).toContain('<link rel="canonical" href="https://sintgpt.com/contact"');
+    expect(html).toMatch(/<h1[^>]*>\s*Neem contact op\s*<\/h1>/);
+    expect(html).toContain('name="website"');
+    expect(await (await fetch('/')).text()).toContain('href="/contact"');
+    expect(await (await fetch('/lootjes')).text()).toContain('href="/contact"');
+  });
+
+  it('answers 503 without Turnstile and Telegram, so the page offers the e-mail address', async () => {
+    const res = await fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ topic: 'help', email: 'a@b.nl', message: 'Een testbericht.', locale: 'nl', elapsed: 30, turnstile: 'x' }),
+    });
+    expect(res.status).toBe(503);
+    expect((await res.json()).data.reason).toBe('unavailable');
+  });
+});
+
 describe('privacy and terms', () => {
   it.each([
     ['/privacy', 'Privacyverklaring'],
@@ -108,6 +131,14 @@ describe('privacy and terms', () => {
     expect(terms).toContain('€12,99');
     expect(terms).toContain('tot en met de eerstvolgende pakjesavond');
     expect(privacy).toContain('verdwijnt na pakjesavond');
+  });
+
+  it('names the contact form, Telegram and Turnstile', async () => {
+    const privacy = await (await fetch('/privacy')).text();
+    expect(privacy).toContain('contactformulier');
+    expect(privacy).toContain('Telegram');
+    expect(privacy).toContain('Cloudflare Turnstile');
+    expect(privacy).toContain('hooguit 5 berichten per dag');
   });
 
   it('links to both from the home page and the blog', async () => {

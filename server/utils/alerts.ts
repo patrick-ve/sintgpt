@@ -16,6 +16,7 @@ export const ALERT_ERROR_EVENTS = [
   'Payments unavailable',
   'Poem stream failed',
   'PDF failed',
+  'Contact failed',
 ] as const;
 
 /** Money and access, worth knowing as it happens. */

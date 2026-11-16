@@ -523,9 +523,60 @@ export default {
   video: {
     title: 'Sinterklaas over sintgpt.com',
   },
+  contact: {
+    seoTitle: 'Contact: hulp, vragen en klachten | SintGPT',
+    description: 'Hulp nodig met SintGPT, een vraag over je betaling of een klacht? Stuur ons een bericht. We antwoorden per e-mail.',
+    title: 'Neem contact op',
+    intro: 'Hulp nodig, een vraag of een klacht? Stuur ons een bericht. We antwoorden per e-mail.',
+    quickTitle: 'Misschien staat je antwoord hier al',
+    quick: [
+      {
+        question: 'Ik heb betaald, maar ik kan niet verder schrijven',
+        answer: 'Schrijf je in een andere browser of op een ander apparaat? Vul het formulier in en klik op "Schrijf mijn gedicht". Kies in het betaalvenster dat dan opent "Al betaald? Ga verder met je betalings-ID". Je betalings-ID begint met pay_ en staat in de e-mail van Dodo Payments.',
+      },
+      {
+        question: 'Waar staan mijn gedichten?',
+        answer: 'Onder "Mijn gedichten", in de browser waarin je ze schreef. We bewaren ze niet op een server, dus op een ander apparaat zie je ze niet.',
+      },
+      {
+        question: 'Hoeveel gedichten zijn gratis?',
+        answer: 'Je eerste gedicht is gratis. Per internetaansluiting kun je hooguit 1 gratis gedicht per 24 uur maken.',
+      },
+    ],
+    formTitle: 'Stuur een bericht',
+    topicLabel: 'Waar gaat het over?',
+    topics: {
+      help: 'Ik heb hulp nodig',
+      question: 'Ik heb een vraag',
+      complaint: 'Ik heb een klacht',
+    },
+    emailLabel: 'Je e-mailadres',
+    emailHelp: 'Hierop sturen we ons antwoord.',
+    emailInvalid: 'Vul een geldig e-mailadres in, zoals naam@voorbeeld.nl.',
+    messageLabel: 'Je bericht',
+    messageHelp: 'Heb je betaald? Zet dan je betalings-ID (pay_…) erbij.',
+    messageTooShort: 'Schrijf iets meer, minstens {min} tekens.',
+    count: '{count} / {max}',
+    honeypot: 'Laat dit veld leeg',
+    submit: 'Verstuur bericht',
+    sending: 'Versturen…',
+    checking: 'Even controleren dat je geen robot bent…',
+    privacy: 'We gebruiken je e-mailadres en bericht alleen om je te helpen. Cloudflare Turnstile controleert dat je geen robot bent.',
+    privacyLink: 'Lees de privacyverklaring',
+    sentTitle: 'Bedankt, je bericht is verstuurd!',
+    sentText: 'We antwoorden per e-mail op {email}. Kijk ook in je map met ongewenste e-mail.',
+    another: 'Nog een bericht sturen',
+    errors: {
+      captcha: 'De controle tegen robots lukte niet. Probeer het nog eens.',
+      debounce: 'Je stuurde net al een bericht. Wacht een paar seconden en probeer het opnieuw.',
+      limit: 'Je stuurde vandaag al 5 berichten. Mail ons gerust op {email}.',
+      unavailable: 'Versturen lukt nu niet. Mail je bericht naar {email}. Je tekst staat nog in het formulier.',
+    },
+    mailInstead: 'Liever mailen? Dat kan op',
+  },
   legal: {
     back: 'Terug naar SintGPT',
-    updated: 'Laatst bijgewerkt: 9 november 2026',
+    updated: 'Laatst bijgewerkt: 15 november 2026',
     privacy: {
       title: 'Privacyverklaring',
       seoTitle: 'Privacyverklaring | SintGPT',
@@ -591,9 +642,12 @@ export default {
           ],
         },
         {
-          heading: 'E-mail',
+          heading: 'E-mail en contactformulier',
           body: [
-            'Mail je ons, dan gebruiken we je e-mailadres en je bericht alleen om je te helpen. We verwijderen de mail als we hem niet meer nodig hebben.',
+            'Mail je ons, of stuur je een bericht via het contactformulier, dan gebruiken we je e-mailadres en je bericht alleen om je te helpen. We verwijderen ze als we ze niet meer nodig hebben.',
+            'Een bericht via het formulier komt bij ons binnen via Telegram. Daarbij zetten we ook wat je kocht (of "gratis"), je taalkeuze en de pagina waar je vandaan kwam, zodat we je sneller helpen. Je IP-adres en je betalings-ID sturen we niet mee. Om je IP-adres tellen we hooguit 5 berichten per dag, op dezelfde manier als bij gedichten: die teller verdwijnt na 24 uur.',
+            'Cloudflare Turnstile controleert op de contactpagina of je een mens bent. Het kijkt daarvoor naar je browser, zonder cookies voor reclame of tracking. Vul geen gevoelige gegevens in je bericht in.',
+            'Grondslag: ons gerechtvaardigd belang om je vraag te beantwoorden en de website vrij van spam te houden.',
           ],
         },
         {

@@ -44,7 +44,16 @@ export default defineNuxtConfig({
     accessCookieSecret: '',
     // Gift links (?cadeau=<code>), comma-separated. See server/utils/giftAccess.ts.
     giftCodes: '',
-    public: {},
+    // Contact form (server/api/contact.post.ts): Cloudflare Turnstile and the
+    // Telegram bot of the alerts. NUXT_TURNSTILE_SECRET_KEY,
+    // NUXT_TELEGRAM_BOT_TOKEN, NUXT_TELEGRAM_CHAT_ID and
+    // NUXT_PUBLIC_TURNSTILE_SITE_KEY.
+    turnstileSecretKey: '',
+    telegramBotToken: '',
+    telegramChatId: '',
+    public: {
+      turnstileSiteKey: '',
+    },
   },
 
   fonts: {

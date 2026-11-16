@@ -55,4 +55,4 @@ Wat de site actueel aanbiedt, staat in het betaalvenster en in de voorwaarden. B
 - [Alle blogartikelen](https://sintgpt.com/blog)
 - [Privacyverklaring](https://sintgpt.com/privacy): welke gegevens de site gebruikt en hoe lang
 - [Voorwaarden](https://sintgpt.com/voorwaarden): prijzen, gratis gebruik, herroepingsrecht
-- Contact: patrick@sintgpt.com
+- [Contact](https://sintgpt.com/contact): hulp, vragen en klachten via een formulier, of mail naar patrick@sintgpt.com

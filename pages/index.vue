@@ -2234,10 +2234,8 @@ useHead({
             {{ t('footer.terms') }}
           </NuxtLink>
           <UButton
-            as="a"
-            href="mailto:patrick@sintgpt.com"
+            to="/contact"
             size="lg"
-            @click="track('Contact')"
             variant="outline"
             class="border-2 border-[#d4a853] text-[#f4cd60] hover:bg-[#d4a853] hover:text-[#5c0f26] transition rounded-xl"
             icon="i-heroicons-envelope"
