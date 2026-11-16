@@ -5,15 +5,21 @@ description: Report today's SintGPT analytics (Workers Analytics Engine) as a sh
 
 # Report today's analytics
 
-Read-only. It queries Analytics Engine and writes nothing.
+Read-only. It queries Analytics Engine and writes no events. The only file it writes is the dashboard page `reports/analytics.html` (git-ignored).
 
-## 1. Run the report
+## 1. Run the report and open the dashboard
+
+Run both commands. They are independent, so run them in parallel:
 
 ```sh
 npx tsx scripts/analytics-report.ts today
+npm run analytics -- today
 ```
 
-Use `yesterday` instead of `today` when the user asks for yesterday.
+Use `yesterday` instead of `today` in both commands when the user asks for yesterday.
+
+- The first command prints the numbers you read in step 3.
+- The second command builds the dashboard again with fresh data (`reports/analytics.html`) and opens it in the browser on the same period. The user explores it there; you do not read the page. If it fails, say so in one line and still write the overview.
 
 - `today` is the Dutch calendar day from 00:00 to now. The first line of the output says the date and the hours.
 - The token comes from `.env.analytics`. Never open, print or cat `.env` or `.env.analytics`. When the script says the token is missing, tell the user to set `CLOUDFLARE_ANALYTICS_TOKEN` there.
@@ -43,7 +49,7 @@ A commit is not a deploy, but it tells when a change could have gone live. Link 
 
 Write in ASD-STE100 Simplified Technical English (short sentences, simple words, lists), as the global instructions say. Keep event names and project terms exactly as they are.
 
-Start with one line that says how the day went. Then use these headings and leave out a heading that has nothing:
+Start with one line that says how the day went, and say that the dashboard is open. Then use these headings and leave out a heading that has nothing:
 
 1. **Traffic**: page views per page, countries, referrers, campaigns (`utm_*`, sticker campaigns `ams-<id>`).
 2. **Shared poems**: `/g/:id` views, `Open shared poem`, `Shared poem to form`.
