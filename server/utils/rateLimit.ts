@@ -7,7 +7,7 @@
  */
 
 export type RateLimitVerdict =
-  | { ok: true }
+  | { ok: true; retry?: true }
   | { ok: false; reason: 'debounce' | 'limit'; retryAfterSeconds: number };
 
 /** How many requests counted in the current window, without counting one. */
@@ -28,6 +28,41 @@ export interface RateLimitEntry {
   resetTime: number;
   /** Time of the last allowed request. */
   last: number;
+  /** The attempt ID of the last counted poem, so a retry of it does not count again. */
+  attempt?: string;
+  /** Retries of that attempt so far. */
+  retries?: number;
+}
+
+/**
+ * A poem request from the page. The page makes a new ID per poem and sends
+ * the same ID again when the connection dropped (`retry`).
+ */
+export interface PoemAttempt {
+  id: string;
+  retry: boolean;
+}
+
+/** IDs from crypto.randomUUID(), or the page's fallback. */
+export const POEM_ATTEMPT_PATTERN = /^[A-Za-z0-9-]{8,64}$/;
+
+/**
+ * A dropped connection must not cost a poem: up to 3 retries of the last
+ * counted poem, each within 10 minutes of the try before it, do not count and
+ * skip the 10 s wait. The page retries twice by itself and once more when the
+ * visitor tries again (usePoemGenerator). The server cannot tell whether the
+ * visitor got the poem (in one case it finished 16 s before the phone
+ * reported the drop), so a page that fakes retries gets at most 4 poems for 1.
+ */
+export const MAX_POEM_RETRIES = 3;
+export const POEM_RETRY_WINDOW_MS = 10 * 60 * 1000;
+
+/** The attempt in a poem request body, if it has a valid one. */
+export function poemAttempt(body: unknown): PoemAttempt | undefined {
+  const { attempt, retry } = (body ?? {}) as { attempt?: unknown; retry?: unknown };
+  return typeof attempt === 'string' && POEM_ATTEMPT_PATTERN.test(attempt)
+    ? { id: attempt, retry: retry === true }
+    : undefined;
 }
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -90,7 +125,17 @@ export function applyRateLimit(
   entry: RateLimitEntry | undefined,
   now: number,
   rule: RateLimitRule,
+  attempt?: PoemAttempt,
 ): { verdict: RateLimitVerdict; entry?: RateLimitEntry } {
+  if (
+    attempt?.retry
+    && entry?.attempt === attempt.id
+    && (entry.retries ?? 0) < MAX_POEM_RETRIES
+    && now - entry.last < POEM_RETRY_WINDOW_MS
+  ) {
+    return { verdict: { ok: true, retry: true }, entry: { ...entry, retries: (entry.retries ?? 0) + 1, last: now } };
+  }
+
   if (entry && now - entry.last < rule.debounceMs) {
     return {
       verdict: {
@@ -102,7 +147,7 @@ export function applyRateLimit(
   }
 
   if (!entry || now >= entry.resetTime) {
-    return { verdict: { ok: true }, entry: { count: 1, resetTime: now + rule.windowMs, last: now } };
+    return { verdict: { ok: true }, entry: counted({ count: 1, resetTime: now + rule.windowMs, last: now }, attempt) };
   }
 
   if (entry.count >= rule.maxRequests) {
@@ -115,7 +160,13 @@ export function applyRateLimit(
     };
   }
 
-  return { verdict: { ok: true }, entry: { ...entry, count: entry.count + 1, last: now } };
+  return { verdict: { ok: true }, entry: counted({ ...entry, count: entry.count + 1, last: now }, attempt) };
+}
+
+/** A counted poem replaces the attempt a retry may refer to. */
+function counted(entry: RateLimitEntry, attempt?: PoemAttempt): RateLimitEntry {
+  const { attempt: _attempt, retries: _retries, ...rest } = entry;
+  return attempt ? { ...rest, attempt: attempt.id, retries: 0 } : rest;
 }
 
 export interface RateLimiterOptions extends Partial<RateLimitRule> {
@@ -146,8 +197,8 @@ export function createRateLimiter(options: RateLimiterOptions = {}) {
    * Counts the request when it is allowed. A request counts before the body is
    * validated, so invalid requests use up the limit too.
    */
-  const check = (key: string, now = Date.now(), rule: RateLimitRule = defaultRule): RateLimitVerdict => {
-    const { verdict, entry } = applyRateLimit(entries.get(key), now, rule);
+  const check = (key: string, now = Date.now(), rule: RateLimitRule = defaultRule, attempt?: PoemAttempt): RateLimitVerdict => {
+    const { verdict, entry } = applyRateLimit(entries.get(key), now, rule, attempt);
     if (entry) {
       entries.set(key, entry);
       prune(now);

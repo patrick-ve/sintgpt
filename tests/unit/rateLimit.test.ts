@@ -4,8 +4,11 @@ import {
   BUYER_RATE_LIMIT,
   createRateLimiter,
   freeRateLimit,
+  MAX_POEM_RETRIES,
   PAYMENTS_DOWN_RATE_LIMIT,
   POEM_RATE_LIMIT,
+  POEM_RETRY_WINDOW_MS,
+  poemAttempt,
 } from '../../server/utils/rateLimit';
 
 const HOUR = 60 * 60 * 1000;
@@ -124,5 +127,51 @@ describe('BUYER_RATE_LIMIT', () => {
       expect(limiter.check('pay_1', T0 + i * 10_000).ok).toBe(true);
     }
     expect(limiter.check('pay_1', T0 + 100 * 10_000)).toMatchObject({ ok: false, reason: 'limit' });
+  });
+});
+
+describe('retries after a dropped connection', () => {
+  const first = { id: 'attempt-1234', retry: false };
+  const again = { id: 'attempt-1234', retry: true };
+  const counted = applyRateLimit(undefined, T0, POEM_RATE_LIMIT, first).entry!;
+
+  it('remembers the attempt of a counted poem', () => {
+    expect(counted).toEqual({ count: 1, resetTime: T0 + 24 * HOUR, last: T0, attempt: 'attempt-1234', retries: 0 });
+  });
+
+  it('lets 3 retries of that attempt through without counting or waiting 10 s', () => {
+    let entry = counted;
+    for (let retry = 1; retry <= MAX_POEM_RETRIES; retry++) {
+      const result = applyRateLimit(entry, entry.last + 2_000, POEM_RATE_LIMIT, again);
+      expect(result.verdict).toEqual({ ok: true, retry: true });
+      entry = result.entry!;
+      expect(entry).toMatchObject({ count: 1, retries: retry });
+    }
+    // The fourth is a new poem, and the free one is used.
+    expect(applyRateLimit(entry, entry.last + 20_000, POEM_RATE_LIMIT, again).verdict)
+      .toMatchObject({ ok: false, reason: 'limit' });
+  });
+
+  it('counts a retry that comes too late, has another ID or does not say it is a retry', () => {
+    const late = counted.last + POEM_RETRY_WINDOW_MS;
+    expect(applyRateLimit(counted, late, POEM_RATE_LIMIT, again).verdict).toMatchObject({ ok: false, reason: 'limit' });
+    expect(applyRateLimit(counted, T0 + 20_000, POEM_RATE_LIMIT, { id: 'other-12345', retry: true }).verdict)
+      .toMatchObject({ ok: false, reason: 'limit' });
+    expect(applyRateLimit(counted, T0 + 20_000, POEM_RATE_LIMIT, first).verdict).toMatchObject({ ok: false, reason: 'limit' });
+  });
+
+  it('forgets the attempt when another poem counts', () => {
+    const next = applyRateLimit(counted, T0 + 20_000, BUYER_RATE_LIMIT).entry!;
+    expect(next).toEqual({ count: 2, resetTime: counted.resetTime, last: T0 + 20_000 });
+    expect(applyRateLimit(next, T0 + 40_000, BUYER_RATE_LIMIT, again).verdict).toEqual({ ok: true });
+  });
+
+  it('reads the attempt from the request body, and only a valid ID', () => {
+    expect(poemAttempt({ attempt: '0b6f2c4e-8f1a-4d4b-9a51-2f0c9e2d7a11', retry: true }))
+      .toEqual({ id: '0b6f2c4e-8f1a-4d4b-9a51-2f0c9e2d7a11', retry: true });
+    expect(poemAttempt({ attempt: 'abcdefgh' })).toEqual({ id: 'abcdefgh', retry: false });
+    for (const body of [null, {}, { attempt: 'short' }, { attempt: 'has spaces in it' }, { attempt: 12345678 }]) {
+      expect(poemAttempt(body)).toBeUndefined();
+    }
   });
 });

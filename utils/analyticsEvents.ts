@@ -28,6 +28,9 @@ export const CLIENT_EVENTS = [
   'Rate poem',
   'Edit poem',
   'Poem stream failed',
+  // The page asks for the same poem again after a dropped connection
+  // (detail network, with the retry number in value; or manual).
+  'Poem retry',
   'Open poem from history',
   'Open history',
   'Delete poem',

@@ -350,9 +350,56 @@ describe('poem form', () => {
       language: 'english',
       greeting: true,
       regenerate: false,
+      // One ID per poem, so a retry after a dropped connection does not count.
+      attempt: expect.stringMatching(/^[A-Za-z0-9-]{8,64}$/),
+      retry: false,
     });
     await page.close();
   }, 30_000);
+
+  it('asks again with the same attempt when the connection drops, and shows the poem', async () => {
+    const page = await createPage();
+    const sent: Record<string, unknown>[] = [];
+    await page.route('**/api/poem/generate', (route) => {
+      sent.push(route.request().postDataJSON());
+      return sent.length === 1
+        ? route.abort('internetdisconnected')
+        : route.fulfill({ status: 200, contentType: 'text/event-stream', body: poemStream('Het tweede gedicht.') });
+    });
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+    await page.fill('#poem-name', 'Sanne');
+    await page.locator('#poem-form button[type=submit]').click();
+
+    await page.getByText('De verbinding viel even weg').waitFor();
+    await page.getByText('Het tweede gedicht.').waitFor();
+    expect(sent).toHaveLength(2);
+    expect(sent[1]!.attempt).toBe(sent[0]!.attempt);
+    expect([sent[0]!.retry, sent[1]!.retry]).toEqual([false, true]);
+    expect(await page.getByText('De verbinding viel even weg').count()).toBe(0);
+    await page.close();
+  }, 30_000);
+
+  it('stops after 2 retries, and the next try is a retry of the same poem', async () => {
+    const page = await createPage();
+    const sent: Record<string, unknown>[] = [];
+    await page.route('**/api/poem/generate', (route) => {
+      sent.push(route.request().postDataJSON());
+      return sent.length <= 3
+        ? route.abort('internetdisconnected')
+        : route.fulfill({ status: 200, contentType: 'text/event-stream', body: poemStream('Eindelijk een gedicht.') });
+    });
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+    await page.fill('#poem-name', 'Sanne');
+    await page.locator('#poem-form button[type=submit]').click();
+
+    await page.getByText('De verbinding viel weg. Controleer je internet').waitFor({ timeout: 15_000 });
+    expect(sent).toHaveLength(3);
+    await page.locator('#poem-form button[type=submit]').click();
+    await page.getByText('Eindelijk een gedicht.').waitFor();
+    expect(new Set(sent.map(body => body.attempt)).size).toBe(1);
+    expect(sent.map(body => body.retry)).toEqual([false, true, true, true]);
+    await page.close();
+  }, 40_000);
 
   it('adds "Lieve <name>," and "Van Sint & Piet" unless the visitor turns them off', async () => {
     const page = await createPage();
@@ -1164,6 +1211,18 @@ describe('POST /api/poem/generate', () => {
     });
     expect(buyer.status).toBe(400);
   }, 60_000);
+
+  it('does not count a retry of the same attempt after a dropped connection', async () => {
+    const ip = '10.0.0.77';
+    const first = await postPoem({ name: '', attempt: 'attempt-e2e-1', retry: false }, ip);
+    expect(first.status).toBe(400);
+    // Within the 10 s wait and over the free limit, the retry still passes.
+    const retry = await postPoem({ name: '', attempt: 'attempt-e2e-1', retry: true }, ip);
+    expect(retry.status).toBe(400);
+    // Another attempt is a new poem: too soon, and over the free limit.
+    const other = await postPoem({ name: '', attempt: 'attempt-e2e-2', retry: true }, ip);
+    expect(other.status).toBe(429);
+  });
 
   it('rejects a regenerate flag that is not a boolean', async () => {
     const res = await postPoem({ ...VALID_POEM_REQUEST, regenerate: 'yes' }, '10.0.0.4');

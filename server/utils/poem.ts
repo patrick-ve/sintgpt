@@ -93,6 +93,10 @@ export const PoemRequestSchema = z.object({
   // Only with regenerate: what should change, and the poem it changes.
   rewriteHint: z.string().max(POEM_INPUT_LIMITS.rewriteHint).optional(),
   previousPoem: z.string().max(POEM_INPUT_LIMITS.previousPoem).optional(),
+  // One ID per poem from the page, sent again with `retry` after a dropped
+  // connection. The rate limit reads them (poemAttempt in rateLimit.ts).
+  attempt: z.string().regex(/^[A-Za-z0-9-]{8,64}$/).optional(),
+  retry: z.boolean().optional(),
 });
 
 export type PoemRequest = z.infer<typeof PoemRequestSchema>;

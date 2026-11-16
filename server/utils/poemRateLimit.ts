@@ -4,6 +4,7 @@ import {
   BUYER_RATE_LIMIT,
   createRateLimiter,
   POEM_RATE_LIMIT,
+  type PoemAttempt,
   type RateLimitRule,
   type RateLimitVerdict,
 } from './rateLimit';
@@ -86,6 +87,7 @@ export async function checkPoemRateLimit(
   event: H3Event,
   subject: RateLimitSubject,
   rule: RateLimitRule = RULES[subject.kind],
+  attempt?: PoemAttempt,
 ): Promise<RateLimitVerdict> {
   const env = (event.context as { cloudflare?: { env?: RateLimitEnv } }).cloudflare?.env;
 
@@ -93,14 +95,16 @@ export async function checkPoemRateLimit(
     try {
       const name = await counterName(subject, useRuntimeConfig(event).accessCookieSecret);
 
-      if (env.POEM_BURST && !(await env.POEM_BURST.limit({ key: name })).success) {
+      // A retry after a dropped connection comes within seconds; the Durable
+      // Object decides whether it really is one.
+      if (!attempt?.retry && env.POEM_BURST && !(await env.POEM_BURST.limit({ key: name })).success) {
         return { ok: false, reason: 'debounce', retryAfterSeconds: Math.ceil(rule.debounceMs / 1000) };
       }
 
       const counter = env.RATE_LIMITER.get(env.RATE_LIMITER.idFromName(name));
       const res = await counter.fetch('https://rate-limit.internal/check', {
         method: 'POST',
-        body: JSON.stringify(rule),
+        body: JSON.stringify({ ...rule, attempt }),
       });
       if (res.ok) return (await res.json()) as RateLimitVerdict;
       consola.warn(`Rate limit counter answered ${res.status}, using memory`);
@@ -109,7 +113,7 @@ export async function checkPoemRateLimit(
     }
   }
 
-  return memory[subject.kind].check(subject.id, Date.now(), rule);
+  return memory[subject.kind].check(subject.id, Date.now(), rule, attempt);
 }
 
 /** How many requests the subject's current window has used. Counts nothing. */

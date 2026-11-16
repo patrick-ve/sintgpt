@@ -72,6 +72,22 @@ describe('checkPoemRateLimit', () => {
     expect(answer).not.toHaveBeenCalled();
   });
 
+  it('lets a retry past the burst limit and gives the attempt to the Durable Object', async () => {
+    const answer = vi.fn(async (_url: string, init: RequestInit) => {
+      expect(JSON.parse(String(init.body))).toMatchObject({ maxRequests: 1, attempt: { id: 'attempt-1234', retry: true } });
+      return Response.json({ ok: true, retry: true });
+    });
+    const { namespace } = counterNamespace(answer as never);
+    const verdict = await checkPoemRateLimit(
+      cloudflareEvent({ RATE_LIMITER: namespace, POEM_BURST: { limit: async () => ({ success: false }) } }),
+      { kind: 'ip', id: '203.0.113.10' },
+      undefined,
+      { id: 'attempt-1234', retry: true },
+    );
+    expect(verdict).toEqual({ ok: true, retry: true });
+    expect(answer).toHaveBeenCalledOnce();
+  });
+
   it('falls back to memory when the Durable Object fails, so visitors are not blocked', async () => {
     const { namespace } = counterNamespace(async () => { throw new Error('overloaded'); });
     const event = cloudflareEvent({ RATE_LIMITER: namespace });

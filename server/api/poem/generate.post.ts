@@ -13,7 +13,7 @@ import { paidAccess } from '../../utils/paymentCookie';
 import { checkPoemRateLimit, rateLimitIp } from '../../utils/poemRateLimit';
 import { signPoemShare } from '../../utils/poemShare';
 import { paymentsAvailable } from '../../utils/paymentsStatus';
-import { BUYER_RATE_LIMIT, creditsRule, freeRateLimit } from '../../utils/rateLimit';
+import { BUYER_RATE_LIMIT, creditsRule, freeRateLimit, poemAttempt } from '../../utils/rateLimit';
 import { TIERS } from '../../../utils/pricingTiers';
 import { framePoem, framePoemStream, poemFrame } from '../../../utils/poemFrame';
 import {
@@ -63,13 +63,18 @@ export default defineEventHandler(async (event) => {
       const rule = tier?.poems
         ? creditsRule(tier.poems, access!.expiresAt, Date.now())
         : access ? BUYER_RATE_LIMIT : freeRateLimit(await paymentsAvailable(event));
+      // The same attempt again after a dropped connection does not count
+      // (MAX_POEM_RETRIES in server/utils/rateLimit.ts).
+      const attempt = poemAttempt(await readBody(event).catch(() => null));
       const verdict = await checkPoemRateLimit(
         event,
         access
           ? { kind: 'buyer', id: access.paymentId }
           : { kind: 'ip', id: rateLimitIp(ip) },
         rule,
+        attempt,
       );
+      if (verdict.ok && verdict.retry) consola.info('Poem retry after a dropped connection: not counted');
       if (!verdict.ok) {
         // The client shows the payment window for `limit` (free poems) and
         // `credits` (the three Drie poems are used). A buyer who reaches the

@@ -13,7 +13,7 @@ import { isSignatureLine, poemFrame, salutation } from '~/utils/poemFrame';
 import type { PoemHistoryEntry } from '~/composables/usePoemHistory';
 import type { PaymentTrigger } from '~/components/PaymentModal.vue';
 
-const { generatePoem, isLoading, error, poem, isRateLimitError, rateLimitReason, share: generatedShare } =
+const { generatePoem, isLoading, error, poem, isRateLimitError, rateLimitReason, retrying, share: generatedShare } =
   usePoemGenerator();
 const { t, locale, setLocale } = useI18n();
 const {
@@ -1794,8 +1794,11 @@ useHead({
                 </div>
 
                 <!-- Writing -->
-                <div v-if="isLoading && !poem" class="flex items-center justify-center py-6">
+                <div v-if="isLoading && !poem" class="flex flex-col items-center justify-center gap-3 py-6">
                   <PoemWritingAnimation />
+                  <p v-if="retrying" class="m-0 text-center text-[0.9375rem] font-bold text-[#5c0f26]" role="status">
+                    {{ t('poem.retrying') }}
+                  </p>
                 </div>
 
                 <!-- Error -->

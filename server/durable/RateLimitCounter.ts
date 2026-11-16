@@ -1,4 +1,4 @@
-import { applyRateLimit, usedInWindow, type RateLimitEntry, type RateLimitRule } from '../utils/rateLimit';
+import { applyRateLimit, usedInWindow, type PoemAttempt, type RateLimitEntry, type RateLimitRule } from '../utils/rateLimit';
 
 /** The parts of the Durable Object state this class uses. */
 export interface CounterState {
@@ -30,11 +30,12 @@ export class RateLimitCounter {
     if (new URL(request.url).pathname === '/peek') {
       return Response.json({ used: usedInWindow(await this.state.storage.get<RateLimitEntry>(ENTRY), now) });
     }
-    const rule = (await request.json()) as RateLimitRule;
+    // The rule, plus the poem attempt when the page sent one.
+    const { attempt, ...rule } = (await request.json()) as RateLimitRule & { attempt?: PoemAttempt };
     // Input gates hold other requests to this object while storage is busy,
     // so this read and write cannot interleave with another check.
     const current = await this.state.storage.get<RateLimitEntry>(ENTRY);
-    const { verdict, entry } = applyRateLimit(current, now, rule);
+    const { verdict, entry } = applyRateLimit(current, now, rule, attempt);
     if (entry) {
       await this.state.storage.put(ENTRY, entry);
       // A new window: delete the data when it ends. An alarm costs a write, so

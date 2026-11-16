@@ -140,6 +140,8 @@ export default {
     shareEmail: 'Send via email',
     shareFacebook: 'Share on Facebook',
     loading: 'Sinterklaas is writing your poem…',
+    retrying: 'The connection dropped for a moment. Sinterklaas starts again…',
+    connectionLost: 'The connection dropped. Check your internet and try again.',
     error: 'That did not work',
     freeComplete: 'This free poem is all yours: share it, copy it or save it as a PDF.',
     ready: 'Your poem is ready.',

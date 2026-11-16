@@ -88,4 +88,17 @@ describe('Drie: 3 poems until pakjesavond', () => {
     // The data goes when the access ends, not after a day.
     expect(alarms).toEqual([expiresAt]);
   });
+
+  it('lets a retry of the counted attempt through without counting', async () => {
+    const { state, data } = fakeState();
+    const counter = new RateLimitCounter(state);
+    const send = (attempt: object) => counter.fetch(new Request('https://rate-limit.internal/check', {
+      method: 'POST',
+      body: JSON.stringify({ ...PAYMENTS_DOWN_RATE_LIMIT, attempt }),
+    })).then(res => res.json());
+    expect(await send({ id: 'attempt-1234', retry: false })).toEqual({ ok: true });
+    vi.advanceTimersByTime(2_000);
+    expect(await send({ id: 'attempt-1234', retry: true })).toEqual({ ok: true, retry: true });
+    expect(data.get('entry')).toMatchObject({ count: 1, attempt: 'attempt-1234', retries: 1 });
+  });
 });

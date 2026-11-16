@@ -141,6 +141,8 @@ export default {
     shareEmail: 'Verstuur via e-mail',
     shareFacebook: 'Deel op Facebook',
     loading: 'De Sint schrijft je gedicht…',
+    retrying: 'De verbinding viel even weg. De Sint begint opnieuw…',
+    connectionLost: 'De verbinding viel weg. Controleer je internet en probeer het nog eens.',
     ready: 'Je gedicht is klaar.',
     error: 'Dat ging mis',
     freeComplete: 'Dit gratis gedicht is helemaal van jou: deel het, kopieer het of bewaar het als PDF.',
