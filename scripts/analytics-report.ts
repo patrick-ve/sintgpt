@@ -1,21 +1,60 @@
 // Prints a short report from the Workers Analytics Engine dataset.
 //
-//   CLOUDFLARE_ANALYTICS_TOKEN=... npx tsx scripts/analytics-report.ts [days]
+//   CLOUDFLARE_ANALYTICS_TOKEN=... npx tsx scripts/analytics-report.ts [today|yesterday|<days>]
+//
+// `today` and `yesterday` are Dutch calendar days and add the same day a week
+// earlier, for comparison, and a timeline of the notable events. A number is
+// that many times 24 hours back from now.
 //
 // The token needs only "Account Analytics Read". Column names follow the
 // order in server/utils/analytics.ts. Counts are weighted with
 // _sample_interval, because Analytics Engine can sample busy datasets.
 
+import { ALERT_ERROR_EVENTS, ALERT_MONEY_EVENTS } from '../server/utils/alerts';
 import { DATASET, analyticsCredentials, analyticsQuery as query } from './analyticsSql';
+import { dutchDayStart, dutchTime, sqlTimestamp } from './dutchDay';
 
 analyticsCredentials();
 
-const days = Number.parseInt(process.argv[2] ?? '7', 10);
-if (!Number.isInteger(days) || days < 1 || days > 92) {
-  console.error('Days must be a whole number from 1 to 92 (data is kept for 3 months).');
-  process.exit(1);
+const arg = process.argv[2] ?? '7';
+const now = new Date();
+let title: string;
+let since: string;
+let weekBefore: string | null = null;
+
+if (arg === 'today' || arg === 'yesterday') {
+  const daysAgo = arg === 'today' ? 0 : 1;
+  const from = dutchDayStart(now, daysAgo);
+  const to = arg === 'today' ? now : dutchDayStart(now, 0);
+  const between = (start: Date, end: Date) =>
+    `timestamp >= toDateTime('${sqlTimestamp(start)}') AND timestamp < toDateTime('${sqlTimestamp(end)}')`;
+  since = between(from, to);
+  // The same hours a week earlier, so a weekday is compared with the same weekday.
+  const WEEK = 7 * 24 * 60 * 60 * 1000;
+  weekBefore = between(new Date(from.getTime() - WEEK), new Date(to.getTime() - WEEK));
+  const day = new Intl.DateTimeFormat('nl-NL', { timeZone: 'Europe/Amsterdam', dateStyle: 'full' }).format(from);
+  title = `${arg} (${day}, 00:00 to ${arg === 'today' ? dutchTime(now) : '24:00'} Dutch time)`;
+} else {
+  const days = Number.parseInt(arg, 10);
+  if (!Number.isInteger(days) || days < 1 || days > 92) {
+    console.error('Use today, yesterday or a whole number of days from 1 to 92 (data is kept for 3 months).');
+    process.exit(1);
+  }
+  since = `timestamp > NOW() - INTERVAL '${days}' DAY`;
+  title = `last ${days} day(s)`;
 }
-const since = `timestamp > NOW() - INTERVAL '${days}' DAY`;
+
+const sqlList = (values: readonly string[]) => values.map(value => `'${value}'`).join(', ');
+
+/** Events worth a line of their own in a one-day timeline. */
+const TIMELINE_EVENTS = [
+  ...ALERT_ERROR_EVENTS,
+  ...ALERT_MONEY_EVENTS,
+  'Generate poem', 'Regenerate poem', 'Poem aborted', 'Rate limited', 'No poems left', 'Form refused',
+  'Show payment modal', 'Close payment modal', 'Proceed to payment', 'Payment returned', 'Payment verified',
+  'Payment succeeded', 'Access restored', 'Restore failed', 'Poem retry', 'Rate poem', 'Edit poem',
+  'Contact sent', 'Contact refused', 'Contact failed', 'Surprise ideas',
+];
 
 const QUERIES: Record<string, string> = {
   'Events': `
@@ -85,9 +124,28 @@ const QUERIES: Record<string, string> = {
     SELECT blob4 AS country, SUM(_sample_interval) AS views
     FROM ${DATASET} WHERE ${since} AND blob1 = 'Page view'
     GROUP BY country ORDER BY views DESC LIMIT 10`,
+  'Problems': `
+    SELECT blob1 AS event, blob9 AS detail, blob2 AS path, SUM(_sample_interval) AS count
+    FROM ${DATASET} WHERE ${since} AND blob1 IN (${sqlList([...ALERT_ERROR_EVENTS, 'Poem retry', 'Contact refused'])})
+    GROUP BY event, detail, path ORDER BY count DESC LIMIT 30`,
+  'Contact form': `
+    SELECT blob1 AS event, blob9 AS detail, SUM(_sample_interval) AS count
+    FROM ${DATASET} WHERE ${since} AND blob1 IN ('Contact', 'Contact sent', 'Contact refused', 'Contact failed')
+    GROUP BY event, detail ORDER BY count DESC`,
 };
 
-console.log(`SintGPT, last ${days} day(s)`);
+if (weekBefore) {
+  QUERIES['Same hours a week earlier'] = `
+    SELECT blob1 AS event, SUM(_sample_interval) AS count
+    FROM ${DATASET} WHERE ${weekBefore}
+    GROUP BY event ORDER BY count DESC`;
+  QUERIES['Timeline (UTC; Dutch time is +1 in winter, +2 in summer)'] = `
+    SELECT timestamp, blob1 AS event, blob9 AS detail, blob17 AS tier, double5 AS value, blob4 AS country
+    FROM ${DATASET} WHERE ${since} AND blob1 IN (${sqlList(TIMELINE_EVENTS)})
+    ORDER BY timestamp LIMIT 300`;
+}
+
+console.log(`SintGPT, ${title}`);
 for (const [title, sql] of Object.entries(QUERIES)) {
   console.log(`\n${title}`);
   try {
