@@ -110,7 +110,7 @@ const chatgpt = computed(() => {
 
         <div class="flex flex-col gap-3.5" :class="{ 'max-lg:hidden': chatgpt && shown !== 'sintgpt' }">
           <h3 v-if="chatgpt" class="text-[1.375rem] font-bold text-[#3d0716] max-lg:sr-only">{{ t('examples.sintgpt') }}</h3>
-          <ExamplePoemCard :example="example" :heading-level="chatgpt ? 'h4' : 'h3'" :show-details="false" />
+          <ExamplePoemCard :example="example" :heading-level="chatgpt ? 'h4' : 'h3'" />
         </div>
       </div>
 

@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import type { ExamplePoem } from '~/utils/examplePoems';
 
+// The SintGPT side of "ChatGPT vs SintGPT" on the home page. /voorbeelden
+// shows the examples as PDF sheets instead (ExampleSheet.vue).
 const props = withDefaults(
   defineProps<{
     example: ExamplePoem;
-    headingLevel?: 'h2' | 'h3' | 'h4';
-    showDetails?: boolean;
-    /** A descriptive heading (on /voorbeelden). The recipient then moves to the line above it. */
-    heading?: string;
+    headingLevel?: 'h3' | 'h4';
   }>(),
-  { headingLevel: 'h3', showDetails: true },
+  { headingLevel: 'h3' },
 );
 
 const { t } = useI18n();
@@ -30,43 +29,16 @@ const lines = computed(() => props.example.poem.split('\n'));
 <template>
   <article class="example-letter" :lang="request.language === 'english' ? 'en' : 'nl'">
     <p class="text-[0.8125rem] font-bold tracking-[0.06em] uppercase text-[#8b1538]">
-      {{ heading ? t('poem.title', { name: request.name }) : t(`form.style.${styleKeys[request.style]}`) }}
+      {{ t(`form.style.${styleKeys[request.style]}`) }}
     </p>
     <component
       :is="headingLevel"
       class="font-display font-bold text-[1.75rem] leading-tight text-[#8b1538] break-words"
     >
-      {{ heading ?? t('poem.title', { name: request.name }) }}
+      {{ t('poem.title', { name: request.name }) }}
     </component>
 
     <p class="example-text"><span v-for="(line, index) in lines" :key="index" class="example-line">{{ line }}</span></p>
-
-    <dl v-if="showDetails" class="example-details">
-      <div v-if="request.present">
-        <dt>{{ t('examples.present') }}</dt>
-        <dd>
-          {{ request.present }}<template v-if="request.revealPresent === false"> ({{ t('examples.secret') }})</template>
-        </dd>
-      </div>
-      <div v-if="request.funFacts">
-        <dt>{{ t('examples.facts') }}</dt>
-        <dd>{{ request.funFacts }}</dd>
-      </div>
-      <div v-if="request.writtenBy">
-        <dt>{{ t('examples.writtenBy') }}</dt>
-        <dd>{{ request.writtenBy }}</dd>
-      </div>
-      <div v-if="request.writtenForAudience">
-        <dt>{{ t('examples.audience') }}</dt>
-        <dd>{{ request.writtenForAudience }}</dd>
-      </div>
-      <div>
-        <dt>{{ t('examples.rhyme') }}</dt>
-        <dd>
-          {{ request.rhymeScheme }}, {{ t('examples.lines', { count: request.lines }) }}<template v-if="request.language === 'english'">, {{ t('examples.english') }}</template>
-        </dd>
-      </div>
-    </dl>
   </article>
 </template>
 
@@ -108,25 +80,5 @@ const lines = computed(() => props.example.poem.split('\n'));
   min-height: 1lh;
   padding-inline-start: 0.9em;
   text-indent: -0.9em;
-}
-
-.example-details {
-  display: grid;
-  gap: 0.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid #e6d5b0;
-  font-size: 0.9375rem;
-  color: #5c0f26;
-}
-.example-details dt {
-  display: inline;
-  font-weight: 700;
-}
-.example-details dt::after {
-  content: ': ';
-}
-.example-details dd {
-  display: inline;
-  margin: 0;
 }
 </style>

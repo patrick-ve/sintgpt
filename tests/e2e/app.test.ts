@@ -1449,6 +1449,11 @@ describe('example poems', () => {
     for (const name of ['Opa Kees', 'Lotte', 'Mark', 'Tante Els', 'Daan', 'Jeroen', 'Buurman Gerrit', 'Emma']) {
       expect(html, name).toContain(`Gedicht voor ${name}`);
     }
+    // Each example is a picture of its PDF that turns over to what the Sint knew,
+    // with the poem as text for search engines and small screens.
+    expect(html).toContain('/pdf/examples/opa-kees-560.webp');
+    expect(html).toContain('Wat wist de Sint?');
+    expect(html).toContain('Met deze verrekijker mis je geen vogel op de grond!');
     expect(html).not.toMatch(/gemini|openai/i);
   });
 });
