@@ -65,7 +65,24 @@ bash scripts/smoke-test.sh
 - Also check what this deploy changed, with `curl` or a browser. For example: new text on a page, a new file, a fixed bug.
 - In a browser, mock `**/api/poem/generate` and `**/api/events` (Playwright `page.route`), so the check costs no AI Gateway call and adds no analytics data.
 
-## 6. Report
+## 6. Tell search engines (IndexNow)
+
+Only when the smoke test passed and this deploy changed public pages (text, a new page, a new blog post). Bing, Yandex and the other IndexNow engines then crawl them soon. Google does not use IndexNow.
+
+1. List the changed pages: `git diff --stat <previous deploy commit>..HEAD -- pages components locales utils/blogPosts.ts public/sitemap.xml`. The previous deploy commit is in the last deploy report or in `ISSUES.md`; if you do not know it, ask.
+2. A new or changed page needs a current `<lastmod>` in `public/sitemap.xml`. If it is old, say so; fix it in the next commit (the sitemap that is live now is what the engines read).
+3. Dry run, then send:
+
+```sh
+npx tsx scripts/indexnow.ts https://sintgpt.com/<path> ...
+npx tsx scripts/indexnow.ts https://sintgpt.com/<path> ... --send
+```
+
+- `--since YYYY-MM-DD` takes the sitemap pages with that `<lastmod>` or later instead of a list.
+- The script first checks that the key file `https://sintgpt.com/<key>.txt` is live. 200 or 202 is a success.
+- Send each URL once per change, not on every deploy: the engines ignore sites that send too often.
+
+## 7. Report
 
 - Version ID, commit (`git log --oneline -1`), and whether the commit is on GitHub.
 - The result of each step, with failures first. Say which checks did not run.

@@ -140,6 +140,28 @@ export default {
     shareEmail: 'Send via email',
     shareFacebook: 'Share on Facebook',
     loading: 'Sinterklaas is writing your poem…',
+    writing: {
+      steps: [
+        'Sinterklaas reads what you filled in…',
+        'He picks the best fun facts…',
+        'Pete looks for rhymes…',
+        'Sinterklaas counts the syllables…',
+        'Now a joke for the last line…',
+        'Almost done. Sinterklaas reads it once more…',
+        'This takes a bit longer than usual. Your poem is on its way.',
+      ],
+      rewriteSteps: [
+        'Sinterklaas reads your poem again…',
+        'He thinks about what could be better…',
+        'Pete looks for new rhymes…',
+        'Sinterklaas writes the lines again…',
+        'A new joke for the last line…',
+        'Almost done. A rewrite takes a bit more thought…',
+        'This takes a bit longer than usual. Your poem is on its way.',
+      ],
+      hint: 'Usually ready in about 30 seconds.',
+      rewriteHint: 'A rewrite usually takes about a minute.',
+    },
     retrying: 'The connection dropped for a moment. Sinterklaas starts again…',
     connectionLost: 'The connection dropped. Check your internet and try again.',
     error: 'That did not work',
@@ -322,6 +344,10 @@ export default {
     description: 'Want to write for more people? Keep writing from €3.99. A one-time €6.99 covers poems for the whole family.',
     oneTimePayment: 'Pay once',
     includesVAT: 'incl. VAT',
+    freeEdit: {
+      text: 'Only want a few words changed? You can do that yourself, for free.',
+      button: 'Edit the poem yourself',
+    },
     intro: {
       rewriteTier: 'Rewriting poems with AI comes with Family and Whole family. What you filled in stays.',
       credits: 'You have written your 3 poems. Want to keep writing? What you filled in stays.',
@@ -416,6 +442,7 @@ export default {
     intro: 'Download your poem as a PDF, in one of these designs.',
     alt: 'The {design} design with the poem for {name}',
     cta: 'Write your poem',
+    examples: 'See the example poems in their designs',
   },
   examples: {
     title: 'ChatGPT vs SintGPT',

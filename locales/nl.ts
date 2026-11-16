@@ -141,6 +141,28 @@ export default {
     shareEmail: 'Verstuur via e-mail',
     shareFacebook: 'Deel op Facebook',
     loading: 'De Sint schrijft je gedicht…',
+    writing: {
+      steps: [
+        'De Sint leest wat je hebt ingevuld…',
+        'Hij kiest de leukste weetjes uit…',
+        'De rijmpiet zoekt rijmwoorden…',
+        'De Sint telt de lettergrepen…',
+        'Nu nog een grap voor de laatste regel…',
+        'Bijna klaar. De Sint leest het nog één keer over…',
+        'Het duurt wat langer dan anders. Je gedicht komt eraan.',
+      ],
+      rewriteSteps: [
+        'De Sint leest je gedicht nog eens…',
+        'Hij bedenkt wat er beter kan…',
+        'De rijmpiet zoekt nieuwe rijmwoorden…',
+        'De Sint schrijft de regels opnieuw…',
+        'Een nieuwe grap voor de laatste regel…',
+        'Bijna klaar. Herschrijven kost wat meer denkwerk…',
+        'Het duurt wat langer dan anders. Je gedicht komt eraan.',
+      ],
+      hint: 'Meestal klaar in ongeveer 30 seconden.',
+      rewriteHint: 'Herschrijven duurt meestal ongeveer een minuut.',
+    },
     retrying: 'De verbinding viel even weg. De Sint begint opnieuw…',
     connectionLost: 'De verbinding viel weg. Controleer je internet en probeer het nog eens.',
     ready: 'Je gedicht is klaar.',
@@ -325,6 +347,10 @@ export default {
     description: 'Wil je voor meer mensen schrijven? Vanaf €3,99 schrijf je verder. Voor eenmalig €6,99 schrijf je gedichten voor het hele gezin.',
     oneTimePayment: 'Eenmalig betalen',
     includesVAT: 'incl. btw',
+    freeEdit: {
+      text: 'Wil je maar een paar woorden anders? Dat doe je gratis zelf.',
+      button: 'Pas het gedicht zelf aan',
+    },
     intro: {
       rewriteTier: 'Gedichten herschrijven met AI zit in Gezin en Hele familie. Wat je invulde, blijft staan.',
       credits: 'Je 3 gedichten zijn geschreven. Wil je verder schrijven? Wat je invulde, blijft staan.',
@@ -419,6 +445,7 @@ export default {
     intro: 'Download je gedicht als PDF, in een van deze ontwerpen.',
     alt: 'Ontwerp {design} met het gedicht voor {name}',
     cta: 'Schrijf je gedicht',
+    examples: 'Zie de voorbeeldgedichten in hun ontwerp',
   },
   examples: {
     title: 'ChatGPT vs SintGPT',

@@ -222,7 +222,8 @@ Last updated: 14 November 2026. Live version: `dfdbe138-2258-4f6c-81cf-0526bbed5
 ### #15 Small UI items
 
 - **Status:** open, optional.
-- The countdown's 🎁 sits against the text without a space.
+- ~~The countdown's 🎁 sits against the text without a space.~~ Fixed 16 November
+  2026: the emoji has its own span with a margin (home and shared poem page).
 - The extra PDF designs (Goudfolie, Stoomboot) are a soft lock: the PDF is built
   in the browser, so a technical visitor can get them without paying. Accepted.
 - Hele familie bought outside the season can last longer than 400 days; the
@@ -295,6 +296,12 @@ Last updated: 14 November 2026. Live version: `dfdbe138-2258-4f6c-81cf-0526bbed5
     from late November; organic SEO is too slow for this season.
   - Search Console (#12): see which terms bring impressions; write posts for them.
   - AI assistants: one visit came from chatgpt.com. Keep `llms.txt` current.
+- **16 November 2026, to measure after the deploy:** on 16 November 4 payment
+  windows opened (2 `rewrite`) and 0 led to `Proceed to payment`. The window
+  for a rewrite now offers "Pas het gedicht zelf aan": count `Close payment
+  modal` `edit` against `Edit poem`. The writing animation now shows steps and a
+  bar during the wait of about 28 s: compare `Poem aborted` `before` per poem
+  with the weeks before. Both counts are small until the peak.
 
 ### #21 Edit a poem before sharing
 
@@ -392,7 +399,7 @@ Last updated: 14 November 2026. Live version: `dfdbe138-2258-4f6c-81cf-0526bbed5
 | S21 | 5 | 0.25 | Title Case in Dutch titles; "…in 2026" post shows 17 november 2025 | Live: sentence case in titles and headings; the post shows "bijgewerkt 8 november 2026" |
 | S22 | 5 | 0.1 | Home H1: no space between the two spans in the HTML | Live |
 | S23 | 5 | 1 | `/voorbeelden`, `/lootjes`, legal pages share the home `og:image` | Live: own images for `/voorbeelden` and `/lootjes`; legal pages keep the home image on purpose |
-| S24 | – | – | Search Console: Domain property verified 10 Nov 2026. To do: submit the sitemap, request indexing of /, /voorbeelden, /lootjes, /blog, check excluded pages after about a week, import into Bing Webmaster Tools. See #12 | Owner |
+| S24 | – | – | Search Console: Domain property verified 10 Nov 2026. To do: submit the sitemap, request indexing of /, /voorbeelden, /lootjes, /blog, check excluded pages after about a week, import into Bing Webmaster Tools. See #12. IndexNow (16 Nov 2026): `scripts/indexnow.ts` and step 6 of the deploy skill send changed pages to Bing and Yandex after a deploy; the first send (all sitemap pages, `--all`) is open until the key file is live | Owner |
 | S25 | – | – | PageSpeed Insights and field data from outside the company network (Cato proxy forces HTTP/1.1 locally) | Owner |
 
 ### #26 Keywords and blog content
@@ -429,6 +436,7 @@ Last updated: 14 November 2026. Live version: `dfdbe138-2258-4f6c-81cf-0526bbed5
     overview. The overview's main term is now "soorten sinterklaasgedichten". Sitemap
     `lastmod` is 11 November for every blog page that changed.
 - **12 November 2026, SEO skills pass** (`.claude/skills/` from `Illyism/seo-skills`): `seo-roast` found no blocker (`seo/roast-roadmap.md`); all 20 posts cleaned of filler and given a direct answer first (`unslop-seo`); one link to the poem form in the upper 40% of each post (`internal-linking`, `seo/internal-links-report.md`); style posts link to `/?stijl=<stijl>#poem-form`; `/voorbeelden` title starts with its main term; weak or non-AABB example poems rewritten. `blog-refresher` (`seo/blog-refresh-plan.md`, approved by the owner): "sinterklaasgedicht schrijven", "grappig sinterklaasgedicht" and "rijmwoorden sinterklaas" rewritten to 1,500–1,770 words (above the 1,400 cap, approved), each with a FAQ. Posts now say "bijgewerkt 12 november". The 1,400-word cap in `STYLE_RULES` still applies to new posts; re-rendering a post from saved JSON would undo these edits.
+- **16 November 2026, seasonal posts:** `sinterklaasgedicht-last-minute`, `sinterklaasgedicht-papa-mama` and `sinterklaasgedicht-juf-meester` (same script and model, briefs in `scripts/blogBriefs.ts`). Fixed by hand: literal `<br>` text instead of stanzas, nonsense lines and a jij/hij switch in the example poems (all AABB now), a wrong claim that "chocoladeletter" is hard to rhyme, "binnen dertig seconden" (now "ongeveer 30"). Each gets 2 links from the text of older posts. "collega" stays with `sinterklaas-op-het-werk`. Re-rendering these slugs from saved JSON would undo the edits.
 - **Next steps:** request indexing for the new posts in Search Console (S24). From late November, check Performance → Queries and adjust the briefs. Owner: check Cloudflare Security → Bots that search crawlers (OAI-SearchBot, PerplexityBot) are allowed.
 - **Notes:** no keyword tool was used, so the map has no search volumes.
 

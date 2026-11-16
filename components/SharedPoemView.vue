@@ -76,7 +76,7 @@ onBeforeUnmount(() => observer?.disconnect());
 
       <div class="mt-10 text-center">
         <p v-if="countdown" class="mb-3 text-[#f4cd60] font-bold text-base">
-          🎁 {{ countdownText }}
+          <span class="me-[0.45em]" aria-hidden="true">🎁</span>{{ countdownText }}
         </p>
         <p class="font-display text-2xl md:text-3xl text-white text-balance">
           {{ t('share.ctaLead') }}

@@ -53,10 +53,13 @@ const items = PDF_SHOWCASE.map(({ design, exampleId }) => {
       </div>
     </div>
 
-    <div class="mx-auto max-w-[1240px] px-4 sm:px-6 mt-8">
+    <div class="mx-auto max-w-[1240px] px-4 sm:px-6 mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
       <button type="button" class="showcase-cta" @click="emit('start')">
         {{ t('pdfShowcase.cta') }}
       </button>
+      <NuxtLink to="/voorbeelden" class="showcase-examples">
+        {{ t('pdfShowcase.examples') }} <span aria-hidden="true">→</span>
+      </NuxtLink>
     </div>
   </section>
 </template>
@@ -184,8 +187,30 @@ const items = PDF_SHOWCASE.map(({ design, exampleId }) => {
   }
 }
 
-.showcase-cta:focus-visible {
+.showcase-cta:focus-visible,
+.showcase-examples:focus-visible {
   outline: 2px solid #f4cd60;
   outline-offset: 3px;
+}
+
+.showcase-examples {
+  display: inline-flex;
+  align-items: center;
+  min-height: 3rem;
+  gap: 0.35em;
+  color: #f4cd60;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+  border-radius: 4px;
+}
+
+@media (hover: hover) {
+  .showcase-examples:hover {
+    color: #ffe08a;
+    text-decoration-thickness: 2px;
+  }
 }
 </style>

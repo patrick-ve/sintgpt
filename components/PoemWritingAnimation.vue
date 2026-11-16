@@ -1,4 +1,12 @@
 <script setup lang="ts">
+import { writingProgress, writingStepIndex } from '~/utils/writingSteps';
+
+// Shown until the first text of the poem arrives: about 28 s for a new poem
+// (Flash), about a minute for a rewrite (Pro). The steps tell the visitor what
+// happens while the model reasons, so the wait does not feel like a hang.
+const props = defineProps<{ rewrite?: boolean }>();
+const { t } = useI18n();
+
 // Number of skeleton lines to show
 const lineCount = 8;
 
@@ -6,6 +14,23 @@ const lineCount = 8;
 const lineWidths = [
   '92%', '78%', '85%', '70%', '88%', '65%', '80%', '73%'
 ];
+
+const kind = computed(() => (props.rewrite ? 'rewrite' : 'new'));
+const elapsed = ref(0);
+let timer: ReturnType<typeof setInterval> | undefined;
+
+onMounted(() => {
+  const start = performance.now();
+  timer = setInterval(() => {
+    elapsed.value = (performance.now() - start) / 1000;
+  }, 500);
+});
+onBeforeUnmount(() => clearInterval(timer));
+
+const steps = computed<string[]>(() => t(props.rewrite ? 'poem.writing.rewriteSteps' : 'poem.writing.steps'));
+const stepIndex = computed(() => Math.min(writingStepIndex(kind.value, elapsed.value), steps.value.length - 1));
+const progress = computed(() => writingProgress(kind.value, elapsed.value));
+const hint = computed(() => t(props.rewrite ? 'poem.writing.rewriteHint' : 'poem.writing.hint'));
 </script>
 
 <template>
@@ -45,11 +70,19 @@ const lineWidths = [
         </div>
       </div>
 
-      <!-- Bottom message -->
+      <!-- What the Sint does now -->
       <div class="writing-message">
-        <span class="sparkle">✨</span>
-        <span class="message-text">De rijmpiet schrijft jouw gedicht...</span>
-        <span class="sparkle">✨</span>
+        <div class="writing-step" role="status">
+          <span class="writing-sparkle" aria-hidden="true">✨</span>
+          <Transition name="step" mode="out-in">
+            <span :key="stepIndex" class="message-text">{{ steps[stepIndex] }}</span>
+          </Transition>
+          <span class="writing-sparkle" aria-hidden="true">✨</span>
+        </div>
+        <div class="writing-progress" aria-hidden="true">
+          <div class="writing-progress-bar" :style="{ transform: `scaleX(${progress})` }" />
+        </div>
+        <p class="writing-hint">{{ hint }}</p>
       </div>
     </div>
   </div>
@@ -381,12 +414,20 @@ const lineWidths = [
 /* Bottom message */
 .writing-message {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: 0.75rem;
   margin-top: 2rem;
   padding-top: 1.5rem;
   border-top: 1px dashed #d4a853;
+}
+
+.writing-step {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 3.2em;
 }
 
 .message-text {
@@ -394,14 +435,63 @@ const lineWidths = [
   font-size: 1.1rem;
   color: #8b1538;
   font-style: italic;
+  text-align: center;
+  text-wrap: balance;
 }
 
-.sparkle {
+.step-enter-active,
+.step-leave-active {
+  transition-property: opacity, translate;
+  transition-duration: 250ms;
+  transition-timing-function: ease-out;
+}
+
+.step-enter-from {
+  opacity: 0;
+  translate: 0 0.35em;
+}
+
+.step-leave-to {
+  opacity: 0;
+  translate: 0 -0.35em;
+}
+
+.writing-progress {
+  width: min(16rem, 80%);
+  height: 6px;
+  border-radius: 999px;
+  background: rgb(212 168 83 / 0.3);
+  overflow: hidden;
+}
+
+.writing-progress-bar {
+  height: 100%;
+  border-radius: inherit;
+  background: #8b1538;
+  transform-origin: left center;
+  transition: transform 500ms linear;
+}
+
+.writing-hint {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #5c0f26;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .step-enter-active,
+  .step-leave-active,
+  .writing-progress-bar {
+    transition: none;
+  }
+}
+
+.writing-sparkle {
   font-size: 1rem;
   animation: sparkle-pulse 1.5s ease-in-out infinite;
 }
 
-.sparkle:last-child {
+.writing-sparkle:last-child {
   animation-delay: 0.75s;
 }
 

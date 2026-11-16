@@ -10,7 +10,9 @@ const isOpen = defineModel<boolean>({ default: false });
 // Why the window opened, for analytics and the first line: the second poem, a
 // rewrite, the server's daily limit, the Drie poems used up, or a Hele
 // familie feature. `tier` is the card to select, if it can be bought.
-const props = defineProps<{ trigger?: PaymentTrigger; tier?: TierId }>();
+// `freeEdit`: the window opened for a rewrite of a poem on screen, which the
+// visitor can also change by hand for free ("Pas aan").
+const props = defineProps<{ trigger?: PaymentTrigger; tier?: TierId; freeEdit?: boolean }>();
 
 const dialogRef = ref<HTMLDialogElement | null>(null);
 
@@ -18,7 +20,8 @@ const isLoading = ref(false);
 const error = ref<string | null>(null);
 
 // `checkout` fires just before the page leaves for Dodo, so the form can be kept.
-const emit = defineEmits<{ restored: []; checkout: [] }>();
+// `edit` asks the page to open the poem editor.
+const emit = defineEmits<{ restored: []; checkout: []; edit: [] }>();
 const {
   claimPayment,
   paymentsUnavailable,
@@ -181,7 +184,13 @@ const continueFree = () => {
   document.getElementById('poem-form')?.scrollIntoView({ block: 'start' });
 };
 
-const closeModal = (how: 'button' | 'backdrop' | 'continue free') => {
+// A rewrite costs a poem; changing a few words by hand does not.
+const editInstead = () => {
+  closeModal('edit');
+  emit('edit');
+};
+
+const closeModal = (how: 'button' | 'backdrop' | 'continue free' | 'edit') => {
   track('Close payment modal', { detail: how });
   isOpen.value = false;
   error.value = null;
@@ -325,6 +334,14 @@ const closeModal = (how: 'button' | 'backdrop' | 'continue free') => {
         <!-- Shimmer effect -->
         <div class="button-shimmer"></div>
       </button>
+
+      <!-- A rewrite of the poem on screen: changing it by hand is free -->
+      <div v-if="freeEdit" class="free-edit">
+        <p class="free-edit-text">{{ t('payment.freeEdit.text') }}</p>
+        <button type="button" class="free-edit-button" @click="editInstead">
+          {{ t('payment.freeEdit.button') }}
+        </button>
+      </div>
 
       <!-- Restore access for earlier buyers -->
       <details class="restore">
@@ -999,6 +1016,43 @@ const closeModal = (how: 'button' | 'backdrop' | 'continue free') => {
 .restore {
   margin-top: 1rem;
   text-align: start;
+}
+
+.free-edit {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px dashed #d4a853;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.free-edit-text {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: #5c0f26;
+  text-wrap: pretty;
+}
+
+.free-edit-button {
+  min-height: 2.75rem;
+  padding-inline: 0.5rem;
+  font-weight: 700;
+  color: #8b1538;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.free-edit-button:focus-visible {
+  outline: 2px solid #8b1538;
+  outline-offset: 2px;
+}
+
+@media (hover: hover) {
+  .free-edit-button:hover {
+    text-decoration-thickness: 2px;
+  }
 }
 
 .restore summary {

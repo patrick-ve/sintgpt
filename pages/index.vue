@@ -389,6 +389,9 @@ watch(showHistory, (open) => {
   if (open) track('Open history');
 });
 
+// A rewrite uses a slower model, so the writing animation shows other steps.
+const writingRewrite = ref(false);
+
 const runGeneration = async (request: PoemFormData, regenerate = false, hint?: string) => {
   // Scroll to poem section on mobile immediately so user sees loading state
   if (window.innerWidth < 1024 && poemSectionRef.value) {
@@ -399,6 +402,7 @@ const runGeneration = async (request: PoemFormData, regenerate = false, hint?: s
   }
 
   poemAnnouncement.value = t('poem.loading');
+  writingRewrite.value = regenerate;
 
   displayedRecipient.value = request.name.trim();
   // The wish needs the poem it changes; read it before the new one replaces it.
@@ -515,6 +519,15 @@ const startEdit = () => {
   editing.value = true;
   closeHint();
   nextTick(() => editRef.value?.focus());
+};
+// The payment window for a rewrite also offers to change the poem by hand,
+// which is free. The dialog gives focus back when it closes, so the editor
+// opens after that.
+const canEditInstead = computed(() =>
+  paymentTrigger.value === 'rewrite' && !!poem.value && !isLoading.value && !error.value,
+);
+const editInstead = () => {
+  nextTick(() => startEdit());
 };
 const stopEditing = () => {
   editing.value = false;
@@ -1324,7 +1337,7 @@ useHead({
       <div class="mx-auto max-w-[1240px] px-4 sm:px-6 pt-4 pb-16 md:pt-2 md:pb-10 flex flex-wrap lg:flex-nowrap items-center gap-10 lg:gap-12">
         <div class="flex-[1_1_520px] lg:flex-[1_1_0%] min-w-0 flex flex-col gap-6 lg:gap-5">
           <p v-if="countdown" class="countdown self-start">
-            <span class="countdown-days">🎁 {{ countdownText }}</span>
+            <span class="countdown-days"><span class="countdown-gift" aria-hidden="true">🎁</span>{{ countdownText }}</span>
             <span v-if="countdown.hurry" class="block text-[#f7e6c0] font-normal">{{ t('countdown.hint') }}</span>
           </p>
           <h1
@@ -1795,7 +1808,7 @@ useHead({
 
                 <!-- Writing -->
                 <div v-if="isLoading && !poem" class="flex flex-col items-center justify-center gap-3 py-6">
-                  <PoemWritingAnimation />
+                  <PoemWritingAnimation :rewrite="writingRewrite" />
                   <p v-if="retrying" class="m-0 text-center text-[0.9375rem] font-bold text-[#5c0f26]" role="status">
                     {{ t('poem.retrying') }}
                   </p>
@@ -2271,7 +2284,15 @@ useHead({
 
     <!-- Payment Modal -->
     <ClientOnly>
-      <PaymentModal v-model="showPaymentModal" :trigger="paymentTrigger" :tier="paymentTier" @restored="paymentStatus = 'success'" @checkout="saveFormForCheckout" />
+      <PaymentModal
+        v-model="showPaymentModal"
+        :trigger="paymentTrigger"
+        :tier="paymentTier"
+        :free-edit="canEditInstead"
+        @restored="paymentStatus = 'success'"
+        @checkout="saveFormForCheckout"
+        @edit="editInstead"
+      />
       <PdfDesignDialog
         v-model="pdfDialogOpen"
         :busy="isSavingPdf"
@@ -2955,6 +2976,11 @@ useHead({
   font-weight: 700;
   font-size: 1.0625rem;
   line-height: 1.4;
+}
+
+/* The space after an emoji looks too narrow in Alegreya Sans. */
+.countdown-gift {
+  margin-inline-end: 0.45em;
 }
 
 /* Hero buttons */
