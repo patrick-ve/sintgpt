@@ -74,6 +74,29 @@ Lastig om op te rijmen: "december", "pakjesavond", "surprise". Zet zulke woorden
 const AABB_ONLY = 'Schrijf elk voorbeeldgedicht en elk voorbeeldcouplet in rijmschema AABB (rijmparen), want dat kiezen de meeste mensen.';
 
 export const BLOG_BRIEFS: BlogBrief[] = [
+  // Seasonal and recipient posts (16 November 2026).
+  {
+    slug: 'sinterklaasgedicht-last-minute',
+    keyword: 'sinterklaasgedicht last minute',
+    secondary: ['snel een sinterklaasgedicht schrijven', 'sinterklaasgedicht vergeten', 'sinterklaasgedicht in 10 minuten', 'sinterklaasgedicht morgen pakjesavond'],
+    angle: `Voor wie het gedicht vergeten is: pakjesavond is vanavond of morgen, en er is nog geen regel. Een plan voor een goed gedicht in ongeveer 10 minuten: eerst 2 minuten weetjes verzamelen (één gewoonte, één gebeurtenis van dit jaar, het cadeau), dan een kort gedicht van 8 regels in AABB, dan hardop lezen. Geef een invulsjabloon van 8 regels met [naam], [gewoonte] en [cadeau] dat echt rijmt, plus twee ingevulde voorbeelden. Geef rijmparen die altijd werken (Sint, Piet, cadeau, gedicht), en wat je vermijdt als je haast hebt (te lang, geen grap, het cadeau verraden). Zeg eerlijk dat je op SintGPT in ongeveer 30 seconden een persoonlijk gedicht laat schrijven en dat het eerste gratis is; noem dat één keer in de tekst en verder alleen in de afsluitende oproep. Ook: wat als je het gedicht niet kunt printen (voorlezen van je telefoon, op een kaartje overschrijven), en een gedicht voor meerdere pakjes tegelijk. ${AABB_ONLY}`,
+    material: RHYMES,
+    cta: '/',
+  },
+  {
+    slug: 'sinterklaasgedicht-papa-mama',
+    keyword: 'sinterklaasgedicht voor papa of mama',
+    secondary: ['sinterklaasgedicht voor papa', 'sinterklaasgedicht voor mama', 'sinterklaasgedicht vader', 'sinterklaasgedicht moeder', 'sinterklaasgedicht voor je ouders'],
+    angle: `Een gedicht voor je vader of moeder. Drie situaties: een kind of tiener schrijft voor papa of mama (eenvoudige woorden, hulp van de andere ouder), een volwassen kind schrijft voor een ouder, en een ouder schrijft namens de kinderen voor de partner (dan spreekt de Sint, en niets mag het geheim van de Sint verraden als er kinderen meeluisteren die nog geloven). Onderwerpen die goed werken: vaste uitspraken, de vadergrap, de planning op de koelkast, het eeuwige zoeken naar sleutels, de hobby, de taxi naar sport. Plagen mag, liefdevol en zonder grappen over gewicht, uiterlijk, leeftijd als gebrek of ruzies. Eindig met waardering. Geef minstens 3 voorbeeldcoupletten (voor papa, voor mama, voor allebei) en een kort compleet voorbeeldgedicht van 8 tot 12 regels. Link naar /blog/sinterklaasgedicht-opa-oma en /blog/sinterklaasgedicht-voor-kinderen waar dat past. ${AABB_ONLY}`,
+    cta: '/',
+  },
+  {
+    slug: 'sinterklaasgedicht-juf-meester',
+    keyword: 'sinterklaasgedicht voor de juf of meester',
+    secondary: ['sinterklaasgedicht juf', 'sinterklaasgedicht meester', 'sinterklaasgedicht leerkracht', 'gedicht klassencadeau juf'],
+    angle: `Een gedicht voor de juf of meester op school. Situaties: ouders geven een klassencadeau en schrijven er een gedicht bij, een kind schrijft zelf een kort gedichtje met hulp, of een surprise van de klas. De toon is vriendelijk en dankbaar: de hele klas luistert mee, dus geen plagerij over uiterlijk, privéleven of strengheid en niets wat de juf of meester voor de klas voor schut zet. Wel: wat de klas dit jaar samen deed (een uitstapje, een project, het klassendier), een vast zinnetje van de juf, de koffie in de pauze, een knipoog naar de drukte in de klas. Houd het kort (8 tot 16 regels) en makkelijk voor te lezen door een kind. Geef minstens 3 voorbeeldcoupletten (voor een juf, voor een meester, namens de hele klas) en een kort compleet voorbeeldgedicht. Vermeld dat een gedicht niet duur hoeft te zijn: een gedicht met een klein cadeau of een tekening werkt ook. Geen uitspraken over wat scholen wel of niet toestaan. ${AABB_ONLY}`,
+    cta: '/',
+  },
   // Posts about the poem styles (November 2026).
   {
     slug: 'sinterklaasgedicht-stijlen',

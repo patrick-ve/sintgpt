@@ -52,10 +52,13 @@ Example poems in the posts use rhyme scheme AABB only (the owner's choice, 11 No
 | `lootjes-trekken-tips` | lootjes trekken (tips and rules; the tool itself is `/lootjes`) |
 | `surprise-maken-ideeen` | surprise maken |
 | `sinterklaas-tradities` | sinterklaas tradities |
+| `sinterklaasgedicht-last-minute` | sinterklaasgedicht last minute (snel, vergeten, in 10 minuten) |
+| `sinterklaasgedicht-papa-mama` | sinterklaasgedicht voor papa of mama (vader, moeder, ouders) |
+| `sinterklaasgedicht-juf-meester` | sinterklaasgedicht voor de juf of meester (leerkracht, klassencadeau) |
 
 ## Ideas for later
 
-- Other recipients: sinterklaasgedicht voor je moeder, vader, juf of meester,
-  schoonmoeder, beste vriendin.
-- Seasonal: "sinterklaasgedicht last minute" (from 1 December).
+- Other recipients: sinterklaasgedicht voor je schoonmoeder, beste vriendin.
+  (Moeder, vader, juf and meester got posts on 16 November 2026; "collega" stays
+  with `sinterklaas-op-het-werk`.)
 - English pages with their own URLs (then `hreflang`, see `CLAUDE.md`).

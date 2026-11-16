@@ -131,7 +131,7 @@
       <li>Lees het gedicht hardop: schaaf de regels bij waar je over je eigen woorden struikelt.</li>
     </ol>
     <p class="leading-relaxed mb-4">
-      Heb je weinig tijd? Op SintGPT vul je de namen, het cadeau en een paar weetjes in. In ongeveer dertig seconden staat er een persoonlijk gedicht. Bekijk ook onze andere <NuxtLink to="/voorbeelden" class="text-red-700 underline underline-offset-2 hover:text-red-900">voorbeeldgedichten in alle zes stijlen</NuxtLink>.
+      Schrijf je ook voor je ouders? Lees dan de tips voor een <NuxtLink to="/blog/sinterklaasgedicht-papa-mama" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht voor papa of mama</NuxtLink>. Heb je weinig tijd? Op SintGPT vul je de namen, het cadeau en een paar weetjes in. In ongeveer dertig seconden staat er een persoonlijk gedicht. Bekijk ook onze andere <NuxtLink to="/voorbeelden" class="text-red-700 underline underline-offset-2 hover:text-red-900">voorbeeldgedichten in alle zes stijlen</NuxtLink>.
     </p>
 
     <div class="bg-red-50 border-2 border-red-600 rounded-xl p-8 my-8 text-center shadow-lg">

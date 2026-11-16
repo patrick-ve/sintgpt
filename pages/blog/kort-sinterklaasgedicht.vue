@@ -16,7 +16,7 @@
 
     <h2 class="text-3xl font-bold mt-8 mb-4">Hoe bouw je een gedicht van 4 of 8 regels op?</h2>
     <p class="leading-relaxed mb-4">
-      In 4 regels noem je één weetje, maak je de stap naar het cadeau en sluit je af. In 8 regels krijgt het weetje een eigen strofe en volgt het cadeau in de tweede. Zo telt elke regel.
+      In 4 regels noem je één weetje, maak je de stap naar het cadeau en sluit je af. In 8 regels krijgt het weetje een eigen strofe en volgt het cadeau in de tweede. Zo telt elke regel. Is het al bijna pakjesavond? Dan helpt het invulsjabloon voor een <NuxtLink to="/blog/sinterklaasgedicht-last-minute" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht last minute</NuxtLink>.
     </p>
     <h3 class="text-2xl font-bold mt-6 mb-3">Opbouw van een gedicht van 4 regels</h3>
     <p class="leading-relaxed mb-4">

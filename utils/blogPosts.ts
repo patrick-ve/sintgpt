@@ -20,6 +20,30 @@ export interface BlogPostSummary {
 
 export const BLOG_POSTS: BlogPostSummary[] = [
   {
+    slug: 'sinterklaasgedicht-last-minute',
+    title: 'Sinterklaasgedicht last minute: in 10 minuten klaar',
+    description: 'Pakjesavond en nog geen gedicht? Met een invulsjabloon en rijmwoorden die altijd werken schrijf je in tien minuten een persoonlijk rijm.',
+    published: '2026-11-16',
+    readMinutes: 6,
+    related: ['kort-sinterklaasgedicht', 'rijmwoorden-sinterklaas', 'sinterklaasgedicht-beginnen-en-afsluiten'],
+  },
+  {
+    slug: 'sinterklaasgedicht-papa-mama',
+    title: 'Sinterklaasgedicht voor papa of mama: tips en voorbeelden',
+    description: 'Tips en voorbeelden voor een warm sinterklaasgedicht voor papa of mama, of je nu als kind, tiener of volwassene schrijft.',
+    published: '2026-11-16',
+    readMinutes: 5,
+    related: ['sinterklaasgedicht-opa-oma', 'sinterklaasgedicht-partner', 'sinterklaasgedicht-voor-kinderen'],
+  },
+  {
+    slug: 'sinterklaasgedicht-juf-meester',
+    title: 'Sinterklaasgedicht voor de juf of meester: tips en voorbeelden',
+    description: 'Tips en voorbeelden voor een vriendelijk sinterklaasgedicht voor de juf of meester, bij een klassencadeau of een surprise.',
+    published: '2026-11-16',
+    readMinutes: 5,
+    related: ['sinterklaasgedicht-voor-kinderen', 'kort-sinterklaasgedicht', 'surprise-maken-ideeen'],
+  },
+  {
     slug: 'sinterklaasgedicht-beginnen-en-afsluiten',
     title: 'Hoe begin je een sinterklaasgedicht? Openingszinnen en slotzinnen',
     description: 'Zit je vast bij de eerste regel of het slot? Bekijk handige manieren om te starten en meer dan 20 rijmende openings- en slotzinnen.',
@@ -44,7 +68,7 @@ export const BLOG_POSTS: BlogPostSummary[] = [
     published: '2026-11-10',
     modified: '2026-11-12',
     readMinutes: 5,
-    related: ['sinterklaasgedicht-beginnen-en-afsluiten', 'rijmwoorden-sinterklaas', 'sinterklaasgedicht-voor-kinderen'],
+    related: ['sinterklaasgedicht-last-minute', 'sinterklaasgedicht-beginnen-en-afsluiten', 'rijmwoorden-sinterklaas'],
   },
   {
     slug: 'sinterklaasgedicht-opa-oma',
@@ -53,7 +77,7 @@ export const BLOG_POSTS: BlogPostSummary[] = [
     published: '2026-11-10',
     modified: '2026-11-12',
     readMinutes: 5,
-    related: ['kort-sinterklaasgedicht', 'ouderwets-sinterklaasgedicht', 'sinterklaasgedicht-beginnen-en-afsluiten'],
+    related: ['sinterklaasgedicht-papa-mama', 'kort-sinterklaasgedicht', 'ouderwets-sinterklaasgedicht'],
   },
   {
     slug: 'sinterklaasgedicht-partner',
@@ -62,7 +86,7 @@ export const BLOG_POSTS: BlogPostSummary[] = [
     published: '2026-11-10',
     modified: '2026-11-12',
     readMinutes: 6,
-    related: ['grappige-sinterklaasgedichten-tips', 'pikant-sinterklaasgedicht', 'sinterklaasgedicht-opa-oma'],
+    related: ['grappige-sinterklaasgedichten-tips', 'pikant-sinterklaasgedicht', 'sinterklaasgedicht-papa-mama'],
   },
   {
     slug: 'sinterklaasgedicht-voor-kinderen',
@@ -71,7 +95,7 @@ export const BLOG_POSTS: BlogPostSummary[] = [
     published: '2026-11-10',
     modified: '2026-11-12',
     readMinutes: 6,
-    related: ['kort-sinterklaasgedicht', 'sinterklaas-tradities', 'sinterklaasgedicht-opa-oma'],
+    related: ['kort-sinterklaasgedicht', 'sinterklaasgedicht-juf-meester', 'sinterklaas-tradities'],
   },
   {
     slug: 'sinterklaasgedicht-in-het-engels',
@@ -152,7 +176,7 @@ export const BLOG_POSTS: BlogPostSummary[] = [
     published: '2026-10-09',
     modified: '2026-11-12',
     readMinutes: 5,
-    related: ['lootjes-trekken-tips', 'hoe-schrijf-je-het-perfecte-sinterklaasgedicht', 'sinterklaas-tradities'],
+    related: ['lootjes-trekken-tips', 'sinterklaasgedicht-juf-meester', 'hoe-schrijf-je-het-perfecte-sinterklaasgedicht'],
   },
   {
     slug: 'ouderwets-sinterklaasgedicht',
@@ -179,7 +203,7 @@ export const BLOG_POSTS: BlogPostSummary[] = [
     published: '2025-11-17',
     modified: '2026-11-12',
     readMinutes: 8,
-    related: ['sinterklaasgedicht-beginnen-en-afsluiten', 'rijm-en-ritme-sinterklaasgedicht', 'rijmwoorden-sinterklaas'],
+    related: ['sinterklaasgedicht-beginnen-en-afsluiten', 'rijm-en-ritme-sinterklaasgedicht', 'sinterklaasgedicht-last-minute'],
   },
   {
     slug: 'grappige-sinterklaasgedichten-tips',

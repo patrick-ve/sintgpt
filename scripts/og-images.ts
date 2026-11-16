@@ -71,6 +71,24 @@ export const OG_IMAGES: OgImageSpec[] = [
     subtitle: 'In 4 of 8 regels raak en persoonlijk dichten',
   },
   {
+    name: 'blog-sinterklaasgedicht-last-minute',
+    kind: 'article',
+    title: 'Sinterklaasgedicht last minute',
+    subtitle: 'In tien minuten een persoonlijk rijm',
+  },
+  {
+    name: 'blog-sinterklaasgedicht-papa-mama',
+    kind: 'article',
+    title: 'Sinterklaasgedicht voor papa of mama',
+    subtitle: 'Tips en voorbeelden voor een warm gedicht',
+  },
+  {
+    name: 'blog-sinterklaasgedicht-juf-meester',
+    kind: 'article',
+    title: 'Sinterklaasgedicht voor de juf of meester',
+    subtitle: 'Tips en voorbeelden voor de hele klas',
+  },
+  {
     name: 'blog-sinterklaasgedicht-opa-oma',
     kind: 'article',
     title: 'Sinterklaasgedicht voor opa en oma',

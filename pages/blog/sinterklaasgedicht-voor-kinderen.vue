@@ -43,7 +43,7 @@
 
     <h2 class="text-3xl font-bold mt-8 mb-4">Gedichten voor kinderen die nog geloven</h2>
     <p class="leading-relaxed mb-4">
-      Voor kinderen op de basisschool die nog in Sinterklaas geloven, is het gedicht een persoonlijke boodschap van de Goedheiligman zelf. Schrijf daarom steeds vanuit het perspectief van Sinterklaas en Piet. Gebruik vertrouwde zinnen zoals "Sint zat in zijn grote boek te kijken" of "Piet zag op het dak hoe hard jij oefende".
+      Voor kinderen op de basisschool die nog in Sinterklaas geloven, is het gedicht een persoonlijke boodschap van de Goedheiligman zelf. Schrijf daarom steeds vanuit het perspectief van Sinterklaas en Piet. Gebruik vertrouwde zinnen zoals "Sint zat in zijn grote boek te kijken" of "Piet zag op het dak hoe hard jij oefende". Schrijf je kind liever zelf iets voor de klas? Lees dan hoe je samen een <NuxtLink to="/blog/sinterklaasgedicht-juf-meester" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht voor de juf of meester</NuxtLink> schrijft.
     </p>
     <p class="leading-relaxed mb-4">
       Noem in het gedicht vooral wat het afgelopen jaar goed ging. Heeft het kind een zwemdiploma gehaald, leert het vlot lezen of helpt het altijd mee met opruimen? Zulke mijlpalen maken indruk. Dreig niet met de zak en geef geen standjes over ondeugend gedrag. Het kind moet zich veilig voelen. Geef ook geen hints over wie het cadeau in de winkel kocht.

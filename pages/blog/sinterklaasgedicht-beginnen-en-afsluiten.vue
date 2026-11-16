@@ -29,7 +29,7 @@
       <li>Meteen de grap maken: noem in de eerste regel een blunder of een bekende eigenschap van de ontvanger.</li>
     </ol>
     <p class="leading-relaxed mb-4">
-      Wil je weten hoe je na de start de rest van het gedicht opbouwt? Lees dan onze uitgebreide gids over <NuxtLink to="/blog/hoe-schrijf-je-het-perfecte-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">een sinterklaasgedicht schrijven</NuxtLink>. Kom je er zelf niet uit, dan kun je met een paar weetjes ook <NuxtLink to="/" data-cta="blog:sinterklaasgedicht-beginnen-en-afsluiten:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">een gedicht met begin en slot laten schrijven</NuxtLink>.
+      Wil je weten hoe je na de start de rest van het gedicht opbouwt? Lees dan onze uitgebreide gids over <NuxtLink to="/blog/hoe-schrijf-je-het-perfecte-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">een sinterklaasgedicht schrijven</NuxtLink>. Heb je haast, gebruik dan het sjabloon voor een <NuxtLink to="/blog/sinterklaasgedicht-last-minute" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht last minute</NuxtLink>. Kom je er zelf niet uit, dan kun je met een paar weetjes ook <NuxtLink to="/" data-cta="blog:sinterklaasgedicht-beginnen-en-afsluiten:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">een gedicht met begin en slot laten schrijven</NuxtLink>.
     </p>
 
     <h2 class="text-3xl font-bold mt-8 mb-4">15 rijmende openingszinnen voor je sinterklaasgedicht</h2>

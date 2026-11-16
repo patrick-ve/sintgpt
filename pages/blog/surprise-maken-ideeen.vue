@@ -106,6 +106,9 @@
     <p class="leading-relaxed mb-4">
       Laat kinderen meehelpen met scheuren, schilderen en papier-maché plakken. Snijden met een stanleymes en werken met een heet lijmpistool doen volwassenen. Haal na pakjesavond de plastic tape van het karton. Dan kan het karton bij het oud papier.
     </p>
+    <p class="leading-relaxed mb-4">
+      Maakt de klas samen een surprise voor de leerkracht? Een kort, vriendelijk gedicht hoort erbij. Tips en voorbeelden staan in het artikel over een <NuxtLink to="/blog/sinterklaasgedicht-juf-meester" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht voor de juf of meester</NuxtLink>.
+    </p>
 
     <h2 class="text-3xl font-bold mt-8 mb-4">Wanneer begin je met een surprise maken?</h2>
     <p class="leading-relaxed mb-4">

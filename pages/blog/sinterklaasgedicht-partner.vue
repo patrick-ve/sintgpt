@@ -23,6 +23,9 @@
       <li>Met jonge kinderen erbij: houd het gedicht luchtig en herkenbaar. Vermijd dubbelzinnige grappen die vragen oproepen die je tijdens het uitpakken liever niet beantwoordt.</li>
       <li>Met familie of schoonfamilie: richt je op herkenbare gewoontes, gezamenlijke vakanties en grappige anekdotes. Bewaar intieme bekentenissen en pikante toespelingen voor later op de avond.</li>
     </ul>
+    <p class="leading-relaxed mb-4">
+      Schrijf je als ouder namens de kinderen voor je partner? Dan spreekt de Sint. Daarover gaat het artikel over een <NuxtLink to="/blog/sinterklaasgedicht-papa-mama" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht voor papa of mama</NuxtLink>.
+    </p>
     <div class="bg-[#fff3c9] p-6 rounded-lg my-6 border border-[#F4CD60]">
       <h3 class="text-xl font-bold text-red-900 mb-3 font-display">De dubbele bodem</h3>
       <p class="text-red-800">Wil je toch een ondeugende toespeling maken in een volle woonkamer? Gebruik dan een subtiel codewoord of een herinnering aan een specifiek moment dat alleen jullie twee kennen. Voor de familie klinkt het als een onschuldige opmerking, terwijl je partner meteen weet wat je bedoelt.</p>
