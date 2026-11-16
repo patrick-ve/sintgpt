@@ -399,7 +399,7 @@ Last updated: 14 November 2026. Live version: `dfdbe138-2258-4f6c-81cf-0526bbed5
 | S21 | 5 | 0.25 | Title Case in Dutch titles; "…in 2026" post shows 17 november 2025 | Live: sentence case in titles and headings; the post shows "bijgewerkt 8 november 2026" |
 | S22 | 5 | 0.1 | Home H1: no space between the two spans in the HTML | Live |
 | S23 | 5 | 1 | `/voorbeelden`, `/lootjes`, legal pages share the home `og:image` | Live: own images for `/voorbeelden` and `/lootjes`; legal pages keep the home image on purpose |
-| S24 | – | – | Search Console: Domain property verified 10 Nov 2026. To do: submit the sitemap, request indexing of /, /voorbeelden, /lootjes, /blog, check excluded pages after about a week, import into Bing Webmaster Tools. See #12. IndexNow (16 Nov 2026): `scripts/indexnow.ts` and step 6 of the deploy skill send changed pages to Bing and Yandex after a deploy; the first send (all sitemap pages, `--all`) is open until the key file is live | Owner |
+| S24 | – | – | Search Console: Domain property verified 10 Nov 2026. To do: submit the sitemap, request indexing of /, /voorbeelden, /lootjes, /blog, check excluded pages after about a week, import into Bing Webmaster Tools. See #12. IndexNow (16 Nov 2026): `scripts/indexnow.ts` and step 6 of the deploy skill send changed pages to Bing and Yandex after a deploy; first send of all 30 sitemap pages on 16 Nov 2026 after deploy `99c92883` (202 Accepted) | Owner |
 | S25 | – | – | PageSpeed Insights and field data from outside the company network (Cato proxy forces HTTP/1.1 locally) | Owner |
 
 ### #26 Keywords and blog content
