@@ -3,7 +3,7 @@
 //   npx tsx scripts/gift-mail.ts list [export.csv] [--from 2025-09-01] [--to 2026-01-31]
 //   npx tsx scripts/gift-mail.ts codes
 //   npx tsx scripts/gift-mail.ts preview <dir>
-//   npx tsx scripts/gift-mail.ts test <your address>
+//   npx tsx scripts/gift-mail.ts test <your address> [--text-only]
 //   npx tsx scripts/gift-mail.ts send
 //
 // Everything with addresses or codes stays in .cache/gift-mail/ (git-ignored).
@@ -93,7 +93,7 @@ type SendResult =
   | { ok: true; outcome: NonNullable<Recipient['outcome']> }
   | { ok: false; retry: boolean; status: number; error: string };
 
-async function sendOne(to: string, code: string): Promise<SendResult> {
+async function sendOne(to: string, code: string, textOnly = false): Promise<SendResult> {
   const token = process.env.CLOUDFLARE_EMAIL_TOKEN;
   if (!token) fail(`Set CLOUDFLARE_EMAIL_TOKEN in ${ENV_FILE}.`);
   const mail = renderGiftMail(code);
@@ -106,7 +106,8 @@ async function sendOne(to: string, code: string): Promise<SendResult> {
       reply_to: SENDER.address,
       subject: mail.subject,
       text: mail.text,
-      html: mail.html,
+      // --text-only: a spam-filter test without the HTML part.
+      ...(textOnly ? {} : { html: mail.html }),
       headers: mail.headers,
     }),
   });
@@ -128,9 +129,9 @@ async function sendOne(to: string, code: string): Promise<SendResult> {
   return { ok: false, retry: res.status === 429 || res.status >= 500, status: res.status, error };
 }
 
-async function sendWithRetry(to: string, code: string): Promise<SendResult> {
+async function sendWithRetry(to: string, code: string, textOnly = false): Promise<SendResult> {
   for (let attempt = 1; ; attempt++) {
-    const result = await sendOne(to, code);
+    const result = await sendOne(to, code, textOnly);
     if (result.ok || !result.retry || attempt === 3) return result;
     console.log(`Got ${result.status} (${result.error}); waiting ${attempt * 30} s.`);
     await new Promise(done => setTimeout(done, attempt * 30_000));
@@ -138,10 +139,10 @@ async function sendWithRetry(to: string, code: string): Promise<SendResult> {
 }
 
 async function test(args: string[]): Promise<void> {
-  const to = args[0] ?? fail('Give your own address: npx tsx scripts/gift-mail.ts test <address>');
+  const to = args.find(arg => !arg.startsWith('--')) ?? fail('Give your own address: npx tsx scripts/gift-mail.ts test <address>');
   const { testCode } = readFile();
   if (!testCode) fail('No test code yet. Run `codes` first, and set the secret.');
-  const result = await sendWithRetry(to, testCode);
+  const result = await sendWithRetry(to, testCode, args.includes('--text-only'));
   console.log(result.ok ? `Test mail: ${result.outcome}.` : `Test mail failed: ${result.status} ${result.error}`);
 }
 
