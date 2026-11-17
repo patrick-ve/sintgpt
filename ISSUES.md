@@ -44,7 +44,7 @@ Last updated: 14 November 2026. Live version: `dfdbe138-2258-4f6c-81cf-0526bbed5
 | [#27](#27-share-sheet-on-phones) | Medium | Share sheet on phones | Link live; PDF built; phone check open |
 | [#28](#28-new-poem-prompt-wait-time-and-follow-ups) | Medium | New poem prompt: wait time and follow-ups | Live; owner checks open |
 | [#29](#29-error-alerts-to-telegram-and-a-waf-rule) | High | Error alerts to Telegram and a WAF rule | Built, not deployed; owner setup open |
-| [#30](#30-gift-mail-to-last-seasons-buyers) | High | Gift mail to last season's buyers | Codes and script built; deploy, poem and owner setup open |
+| [#30](#30-gift-mail-to-last-seasons-buyers) | High | Gift mail to last season's buyers | Codes live; Email Sending setup and test mail open |
 
 ## Open
 
@@ -506,10 +506,12 @@ Owner steps:
 
 ### #30 Gift mail to last season's buyers
 
-- **Status:** 17 Nov 2026: season codes (3 browsers, until 5 Dec) and
-  `scripts/gift-mail.ts` built and tested, not deployed; nothing sent. Open: deploy,
-  the thank-you poem (owner writes it on the live site), Dodo export, Workers Paid
-  and Email Sending setup. Plan and checklist: `docs/buyer-gift-mail.md`.
+- **Status:** 17 Nov 2026: season codes live (version `b3b32f44`, commit
+  `6061832`); `NUXT_GIFT_CODES_SEASON` set with 54 buyer codes and 1 test code;
+  the test code works on the live site (Hele familie until 5 Dec 23:00 UTC; it
+  used 1 of its 3 browsers). Thank-you poem in the mail (`/g/AqQuyZ15Tx`).
+  Open: onboard `sintgpt.com` for Email Sending, a token in `.env.mail`, the test
+  mail, then the send. Plan and checklist: `docs/buyer-gift-mail.md`.
 - **What:** one mail to the buyers of the 2025 season (fewer than 50, old Dodo
   business), each with a unique gift URL for Hele familie until pakjesavond
   5 Dec 2026, usable in at most 3 browsers. Sent with Cloudflare Email Sending.

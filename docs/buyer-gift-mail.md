@@ -1,7 +1,8 @@
 # Gift mail to last season's buyers
 
-Plan of 17 Nov 2026 (see #30 in `ISSUES.md`). Status: part A and the script are
-built and tested (17 Nov), not deployed; nothing sent.
+Plan of 17 Nov 2026 (see #30 in `ISSUES.md`). Status (17 Nov): A live, B done
+(poem in the script), C done (54 buyers, secret set), D.1 done (Workers Paid);
+open: D.2, D.3, then E. Nothing sent.
 
 ## Decisions (owner, 17 Nov 2026)
 
@@ -61,7 +62,7 @@ built and tested (17 Nov), not deployed; nothing sent.
 - Privacy text: section "Cadeau voor kopers van vorig jaar" (nl and en), and
   "De website krijgt alleen het betalings-ID…" in "Betalen".
 - Tests: `tests/unit/paymentAccess.test.ts` (season codes), e2e "gift links".
-- Still open: deploy with `/deploy`.
+- Live since 17 Nov 2026 (version `b3b32f44`). Checked with the test code.
 
 ## B. Thank-you poem (owner, on the live site)
 
