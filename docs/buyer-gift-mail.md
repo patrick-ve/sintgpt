@@ -68,7 +68,7 @@ built and tested (17 Nov), not deployed; nothing sent.
 Write it in your own browser with access (the `sintgpt-intern` cookie keeps it out
 of the analytics). Proposed form input:
 
-- Aanhef en ondertekening: off (the mail starts with "Hoi,")
+- Aanhef en ondertekening: off (the mail starts with "Beste rijmfanaat,")
 - Naam ontvanger: Onze dichters van vorig jaar
 - Sinterklaascadeau: SintGPT gratis tot en met pakjesavond (Cadeau vermelden: ja)
 - Leuke weetjes: Schreven vorig jaar hun sinterklaasgedichten met SintGPT. De
@@ -129,7 +129,8 @@ Mail details (`renderGiftMail` in `scripts/giftMail.ts`):
 - Header `List-Unsubscribe: <mailto:patrick@sintgpt.com?subject=afmelden>`.
 - Plain text and HTML, no tracking pixel, no link shortener.
 - Gift link: `https://sintgpt.com/?cadeau=<code>&utm_source=email&utm_medium=email&utm_campaign=kopers-2025`.
-- Subject: "Een cadeautje van de Sint: dit jaar SintGPT gratis". Text: thanks,
+- Subject: "Een cadeautje van de Rijmpiet - Gratis gebruik van SintGPT" (owner,
+  17 Nov). Opens with "Beste rijmfanaat,". Text: thanks,
   the poem with its parchment link, what Hele familie gives until 5 December, the
   button "Open mijn cadeau", "werkt in 3 browsers", "Je betaalt niets en er loopt
   niets door", and the one-time and "afmelden" line.

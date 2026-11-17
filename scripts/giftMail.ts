@@ -35,7 +35,7 @@ export const THANK_YOU_POEM = {
 };
 
 export const SENDER = { address: 'patrick@sintgpt.com', name: 'Patrick van SintGPT' };
-export const SUBJECT = 'Een cadeautje van de Sint: dit jaar SintGPT gratis';
+export const SUBJECT = 'Een cadeautje van de Rijmpiet - Gratis gebruik van SintGPT';
 export const CAMPAIGN = 'kopers-2025';
 
 /** One row per recipient in .cache/gift-mail/recipients.json. */
@@ -188,9 +188,9 @@ export function renderGiftMail(code: string, poem = THANK_YOU_POEM): GiftMail {
   const stanzas = poem.text.trim().split(/\n\s*\n/);
 
   const text = [
-    'Hoi,',
+    'Beste rijmfanaat,',
     '',
-    'Vorig jaar schreef je je sinterklaasgedichten met SintGPT. Dank je wel daarvoor. De Sint schreef er zelf een gedicht over:',
+    'Vorig jaar schreef je je sinterklaasgedichten met SintGPT. Dank je wel daarvoor. De Sint en de Rijmpiet schreven er een gedicht over:',
     '',
     poem.text.trim(),
     '',
@@ -217,8 +217,8 @@ export function renderGiftMail(code: string, poem = THANK_YOU_POEM): GiftMail {
 <html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(SUBJECT)}</title></head>
 <body style="margin:0;padding:0;background:#f6efe2">
 <div style="max-width:560px;margin:0 auto;padding:24px 16px;font-family:Georgia,'Times New Roman',serif;font-size:17px;line-height:1.55;color:#2b1d14">
-${paragraph('Hoi,')}
-${paragraph('Vorig jaar schreef je je sinterklaasgedichten met SintGPT. Dank je wel daarvoor. De Sint schreef er zelf een gedicht over:')}
+${paragraph('Beste rijmfanaat,')}
+${paragraph('Vorig jaar schreef je je sinterklaasgedichten met SintGPT. Dank je wel daarvoor. De Sint en de Rijmpiet schreven er een gedicht over:')}
 <div style="background:#fffaf0;border:1px solid #e3cfa8;border-radius:8px;padding:20px 22px;margin:0 0 12px;font-style:italic">
 ${stanzas.map(stanza => `<p style="margin:0 0 14px">${stanza.split('\n').map(line => escapeHtml(line.trim())).join('<br>')}</p>`).join('\n')}
 </div>
