@@ -2,7 +2,10 @@
 
 Plan of 17 Nov 2026 (see #30 in `ISSUES.md`). Status (17 Nov): A live, B done
 (poem in the script), C done (54 buyers, secret set), D.1 done (Workers Paid);
-open: D.2, D.3, then E. Nothing sent.
+D.2 done (`wrangler email sending enable sintgpt.com`:
+`cf-bounce` MX/SPF and DKIM `cf-bounce._domainkey` live; root MX, SPF and
+DMARC `p=none` unchanged, keep `p=none` because Dynadot also sends); open: D.3
+(token, permission "Email Sending: Edit"), then E. Nothing sent.
 
 ## Decisions (owner, 17 Nov 2026)
 
