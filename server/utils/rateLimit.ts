@@ -118,6 +118,22 @@ export function creditsRule(poems: number, expiresAt: number, now: number): Rate
 }
 
 /**
+ * Browsers that claimed one season gift code (see giftAccess.ts). The real
+ * window ends with the gift (`giftClaimRule`); this default is for the
+ * in-memory limiter only.
+ */
+export const GIFT_CLAIM_RULE = {
+  maxRequests: 3,
+  windowMs: DAY_MS,
+  debounceMs: 0,
+} as const satisfies RateLimitRule;
+
+/** One window until the gift ends, so a code never gets new browsers before then. */
+export function giftClaimRule(browsers: number, expiresAt: number, now: number): RateLimitRule {
+  return { maxRequests: browsers, windowMs: Math.max(1, expiresAt - now), debounceMs: 0 };
+}
+
+/**
  * Decides one request. Returns the new entry when the request is allowed, and
  * no entry when it is refused, because a refused request does not count.
  */

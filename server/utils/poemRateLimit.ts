@@ -3,14 +3,18 @@ import { consola } from 'consola';
 import {
   BUYER_RATE_LIMIT,
   createRateLimiter,
+  GIFT_CLAIM_RULE,
   POEM_RATE_LIMIT,
   type PoemAttempt,
   type RateLimitRule,
   type RateLimitVerdict,
 } from './rateLimit';
 
-/** Who a limit applies to: a free visitor by IP, or a buyer by payment. */
-export type RateLimitSubject = { kind: 'ip' | 'buyer'; id: string };
+/**
+ * Who a limit applies to: a free visitor by IP, a buyer by payment, or the
+ * browsers that claimed one season gift code (by gift ID).
+ */
+export type RateLimitSubject = { kind: 'ip' | 'buyer' | 'gift'; id: string };
 
 interface DurableObjectNamespaceLike {
   idFromName(name: string): unknown;
@@ -29,6 +33,7 @@ interface RateLimitEnv {
 const RULES: Record<RateLimitSubject['kind'], RateLimitRule> = {
   ip: POEM_RATE_LIMIT,
   buyer: BUYER_RATE_LIMIT,
+  gift: GIFT_CLAIM_RULE,
 };
 
 // Per isolate: for the Node build, and when Cloudflare cannot be reached.
@@ -36,6 +41,7 @@ const RULES: Record<RateLimitSubject['kind'], RateLimitRule> = {
 const memory = {
   ip: createRateLimiter(POEM_RATE_LIMIT),
   buyer: createRateLimiter(BUYER_RATE_LIMIT),
+  gift: createRateLimiter(GIFT_CLAIM_RULE),
 };
 
 /**
@@ -97,7 +103,8 @@ export async function checkPoemRateLimit(
 
       // A retry after a dropped connection comes within seconds; the Durable
       // Object decides whether it really is one.
-      if (!attempt?.retry && env.POEM_BURST && !(await env.POEM_BURST.limit({ key: name })).success) {
+      // Gift claims are not poems: a phone and a laptop may claim in the same minute.
+      if (subject.kind !== 'gift' && !attempt?.retry && env.POEM_BURST && !(await env.POEM_BURST.limit({ key: name })).success) {
         return { ok: false, reason: 'debounce', retryAfterSeconds: Math.ceil(rule.debounceMs / 1000) };
       }
 

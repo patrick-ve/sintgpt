@@ -189,3 +189,67 @@ describe('gift links', async () => {
     expect(await giftStillValid(id, 'another-code-0123456789')).toBe(false);
   });
 });
+
+describe('season gift codes', async () => {
+  const { claimGift, giftId, giftInLists, giftLists, seasonGiftEnd, GIFT_BROWSERS } = await import('../../server/utils/giftAccess');
+  const { applyRateLimit, giftClaimRule } = await import('../../server/utils/rateLimit');
+  const STANDING = 'standing-code-0123456789';
+  const SEASON = 'season-code-0123456789ab';
+  const lists = { codes: STANDING, seasonCodes: ` ${SEASON} , other-season-code-0123`, seasonEnd: '2026-12-05' };
+  const END = Date.UTC(2026, 11, 5, 23);
+  const BEFORE = Date.UTC(2026, 10, 20, 12);
+
+  it('ends at the end of the date, Dutch winter time', () => {
+    expect(seasonGiftEnd('2026-12-05')).toBe(END);
+    expect(seasonGiftEnd('')).toBeNull();
+    expect(seasonGiftEnd(undefined)).toBeNull();
+    expect(seasonGiftEnd('5 december')).toBeNull();
+    expect(seasonGiftEnd('2026-02-30')).toBeNull();
+  });
+
+  it('gives a season code until the end date', async () => {
+    expect(await claimGift(SEASON, lists, BEFORE)).toEqual({ kind: 'season', id: await giftId(SEASON), expiresAt: END });
+  });
+
+  it('refuses a season code after the end, or without an end date', async () => {
+    expect(await claimGift(SEASON, lists, END)).toEqual({ kind: 'expired' });
+    expect(await claimGift(SEASON, { ...lists, seasonEnd: '' }, BEFORE)).toEqual({ kind: 'expired' });
+  });
+
+  it('keeps standing codes as they were, and lets them win', async () => {
+    expect(await claimGift(STANDING, lists, BEFORE)).toEqual({ kind: 'standing', id: await giftId(STANDING) });
+    expect(await claimGift(STANDING, { ...lists, seasonCodes: STANDING }, BEFORE)).toMatchObject({ kind: 'standing' });
+  });
+
+  it('refuses unknown and malformed codes', async () => {
+    expect(await claimGift('unknown-code-0123456789', lists, BEFORE)).toBeNull();
+    expect(await claimGift('short', lists, BEFORE)).toBeNull();
+    expect(await claimGift({ code: SEASON }, lists, BEFORE)).toBeNull();
+  });
+
+  it('ends a season gift when its code leaves the list', async () => {
+    const id = await giftId(SEASON);
+    expect(await giftInLists(id, lists)).toBe(true);
+    expect(await giftInLists(await giftId(STANDING), lists)).toBe(true);
+    expect(await giftInLists(id, { ...lists, seasonCodes: '' })).toBe(false);
+  });
+
+  it('reads the lists from the runtime config', () => {
+    expect(giftLists({ giftCodes: 'a', giftCodesSeason: 'b', giftSeasonEnd: '2026-12-05' }))
+      .toEqual({ codes: 'a', seasonCodes: 'b', seasonEnd: '2026-12-05' });
+    expect(giftLists({})).toEqual({ codes: '', seasonCodes: '', seasonEnd: '' });
+  });
+
+  it('lets 3 browsers claim one code until the gift ends, not a 4th', () => {
+    const rule = giftClaimRule(GIFT_BROWSERS, END, BEFORE);
+    let entry;
+    for (let browser = 1; browser <= GIFT_BROWSERS; browser++) {
+      const result = applyRateLimit(entry, BEFORE + browser, rule);
+      expect(result.verdict.ok).toBe(true);
+      entry = result.entry;
+    }
+    expect(applyRateLimit(entry, BEFORE + 10, rule).verdict).toMatchObject({ ok: false, reason: 'limit' });
+    // Still full a week later: the window lasts until the gift ends.
+    expect(applyRateLimit(entry, BEFORE + 7 * 24 * 60 * 60 * 1000, rule).verdict.ok).toBe(false);
+  });
+});

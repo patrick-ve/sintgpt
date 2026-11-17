@@ -404,9 +404,12 @@ export default {
     giftTitle: 'Je hebt Hele familie cadeau gekregen',
     giftFailedTitle: 'Deze cadeaulink werkt niet',
     giftFailedMessage: 'De link is verlopen of niet compleet. Vraag degene die hem stuurde om een nieuwe.',
+    giftFullTitle: 'Deze cadeaulink is al in gebruik',
+    giftFullMessage: 'De link werkt in 3 browsers, en die zijn al gekozen. Open SintGPT op een van die apparaten, of stuur ons een bericht via de contactpagina.',
     successMessage: 'Schrijf zoveel gedichten als je wilt, voor het hele gezin.',
     successMessageDrie: 'Je kunt nog 3 gedichten schrijven, tot en met pakjesavond.',
     successMessageFamilie: 'Schrijf zoveel gedichten als je wilt, ook volgend jaar. Bij elk gedicht kun je surprise-ideeën vragen.',
+    successMessageFamilieSeason: 'Schrijf zoveel gedichten als je wilt, tot en met pakjesavond. Bij elk gedicht kun je surprise-ideeën vragen.',
     successDraft: 'Wat je invulde, staat nog in het formulier.',
     successNext: 'Schrijf het gedicht',
     pendingTitle: 'Even je betaling nakijken…',
@@ -656,9 +659,18 @@ export default {
         {
           heading: 'Betalen',
           body: [
-            'Je betaalt bij Dodo Payments. Dodo is de verkoper (merchant of record) en verwerkt je naam, e-mailadres en betaalgegevens volgens zijn eigen privacybeleid. SintGPT krijgt alleen het betalings-ID, de status en het product van je betaling te zien.',
+            'Je betaalt bij Dodo Payments. Dodo is de verkoper (merchant of record) en verwerkt je naam, e-mailadres en betaalgegevens volgens zijn eigen privacybeleid. De website krijgt alleen het betalings-ID, de status en het product van je betaling te zien.',
             'Na een geslaagde betaling, of als je een cadeaulink opent, zetten we het cookie "sintgpt-access" in je browser. Het bevat je betalings-ID en een handtekening, zodat we weten dat je betaald hebt. Het bevat ook wat je kocht en tot wanneer het geldt, en het verloopt dan (na hooguit 400 dagen). Het is nodig voor de dienst die je kocht.',
             'Grondslag: het uitvoeren van de overeenkomst.',
+          ],
+        },
+        {
+          heading: 'Cadeau voor kopers van vorig jaar',
+          body: [
+            'Wie in 2025 SintGPT kocht, krijgt in november 2026 eenmalig een e-mail met een persoonlijke cadeaulink. Het e-mailadres komt uit de betaling bij Dodo. We versturen de mail met Cloudflare Email Service. We wissen de lijst met adressen uiterlijk na pakjesavond 2026.',
+            'Zo\'n cadeaulink werkt in hooguit 3 browsers. Per link houden we bij hoeveel browsers hem gebruiken; die teller is een sleutel van de link, niet de link zelf, en verdwijnt na pakjesavond.',
+            'Wil je geen mail meer van ons? Antwoord op de mail of mail ons, dan sturen we je niets meer.',
+            'Grondslag: ons gerechtvaardigd belang om eerdere kopers te bedanken.',
           ],
         },
         {

@@ -1,6 +1,11 @@
 import { loadEnv } from 'vite';
 import { defineConfig } from 'vitest/config';
 
+// Season gift codes need an end date in the future: the next pakjesavond
+// (as pakjesavondEnd in utils/pricingTiers.ts, which this config cannot import).
+const thisYear = new Date().getUTCFullYear();
+const seasonEnd = `${Date.now() < Date.UTC(thisYear, 11, 5, 23) ? thisYear : thisYear + 1}-12-05`;
+
 export default defineConfig({
   test: {
     include: ['tests/**/*.test.ts'],
@@ -11,6 +16,8 @@ export default defineConfig({
       NUXT_ACCESS_COOKIE_SECRET: 'e2e-access-secret',
       NUXT_DODO_PAYMENTS_WEBHOOK_SECRET: 'whsec_ZTJlLXdlYmhvb2stc2VjcmV0',
       NUXT_GIFT_CODES: 'e2e-gift-code-0123456789',
+      NUXT_GIFT_CODES_SEASON: 'e2e-season-code-0123456789,e2e-season-full-0123456789',
+      NUXT_GIFT_SEASON_END: seasonEnd,
     },
     // The e2e suite builds the app and makes a live AI Gateway call.
     testTimeout: 180_000,

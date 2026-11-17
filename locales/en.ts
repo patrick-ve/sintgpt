@@ -401,9 +401,12 @@ export default {
     giftTitle: 'You received Whole family as a gift',
     giftFailedTitle: 'This gift link does not work',
     giftFailedMessage: 'The link has expired or is incomplete. Ask the person who sent it for a new one.',
+    giftFullTitle: 'This gift link is already in use',
+    giftFullMessage: 'The link works in 3 browsers, and those are already taken. Open SintGPT on one of those devices, or send us a message through the contact page.',
     successMessage: 'Write as many poems as you like, for the whole family.',
     successMessageDrie: 'You can write 3 more poems, until pakjesavond.',
     successMessageFamilie: 'Write as many poems as you like, next year too. With every poem you can ask for surprise ideas.',
+    successMessageFamilieSeason: 'Write as many poems as you like, until pakjesavond. Ask for surprise ideas with every poem.',
     successDraft: 'What you filled in is still in the form.',
     successNext: 'Write the poem',
     pendingTitle: 'Checking your payment…',
@@ -653,9 +656,18 @@ export default {
         {
           heading: 'Payments',
           body: [
-            'You pay Dodo Payments. Dodo is the seller (merchant of record) and processes your name, email address and payment details under its own privacy policy. SintGPT only sees the payment ID, the status and the product of your payment.',
+            'You pay Dodo Payments. Dodo is the seller (merchant of record) and processes your name, email address and payment details under its own privacy policy. The website only sees the payment ID, the status and the product of your payment.',
             'After a successful payment, or when you open a gift link, we set the cookie "sintgpt-access" in your browser. It holds your payment ID and a signature, so we know you have paid. It also holds what you bought and until when it is valid, and it then expires (after 400 days at most). It is necessary for the service you bought.',
             'Legal basis: performing the agreement.',
+          ],
+        },
+        {
+          heading: 'A gift for last year\'s buyers',
+          body: [
+            'Everyone who bought SintGPT in 2025 gets one email in November 2026 with a personal gift link. The email address comes from the payment at Dodo. We send the email with Cloudflare Email Service. We delete the list of addresses after pakjesavond 2026 at the latest.',
+            'Such a gift link works in 3 browsers at most. For each link we count how many browsers use it; that counter uses a key of the link, not the link itself, and disappears after pakjesavond.',
+            'Do you want no more email from us? Reply to the email or email us, and we send you nothing more.',
+            'Legal basis: our legitimate interest in thanking earlier buyers.',
           ],
         },
         {

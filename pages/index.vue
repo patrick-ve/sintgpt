@@ -5,7 +5,7 @@ import { POEM_INPUT_LIMITS } from '~/utils/poemLimits';
 import { saveFormDraft, takeFormDraft } from '~/utils/formDraft';
 import { pakjesavondCountdown } from '~/utils/pakjesavond';
 import { PDF_DESIGNS, type PdfDesignId } from '~/utils/pdfDesigns';
-import { fillSeasons, TIERS, type TierId } from '~/utils/pricingTiers';
+import { fillSeasons, pakjesavondEnd, TIERS, type TierId } from '~/utils/pricingTiers';
 import { findBlogPost } from '~/utils/blogPosts';
 import { STYLE_PARAM, styleFromQuery } from '~/utils/stylePreset';
 import { hasOwnPhoto, sintStyleAvatar, sintStylePhoto, type SintStyle } from '~/utils/sintStyles';
@@ -29,6 +29,7 @@ const {
   paymentsUnavailable,
   refreshPaymentsStatus,
   tier: ownedTier,
+  expiresAt: accessExpiresAt,
   poemsLeft,
   creditsUsed,
   hasFeature,
@@ -51,7 +52,7 @@ const displayedRecipient = ref('');
 const router = useRouter();
 
 // Payment status from redirect
-const paymentStatus = ref<'success' | 'pending' | 'failed' | 'cancelled' | 'giftFailed' | null>(null);
+const paymentStatus = ref<'success' | 'pending' | 'failed' | 'cancelled' | 'giftFailed' | 'giftFull' | null>(null);
 // True when access came from a gift link, not a payment.
 const giftReceived = ref(false);
 
@@ -88,15 +89,18 @@ onMounted(async () => {
     router.replace({ query: rest, hash: route.hash });
   }
 
-  // A gift link: claim it, then take the code out of the address bar.
+  // A gift link: claim it, then take the code out of the address bar. Other
+  // parameters (the utm tags of the gift mail) stay for the page view.
   const giftCode = route.query.cadeau;
   if (typeof giftCode === 'string') {
-    router.replace({ query: {} });
-    if (await claimGift(giftCode)) {
+    const { cadeau: _cadeau, ...rest } = route.query;
+    router.replace({ query: rest, hash: route.hash });
+    const gift = await claimGift(giftCode);
+    if (gift === 'granted') {
       giftReceived.value = true;
       paymentStatus.value = 'success';
     } else {
-      paymentStatus.value = 'giftFailed';
+      paymentStatus.value = gift === 'full' ? 'giftFull' : 'giftFailed';
     }
     return;
   }
@@ -735,6 +739,10 @@ const accessHint = computed(() => {
 const successMessage = computed(() => {
   if (restoredDraft.value) return t('payment.successDraft');
   if (ownedTier.value === 'drie') return t('payment.successMessageDrie');
+  // A season gift ends at this pakjesavond, so "ook volgend jaar" is not true for it.
+  if (ownedTier.value === 'familie' && giftReceived.value && accessExpiresAt.value && accessExpiresAt.value <= pakjesavondEnd(new Date()).getTime()) {
+    return t('payment.successMessageFamilieSeason');
+  }
   if (ownedTier.value === 'familie') return t('payment.successMessageFamilie');
   return t('payment.successMessage');
 });

@@ -1914,6 +1914,42 @@ describe('gift links', () => {
     await page.close();
   }, 30_000);
 
+  it('gives Hele familie until pakjesavond through a season code, and keeps the utm tags', async () => {
+    const page = await createPage();
+    await page.goto(url('/?cadeau=e2e-season-code-0123456789&utm_campaign=kopers-2025'), { waitUntil: 'networkidle' });
+    await page.getByText('Je hebt Hele familie cadeau gekregen').waitFor();
+    await page.getByText('Schrijf zoveel gedichten als je wilt, tot en met pakjesavond').waitFor();
+    expect(page.url()).not.toContain('cadeau');
+    expect(page.url()).toContain('utm_campaign=kopers-2025');
+    const access = await page.evaluate(() => window.fetch('/api/payment/check-access').then(res => res.json()));
+    expect(access).toMatchObject({ hasAccess: true, tier: 'familie' });
+    expect(access.expiresAt).toBeLessThanOrEqual(Date.now() + 366 * 24 * 60 * 60 * 1000);
+    await page.close();
+  }, 30_000);
+
+  it('lets a season code work in 3 browsers, not in a 4th', async () => {
+    const claim = async () => {
+      const page = await createPage();
+      await page.goto(url('/?cadeau=e2e-season-full-0123456789'), { waitUntil: 'networkidle' });
+      return page;
+    };
+    for (let browser = 1; browser <= 3; browser++) {
+      const page = await claim();
+      await page.getByText('Je hebt Hele familie cadeau gekregen').waitFor();
+      // The same browser opening the link again takes no extra place.
+      if (browser === 1) {
+        await page.goto(url('/?cadeau=e2e-season-full-0123456789'), { waitUntil: 'networkidle' });
+        await page.getByText('Je hebt Hele familie cadeau gekregen').waitFor();
+      }
+      await page.close();
+    }
+    const fourth = await claim();
+    await fourth.getByText('Deze cadeaulink is al in gebruik').waitFor();
+    const access = await fourth.evaluate(() => window.fetch('/api/payment/check-access').then(res => res.json()));
+    expect(access).toMatchObject({ hasAccess: false });
+    await fourth.close();
+  }, 60_000);
+
   it('explains a wrong code and gives no access', async () => {
     const page = await createPage();
     await page.goto(url('/?cadeau=not-the-right-code-123'), { waitUntil: 'networkidle' });

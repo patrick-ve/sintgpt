@@ -44,6 +44,7 @@ Last updated: 14 November 2026. Live version: `dfdbe138-2258-4f6c-81cf-0526bbed5
 | [#27](#27-share-sheet-on-phones) | Medium | Share sheet on phones | Link live; PDF built; phone check open |
 | [#28](#28-new-poem-prompt-wait-time-and-follow-ups) | Medium | New poem prompt: wait time and follow-ups | Live; owner checks open |
 | [#29](#29-error-alerts-to-telegram-and-a-waf-rule) | High | Error alerts to Telegram and a WAF rule | Built, not deployed; owner setup open |
+| [#30](#30-gift-mail-to-last-seasons-buyers) | High | Gift mail to last season's buyers | Codes and script built; deploy, poem and owner setup open |
 
 ## Open
 
@@ -399,7 +400,7 @@ Last updated: 14 November 2026. Live version: `dfdbe138-2258-4f6c-81cf-0526bbed5
 | S21 | 5 | 0.25 | Title Case in Dutch titles; "…in 2026" post shows 17 november 2025 | Live: sentence case in titles and headings; the post shows "bijgewerkt 8 november 2026" |
 | S22 | 5 | 0.1 | Home H1: no space between the two spans in the HTML | Live |
 | S23 | 5 | 1 | `/voorbeelden`, `/lootjes`, legal pages share the home `og:image` | Live: own images for `/voorbeelden` and `/lootjes`; legal pages keep the home image on purpose |
-| S24 | – | – | Search Console: Domain property verified 10 Nov 2026. To do: submit the sitemap, request indexing of /, /voorbeelden, /lootjes, /blog, check excluded pages after about a week, import into Bing Webmaster Tools. See #12. IndexNow (16 Nov 2026): `scripts/indexnow.ts` and step 6 of the deploy skill send changed pages to Bing and Yandex after a deploy; first send of all 30 sitemap pages on 16 Nov 2026 after deploy `99c92883` (202 Accepted) | Owner |
+| S24 | – | – | Search Console: Domain property verified 10 Nov 2026. To do: submit the sitemap, request indexing of /, /voorbeelden, /lootjes, /blog, check excluded pages after about a week. Bing Webmaster Tools: imported from Search Console on 17 Nov 2026; follow-up checks in `docs/gsc-indexing-requests.md`. See #12. IndexNow (16 Nov 2026): `scripts/indexnow.ts` and step 6 of the deploy skill send changed pages to Bing and Yandex after a deploy; first send of all 30 sitemap pages on 16 Nov 2026 after deploy `99c92883` (202 Accepted). Sitemap submitted by the owner by 17 Nov 2026. **URL inspection, 17 Nov 2026 (OpenSEO):** indexed are only `/`, `/voorbeelden`, `/blog` and `/lootjes`. `grappige-sinterklaasgedichten-tips` and `hoe-schrijf-je-het-perfecte-sinterklaasgedicht` show "Server error (5xx)" from their last crawl (12 and 14 Sep 2026; both return 200 now, cause unknown). `sinterklaas-tradities` is "Crawled - currently not indexed"; the other 20 posts and `/contact` are "Discovered - currently not indexed"; `sinterklaasgedicht-papa-mama` is unknown to Google. GSC 14 Aug–14 Nov: impressions on 4 pages only (home 291, 12 clicks, average position 18.3). Indexing is requested per post in URL inspection (about 10 a day), most-searched posts first: batch 1 (10 posts) done on 17 Nov 2026; batches 2 and 3 and the links are in `docs/gsc-indexing-requests.md` | Owner |
 | S25 | – | – | PageSpeed Insights and field data from outside the company network (Cato proxy forces HTTP/1.1 locally) | Owner |
 
 ### #26 Keywords and blog content
@@ -502,6 +503,24 @@ Owner steps:
      showcase come from the old prompt. The site now writes better poems than
      its examples. Write them again (`scripts/generate-example-poems.ts`) and
      review them.
+
+### #30 Gift mail to last season's buyers
+
+- **Status:** 17 Nov 2026: season codes (3 browsers, until 5 Dec) and
+  `scripts/gift-mail.ts` built and tested, not deployed; nothing sent. Open: deploy,
+  the thank-you poem (owner writes it on the live site), Dodo export, Workers Paid
+  and Email Sending setup. Plan and checklist: `docs/buyer-gift-mail.md`.
+- **What:** one mail to the buyers of the 2025 season (fewer than 50, old Dodo
+  business), each with a unique gift URL for Hele familie until pakjesavond
+  5 Dec 2026, usable in at most 3 browsers. Sent with Cloudflare Email Sending.
+- **Decisions:** owner, 17 Nov 2026. The owner accepted the legal risk: the 2025
+  checkout asked for the address "voor factuur" with no marketing opt-out, so the
+  soft opt-in exception (art. 11.7 Tw) most likely does not apply. Limits: one
+  mail, gift only, opt-out, no follow-ups. One thank-you poem for everyone, written
+  by SintGPT, in the mail with its `/g/<id>` link.
+- **Needs:** season codes with a 3-browser limit (code and deploy), Workers Paid
+  and Email Sending onboarding (owner), a Dodo CSV export (owner), the send script,
+  a privacy text change.
 
 ## Findings
 

@@ -43,7 +43,11 @@ export default defineNuxtConfig({
     dodoPaymentsWebhookSecret: '',
     accessCookieSecret: '',
     // Gift links (?cadeau=<code>), comma-separated. See server/utils/giftAccess.ts.
+    // Season codes (NUXT_GIFT_CODES_SEASON) work until the end of
+    // giftSeasonEnd, in at most 3 browsers each.
     giftCodes: '',
+    giftCodesSeason: '',
+    giftSeasonEnd: '2026-12-05',
     // Contact form (server/api/contact.post.ts): Cloudflare Turnstile and the
     // Telegram bot of the alerts. NUXT_TURNSTILE_SECRET_KEY,
     // NUXT_TELEGRAM_BOT_TOKEN, NUXT_TELEGRAM_CHAT_ID and

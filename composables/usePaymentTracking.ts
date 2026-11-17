@@ -189,23 +189,25 @@ export const usePaymentTracking = () => {
 
   // A gift link (?cadeau=<code>). The server checks the code and sets the
   // same cookie as for a buyer.
-  const claimGift = async (code: string): Promise<boolean> => {
+  // `full`: a season code that already works in 3 other browsers.
+  const claimGift = async (code: string): Promise<'granted' | 'denied' | 'full'> => {
     try {
-      const claim = await $fetch<{ status: 'granted' | 'denied'; tier?: TierId; expiresAt?: number }>(
+      const claim = await $fetch<{ status: 'granted' | 'denied' | 'full'; tier?: TierId; expiresAt?: number }>(
         '/api/payment/claim-gift',
         { method: 'POST', body: { code } },
       );
-      if (claim.status !== 'granted' || !claim.tier) return false;
+      if (claim.status === 'full') return 'full';
+      if (claim.status !== 'granted' || !claim.tier) return 'denied';
       tier.value = claim.tier;
       expiresAt.value = claim.expiresAt ?? null;
       poemsLeft.value = TIERS[claim.tier].poems;
       storedTrialPoem.value = null;
       storedTrialPoemName.value = null;
       saveToStorage();
-      return true;
+      return 'granted';
     } catch (error) {
       console.error('Error claiming gift:', error);
-      return false;
+      return 'denied';
     }
   };
 

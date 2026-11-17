@@ -1,5 +1,5 @@
 import type { H3Event } from 'h3';
-import { giftStillValid, isGiftId } from './giftAccess';
+import { giftInLists, giftLists, isGiftId } from './giftAccess';
 import { cookieMaxAge, readAccessToken, signAccessToken, type PaidAccess } from './paymentAccess';
 
 const ACCESS_COOKIE = 'sintgpt-access';
@@ -13,8 +13,8 @@ export async function paidAccess(event: H3Event): Promise<PaidAccess | null> {
   const token = getCookie(event, ACCESS_COOKIE);
   if (!secret || !token) return null;
   const access = await readAccessToken(token, secret);
-  // A gift ends as soon as its code leaves NUXT_GIFT_CODES.
-  if (access && isGiftId(access.paymentId) && !(await giftStillValid(access.paymentId, String(useRuntimeConfig(event).giftCodes || "")))) {
+  // A gift ends as soon as its code leaves NUXT_GIFT_CODES or NUXT_GIFT_CODES_SEASON.
+  if (access && isGiftId(access.paymentId) && !(await giftInLists(access.paymentId, giftLists(useRuntimeConfig(event))))) {
     return null;
   }
   return access;
