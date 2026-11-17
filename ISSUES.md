@@ -9,8 +9,8 @@ findings worth keeping. Newest information first within each section.
   `docs/pricing-tiers.md`.
 - Never put API keys, webhook secrets or gift codes in this file.
 
-Last updated: 14 November 2026. Live version: `dfdbe138-2258-4f6c-81cf-0526bbed52cf`
-(commit `73bb578`, on GitHub).
+Last updated: 17 November 2026. Live version: `b3b32f44-e8fa-4b35-ba14-56ab1a46ebd3`
+(commit `6061832`, on GitHub).
 
 ## Priorities
 
