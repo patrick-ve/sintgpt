@@ -1,11 +1,9 @@
 # Gift mail to last season's buyers
 
-Plan of 17 Nov 2026 (see #30 in `ISSUES.md`). Status (17 Nov): A live, B done
-(poem in the script), C done (54 buyers, secret set), D.1 done (Workers Paid);
-D.2 done (`wrangler email sending enable sintgpt.com`:
-`cf-bounce` MX/SPF and DKIM `cf-bounce._domainkey` live; root MX, SPF and
-DMARC `p=none` unchanged, keep `p=none` because Dynadot also sends); open: D.3
-(token, permission "Email Sending: Edit"), then E. Nothing sent.
+Plan of 17 Nov 2026 (see #30 in `ISSUES.md`). **Sent on 17 Nov 2026 (about
+21:50 NL time)** through Cloudflare Email Sending: 53 mails, all `queued`; 1
+recipient skipped (`skip: "no MX"`, the domain has no mail server). Open: the
+clean-up after pakjesavond (E.5).
 
 ## Decisions (owner, 17 Nov 2026)
 
@@ -152,7 +150,14 @@ in spam. Headers: SPF, DKIM (`d=sintgpt.com`) and DMARC `pass`, `compauth=pass`,
 Causes: no sending reputation yet (shared Cloudflare IP, first day) and content
 that looks like a promotion. Changed (owner's choice): no "Gratis" in the
 subject, and the gift link without utm tags. Kept: the button and the feature
-list. Second test to the same addresses, plus a Gmail address, before the send.
+list.
+
+Second test (subject without "Gratis", short link): fd.nl SCL 5 again. Plain-text
+test (no HTML): SCL 5 again. Hotmail: spam. Google Workspace (careerdeck.ai): not
+in spam. So the cause is the sending route (shared Cloudflare IP, new domain), not
+the content. Recipients by MX: Google 28, Microsoft 14, other 7, Apple 4, no MX 1.
+The owner chose to send all through Cloudflare anyway, knowing that the 14
+Microsoft recipients most likely find it in spam.
 
 ## Order and timing
 

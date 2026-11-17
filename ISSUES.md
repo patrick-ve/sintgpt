@@ -44,7 +44,7 @@ Last updated: 17 November 2026. Live version: `b3b32f44-e8fa-4b35-ba14-56ab1a46e
 | [#27](#27-share-sheet-on-phones) | Medium | Share sheet on phones | Link live; PDF built; phone check open |
 | [#28](#28-new-poem-prompt-wait-time-and-follow-ups) | Medium | New poem prompt: wait time and follow-ups | Live; owner checks open |
 | [#29](#29-error-alerts-to-telegram-and-a-waf-rule) | High | Error alerts to Telegram and a WAF rule | Built, not deployed; owner setup open |
-| [#30](#30-gift-mail-to-last-seasons-buyers) | High | Gift mail to last season's buyers | Codes live; Email Sending setup and test mail open |
+| [#30](#30-gift-mail-to-last-seasons-buyers) | High | Gift mail to last season's buyers | Sent 17 Nov (53 mails); clean-up after pakjesavond |
 
 ## Open
 
@@ -506,12 +506,13 @@ Owner steps:
 
 ### #30 Gift mail to last season's buyers
 
-- **Status:** 17 Nov 2026: season codes live (version `b3b32f44`, commit
-  `6061832`); `NUXT_GIFT_CODES_SEASON` set with 54 buyer codes and 1 test code;
-  the test code works on the live site (Hele familie until 5 Dec 23:00 UTC; it
-  used 1 of its 3 browsers). Thank-you poem in the mail (`/g/AqQuyZ15Tx`).
-  Open: onboard `sintgpt.com` for Email Sending, a token in `.env.mail`, the test
-  mail, then the send. Plan and checklist: `docs/buyer-gift-mail.md`.
+- **Status:** sent on 17 Nov 2026 through Cloudflare Email Sending: 53 mails
+  queued, 1 address skipped (no mail server). Tests: Google delivers to the inbox;
+  Microsoft (fd.nl, Hotmail) put every test in spam (SCL 5, also plain text), so
+  the 14 Microsoft recipients most likely find it in spam. Watch `Gift claimed`
+  (`granted:season`, `full`) and "afmelden" replies. After pakjesavond: delete
+  `.cache/gift-mail/`, the secret `NUXT_GIFT_CODES_SEASON` and the token
+  "SintGPT gift mail". Details: `docs/buyer-gift-mail.md`.
 - **What:** one mail to the buyers of the 2025 season (fewer than 50, old Dodo
   business), each with a unique gift URL for Hele familie until pakjesavond
   5 Dec 2026, usable in at most 3 browsers. Sent with Cloudflare Email Sending.

@@ -43,6 +43,8 @@ export interface Recipient {
   code?: string;
   sentAt?: string;
   outcome?: 'delivered' | 'queued' | 'bounced' | 'suppressed';
+  /** Why this recipient gets no mail, for example "no MX" (the domain has no mail server). */
+  skip?: string;
 }
 
 export interface RecipientFile {

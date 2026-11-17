@@ -148,10 +148,10 @@ async function test(args: string[]): Promise<void> {
 
 async function send(): Promise<void> {
   const file = readFile();
-  const todo = file.recipients.filter(recipient => !recipient.sentAt);
+  const todo = file.recipients.filter(recipient => !recipient.sentAt && !recipient.skip);
   if (file.recipients.some(recipient => !recipient.code)) fail('Some recipients have no code. Run `codes` and set the secret again.');
   renderGiftMail('check0123456789abcdef'); // Fails early while the poem is missing.
-  console.log(`To send: ${todo.length} of ${file.recipients.length}.`);
+  console.log(`To send: ${todo.length} of ${file.recipients.length} (skipped: ${file.recipients.filter(recipient => recipient.skip).length}).`);
   const counts: Record<string, number> = {};
   for (const [index, recipient] of todo.entries()) {
     const result = await sendWithRetry(recipient.email, recipient.code!);
