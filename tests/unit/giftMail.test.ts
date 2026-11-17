@@ -65,7 +65,7 @@ describe('gift mail: the mail', () => {
   it('holds the poem, the gift link, the end date and an opt-out', () => {
     const mail = renderGiftMail('code0123456789abcdef', POEM);
     const url = giftUrl('code0123456789abcdef');
-    expect(url).toBe('https://sintgpt.com/?cadeau=code0123456789abcdef&utm_source=email&utm_medium=email&utm_campaign=kopers-2025');
+    expect(url).toBe('https://sintgpt.com/?cadeau=code0123456789abcdef');
     for (const body of [mail.text, mail.html]) {
       expect(body).toContain('voor elk gedicht en elk geval.');
       expect(body).toContain(POEM.link);

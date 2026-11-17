@@ -35,8 +35,7 @@ export const THANK_YOU_POEM = {
 };
 
 export const SENDER = { address: 'patrick@sintgpt.com', name: 'Patrick van SintGPT' };
-export const SUBJECT = 'Een cadeautje van de Rijmpiet - Gratis gebruik van SintGPT';
-export const CAMPAIGN = 'kopers-2025';
+export const SUBJECT = 'Een cadeautje van de Rijmpiet';
 
 /** One row per recipient in .cache/gift-mail/recipients.json. */
 export interface Recipient {
@@ -156,9 +155,13 @@ export function secretValue(file: RecipientFile): string {
   return [file.testCode, ...file.recipients.map(recipient => recipient.code)].filter(Boolean).join(',');
 }
 
+/**
+ * Only the code: a long link full of parameters counted against the mail in
+ * Microsoft's spam filter (test of 17 Nov 2026). `Gift claimed` still counts
+ * the claims.
+ */
 export function giftUrl(code: string): string {
-  const params = new URLSearchParams({ cadeau: code, utm_source: 'email', utm_medium: 'email', utm_campaign: CAMPAIGN });
-  return `https://sintgpt.com/?${params}`;
+  return `https://sintgpt.com/?${new URLSearchParams({ cadeau: code })}`;
 }
 
 function escapeHtml(text: string): string {

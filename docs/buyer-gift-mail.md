@@ -134,14 +134,24 @@ Mail details (`renderGiftMail` in `scripts/giftMail.ts`):
   the Dynadot mailbox).
 - Header `List-Unsubscribe: <mailto:patrick@sintgpt.com?subject=afmelden>`.
 - Plain text and HTML, no tracking pixel, no link shortener.
-- Gift link: `https://sintgpt.com/?cadeau=<code>&utm_source=email&utm_medium=email&utm_campaign=kopers-2025`.
-- Subject: "Een cadeautje van de Rijmpiet - Gratis gebruik van SintGPT" (owner,
-  17 Nov). Opens with "Beste rijmfanaat,". Text: thanks,
+- Gift link: `https://sintgpt.com/?cadeau=<code>` only (no utm tags, see below).
+- Subject: "Een cadeautje van de Rijmpiet" (owner, 17 Nov; first "… - Gratis
+  gebruik van SintGPT", see below). Opens with "Beste rijmfanaat,". Text: thanks,
   the poem with its parchment link, what Hele familie gives until 5 December, the
   button "Open mijn cadeau", "werkt in 3 browsers", "Je betaalt niets en er loopt
   niets door", and the one-time and "afmelden" line.
 - Follow the Persuasion rules in `CLAUDE.md`: no fake urgency, no "populair", the
   date is real.
+
+## Spam test (17 Nov 2026)
+
+Test mail to a company Microsoft 365 mailbox (fd.nl): delivered in 3 seconds, but
+in spam. Headers: SPF, DKIM (`d=sintgpt.com`) and DMARC `pass`, `compauth=pass`,
+`BCL:0` (not seen as bulk), but `SCL:5`, `SFV:SPM`, `CAT:SPM`: the content filter.
+Causes: no sending reputation yet (shared Cloudflare IP, first day) and content
+that looks like a promotion. Changed (owner's choice): no "Gratis" in the
+subject, and the gift link without utm tags. Kept: the button and the feature
+list. Second test to the same addresses, plus a Gmail address, before the send.
 
 ## Order and timing
 
