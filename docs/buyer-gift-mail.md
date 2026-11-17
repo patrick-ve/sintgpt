@@ -125,6 +125,8 @@ The script refuses to send while it is empty.
    so nothing else is needed.
 5. After pakjesavond: delete `.cache/gift-mail/`, remove `NUXT_GIFT_CODES_SEASON`
    (`npx wrangler secret delete NUXT_GIFT_CODES_SEASON --name sintgpt`).
+   Delete the API token "SintGPT gift mail" (Email Sending Write, no expiration)
+   and `.env.mail`.
 
 Mail details (`renderGiftMail` in `scripts/giftMail.ts`):
 
