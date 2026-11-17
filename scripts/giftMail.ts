@@ -35,7 +35,7 @@ export const THANK_YOU_POEM = {
 };
 
 export const SENDER = { address: 'patrick@sintgpt.com', name: 'Patrick van SintGPT' };
-export const SUBJECT = 'Een cadeautje van de Rijmpiet';
+export const SUBJECT = 'Een cadeautje van de Rijmpiet als trouwe klant van SintGPT';
 
 /** One row per recipient in .cache/gift-mail/recipients.json. */
 export interface Recipient {

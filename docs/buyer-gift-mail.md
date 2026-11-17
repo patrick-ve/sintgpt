@@ -135,8 +135,9 @@ Mail details (`renderGiftMail` in `scripts/giftMail.ts`):
 - Header `List-Unsubscribe: <mailto:patrick@sintgpt.com?subject=afmelden>`.
 - Plain text and HTML, no tracking pixel, no link shortener.
 - Gift link: `https://sintgpt.com/?cadeau=<code>` only (no utm tags, see below).
-- Subject: "Een cadeautje van de Rijmpiet" (owner, 17 Nov; first "… - Gratis
-  gebruik van SintGPT", see below). Opens with "Beste rijmfanaat,". Text: thanks,
+- Subject: "Een cadeautje van de Rijmpiet als trouwe klant van SintGPT" (owner,
+  17 Nov; first "… - Gratis gebruik van SintGPT", then "Een cadeautje van de
+  Rijmpiet", see below). Opens with "Beste rijmfanaat,". Text: thanks,
   the poem with its parchment link, what Hele familie gives until 5 December, the
   button "Open mijn cadeau", "werkt in 3 browsers", "Je betaalt niets en er loopt
   niets door", and the one-time and "afmelden" line.
