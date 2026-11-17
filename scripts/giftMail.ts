@@ -196,7 +196,7 @@ export function renderGiftMail(code: string, poem = THANK_YOU_POEM): GiftMail {
     '',
     `Op een mooi perkament: ${poem.link}`,
     '',
-    'En daarom krijg je dit jaar Hele familie van ons cadeau, tot en met pakjesavond 5 december:',
+    'En daarom krijg je dit jaar gratis gebruik van SintGPT van ons cadeau, tot en met pakjesavond 5 december:',
     '',
     ...FEATURES.map(feature => `- ${feature}`),
     '',
@@ -223,7 +223,7 @@ ${paragraph('Vorig jaar schreef je je sinterklaasgedichten met SintGPT. Dank je 
 ${stanzas.map(stanza => `<p style="margin:0 0 14px">${stanza.split('\n').map(line => escapeHtml(line.trim())).join('<br>')}</p>`).join('\n')}
 </div>
 ${paragraph(`<a href="${escapeHtml(poem.link)}" style="color:#9b1c1c">Bekijk het gedicht op perkament</a>`)}
-${paragraph('En daarom krijg je dit jaar <strong>Hele familie</strong> van ons cadeau, tot en met pakjesavond 5 december:')}
+${paragraph('En daarom krijg je dit jaar <strong>gratis gebruik van SintGPT</strong> van ons cadeau, tot en met pakjesavond 5 december:')}
 <ul style="margin:0 0 16px;padding-left:22px">
 ${FEATURES.map(feature => `<li>${escapeHtml(feature)}</li>`).join('\n')}
 </ul>
