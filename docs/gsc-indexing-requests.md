@@ -23,9 +23,14 @@ https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintg
 - [x] [sinterklaasgedicht-opa-oma](https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintgpt.com&id=heqw8_iZq41sDUygJLkDyw)
 - [x] [sinterklaasgedicht-voor-kinderen](https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintgpt.com&id=I6GKOrPCglDzJWD91RmqOw)
 
-## Batch 2: 18 Nov 2026
+## Batch 2: started 18 Nov 2026, rest on 19 Nov
 
-- [ ] [sinterklaasgedicht-papa-mama](https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintgpt.com&id=SH5ZcodFEUHWxjuCWV6CMA)
+On 18 Nov (about 11:00) only the first request worked; the other 9 got
+"quota exceeded". The quota seems to be a rolling 24 hours, not a calendar day:
+batch 1 was requested on the evening of 17 Nov. Try the rest on 19 Nov after
+the time of batch 1 (evening), or later.
+
+- [x] [sinterklaasgedicht-papa-mama](https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintgpt.com&id=SH5ZcodFEUHWxjuCWV6CMA)
 - [ ] [sinterklaasgedicht-juf-meester](https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintgpt.com&id=OKNYJ8y6sREqnb5D34Xftg)
 - [ ] [sinterklaasgedicht-partner](https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintgpt.com&id=3oIBO9dTwrQh_0dLwW3RZg)
 - [ ] [roast-sinterklaasgedicht-zonder-te-kwetsen](https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintgpt.com&id=v4WWFDKJ-Yl5ejJt2MsMcw)
@@ -36,7 +41,7 @@ https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintg
 - [ ] [rijm-en-ritme-sinterklaasgedicht](https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintgpt.com&id=YZotqkrgYq5e5mPdOp8b-A)
 - [ ] [sinterklaasgedicht-in-het-engels](https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintgpt.com&id=IDwNVligbIiUneVs7MmpLA)
 
-## Batch 3: 19 Nov 2026
+## Batch 3: 20 Nov 2026 (moved from 19 Nov, see batch 2)
 
 - [ ] [lootjes-trekken-tips](https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintgpt.com&id=M7Qq6isLx14OTRMaotW38w)
 - [ ] [surprise-maken-ideeen](https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintgpt.com&id=h6fM14NPwIJkyylPHjp3NQ)
