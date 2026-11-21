@@ -198,20 +198,14 @@ en proef me vanavond maar weer lekker thuis.`,
       funFacts: 'Maait zijn gras elke zaterdag om acht uur, ook als het regent. Zijn gazon is het mooiste van de straat.',
       style: 'funny',
       rhymeScheme: 'Limerick',
-      lines: 10,
+      lines: 5,
       language: 'dutch',
     },
-    poem: `Om acht uur staat buurman Gerrit paraat,
-Met 't groenste gazon van de hele straat.
-Al plenst het van regen,
-Dat houdt hem niet tegen,
-Hij maait elke zaterdag strak langs de naad!
-
-Sint dacht: "Gerrit verdient op z'n tijd wat meer rust,"
-Zodat hij op zaterdags 't kussen weer kust.
-Blijf lekker in bed,
-Met koffie gezet,
-Want een robotmaaier klaart de klus vol van lust!`,
+    poem: `Buurman Gerrit, jouw gras is het mooist van de straat,
+Waar jij zaterdags vroeg in de ochtend al staat.
+Al word je kletsnat,
+Jij maait alles plat,
+Dus zet Sint voortaan mooi een robotmaaier paraat!`,
   },
   {
     id: 'sem',

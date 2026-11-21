@@ -121,7 +121,10 @@ describe('example poems', () => {
     expect([...styles].sort()).toEqual(['classic', 'funny', 'ironic', 'old-fashioned', 'roast', 'spicy']);
     for (const example of EXAMPLE_POEMS) {
       expect(PoemRequestSchema.safeParse(example.request).success, example.id).toBe(true);
-      expect(example.poem.split('\n').filter(Boolean).length, example.id).toBeGreaterThanOrEqual(8);
+      const verses = example.poem.split('\n').filter(Boolean).length;
+      // A limerick is always 5 lines (LIMERICK_LINES); other poems at least 8.
+      if (example.request.rhymeScheme === 'Limerick') expect(verses, example.id).toBe(5);
+      else expect(verses, example.id).toBeGreaterThanOrEqual(8);
     }
   });
 
