@@ -9,7 +9,7 @@ findings worth keeping. Newest information first within each section.
   `docs/pricing-tiers.md`.
 - Never put API keys, webhook secrets or gift codes in this file.
 
-Last updated: 17 November 2026. Live version: `b3b32f44-e8fa-4b35-ba14-56ab1a46ebd3`
+Last updated: 21 November 2026. Live version: `74d468bd-75ee-488d-b423-d15d2c34c35a` (commit 076c25a)
 (commit `6061832`, on GitHub).
 
 ## Priorities
@@ -26,7 +26,7 @@ Last updated: 17 November 2026. Live version: `b3b32f44-e8fa-4b35-ba14-56ab1a46e
 | [#8](#8-gift-link-has-no-limit-on-attempts) | Low | Gift link has no limit on attempts | Open |
 | [#9](#9-upgrade-price-between-tiers) | Low | Upgrade price between tiers | Idea |
 | [#10](#10-bot-traffic) | Low | Bot traffic | Finding, no action needed |
-| [#11](#11-hydration-mismatch-warning) | Low | Hydration mismatch warning | Fixed in code 18 Nov; not deployed |
+| [#11](#11-hydration-mismatch-warning) | Low | Hydration mismatch warning | Fixed; live 21 Nov |
 | [#12](#12-search-console-sitemap) | Low | Search Console sitemap | Open |
 | [#13](#13-umami-data) | Low | Umami data | Open |
 | [#14](#14-blog-dates) | Low | Blog dates | Open |
@@ -45,8 +45,8 @@ Last updated: 17 November 2026. Live version: `b3b32f44-e8fa-4b35-ba14-56ab1a46e
 | [#28](#28-new-poem-prompt-wait-time-and-follow-ups) | Medium | New poem prompt: wait time and follow-ups | Live; owner checks open |
 | [#29](#29-error-alerts-to-telegram-and-a-waf-rule) | High | Error alerts to Telegram and a WAF rule | Built, not deployed; owner setup open |
 | [#30](#30-gift-mail-to-last-seasons-buyers) | High | Gift mail to last season's buyers | Sent 17 Nov (53 mails); clean-up after pakjesavond |
-| [#31](#31-free-rewrite-with-a-wish) | High | Free rewrite with a wish | Built 18 Nov; not deployed |
-| [#32](#32-write-first-then-pay) | High | Write first, then pay | Built 18 Nov; not deployed |
+| [#31](#31-free-rewrite-with-a-wish) | High | Free rewrite with a wish | Live 21 Nov |
+| [#32](#32-write-first-then-pay) | High | Write first, then pay | Deployed 21 Nov, off (`NUXT_POEM_PREVIEW=off`) until the KV + Dodo test |
 | [#33](#33-sint-reads-the-poem-video) | Low | Sint reads the poem (video) | Researched; decision needed |
 
 ## Open
