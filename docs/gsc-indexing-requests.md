@@ -47,13 +47,39 @@ the time of batch 1 (evening), or later.
 - [ ] [surprise-maken-ideeen](https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintgpt.com&id=h6fM14NPwIJkyylPHjp3NQ)
 - [ ] [sinterklaas-tradities](https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintgpt.com&id=F6im3X2aFVh5Mx0N25mt_Q)
 
+## Re-check on 21 Nov 2026 (OpenSEO `inspect_urls`)
+
+All 30 sitemap URLs inspected. 15 are indexed: `/`, `/blog`, `/voorbeelden`,
+`/lootjes`, all 10 posts of batch 1 and `sinterklaasgedicht-papa-mama` (each
+crawled within hours of its request). The 9 open posts of batch 2 and the 3 of
+batch 3 still have no crawl, so their requests did not go through.
+
+Not indexed (fresh links; request in this order, about 10 a day):
+
+1. [sinterklaasgedicht-juf-meester](https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintgpt.com&id=sUK2XkKnRyxSP-EeyX03Dg): Discovered
+2. [sinterklaasgedicht-partner](https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintgpt.com&id=QwJu2LytJ6hC1KnoVtmEnQ): unknown to Google
+3. [roast-sinterklaasgedicht-zonder-te-kwetsen](https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintgpt.com&id=Cm9RUejUCjCOpUBkSUgbnw): Discovered
+4. [klassiek-sinterklaasgedicht](https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintgpt.com&id=yuJ8CUzBbiDm5ZhkF0aD0A): Discovered
+5. [ironisch-sinterklaasgedicht](https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintgpt.com&id=vDCm8g-s0yiNLveaGzzSNQ): unknown to Google
+6. [pikant-sinterklaasgedicht](https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintgpt.com&id=RaPCsuhmQ6GTaeCECqjngA): Discovered
+7. [ouderwets-sinterklaasgedicht](https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintgpt.com&id=7H7gJKtI9lZJIcJJ1lP6fQ): Discovered
+8. [rijm-en-ritme-sinterklaasgedicht](https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintgpt.com&id=GawxyMC2M5pVNc7yFcL-dA): Discovered
+9. [sinterklaasgedicht-in-het-engels](https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintgpt.com&id=aK80LhzblmBK46XjpAU_nQ): Discovered
+10. [lootjes-trekken-tips](https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintgpt.com&id=Ppbz93lRlZEkaE2CzWir4g): Discovered
+11. [surprise-maken-ideeen](https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintgpt.com&id=CGjHWkZf0wulsGhTFNzPZw): Discovered
+12. [sinterklaas-tradities](https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintgpt.com&id=X7_lzB9hC8DQzpk5SQO71Q): Crawled - currently not indexed (last crawl 16 Aug 2026)
+13. [contact](https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintgpt.com&id=qqaYrhmviGax_yFoFdwxhQ): Discovered
+14. [voorwaarden](https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintgpt.com&id=Zyq0vkaQBpOm6MUrACBPFg): Discovered
+15. [privacy](https://search.google.com/u/1/search-console/inspect?resource_id=sc-domain:sintgpt.com&id=dMMiHQEnVLV8AIRCkeajcA): unknown to Google
+
 ## Check
 
 A few days after each batch, inspect the posts again (OpenSEO `inspect_urls`,
 free) and note which ones are indexed. A post that stays "Discovered - currently
 not indexed" for more than a week needs more internal links or an outside link.
 
-- [ ] Around 21 Nov 2026: re-check all 24 posts with `inspect_urls`.
+- [x] 21 Nov 2026: re-checked all 30 sitemap URLs (see above).
+- [ ] About 2 days after the next batch: re-check the 15 URLs above.
 
 ## Search Console: Crawl stats
 
