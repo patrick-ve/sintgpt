@@ -89,6 +89,28 @@ export const PAYMENTS_DOWN_RATE_LIMIT = {
   debounceMs: 10_000,
 } as const satisfies RateLimitRule;
 
+/**
+ * Free visitors, per IP: one rewrite of a poem SintGPT wrote, with a wish, on
+ * the poem model (not the rewrite model). Its own counter, so it does not use
+ * up the free poem. See freeRewrite.ts for the other conditions.
+ */
+export const FREE_REWRITE_LIMIT = {
+  maxRequests: 1,
+  windowMs: DAY_MS,
+  debounceMs: 10_000,
+} as const satisfies RateLimitRule;
+
+/**
+ * Free visitors without poems left, per IP: poems written before payment, of
+ * which the page shows only the start (poemPreview.ts). Each costs a poem, so
+ * the count is low.
+ */
+export const POEM_PREVIEW_LIMIT = {
+  maxRequests: 2,
+  windowMs: DAY_MS,
+  debounceMs: 10_000,
+} as const satisfies RateLimitRule;
+
 /** The rule for a free visitor. */
 export function freeRateLimit(paymentsOn: boolean): RateLimitRule {
   return paymentsOn ? POEM_RATE_LIMIT : PAYMENTS_DOWN_RATE_LIMIT;

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { buildShareUrl, type PoemShare } from '~/utils/poemLink';
 import { poemHtml } from '~/utils/poemHtml';
-import { POEM_INPUT_LIMITS } from '~/utils/poemLimits';
+import { LIMERICK_LINES, POEM_INPUT_LIMITS, POEM_LINES } from '~/utils/poemLimits';
 import { saveFormDraft, takeFormDraft } from '~/utils/formDraft';
 import { pakjesavondCountdown } from '~/utils/pakjesavond';
 import { PDF_DESIGNS, type PdfDesignId } from '~/utils/pdfDesigns';
@@ -33,7 +33,19 @@ const {
   poemsLeft,
   creditsUsed,
   hasFeature,
+  canFreeRewrite,
+  markFreeRewriteUsed,
 } = usePaymentTracking();
+const poemPreview = usePoemPreview();
+const { preview: previewState, writing: previewWriting, unlocking: previewUnlocking } = poemPreview;
+
+// The free-poem counter reads localStorage, which the server cannot: until the
+// page is mounted it shows what the server rendered, so hydration matches.
+const mounted = ref(false);
+onMounted(() => {
+  mounted.value = true;
+});
+const shownFreePoems = computed(() => (mounted.value ? remainingFreePoems.value : 1));
 const poemHistory = usePoemHistory();
 const { track } = useAnalytics();
 
@@ -70,6 +82,13 @@ onMounted(async () => {
       formData.value.name = storedTrialPoemName.value;
       displayedRecipient.value = storedTrialPoemName.value;
     }
+  }
+  // A poem written before payment (the visitor came back without paying, or
+  // reloaded): show its start again. After payment, the watch on isPaid opens it.
+  if (poemPreview.preview.value && !isPaid.value) {
+    showingPreview.value = true;
+    poem.value = null;
+    displayedRecipient.value = poemPreview.preview.value.recipient;
   }
 
   // Always take the draft, so an old one does not linger; use it only when
@@ -362,14 +381,121 @@ const canStartGeneration = async (trigger: 'submit' | 'rewrite'): Promise<boolea
     openPaymentModal('rewrite');
     return false;
   }
+  // A free visitor's one free rewrite: only with a wish, of a poem SintGPT
+  // signed (server/utils/freeRewrite.ts). Without a wish, ask for one first.
+  if (trigger === 'rewrite' && freeRewriteOffered.value) {
+    if (rewriteHint.value.trim()) return true;
+    openHint();
+    return false;
+  }
   if (import.meta.dev || canGeneratePoem.value) return true;
   if (!isPaid.value && !(await refreshPaymentsStatus())) return true;
   // No poems left: the free poem is used, or Drie's 3 poems are. The event
   // counts the attempt; the window that follows has its own event.
   track('No poems left', { detail: `${creditsUsed.value ? 'credits' : 'free'}:${trigger}` });
+  // A free visitor's new poem is written anyway; the page shows its start and
+  // the payment window opens the rest ("write first, then pay").
+  if (trigger === 'submit' && !isPaid.value) {
+    await startPreview();
+    return false;
+  }
   openPaymentModal(creditsUsed.value ? 'credits' : trigger);
   return false;
 };
+
+// The signed share of the poem on screen, if SintGPT signed it.
+const currentShare = () => historyEntries.value.find(entry => entry.poem === poem.value)?.share ?? null;
+
+// The free rewrite is on offer for a free visitor who has not used it, for a
+// poem with a signature.
+const freeRewriteOffered = computed(() => canFreeRewrite.value && !!poem.value && !!currentShare());
+
+// "Write first, then pay". `showingPreview`: the poem area shows the start of
+// that poem instead of a poem. `previewUnlocked`: the success notice says the
+// poem is ready, instead of offering to write it.
+const showingPreview = ref(false);
+const previewUnlocked = ref(false);
+const previewError = ref('');
+
+const startPreview = async () => {
+  const request = { ...formData.value };
+  if (window.innerWidth < 1024 && poemSectionRef.value) {
+    poemSectionRef.value.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
+  }
+  poemAnnouncement.value = t('poem.loading');
+  writingRewrite.value = false;
+  displayedRecipient.value = request.name.trim();
+  stopEditing();
+  resetSurprise();
+  closeHint();
+  poemRating.value = null;
+  previewError.value = '';
+  error.value = null;
+  isRateLimitError.value = false;
+  showingPreview.value = true;
+  poem.value = null;
+  const result = await poemPreview.write(request);
+  if (result === 'ok') {
+    poemAnnouncement.value = t('poem.preview.ready');
+    return;
+  }
+  // No preview (KV off, the limit, an error): the payment window as before,
+  // with the poem that was on screen back.
+  showingPreview.value = false;
+  poemAnnouncement.value = '';
+  restoreTrialPoem();
+  openPaymentModal('submit');
+};
+
+const restoreTrialPoem = () => {
+  if (!storedTrialPoem.value) return;
+  poem.value = storedTrialPoem.value;
+  displayedRecipient.value = storedTrialPoemName.value ?? '';
+};
+
+// After payment (or a gift, or a restored payment): open the poem that was
+// written before.
+const unlockPreview = async () => {
+  if (!poemPreview.preview.value || poemPreview.unlocking.value) return;
+  const recipient = poemPreview.preview.value.recipient;
+  showingPreview.value = true;
+  poem.value = null;
+  const result = await poemPreview.unlock();
+  showingPreview.value = false;
+  if (typeof result === 'string') {
+    previewError.value = result === 'expired'
+      ? t('poem.preview.expired')
+      : result === 'credits' ? t('payment.creditsUsedMessage')
+        : result === 'fair-use' ? t('poem.fairUse') : t('poem.preview.failed');
+    return;
+  }
+  poem.value = result.poem;
+  generatedShare.value = result.share;
+  displayedRecipient.value = recipient;
+  activeHistoryId.value = null;
+  // The form from before the payment, when it is the one this poem came from.
+  lastRequest.value = formData.value.name.trim() === recipient ? { ...formData.value } : null;
+  incrementPoemCount();
+  const saved = poemHistory.add({
+    recipient,
+    poem: result.poem,
+    style: result.style as PoemFormData['style'],
+    rhymeScheme: result.rhymeScheme as PoemFormData['rhymeScheme'],
+    language: result.language,
+    lines: result.lines,
+    share: result.share,
+  });
+  activeHistoryId.value = saved.id;
+  previewUnlocked.value = true;
+  poemAnnouncement.value = t('poem.ready');
+  track('Poem ready', { detail: 'preview', value: historyEntries.value.length });
+  nextTick(() => {
+    poemSectionRef.value?.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
+  });
+};
+watch(isPaid, (paid) => {
+  if (paid && poemPreview.preview.value) unlockPreview();
+});
 
 // The first time the visitor types or picks something in the form.
 let formStarted = false;
@@ -405,25 +531,34 @@ const runGeneration = async (request: PoemFormData, regenerate = false, hint?: s
     });
   }
 
+  // The free rewrite uses the poem model, so it takes as long as a poem.
+  const freeRewrite = regenerate && !!hint && freeRewriteOffered.value;
   poemAnnouncement.value = t('poem.loading');
-  writingRewrite.value = regenerate;
+  writingRewrite.value = regenerate && !freeRewrite;
+  showingPreview.value = false;
+  previewError.value = '';
 
   displayedRecipient.value = request.name.trim();
   // The wish needs the poem it changes; read it before the new one replaces it.
+  // Its signature shows the server that SintGPT wrote it (the free rewrite).
   const previousPoem = hint ? (poem.value ?? '').slice(0, POEM_INPUT_LIMITS.previousPoem) : '';
+  const previousShare = hint ? currentShare() : null;
   activeHistoryId.value = null;
   lastRequest.value = { ...request };
   poemRating.value = null;
   stopEditing();
   editStatus.value = '';
   resetSurprise();
-  await generatePoem({ ...request, regenerate, ...(hint ? { rewriteHint: hint, previousPoem } : {}) });
+  await generatePoem({ ...request, regenerate, ...(hint ? { rewriteHint: hint, previousPoem, previousShare } : {}) });
+  if (rateLimitReason.value === 'rewrite') markFreeRewriteUsed();
 
   // A rate limit shows the upgrade offer in the poem area.
   poemAnnouncement.value = poem.value ? t('poem.ready') : '';
 
   if (!error.value && !isRateLimitError.value && poem.value) {
-    incrementPoemCount();
+    // The free rewrite is not one of the free poems.
+    if (freeRewrite) markFreeRewriteUsed();
+    else incrementPoemCount();
 
     // The server records "Generate poem" and "Regenerate poem", with the cost.
 
@@ -440,7 +575,7 @@ const runGeneration = async (request: PoemFormData, regenerate = false, hint?: s
     activeHistoryId.value = saved.id;
     // How many poems this device has (the history keeps up to 50).
     track('Poem ready', {
-      detail: regenerate ? (hint ? 'rewrite hint' : 'rewrite') : 'new',
+      detail: freeRewrite ? 'free rewrite' : regenerate ? (hint ? 'rewrite hint' : 'rewrite') : 'new',
       value: historyEntries.value.length,
     });
     if (hint) closeHint();
@@ -737,6 +872,7 @@ const accessHint = computed(() => {
 });
 
 const successMessage = computed(() => {
+  if (previewUnlocked.value) return t('payment.successPreview');
   if (restoredDraft.value) return t('payment.successDraft');
   if (ownedTier.value === 'drie') return t('payment.successMessageDrie');
   // A season gift ends at this pakjesavond, so "ook volgend jaar" is not true for it.
@@ -994,7 +1130,7 @@ watch(() => formData.value.name, () => {
 });
 
 const poemTitle = computed(() => {
-  const name = (poem.value || isLoading.value)
+  const name = (poem.value || isLoading.value || showingPreview.value)
     ? displayedRecipient.value
     : formData.value.name.trim();
   return name ? t('poem.title', { name }) : t('poem.defaultTitle');
@@ -1007,6 +1143,8 @@ const openPoemFromHistory = (entry: PoemHistoryEntry) => {
   poem.value = entry.poem;
   error.value = null;
   isRateLimitError.value = false;
+  showingPreview.value = false;
+  previewError.value = '';
   displayedRecipient.value = entry.recipient;
   activeHistoryId.value = entry.id;
   lastRequest.value = null;
@@ -1030,37 +1168,26 @@ const isLimerick = computed(
   () => formData.value.rhymeScheme === 'Limerick'
 );
 
-// Dynamic slider parameters based on rhyme scheme
-const sliderMin = computed(() => (isLimerick.value ? 10 : 8));
-const sliderMax = computed(() => (isLimerick.value ? 50 : 40));
-const sliderStep = computed(() => (isLimerick.value ? 5 : 4));
+// A limerick is always one verse of 5 lines: the slider is off and shows 5.
+// Its thumb sits at the start, so the minimum moves to 5 while it is off.
+const sliderMin = computed(() => (isLimerick.value ? LIMERICK_LINES : POEM_LINES.min));
 
-// Auto-adjust lines when switching rhyme schemes
+// The length chosen for the other schemes comes back after a limerick.
+// `flush: 'post'`: the slider must have its new minimum before it gets 5,
+// or the browser keeps it at 8.
+let linesBeforeLimerick: number = POEM_LINES.default;
 watch(
   () => formData.value.rhymeScheme,
   (newScheme, oldScheme) => {
     if (newScheme === 'Limerick') {
-      // Set to nearest valid value for Limerick (10-50, step 5)
-      if (formData.value.lines < 10) {
-        formData.value.lines = 10;
-      } else {
-        // Round to nearest multiple of 5
-        formData.value.lines =
-          Math.round(formData.value.lines / 5) * 5;
-        if (formData.value.lines > 50) formData.value.lines = 50;
-      }
+      if (oldScheme !== 'Limerick') linesBeforeLimerick = formData.value.lines;
+      formData.value.lines = LIMERICK_LINES;
     } else if (oldScheme === 'Limerick') {
-      // Set to nearest valid value for non-Limerick (8-40, step 4)
-      if (formData.value.lines < 8) {
-        formData.value.lines = 12;
-      } else {
-        // Round to nearest multiple of 4
-        formData.value.lines =
-          Math.round(formData.value.lines / 4) * 4;
-        if (formData.value.lines > 40) formData.value.lines = 40;
-      }
+      const lines = Math.round(linesBeforeLimerick / POEM_LINES.step) * POEM_LINES.step;
+      formData.value.lines = Math.min(POEM_LINES.max, Math.max(POEM_LINES.min, lines));
     }
-  }
+  },
+  { flush: 'post' }
 );
 
 useSeoMeta({
@@ -1255,7 +1382,7 @@ useHead({
               {{ successMessage }}
             </p>
             <button
-              v-if="restoredDraft && formData.name.trim()"
+              v-if="restoredDraft && formData.name.trim() && !previewUnlocked && !previewState"
               type="button"
               class="btn-festive mt-3 min-h-11 px-5 text-base"
               @click="continueAfterPayment"
@@ -1628,17 +1755,21 @@ useHead({
                     v-model.number="formData.lines"
                     type="range"
                     :min="sliderMin"
-                    :max="sliderMax"
-                    :step="sliderStep"
+                    :max="POEM_LINES.max"
+                    :step="POEM_LINES.step"
                     class="slider-festive w-full"
-                    :disabled="isLoading"
+                    :disabled="isLoading || isLimerick"
+                    :aria-describedby="isLimerick ? 'poem-lines-limerick' : undefined"
                   />
-                  <div class="flex justify-between text-sm font-bold text-[#5c0f26] mt-2">
-                    <span>{{ sliderMin }} {{ t('form.lines.min') }}</span>
-                    <span>{{ sliderMax }} {{ t('form.lines.max') }}</span>
+                  <div
+                    class="flex justify-between text-sm font-bold text-[#5c0f26] mt-2"
+                    :class="{ 'opacity-50': isLimerick }"
+                  >
+                    <span>{{ POEM_LINES.min }} {{ t('form.lines.min') }}</span>
+                    <span>{{ POEM_LINES.max }} {{ t('form.lines.max') }}</span>
                   </div>
                 </div>
-                <p v-if="isLimerick" class="text-sm text-[#5c0f26] mt-2">
+                <p v-if="isLimerick" id="poem-lines-limerick" class="text-sm text-[#5c0f26] mt-2">
                   {{ t('form.lines.limerickNote') }}
                 </p>
               </div>
@@ -1718,10 +1849,10 @@ useHead({
             <div class="flex flex-wrap items-center gap-4">
               <button
                 type="submit"
-                :disabled="isLoading"
+                :disabled="isLoading || previewWriting"
                 class="btn-festive flex-[1_1_280px] min-h-[3.625rem] px-6 text-[1.375rem] disabled:opacity-70 disabled:cursor-wait"
               >
-                <span v-if="isLoading" class="flex items-center justify-center gap-3">
+                <span v-if="isLoading || previewWriting" class="flex items-center justify-center gap-3">
                   <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none" />
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
@@ -1731,9 +1862,9 @@ useHead({
                 <span v-else>{{ t('form.submit.generate') }}</span>
               </button>
               <p class="flex-[1_1_220px] text-[0.9375rem] text-[#5c0f26]">
-                <template v-if="isPaid">{{ accessHint }}</template>
-                <template v-else-if="paymentsUnavailable">{{ t('payment.unavailable.hint') }}</template>
-                <template v-else>{{ t('payment.remainingPoems', { count: remainingFreePoems }) }}.</template>
+                <template v-if="mounted && isPaid">{{ accessHint }}</template>
+                <template v-else-if="mounted && paymentsUnavailable">{{ t('payment.unavailable.hint') }}</template>
+                <template v-else>{{ t('payment.remainingPoems', { count: shownFreePoems }) }}.</template>
                 {{ t('form.submit.time') }}
               </p>
             </div>
@@ -1773,15 +1904,15 @@ useHead({
                 </template>
                 <template v-else>
                   <h3 id="poem-title" class="text-2xl font-bold text-[#8b1538] mb-3 font-display">
-                    {{ rateLimitReason === 'credits' ? t('payment.creditsUsedTitle') : t('payment.limitReached') }}
+                    {{ rateLimitReason === 'credits' ? t('payment.creditsUsedTitle') : rateLimitReason === 'rewrite' ? t('payment.rewriteUsedTitle') : t('payment.limitReached') }}
                   </h3>
                   <p class="text-[#5c0f26] mb-8 max-w-md font-medium">
-                    {{ rateLimitReason === 'credits' ? t('payment.creditsUsedMessage') : `${t('payment.limitReason')} ${t('payment.description')}` }}
+                    {{ rateLimitReason === 'credits' ? t('payment.creditsUsedMessage') : rateLimitReason === 'rewrite' ? t('payment.rewriteUsedMessage') : `${t('payment.limitReason')} ${t('payment.description')}` }}
                   </p>
                   <button
                     type="button"
                     class="btn-festive px-8 py-4 text-lg"
-                    @click="openPaymentModal(rateLimitReason === 'credits' ? 'credits' : 'limit')"
+                    @click="openPaymentModal(rateLimitReason === 'credits' ? 'credits' : rateLimitReason === 'rewrite' ? 'rewrite' : 'limit')"
                   >
                     {{ t('payment.unlimitedAccess') }}
                   </button>
@@ -1790,7 +1921,7 @@ useHead({
 
               <template v-else>
                 <p
-                  v-if="!poem && !isLoading && !error"
+                  v-if="!poem && !isLoading && !error && !showingPreview && !previewError"
                   class="text-[0.8125rem] font-bold tracking-[0.06em] uppercase text-[#8b1538]"
                 >
                   {{ t('poem.sample') }}
@@ -1800,7 +1931,7 @@ useHead({
                     id="poem-title"
                     class="font-display font-bold text-[1.75rem] leading-tight text-[#8b1538] break-words min-w-0"
                   >
-                    {{ poem || isLoading || error ? poemTitle : t('poem.sampleTitle') }}
+                    {{ poem || isLoading || error || showingPreview || previewError ? poemTitle : t('poem.sampleTitle') }}
                   </h3>
                   <button
                     v-if="poem && !isLoading && !error && !editing"
@@ -1815,12 +1946,49 @@ useHead({
                 </div>
 
                 <!-- Writing -->
-                <div v-if="isLoading && !poem" class="flex flex-col items-center justify-center gap-3 py-6">
+                <div v-if="(isLoading && !poem) || previewWriting" class="flex flex-col items-center justify-center gap-3 py-6">
                   <PoemWritingAnimation :rewrite="writingRewrite" />
                   <p v-if="retrying" class="m-0 text-center text-[0.9375rem] font-bold text-[#5c0f26]" role="status">
                     {{ t('poem.retrying') }}
                   </p>
                 </div>
+
+                <!-- Opening the poem that was written before payment -->
+                <p v-else-if="previewUnlocking" class="m-0 py-6 text-center font-bold text-[#5c0f26]" role="status">
+                  {{ t('poem.preview.opening') }}
+                </p>
+
+                <!-- Written before payment: the start, and the shape of the rest -->
+                <div v-else-if="showingPreview && previewState" class="poem-preview">
+                  <pre class="poem-text has-dropcap noselect"><span v-for="(line, index) in previewState.shown" :key="index" class="poem-line">{{ line }}</span></pre>
+                  <div class="preview-rest" aria-hidden="true">
+                    <span
+                      v-for="(length, index) in previewState.hidden"
+                      :key="index"
+                      class="preview-bar"
+                      :class="{ 'preview-gap': !length }"
+                      :style="length ? { width: `${Math.min(100, Math.max(30, length * 2.2))}%` } : undefined"
+                    />
+                  </div>
+                  <div class="preview-offer">
+                    <p class="sr-only">{{ t('poem.preview.hidden', { count: previewState.hidden.filter(Boolean).length }) }}</p>
+                    <p class="m-0 font-display font-bold text-xl text-[#8b1538]">{{ t('poem.preview.title') }}</p>
+                    <p class="m-0 text-[#5c0f26]">{{ t('poem.preview.text') }}</p>
+                    <button type="button" class="btn-festive px-6 min-h-12 text-lg" @click="openPaymentModal('preview')">
+                      {{ t('poem.preview.button') }}
+                    </button>
+                    <p class="m-0 text-sm text-[#5c0f26]">{{ t('poem.preview.keep') }}</p>
+                  </div>
+                </div>
+
+                <UAlert
+                  v-else-if="previewError && !poem"
+                  color="warning"
+                  variant="subtle"
+                  :description="previewError"
+                  icon="i-heroicons-exclamation-triangle"
+                  class="border-2 border-amber-300 bg-amber-50/80 rounded-xl"
+                />
 
                 <!-- Error -->
                 <UAlert
@@ -1942,6 +2110,7 @@ useHead({
                     :placeholder="t('poem.hint.placeholder')"
                     @keydown.enter.prevent="regeneratePoem"
                   >
+                  <p v-if="freeRewriteOffered" class="m-0 text-sm text-[#5c0f26]">{{ t('poem.hint.free') }}</p>
                   <div role="group" :aria-label="t('poem.hint.suggestions')" class="flex flex-wrap gap-2">
                     <button
                       v-for="chip in (t('poem.hint.chips') as string[])"
@@ -1961,7 +2130,7 @@ useHead({
                   @click="regeneratePoem"
                 >
                   <UIcon name="i-heroicons-arrow-path" class="size-5" aria-hidden="true" />
-                  {{ rewriteHint.trim() ? t('poem.regenerateWithHint') : t('poem.regenerate') }}
+                  {{ rewriteHint.trim() ? t('poem.regenerateWithHint') : freeRewriteOffered ? t('poem.regenerateFree') : t('poem.regenerate') }}
                 </button>
                 <button
                   v-if="!hintOpen"
@@ -2089,7 +2258,7 @@ useHead({
             </div>
 
             <p
-              v-if="poem && !isLoading && !error && !isRateLimitError && !isPaid && !paymentsUnavailable && remainingFreePoems === 0"
+              v-if="poem && !isLoading && !error && !isRateLimitError && !isPaid && !paymentsUnavailable && remainingFreePoems === 0 && !showingPreview"
               class="text-sm text-[#5c0f26]"
             >
               {{ t('poem.freeComplete') }}
@@ -2625,6 +2794,42 @@ useHead({
     text-indent: 0;
   }
 }
+/* Written before payment: the rest of the poem is only its shape, as soft
+   bars (the page never has the text). */
+.poem-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.preview-rest {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding-block: 0.25rem;
+  mask-image: linear-gradient(to bottom, #000 30%, transparent);
+}
+.preview-bar {
+  display: block;
+  height: 0.75rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, #8b1538 22%, transparent);
+  filter: blur(1.5px);
+}
+.preview-gap {
+  height: 0.4rem;
+  background: none;
+}
+.preview-offer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  text-align: center;
+  padding: 1rem;
+  border: 2px dashed #d4a853;
+  border-radius: 12px;
+  background: #fffaf0;
+}
 /* Shows that the poem is still being written. */
 .stream-caret {
   display: inline-block;
@@ -2905,6 +3110,19 @@ useHead({
 
 .slider-festive::-webkit-slider-thumb:hover {
   transform: scale(1.1);
+}
+
+/* Off for a limerick (always 5 lines) and while a poem is written. */
+.slider-festive:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.slider-festive:disabled::-webkit-slider-thumb {
+  cursor: not-allowed;
+  transform: none;
+}
+.slider-festive:disabled::-moz-range-thumb {
+  cursor: not-allowed;
 }
 
 .slider-festive::-moz-range-thumb {

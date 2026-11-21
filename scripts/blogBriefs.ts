@@ -19,7 +19,7 @@ export interface BlogBrief {
 export const SITE_FACTS = `
 - SintGPT (sintgpt.com) schrijft in ongeveer 30 seconden een persoonlijk sinterklaasgedicht, in het Nederlands of het Engels.
 - Je vult in: de naam van de ontvanger, het cadeau (en of het cadeau geheim blijft), weetjes over de ontvanger, wie het gedicht schrijft en voor welk publiek het is.
-- Zes stijlen: Grappig, Klassiek, Ironisch, Ouderwets, Pikant en Roast. Rijmschema's: AABB, ABAB, ABBA en limerick. Lengte: 8 tot 40 regels.
+- Zes stijlen: Grappig, Klassiek, Ironisch, Ouderwets, Pikant en Roast. Rijmschema's: AABB, ABAB, ABBA en limerick. Lengte: 8 tot 40 regels; een limerick heeft altijd 5 regels.
 - Wat elke stijl op SintGPT schrijft: Grappig is speels en luchtig; Klassiek is traditioneel, warm en respectvol; Ironisch is geestig en subtiel sarcastisch; Ouderwets is formeel en traditioneel in taal en toon; Pikant heeft suggestieve dubbelzinnigheden en gewaagde knipogen, maar blijft smaakvol en is nooit expliciet; Roast is een genadeloze maar liefdevolle roast.
 - De stijl Roast neemt de ontvanger flink op de hak op basis van wat jij invult, en maakt geen grappen over afkomst, geloof, geaardheid, gender, handicap, ziekte, lichaam, gewicht, overleden naasten of geldzorgen. Een roast eindigt warm.
 - Je eerste gedicht is gratis. Noem geen andere prijzen.

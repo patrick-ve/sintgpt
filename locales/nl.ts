@@ -174,7 +174,20 @@ export default {
     regenerate: 'Herschrijf dit gedicht',
     newPoem: 'Nieuw gedicht',
     regenerateWithHint: 'Herschrijf met deze wens',
+    regenerateFree: 'Herschrijf gratis met een wens',
+    preview: {
+      ready: 'Het begin van je gedicht is klaar.',
+      title: 'Je gedicht is klaar',
+      text: 'Hierboven zie je hoe het begint. Kies hoe je verder schrijft, dan lees je meteen het hele gedicht.',
+      button: 'Lees het hele gedicht',
+      keep: 'We bewaren je gedicht 2 uur.',
+      hidden: 'De andere {count} regels zie je na het betalen.',
+      opening: 'Je gedicht wordt geopend…',
+      expired: 'We hebben dit gedicht niet meer: we bewaren het 2 uur. Wat je invulde, staat nog in het formulier. Schrijf het gedicht opnieuw.',
+      failed: 'Je gedicht openen lukte niet. Vernieuw de pagina om het nog eens te proberen.',
+    },
     hint: {
+      free: 'Je mag je gedicht 1 keer gratis laten herschrijven met een wens.',
       open: 'Zeg wat er anders moet',
       label: 'Wat moet er anders?',
       placeholder: 'Bijv. korter, of meer over zijn nieuwe fiets',
@@ -260,7 +273,7 @@ export default {
   },
   seo: {
     title: "Sinterklaasgedicht maken met AI: gratis generator | SintGPT",
-    description: "Maak in 30 seconden een persoonlijk sinterklaasgedicht dat echt rijmt: grappig, klassiek of een roast, in het Nederlands of Engels. Eerste gedicht gratis.",
+    description: "Lukt dichten met ChatGPT maar niet? SintGPT schrijft leuke en persoonlijke sinterklaasgedichten in minder dan 30 seconden. Gratis en geen account nodig.",
     ogTitle: 'SintGPT: je sinterklaasgedicht in 30 seconden',
     ogDescription:
       'Persoonlijke sinterklaasgedichten die echt rijmen. Klaar in 30 seconden, en je eerste gedicht is gratis.',
@@ -298,7 +311,7 @@ export default {
       {
         question: 'Kan ik een kort sinterklaasgedicht maken?',
         answer:
-          'Ja. Je kiest zelf de lengte, van 8 tot 40 regels. Een gedicht van 8 regels lees je in een halve minuut voor. Handig als er veel pakjes zijn. Kies je een limerick, dan bestaat het gedicht uit coupletten van 5 regels.',
+          'Ja. Je kiest zelf de lengte, van 8 tot 40 regels. Een gedicht van 8 regels lees je in een halve minuut voor. Handig als er veel pakjes zijn. Kies je een limerick, dan heeft het gedicht altijd 5 regels.',
       },
       {
         question: 'Hoe persoonlijk worden de gedichten?',
@@ -324,7 +337,7 @@ export default {
         question:
           'Kan ik een gedicht aanpassen of opnieuw laten schrijven?',
         answer:
-          'Ja. Met "Herschrijf dit gedicht" krijg je een nieuwe versie met dezelfde gegevens. Dat zit in Gezin en Hele familie. Wil je zelf iets veranderen? Kopieer het gedicht en pas het aan waar je wilt.',
+          'Ja. Met "Herschrijf dit gedicht" krijg je een nieuwe versie met dezelfde gegevens. Dat zit in Gezin en Hele familie. Je gratis gedicht mag je 1 keer gratis laten herschrijven met een wens, zoals "korter". Wil je zelf iets veranderen? Kies "Pas aan" en verander het gedicht waar je wilt.',
       },
       {
         question: 'Worden mijn gegevens opgeslagen?',
@@ -356,7 +369,10 @@ export default {
       credits: 'Je 3 gedichten zijn geschreven. Wil je verder schrijven? Wat je invulde, blijft staan.',
       surprise: 'Surprise-ideeën bij je gedicht horen bij Hele familie.',
       design: 'Dit PDF-ontwerp hoort bij Hele familie.',
+      preview: 'Je nieuwe gedicht is klaar. Na het betalen lees je het meteen helemaal, en schrijf je verder.',
     },
+    rewriteUsedTitle: 'Je gratis herschrijving is al gebruikt',
+    rewriteUsedMessage: 'Op deze internetverbinding is de afgelopen 24 uur al een gedicht gratis herschreven. Vaker herschrijven zit in Gezin en Hele familie.',
     tiers: {
       legend: 'Kies wat je wilt kopen',
       recommended: 'Aanbevolen',
@@ -411,6 +427,7 @@ export default {
     successMessageFamilie: 'Schrijf zoveel gedichten als je wilt, ook volgend jaar. Bij elk gedicht kun je surprise-ideeën vragen.',
     successMessageFamilieSeason: 'Schrijf zoveel gedichten als je wilt, tot en met pakjesavond. Bij elk gedicht kun je surprise-ideeën vragen.',
     successDraft: 'Wat je invulde, staat nog in het formulier.',
+    successPreview: 'Je gedicht staat hieronder. Daarna schrijf je meteen verder.',
     successNext: 'Schrijf het gedicht',
     pendingTitle: 'Even je betaling nakijken…',
     pendingMessage:
@@ -577,7 +594,7 @@ export default {
       },
       {
         question: 'Hoeveel gedichten zijn gratis?',
-        answer: 'Je eerste gedicht is gratis. Per internetaansluiting kun je hooguit 1 gratis gedicht per 24 uur maken.',
+        answer: 'Je eerste gedicht is gratis. Per internetaansluiting kun je hooguit 1 gratis gedicht per 24 uur maken. Dat gedicht mag je 1 keer gratis laten herschrijven met een wens.',
       },
     ],
     formTitle: 'Stuur een bericht',
@@ -637,7 +654,7 @@ export default {
         {
           heading: 'Op je eigen apparaat',
           body: [
-            'Je gedichten, je taalkeuze en het aantal gratis gedichten dat je gebruikte staan in de opslag van je browser (localStorage). Ze verlaten je apparaat niet. Je wist ze met "Alles wissen" onder Mijn gedichten, of door de websitegegevens in je browser te wissen.',
+            'Je gedichten, je taalkeuze, het aantal gratis gedichten dat je gebruikte en of je je gratis herschrijving gebruikte staan in de opslag van je browser (localStorage). Is je gratis gedicht op en schrijf je toch een nieuw gedicht, dan staan ook het begin ervan en een code om het na het betalen te openen in die opslag, tot hooguit 2 uur. Ze verlaten je apparaat niet. Je wist ze met "Alles wissen" onder Mijn gedichten, of door de websitegegevens in je browser te wissen.',
             'Ga je betalen, dan bewaren we ook wat je in het formulier invulde, zodat het er nog staat als je terugkomt. We wissen het zodra je terug bent. Kom je niet binnen 2 uur terug, dan gebruiken we het niet meer en wissen we het bij je volgende bezoek.',
             'Trek je lootjes op sintgpt.com/lootjes, dan staan de namen en de lootjes alleen op je apparaat, tot je een nieuwe trekking begint. We sturen ze niet naar een server.',
           ],
@@ -645,13 +662,13 @@ export default {
         {
           heading: 'Gedeelde gedichten',
           body: [
-            'Deel je een gedicht met een korte link, dan bewaren we het gedicht 90 dagen bij Cloudflare (Workers KV). Daarna verdwijnt het vanzelf. Iedereen met de link kan het lezen. Bij een lange link staat het gedicht in de link zelf. De eerste regels kunnen dan in de serverlogs komen. Pas je een gedicht aan, dan stuurt je browser het aangepaste en het oorspronkelijke gedicht naar onze server, zodat de deellink blijft werken. We bewaren ze daarbij niet.',
+            'Deel je een gedicht met een korte link, dan bewaren we het gedicht 90 dagen bij Cloudflare (Workers KV). Daarna verdwijnt het vanzelf. Iedereen met de link kan het lezen. Bij een lange link staat het gedicht in de link zelf. De eerste regels kunnen dan in de serverlogs komen. Pas je een gedicht aan, dan stuurt je browser het aangepaste en het oorspronkelijke gedicht naar onze server, zodat de deellink blijft werken. We bewaren ze daarbij niet. Is je gratis gedicht op en schrijf je toch een nieuw gedicht, dan schrijft SintGPT het alvast en bewaren we het hooguit 2 uur bij Cloudflare (Workers KV), zodat je het na het betalen kunt lezen. Daarna verdwijnt het vanzelf. Tot je betaalt, krijgt je browser alleen het begin.',
           ],
         },
         {
           heading: 'Je IP-adres',
           body: [
-            'Gratis gebruikers mogen 1 gedicht per dag maken, of 3 als betalen tijdelijk niet werkt. Om dat te tellen gebruiken we je IP-adres. We bewaren het niet zelf: Cloudflare bewaart alleen een versleutelde afgeleide (een hash) en een teller. Die verdwijnen na hooguit 24 uur. Voor betalende gebruikers tellen we op dezelfde manier per betaling, met een maximum van 100 gedichten per dag. Bij 3 gedichten tellen we per betaling hoeveel gedichten je schreef; die teller verdwijnt na pakjesavond.',
+            'Gratis gebruikers mogen 1 gedicht per dag maken, of 3 als betalen tijdelijk niet werkt. Daarbij mogen ze 1 gedicht per dag gratis laten herschrijven met een wens, en 2 nieuwe gedichten per dag alvast laten schrijven om na het betalen te lezen. Om dat te tellen gebruiken we je IP-adres. We bewaren het niet zelf: Cloudflare bewaart alleen een versleutelde afgeleide (een hash) en een teller. Die verdwijnen na hooguit 24 uur. Voor betalende gebruikers tellen we op dezelfde manier per betaling, met een maximum van 100 gedichten per dag. Bij 3 gedichten tellen we per betaling hoeveel gedichten je schreef; die teller verdwijnt na pakjesavond.',
             'Cloudflare host de website en houdt technische logs bij, zoals het tijdstip en het adres van een aanvraag. Die logs bewaren we hooguit 7 dagen, om storingen en misbruik op te sporen.',
             'Grondslag: ons gerechtvaardigd belang om de dienst betaalbaar, veilig en beschikbaar te houden.',
           ],
@@ -720,7 +737,7 @@ export default {
         {
           heading: 'Gratis gebruik',
           body: [
-            'Je eerste gedicht is gratis. Per internetaansluiting kun je hooguit 1 gratis gedicht per 24 uur maken. Werkt betalen tijdelijk niet, dan zijn dat er 3.',
+            'Je eerste gedicht is gratis. Per internetaansluiting kun je hooguit 1 gratis gedicht per 24 uur maken. Werkt betalen tijdelijk niet, dan zijn dat er 3. Je gratis gedicht mag je 1 keer gratis laten herschrijven met een wens (hooguit 1 keer per internetaansluiting per 24 uur). Is je gratis gedicht op, dan schrijft SintGPT een nieuw gedicht alvast en zie je het begin ervan; het hele gedicht lees je na het betalen. We bewaren het 2 uur.',
           ],
         },
         {

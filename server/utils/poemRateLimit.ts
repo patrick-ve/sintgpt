@@ -3,7 +3,9 @@ import { consola } from 'consola';
 import {
   BUYER_RATE_LIMIT,
   createRateLimiter,
+  FREE_REWRITE_LIMIT,
   GIFT_CLAIM_RULE,
+  POEM_PREVIEW_LIMIT,
   POEM_RATE_LIMIT,
   type PoemAttempt,
   type RateLimitRule,
@@ -12,9 +14,11 @@ import {
 
 /**
  * Who a limit applies to: a free visitor by IP, a buyer by payment, or the
- * browsers that claimed one season gift code (by gift ID).
+ * browsers that claimed one season gift code (by gift ID). `rewrite` and
+ * `preview` count a free visitor's free rewrite and poems written before
+ * payment, by IP, apart from the free poem.
  */
-export type RateLimitSubject = { kind: 'ip' | 'buyer' | 'gift'; id: string };
+export type RateLimitSubject = { kind: 'ip' | 'buyer' | 'gift' | 'rewrite' | 'preview'; id: string };
 
 interface DurableObjectNamespaceLike {
   idFromName(name: string): unknown;
@@ -34,6 +38,8 @@ const RULES: Record<RateLimitSubject['kind'], RateLimitRule> = {
   ip: POEM_RATE_LIMIT,
   buyer: BUYER_RATE_LIMIT,
   gift: GIFT_CLAIM_RULE,
+  rewrite: FREE_REWRITE_LIMIT,
+  preview: POEM_PREVIEW_LIMIT,
 };
 
 // Per isolate: for the Node build, and when Cloudflare cannot be reached.
@@ -42,6 +48,8 @@ const memory = {
   ip: createRateLimiter(POEM_RATE_LIMIT),
   buyer: createRateLimiter(BUYER_RATE_LIMIT),
   gift: createRateLimiter(GIFT_CLAIM_RULE),
+  rewrite: createRateLimiter(FREE_REWRITE_LIMIT),
+  preview: createRateLimiter(POEM_PREVIEW_LIMIT),
 };
 
 /**

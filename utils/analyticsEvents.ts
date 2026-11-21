@@ -15,6 +15,11 @@ export const SERVER_EVENTS = [
   'Surprise ideas',
   'Surprise ideas failed',
   'Gift claimed',
+  // "Write first, then pay" (server/utils/poemPreview.ts): a poem written for a
+  // free visitor without poems left (cost fields like Generate poem), and the
+  // buyer who gets it after paying (detail new/expired, value = minutes).
+  'Poem preview',
+  'Poem unlocked',
   // A 5xx or an unhandled error on the server (server/plugins/logging.ts).
   'Server error',
   // The contact form (server/api/contact.post.ts); detail is the topic, or

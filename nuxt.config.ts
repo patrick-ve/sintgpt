@@ -55,6 +55,12 @@ export default defineNuxtConfig({
     turnstileSecretKey: '',
     telegramBotToken: '',
     telegramChatId: '',
+    // Kill switches, without a deploy: set NUXT_FREE_REWRITE=off to stop the
+    // free visitor's free rewrite (server/utils/freeRewrite.ts), and
+    // NUXT_POEM_PREVIEW=off to stop writing poems before payment
+    // (server/utils/poemPreview.ts). Both are on when empty.
+    freeRewrite: '',
+    poemPreview: '',
     public: {
       turnstileSiteKey: '',
     },

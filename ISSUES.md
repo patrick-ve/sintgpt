@@ -26,7 +26,7 @@ Last updated: 17 November 2026. Live version: `b3b32f44-e8fa-4b35-ba14-56ab1a46e
 | [#8](#8-gift-link-has-no-limit-on-attempts) | Low | Gift link has no limit on attempts | Open |
 | [#9](#9-upgrade-price-between-tiers) | Low | Upgrade price between tiers | Idea |
 | [#10](#10-bot-traffic) | Low | Bot traffic | Finding, no action needed |
-| [#11](#11-hydration-mismatch-warning) | Low | Hydration mismatch warning | Open |
+| [#11](#11-hydration-mismatch-warning) | Low | Hydration mismatch warning | Fixed in code 18 Nov; not deployed |
 | [#12](#12-search-console-sitemap) | Low | Search Console sitemap | Open |
 | [#13](#13-umami-data) | Low | Umami data | Open |
 | [#14](#14-blog-dates) | Low | Blog dates | Open |
@@ -45,6 +45,9 @@ Last updated: 17 November 2026. Live version: `b3b32f44-e8fa-4b35-ba14-56ab1a46e
 | [#28](#28-new-poem-prompt-wait-time-and-follow-ups) | Medium | New poem prompt: wait time and follow-ups | Live; owner checks open |
 | [#29](#29-error-alerts-to-telegram-and-a-waf-rule) | High | Error alerts to Telegram and a WAF rule | Built, not deployed; owner setup open |
 | [#30](#30-gift-mail-to-last-seasons-buyers) | High | Gift mail to last season's buyers | Sent 17 Nov (53 mails); clean-up after pakjesavond |
+| [#31](#31-free-rewrite-with-a-wish) | High | Free rewrite with a wish | Built 18 Nov; not deployed |
+| [#32](#32-write-first-then-pay) | High | Write first, then pay | Built 18 Nov; not deployed |
+| [#33](#33-sint-reads-the-poem-video) | Low | Sint reads the poem (video) | Researched; decision needed |
 
 ## Open
 
@@ -197,8 +200,9 @@ Last updated: 17 November 2026. Live version: `b3b32f44-e8fa-4b35-ba14-56ab1a46e
 - **Cause (found 10 November):** the counter under the form. The server renders
   "1 gratis gedicht over"; the browser reads the count from localStorage and
   renders "0 gratis gedichten over" for a visitor who used the free poem.
-- **Fix:** render the counter only after mount (`<ClientOnly>` or an `onMounted`
-  flag), so the server and the first browser render agree.
+- **Fix (18 November, not deployed):** the counter shows the server's value until
+  the page is mounted (`shownFreePoems`, `mounted` in `pages/index.vue`). Check the
+  console on the live home page after the deploy.
 
 ### #12 Search Console sitemap
 
@@ -499,7 +503,8 @@ Owner steps:
      `REGENERATE_POEM_MODEL`. The new prompt was tested with Gemini 3.7 Flash
      only (one rewrite with a wish and one hostile wish: both correct). Do one
      real rewrite after the deploy (also open in #18).
-  4. **Example poems.** The poems in `utils/examplePoems.ts` and the PDF
+  4. **Example poems** (still open on 18 Nov: `utils/examplePoems.ts` last changed
+     11 Nov, the prompt on 14 Nov). The poems in `utils/examplePoems.ts` and the PDF
      showcase come from the old prompt. The site now writes better poems than
      its examples. Write them again (`scripts/generate-example-poems.ts`) and
      review them.
@@ -524,6 +529,31 @@ Owner steps:
 - **Needs:** season codes with a 3-browser limit (code and deploy), Workers Paid
   and Email Sending onboarding (owner), a Dodo CSV export (owner), the send script,
   a privacy text change.
+
+### #31 Free rewrite with a wish
+
+- **Status:** built 18 November 2026, not deployed. Details in `CLAUDE.md` (Poem generation, step 6).
+- **Why:** in the 14 days to 18 November, 13 payment windows opened for a rewrite of a free poem; 4 of 35 windows led to Dodo.
+- **Safeguards:** a wish is required; the poem must carry SintGPT's signature; the poem model, not the rewrite model (about $0.012); 1 per IP per 24 hours on its own counter; `NUXT_FREE_REWRITE=off` stops it without a deploy.
+- **Measure after the deploy:** `Poem ready` `free rewrite` and `Regenerate poem` with plan `free` (cost), then `Show payment modal` `rewrite` against the weeks before. A free rewrite that leads to sharing (`Copy share link`, `Shared via …`) is the goal.
+- **Watch:** households on one IP share the one free rewrite (same as #17).
+
+### #32 Write first, then pay
+
+- **Status:** built 18 November 2026, not deployed. Details in `CLAUDE.md` (Payments).
+- **What:** a free visitor without poems left gets the new poem written; the page shows the greeting and the first stanza, the rest as blurred bars, and "Lees het hele gedicht". After payment the page opens the whole poem.
+- **Safeguards:** 2 previews per IP per 24 hours; only while payments work; KV for 2 hours, the browser gets only the start; unlocking needs access and counts as a poem; `NUXT_POEM_PREVIEW=off`.
+- **Cost:** each preview is a poem (about $0.012). Worst case 2 per IP per day.
+- **Measure:** `Poem preview` → `Show payment modal` `preview` → `Proceed to payment` → `Poem unlocked` `new`. Compare with `Show payment modal` `submit` → `Proceed to payment` before (18 → few).
+- **Before the deploy:** test once on a preview deploy or `wrangler dev` with KV: preview, pay in Dodo test mode, return, poem opens.
+
+### #33 Sint reads the poem (video)
+
+- **Status:** researched 18 November 2026 (ElevenLabs), decision needed.
+- **Pipeline:** own Sint voice (Voice Design) → `eleven_v4` TTS in Dutch (about $0.05 per poem) → `creatify-aurora` (image + audio → talking video, the only lip-sync model in the public ElevenLabs API, `POST /v1/flows/video`) → webhook → copy the MP4 to R2 (the ElevenLabs link expires after about 1 hour).
+- **Cost and wait:** about $3.20 (480p) to $6.35 (720p) for a 45 s poem; about 3–6 minutes. Too costly for the 100/day cap: at most 1–3 videos per Hele familie purchase, or a separate product.
+- **Needs:** Pro plan or above for the Image & Video API (check what the account's grant includes); a front-facing Sint image with a visible mouth (`sint.png` is three-quarter, beard over the mouth); one 10 s test clip to read the real cost.
+- **Risks:** the ElevenLabs use policy needs written approval for products aimed at under-18s (children watch); EU AI Act art. 50 labelling of synthetic video versus the "no AI-gegenereerd" text rule; the poem (with names) goes to ElevenLabs and Creatify (privacy text; opt out of training).
 
 ## Findings
 

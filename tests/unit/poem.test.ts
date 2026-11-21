@@ -7,6 +7,7 @@ import {
   poemProviderOptions,
   PoemRequestSchema,
   REGENERATE_POEM_MODEL,
+  withPoemLength,
 } from '../../server/utils/poem';
 
 const validRequest = {
@@ -46,7 +47,8 @@ describe('PoemRequestSchema', () => {
     ['empty name', { name: '' }],
     ['unknown style', { style: 'rap' }],
     ['unknown rhyme scheme', { rhymeScheme: 'AAAA' }],
-    ['too few lines', { lines: 7 }],
+    // 5 to 7 pass the schema: withPoemLength makes them 8 (or 5 for a limerick).
+    ['too few lines', { lines: 4 }],
     ['too many lines', { lines: 51 }],
     ['fractional lines', { lines: 10.5 }],
     ['unknown language', { language: 'german' }],
@@ -122,11 +124,22 @@ describe('poem craft rules', () => {
     expect(prompt()).toContain('De laatste twee regels zijn de uitsmijter');
   });
 
-  it('gives a limerick its own rhythm and stanzas', () => {
+  it('gives a limerick its own rhythm, one verse of 5 lines and a closing line', () => {
+    // 10 lines: what pages from before 21 Nov 2026 send for a limerick.
     const limerick = prompt({ rhymeScheme: 'Limerick', lines: 10 });
-    expect(limerick).toContain('Limericks van vijf regels');
+    expect(limerick).toContain('precies 5 regels. Eén limerick van vijf regels');
     expect(limerick).toContain('regel 3 en 4 zijn kort');
+    expect(limerick).toContain('De slotregel is de uitsmijter');
     expect(limerick).not.toContain('ongeveer 10 lettergrepen');
+    expect(limerick).not.toContain('De laatste twee regels');
+  });
+
+  it('writes every limerick at 5 lines and other schemes at 8 or more', () => {
+    expect(withPoemLength({ rhymeScheme: 'Limerick', lines: 50 }).lines).toBe(5);
+    expect(withPoemLength({ rhymeScheme: 'Limerick', lines: 5 }).lines).toBe(5);
+    expect(withPoemLength({ rhymeScheme: 'AABB', lines: 5 }).lines).toBe(8);
+    expect(withPoemLength({ rhymeScheme: 'ABAB', lines: 24 }).lines).toBe(24);
+    expect(prompt({ lines: 5 })).toContain('precies 8 regels');
   });
 
   it('forbids made-up traits, most of all without fun facts', () => {

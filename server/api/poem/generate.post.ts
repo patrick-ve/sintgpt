@@ -11,9 +11,10 @@ import { formFacts, trackServerEvent } from '../../utils/analytics';
 import { clientDisconnectSignal } from '../../utils/clientDisconnect';
 import { paidAccess } from '../../utils/paymentCookie';
 import { checkPoemRateLimit, rateLimitIp } from '../../utils/poemRateLimit';
+import { freeRewriteEnabled, qualifiesForFreeRewrite } from '../../utils/freeRewrite';
 import { signPoemShare } from '../../utils/poemShare';
 import { paymentsAvailable } from '../../utils/paymentsStatus';
-import { BUYER_RATE_LIMIT, creditsRule, freeRateLimit, poemAttempt } from '../../utils/rateLimit';
+import { BUYER_RATE_LIMIT, creditsRule, FREE_REWRITE_LIMIT, freeRateLimit, poemAttempt } from '../../utils/rateLimit';
 import { TIERS } from '../../../utils/pricingTiers';
 import { framePoem, framePoemStream, poemFrame } from '../../../utils/poemFrame';
 import {
@@ -24,6 +25,7 @@ import {
   poemProviderOptions,
   PoemRequestSchema,
   REGENERATE_POEM_MODEL,
+  withPoemLength,
 } from '../../utils/poem';
 
 export default defineEventHandler(async (event) => {
@@ -56,13 +58,19 @@ export default defineEventHandler(async (event) => {
       }
     }
 
+    // A free visitor's one free rewrite of a poem SintGPT wrote, with a wish:
+    // its own counter and the poem model (safeguards in freeRewrite.ts).
+    const freeRewrite = !access
+      && freeRewriteEnabled(runtimeConfig.freeRewrite)
+      && await qualifiesForFreeRewrite(await readBody(event).catch(() => null), runtimeConfig.accessCookieSecret);
+
     if (!import.meta.dev) {
       // Free visitors get the one poem the page offers, per connection, so a
       // private window (which resets the page's count) gets nothing extra.
       // While payments do not work, the page allows more and so does this.
       const rule = tier?.poems
         ? creditsRule(tier.poems, access!.expiresAt, Date.now())
-        : access ? BUYER_RATE_LIMIT : freeRateLimit(await paymentsAvailable(event));
+        : access ? BUYER_RATE_LIMIT : freeRewrite ? FREE_REWRITE_LIMIT : freeRateLimit(await paymentsAvailable(event));
       // The same attempt again after a dropped connection does not count
       // (MAX_POEM_RETRIES in server/utils/rateLimit.ts).
       const attempt = poemAttempt(await readBody(event).catch(() => null));
@@ -70,7 +78,7 @@ export default defineEventHandler(async (event) => {
         event,
         access
           ? { kind: 'buyer', id: access.paymentId }
-          : { kind: 'ip', id: rateLimitIp(ip) },
+          : { kind: freeRewrite ? 'rewrite' : 'ip', id: rateLimitIp(ip) },
         rule,
         attempt,
       );
@@ -79,9 +87,10 @@ export default defineEventHandler(async (event) => {
         // The client shows the payment window for `limit` (free poems) and
         // `credits` (the three Drie poems are used). A buyer who reaches the
         // daily cap gets `fair-use` and a message instead.
+        // `rewrite`: the free rewrite of this connection is used.
         const reason = verdict.reason === 'limit' && tier
           ? (tier.poems ? 'credits' : 'fair-use')
-          : verdict.reason;
+          : verdict.reason === 'limit' && freeRewrite ? 'rewrite' : verdict.reason;
         // No IP in the log: the reason is enough to see abuse.
         consola.warn(`Rate limit: ${reason}`);
         trackServerEvent(event, 'Rate limited', { detail: reason, plan: access ? 'paid' : 'free', tier: access?.tier });
@@ -93,6 +102,7 @@ export default defineEventHandler(async (event) => {
             limit: `This connection has used its ${rule.maxRequests === 1 ? 'free poem' : `${rule.maxRequests} free poems`} for the last 24 hours.`,
             credits: `You have written the ${tier?.poems} poems you bought.`,
             'fair-use': `You have made ${BUYER_RATE_LIMIT.maxRequests} poems in 24 hours. Please try again later.`,
+            rewrite: 'This connection has used its free rewrite for the last 24 hours.',
           }[reason],
           data: { reason, retryAfterSeconds: verdict.retryAfterSeconds },
         });
@@ -103,7 +113,7 @@ export default defineEventHandler(async (event) => {
     const body = await readBody(event);
 
     // Validate the request data
-    const validatedData = PoemRequestSchema.parse(body);
+    const validatedData = withPoemLength(PoemRequestSchema.parse(body));
 
     consola.info('Generating poem with parameters:', {
       style: validatedData.style,
@@ -136,7 +146,8 @@ export default defineEventHandler(async (event) => {
     const prompt = buildPrompt(validatedData);
 
     // A rewrite always uses the larger model, whatever the override says.
-    const modelId = validatedData.regenerate
+    // The free rewrite uses the poem model: cheaper, and as quick as a poem.
+    const modelId = validatedData.regenerate && !freeRewrite
       ? REGENERATE_POEM_MODEL
       : runtimeConfig.aiGatewayModel || DEFAULT_POEM_MODEL;
     consola.info(`Sending request to AI Gateway (${modelId})...`);

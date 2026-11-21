@@ -53,7 +53,7 @@ const TIMELINE_EVENTS = [
   'Generate poem', 'Regenerate poem', 'Poem aborted', 'Rate limited', 'No poems left', 'Form refused',
   'Show payment modal', 'Close payment modal', 'Proceed to payment', 'Payment returned', 'Payment verified',
   'Payment succeeded', 'Access restored', 'Restore failed', 'Poem retry', 'Rate poem', 'Edit poem',
-  'Contact sent', 'Contact refused', 'Contact failed', 'Surprise ideas',
+  'Contact sent', 'Contact refused', 'Contact failed', 'Surprise ideas', 'Poem preview', 'Poem unlocked',
 ];
 
 const QUERIES: Record<string, string> = {
@@ -68,6 +68,16 @@ const QUERIES: Record<string, string> = {
       round(SUM(_sample_interval * double4), 4) AS cost_usd
     FROM ${DATASET} WHERE ${since} AND blob1 IN ('Generate poem', 'Regenerate poem')
     GROUP BY day ORDER BY day`,
+  'Free rewrite and write first, then pay': `
+    SELECT blob1 AS event, blob9 AS detail, blob8 AS plan, SUM(_sample_interval) AS count,
+      round(SUM(_sample_interval * double4), 4) AS cost_usd
+    FROM ${DATASET}
+    WHERE ${since} AND (blob1 IN ('Poem preview', 'Poem unlocked')
+      OR (blob1 = 'Regenerate poem' AND blob8 = 'free')
+      OR (blob1 = 'Poem ready' AND blob9 IN ('free rewrite', 'preview'))
+      OR (blob1 = 'Show payment modal' AND blob9 = 'preview')
+      OR (blob1 = 'Rate limited' AND (blob9 = 'rewrite' OR blob9 LIKE 'preview:%' OR blob9 LIKE 'unlock:%')))
+    GROUP BY event, detail, plan ORDER BY event, count DESC`,
   'Poems by style': `
     SELECT blob5 AS style, blob7 AS language, SUM(_sample_interval) AS poems
     FROM ${DATASET} WHERE ${since} AND blob1 IN ('Generate poem', 'Regenerate poem')

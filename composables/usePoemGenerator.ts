@@ -18,6 +18,8 @@ interface PoemRequest {
   /** With regenerate: what should change, and the poem on screen. */
   rewriteHint?: string;
   previousPoem?: string;
+  /** The signed share of previousPoem: the free rewrite needs it. */
+  previousShare?: PoemShare | null;
 }
 
 /**
@@ -75,8 +77,9 @@ export const usePoemGenerator = () => {
   const error = ref<string | null>(null);
   const poem = ref<string | null>(null);
   const isRateLimitError = ref(false);
-  // Why the payment offer shows: `limit` (free poems) or `credits` (Drie used up).
-  const rateLimitReason = ref<'limit' | 'credits' | null>(null);
+  // Why the payment offer shows: `limit` (free poems), `credits` (Drie used
+  // up) or `rewrite` (the free rewrite of this connection is used).
+  const rateLimitReason = ref<'limit' | 'credits' | 'rewrite' | null>(null);
   const share = ref<PoemShare | null>(null);
   /** The retry in progress after a dropped connection (1, 2), or 0. */
   const retrying = ref(0);
@@ -154,9 +157,11 @@ export const usePoemGenerator = () => {
           // The page did not know (another device, cleared site data): the
           // server counted the attempt against a visitor without poems left.
           isRateLimitError.value = true;
-          rateLimitReason.value = data?.reason === 'credits' ? 'credits' : 'limit';
+          rateLimitReason.value = data?.reason === 'credits' || data?.reason === 'rewrite' ? data.reason : 'limit';
           error.value = null;
-          track('No poems left', { detail: `${rateLimitReason.value === 'credits' ? 'credits' : 'free'}:server` });
+          track('No poems left', {
+            detail: rateLimitReason.value === 'rewrite' ? 'free:rewrite:server' : `${rateLimitReason.value === 'credits' ? 'credits' : 'free'}:server`,
+          });
         }
         return;
       }

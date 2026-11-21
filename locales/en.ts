@@ -171,6 +171,18 @@ export default {
     sampleTitle: 'Poem for Mark',
     sampleSignature: 'From Sinterklaas & Pete',
     regenerate: 'Rewrite this poem',
+    regenerateFree: 'Rewrite for free with a wish',
+    preview: {
+      ready: 'The start of your poem is ready.',
+      title: 'Your poem is ready',
+      text: 'Above you see how it starts. Choose how to keep writing, and you read the whole poem right away.',
+      button: 'Read the whole poem',
+      keep: 'We keep your poem for 2 hours.',
+      hidden: 'You see the other {count} lines after paying.',
+      opening: 'Opening your poem…',
+      expired: 'We no longer have this poem: we keep it for 2 hours. What you filled in is still in the form. Write the poem again.',
+      failed: 'Opening your poem did not work. Reload the page to try again.',
+    },
     newPoem: 'New poem',
     regenerateWithHint: 'Rewrite with this wish',
     hint: {
@@ -179,6 +191,7 @@ export default {
       placeholder: 'For example shorter, or more about his new bike',
       suggestions: 'Quick wishes',
       chips: ['Shorter', 'Funnier', 'Kinder', 'More about the present', 'Better rhyme'],
+      free: 'You may have your poem rewritten once for free, with a wish.',
       close: 'Close',
     },
     edit: {
@@ -296,7 +309,7 @@ export default {
       {
         question: 'Can I make a short Sinterklaas poem?',
         answer:
-          'Yes. You choose the length, from 8 to 40 lines. A poem of 8 lines takes half a minute to read aloud, which helps when there are many presents. A limerick has verses of 5 lines.',
+          'Yes. You choose the length, from 8 to 40 lines. A poem of 8 lines takes half a minute to read aloud, which helps when there are many presents. A limerick always has 5 lines.',
       },
       {
         question: 'How personal do the poems get?',
@@ -321,7 +334,7 @@ export default {
       {
         question: 'Can I change a poem or have it written again?',
         answer:
-          'Yes. "Rewrite this poem" gives you a new version with the same details. It comes with Family and Whole family. Want to change something yourself? Copy the poem and edit it however you like.',
+          'Yes. "Rewrite this poem" gives you a new version with the same details. It comes with Family and Whole family. You may have your free poem rewritten once for free, with a wish such as "shorter". Want to change something yourself? Choose "Edit" and change the poem however you like.',
       },
       {
         question: 'Is my data stored?',
@@ -350,6 +363,7 @@ export default {
     },
     intro: {
       rewriteTier: 'Rewriting poems with AI comes with Family and Whole family. What you filled in stays.',
+      preview: 'Your new poem is ready. After paying, you read the whole of it right away, and keep writing.',
       credits: 'You have written your 3 poems. Want to keep writing? What you filled in stays.',
       surprise: 'Surprise ideas for your poem come with Whole family.',
       design: 'This PDF design comes with Whole family.',
@@ -408,6 +422,9 @@ export default {
     successMessageFamilie: 'Write as many poems as you like, next year too. With every poem you can ask for surprise ideas.',
     successMessageFamilieSeason: 'Write as many poems as you like, until pakjesavond. Ask for surprise ideas with every poem.',
     successDraft: 'What you filled in is still in the form.',
+    successPreview: 'Your poem is below. Then you keep writing right away.',
+    rewriteUsedTitle: 'Your free rewrite is used',
+    rewriteUsedMessage: 'Someone on this internet connection already had a poem rewritten for free in the last 24 hours. More rewrites come with Family and Whole family.',
     successNext: 'Write the poem',
     pendingTitle: 'Checking your payment…',
     pendingMessage:
@@ -574,7 +591,7 @@ export default {
       },
       {
         question: 'How many poems are free?',
-        answer: 'Your first poem is free. Each internet connection can make at most 1 free poem per 24 hours.',
+        answer: 'Your first poem is free. Each internet connection can make at most 1 free poem per 24 hours. You may have that poem rewritten once for free, with a wish.',
       },
     ],
     formTitle: 'Send a message',
@@ -634,7 +651,7 @@ export default {
         {
           heading: 'On your own device',
           body: [
-            'Your poems, your language choice and the number of free poems you used are kept in your browser\'s storage (localStorage). They do not leave your device. You delete them with "Clear all" under My poems, or by clearing the site data in your browser.',
+            'Your poems, your language choice, the number of free poems you used and whether you used your free rewrite are kept in your browser\'s storage (localStorage). When your free poem is used and you write a new poem anyway, the start of it and a code to open it after paying are kept there too, for at most 2 hours. They do not leave your device. You delete them with "Clear all" under My poems, or by clearing the site data in your browser.',
             'When you go to pay, we also keep what you filled in on the form, so it is still there when you come back. We delete it as soon as you are back. If you do not come back within 2 hours, we no longer use it and delete it on your next visit.',
             'When you draw names on sintgpt.com/lootjes, the names and the draw stay on your device only, until you start a new draw. We do not send them to a server.',
           ],
@@ -642,13 +659,13 @@ export default {
         {
           heading: 'Shared poems',
           body: [
-            'When you share a poem with a short link, we keep the poem at Cloudflare (Workers KV) for 90 days. After that it removes itself. Anyone with the link can read it. With a long link, the poem is in the link itself. Its first lines can then end up in server logs. When you edit a poem, your browser sends the edited and the original poem to our server, so the share link keeps working. We do not keep them.',
+            'When you share a poem with a short link, we keep the poem at Cloudflare (Workers KV) for 90 days. After that it removes itself. Anyone with the link can read it. With a long link, the poem is in the link itself. Its first lines can then end up in server logs. When you edit a poem, your browser sends the edited and the original poem to our server, so the share link keeps working. We do not keep them. When your free poem is used and you write a new poem anyway, SintGPT writes it right away and we keep it at Cloudflare (Workers KV) for at most 2 hours, so you can read it after paying. After that it removes itself. Until you pay, your browser gets only the start.',
           ],
         },
         {
           heading: 'Your IP address',
           body: [
-            'Free users can make 1 poem a day, or 3 while payments do not work. To count them, we use your IP address. We do not keep it ourselves: Cloudflare keeps only a keyed hash and a counter. Both are deleted after 24 hours at most. For paying users we count per payment in the same way, with a maximum of 100 poems a day. With 3 poems, we count per payment how many poems you wrote; that counter is deleted after pakjesavond.',
+            'Free users can make 1 poem a day, or 3 while payments do not work. They may also have 1 poem a day rewritten for free with a wish, and have 2 new poems a day written ahead, to read after paying. To count them, we use your IP address. We do not keep it ourselves: Cloudflare keeps only a keyed hash and a counter. Both are deleted after 24 hours at most. For paying users we count per payment in the same way, with a maximum of 100 poems a day. With 3 poems, we count per payment how many poems you wrote; that counter is deleted after pakjesavond.',
             'Cloudflare hosts the website and keeps technical logs, such as the time and the address of a request. We keep those logs for 7 days at most, to find outages and abuse.',
             'Legal basis: our legitimate interest in keeping the service affordable, safe and available.',
           ],
@@ -717,7 +734,7 @@ export default {
         {
           heading: 'Free use',
           body: [
-            'Your first poem is free. Each internet connection can make at most 1 free poem per 24 hours, or 3 while payments do not work.',
+            'Your first poem is free. Each internet connection can make at most 1 free poem per 24 hours, or 3 while payments do not work. You may have your free poem rewritten once for free, with a wish (at most once per internet connection per 24 hours). When your free poem is used, SintGPT writes a new poem ahead and shows you its start; you read the whole poem after paying. We keep it for 2 hours.',
           ],
         },
         {

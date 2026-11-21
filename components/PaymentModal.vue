@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { fillSeasons, formatPrice, pricePerPoemCents, RECOMMENDED_TIER, TIER_IDS, TIERS, type TierId } from '~/utils/pricingTiers';
 
-export type PaymentTrigger = 'submit' | 'rewrite' | 'limit' | 'credits' | 'surprise' | 'design';
+export type PaymentTrigger = 'submit' | 'rewrite' | 'limit' | 'credits' | 'surprise' | 'design' | 'preview';
 
 const { t, locale } = useI18n();
 
 const isOpen = defineModel<boolean>({ default: false });
 
 // Why the window opened, for analytics and the first line: the second poem, a
-// rewrite, the server's daily limit, the Drie poems used up, or a Hele
-// familie feature. `tier` is the card to select, if it can be bought.
+// rewrite, the server's daily limit, the Drie poems used up, a Hele familie
+// feature, or a poem written before payment (`preview`). `tier` is the card to select, if it can be bought.
 // `freeEdit`: the window opened for a rewrite of a poem on screen, which the
 // visitor can also change by hand for free ("Pas aan").
 const props = defineProps<{ trigger?: PaymentTrigger; tier?: TierId; freeEdit?: boolean }>();
@@ -64,7 +64,7 @@ const upgradeNudge = computed(() => {
 
 const intro = computed(() => {
   if (props.trigger === 'rewrite' && ownedTier.value) return t('payment.intro.rewriteTier');
-  if (props.trigger === 'credits' || props.trigger === 'surprise' || props.trigger === 'design') {
+  if (props.trigger === 'credits' || props.trigger === 'surprise' || props.trigger === 'design' || props.trigger === 'preview') {
     return t(`payment.intro.${props.trigger}`);
   }
   return t('payment.nextStep');

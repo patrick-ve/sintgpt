@@ -68,11 +68,12 @@ export type ApiLimiter = 'PAYMENT_BURST' | 'LINKS_BURST';
 /**
  * Routes that had no limit: payments and gifts (10 a minute per IP: Dodo
  * calls, and guessing payment IDs or gift codes), and poem links (60 a
- * minute: KV reads and signature checks). Poems, surprise ideas, edits and
- * events have their own limits in their handlers.
+ * minute: KV reads and signature checks). Unlocking a poem written before
+ * payment counts with the payments (guessing preview IDs). Poems, previews,
+ * surprise ideas, edits and events have their own limits in their handlers.
  */
 export function apiLimiter(method: string, path: string): ApiLimiter | null {
-  if (method === 'POST' && ['/api/payment/create-checkout', '/api/payment/claim-access', '/api/payment/claim-gift'].includes(path)) {
+  if (method === 'POST' && ['/api/payment/create-checkout', '/api/payment/claim-access', '/api/payment/claim-gift', '/api/poem/unlock'].includes(path)) {
     return 'PAYMENT_BURST';
   }
   if (path === '/api/share/links' || path.startsWith('/api/share/links/') || path === '/api/share/verify') {

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { POEM_INPUT_LIMITS } from '../../utils/poemLimits';
+import { LIMERICK_LINES, POEM_INPUT_LIMITS, POEM_LINES } from '../../utils/poemLimits';
 import { poemFrame, unframePoem } from '../../utils/poemFrame';
 
 // Default AI Gateway model. Override with the NUXT_AI_GATEWAY_MODEL env var.
@@ -81,7 +81,9 @@ export const PoemRequestSchema = z.object({
     'roast',
   ]),
   rhymeScheme: z.enum(['AABB', 'ABAB', 'ABBA', 'Limerick']),
-  lines: z.number().int().min(8).max(50),
+  // 5 for a limerick, 8 to 40 otherwise. Pages from before 21 Nov 2026 send a
+  // limerick of 10 to 50 lines; withPoemLength makes every limerick 5.
+  lines: z.number().int().min(LIMERICK_LINES).max(50),
   language: z.enum(['dutch', 'english']),
   // "Aanhef en ondertekening": the server puts "Lieve <name>," above the poem
   // and "Van Sint & Piet" below it (utils/poemFrame.ts). Off for clients
@@ -93,6 +95,14 @@ export const PoemRequestSchema = z.object({
   // Only with regenerate: what should change, and the poem it changes.
   rewriteHint: z.string().max(POEM_INPUT_LIMITS.rewriteHint).optional(),
   previousPoem: z.string().max(POEM_INPUT_LIMITS.previousPoem).optional(),
+  // The signed share of previousPoem. A free visitor's free rewrite needs it,
+  // to show that SintGPT wrote the poem it changes (freeRewrite.ts).
+  previousShare: z.object({
+    s: z.string().max(400),
+    l: z.enum(['nl', 'en']),
+    d: z.string().max(64),
+    sig: z.string().max(64),
+  }).optional(),
   // One ID per poem from the page, sent again with `retry` after a dropped
   // connection. The rate limit reads them (poemAttempt in rateLimit.ts).
   attempt: z.string().regex(/^[A-Za-z0-9-]{8,64}$/).optional(),
@@ -100,6 +110,17 @@ export const PoemRequestSchema = z.object({
 });
 
 export type PoemRequest = z.infer<typeof PoemRequestSchema>;
+
+// The length the server writes: a limerick is always one verse of 5 lines,
+// other schemes at least POEM_LINES.min. Not a refinement on the schema,
+// because surprise.ts picks fields from it. Use it right after parsing, so
+// the prompt, analytics and stored previews agree.
+export function withPoemLength<T extends Pick<PoemRequest, 'rhymeScheme' | 'lines'>>(data: T): T {
+  const lines = data.rhymeScheme === 'Limerick'
+    ? LIMERICK_LINES
+    : Math.max(POEM_LINES.min, data.lines);
+  return lines === data.lines ? data : { ...data, lines };
+}
 
 // Visitor text goes between XML tags in the prompt. It must not be able to
 // close a tag, open a new one or end the data block, so the model keeps
@@ -132,7 +153,7 @@ export function buildPrompt(
   const clean = (value: string | undefined) =>
     value === undefined ? undefined : asPromptData(value);
   const data: PoemRequest = {
-    ...input,
+    ...withPoemLength(input),
     name: asPromptData(input.name),
     present: clean(input.present),
     funFacts: clean(input.funFacts),
@@ -225,10 +246,13 @@ export function buildPrompt(
     userDataSection += `\n<rewrite_wish>${hint}</rewrite_wish>`;
   }
 
-  // The form offers 8 to 40 lines in steps of 4, and limericks in steps of 5.
+  // The form offers 8 to 40 lines in steps of 4; a limerick is one verse of 5.
   const stanzaInstruction = limerick
-    ? 'Limericks van vijf regels, met een lege regel ertussen.'
+    ? 'Eén limerick van vijf regels, zonder lege regels.'
     : 'Coupletten van vier regels, met een lege regel ertussen.';
+  const closingInstruction = limerick
+    ? 'De slotregel is de uitsmijter: een grap of knipoog die terugverwijst naar de eerste regel.'
+    : 'De laatste twee regels zijn de uitsmijter: een grap of knipoog die terugverwijst naar iets eerder in het gedicht.';
 
   // Without a length to aim at, the model writes lines of 13 to 16 syllables
   // and fills them with adjectives. Ten syllables reads aloud best.
@@ -323,7 +347,7 @@ Zo schrijf je het:
 - Rijm: zuiver eindrijm, met de klemtoon op de rijmende lettergreep. Rijm een woord nooit op zichzelf. Het rijm volgt de zin, niet andersom: geen stoplappen (woorden die er alleen staan voor het rijm of om de regel te vullen) en geen verdraaide woordvolgorde. Past een rijmwoord niet, kies dan een ander rijmpaar.
 - Taal: gewone, levende spreektaal en correcte uitdrukkingen. Elke regel zegt iets concreets dat klopt; een regel die je in gewone woorden niet kunt navertellen, schrijf je opnieuw. Schrap bijvoeglijke naamwoorden en bijwoorden die niets toevoegen.
 - ${contentInstruction}
-- Opbouw: ${openingInstruction} De laatste twee regels zijn de uitsmijter: een grap of knipoog die terugverwijst naar iets eerder in het gedicht.${presentInstruction}${voiceInstruction}${audienceInstruction}
+- Opbouw: ${openingInstruction} ${closingInstruction}${presentInstruction}${voiceInstruction}${audienceInstruction}
 - Sint en Piet bestaan echt in het gedicht, zeker als er kinderen bij zijn.${limitsInstruction}${rewriteInstruction}
 - Tempo: denk kort na en schrijf het gedicht dan in één keer op. Tel geen lettergrepen na en maak geen reeks kladversies: een goed gehoor is genoeg.
 - Geef alleen het gedicht zelf: geen titel, geen uitleg, geen opmaak.${exampleBlock}

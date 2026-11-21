@@ -13,6 +13,8 @@ interface PaymentState {
   poemCount: number;
   trialPoem?: string | null;
   trialPoemName?: string | null;
+  /** The free visitor's one free rewrite (with a wish) is used. */
+  freeRewriteUsed?: boolean;
 }
 
 const STORAGE_KEY = 'sinterklaas-payment';
@@ -33,6 +35,7 @@ const tiersOnSale = ref<TierId[]>([...TIER_IDS]);
 const isInitialized = ref(false);
 const storedTrialPoem = ref<string | null>(null);
 const storedTrialPoemName = ref<string | null>(null);
+const freeRewriteUsed = ref(false);
 // True while Dodo refuses checkouts. Then the page does not offer payment and
 // only the server's daily limit applies.
 const paymentsUnavailable = ref(false);
@@ -48,6 +51,7 @@ export const usePaymentTracking = () => {
         poemCount.value = state.poemCount;
         storedTrialPoem.value = state.trialPoem ?? null;
         storedTrialPoemName.value = state.trialPoemName ?? null;
+        freeRewriteUsed.value = state.freeRewriteUsed === true;
       }
     } catch (error) {
       console.error('Error reading payment state:', error);
@@ -62,6 +66,7 @@ export const usePaymentTracking = () => {
         poemCount: poemCount.value,
         trialPoem: storedTrialPoem.value,
         trialPoemName: storedTrialPoemName.value,
+        freeRewriteUsed: freeRewriteUsed.value,
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch (error) {
@@ -127,6 +132,16 @@ export const usePaymentTracking = () => {
       paymentsUnavailable.value = false;
     }
     return !paymentsUnavailable.value;
+  };
+
+  /**
+   * A free visitor may rewrite a poem once, with a wish, without paying. The
+   * server holds the real count (1 per connection per 24 hours).
+   */
+  const canFreeRewrite = computed(() => !isPaid.value && !freeRewriteUsed.value);
+  const markFreeRewriteUsed = () => {
+    freeRewriteUsed.value = true;
+    saveToStorage();
   };
 
   const remainingFreePoems = computed(() => {
@@ -243,6 +258,8 @@ export const usePaymentTracking = () => {
     refreshAccess: checkServerAccess,
     canGeneratePoem,
     remainingFreePoems,
+    canFreeRewrite,
+    markFreeRewriteUsed,
     incrementPoemCount,
     claimPayment,
     claimGift,

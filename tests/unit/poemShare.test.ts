@@ -228,7 +228,8 @@ describe('input limits', () => {
     expect(PoemRequestSchema.safeParse({ ...base, [field]: 'x'.repeat(length) }).success).toBe(false);
   });
 
-  it('accepts the 50 lines that the form offers for a limerick', () => {
+  it('accepts a limerick of 5 lines, and the 50 lines older pages sent for one', () => {
+    expect(PoemRequestSchema.safeParse({ ...base, rhymeScheme: 'Limerick', lines: 5 }).success).toBe(true);
     expect(PoemRequestSchema.safeParse({ ...base, rhymeScheme: 'Limerick', lines: 50 }).success).toBe(true);
   });
 });

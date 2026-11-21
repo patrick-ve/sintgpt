@@ -55,11 +55,16 @@ const VALID_POEM_REQUEST = {
 };
 
 /** A poem as the UI message stream that /api/poem/generate sends. */
-function poemStream(poem: string): string {
+function poemStream(poem: string, share?: Record<string, string>): string {
   return poem.match(/\S+\s*/g)!
     .map(delta => `data: ${JSON.stringify({ type: 'text-delta', id: '0', delta })}\n\n`)
-    .join('') + 'data: [DONE]\n\n';
+    .join('')
+    + (share ? `data: ${JSON.stringify({ type: 'data-share', data: share })}\n\n` : '')
+    + 'data: [DONE]\n\n';
 }
+
+/** A share as the server signs it. The page only passes it on; mocked routes do not check it. */
+const TEST_SHARE = { s: 'dGVzdA', l: 'nl', d: 'ZGlnZXN0', sig: 'c2ln' };
 
 type TestPage = Awaited<ReturnType<typeof createPage>>;
 
@@ -125,6 +130,8 @@ describe('privacy and terms', () => {
     expect(privacy).toContain('24 uur');
     expect(privacy).toContain('100 gedichten per dag');
     expect(terms).toContain('1 gratis gedicht per 24 uur');
+    expect(terms).toContain('1 keer gratis laten herschrijven met een wens');
+    expect(privacy).toContain('hooguit 2 uur bij Cloudflare (Workers KV)');
     expect(terms).toContain('100 gedichten per 24 uur');
     expect(terms).toContain('€6,99');
     expect(terms).toContain('€3,99');
@@ -489,14 +496,18 @@ describe('poem form', () => {
     await page.close();
   });
 
-  it('switches the limits of the length slider for a limerick', async () => {
+  it('fixes a limerick at 5 lines and brings the chosen length back after it', async () => {
     const page = await createPage('/');
     const slider = page.locator('#poem-lines');
     expect(await slider.getAttribute('max')).toBe('40');
+    await slider.fill('20');
     await page.getByRole('radio', { name: 'Limerick' }).check();
-    expect(await slider.getAttribute('max')).toBe('50');
-    expect(await slider.getAttribute('step')).toBe('5');
-    expect(Number(await slider.inputValue()) % 5).toBe(0);
+    expect(await slider.isDisabled()).toBe(true);
+    expect(await slider.inputValue()).toBe('5');
+    await page.getByText('Limericks zijn altijd 5 regels').waitFor();
+    await page.getByRole('radio', { name: 'AABB' }).check();
+    expect(await slider.isEnabled()).toBe(true);
+    expect(await slider.inputValue()).toBe('20');
     await page.close();
   });
 });
@@ -1753,6 +1764,127 @@ describe('analytics funnel events', () => {
     await expect.poll(() => named(events, 'Shared via share sheet').map(event => event.detail))
       .toEqual(['refused', 'done']);
     expect(await shares()).toHaveLength(2);
+    await page.close();
+  }, 45_000);
+});
+
+describe('free rewrite and write first, then pay', () => {
+  it('lets a free visitor rewrite the free poem once, with a wish', async () => {
+    const page = await createPage();
+    await paymentsWork(page);
+    const sent: Array<Record<string, unknown>> = [];
+    await page.route('**/api/poem/generate', (route) => {
+      sent.push(route.request().postDataJSON());
+      const poem = sent.length === 1 ? 'Eerste gratis versie.' : 'Kortere versie.';
+      return route.fulfill({ status: 200, contentType: 'text/event-stream', body: poemStream(poem, TEST_SHARE) });
+    });
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+    await page.fill('#poem-name', 'Sanne');
+    await page.locator('#poem-form button[type=submit]').click();
+    await page.getByText('Eerste gratis versie.').waitFor({ timeout: 15_000 });
+
+    // Without a wish, the button asks for one first.
+    await page.getByRole('button', { name: 'Herschrijf gratis met een wens' }).click();
+    await page.getByText('Je mag je gedicht 1 keer gratis laten herschrijven met een wens.').waitFor();
+    expect(sent).toHaveLength(1);
+    await page.fill('#rewrite-hint-input', 'korter');
+    await page.getByRole('button', { name: 'Herschrijf met deze wens' }).click();
+    await page.getByText('Kortere versie.').waitFor({ timeout: 15_000 });
+    expect(sent[1]).toMatchObject({
+      regenerate: true,
+      rewriteHint: 'korter',
+      previousPoem: 'Eerste gratis versie.',
+      previousShare: TEST_SHARE,
+    });
+
+    // Used: the next rewrite opens the payment window.
+    await page.getByRole('button', { name: 'Herschrijf dit gedicht' }).click();
+    await page.locator('dialog[open] .pay-button').waitFor();
+    expect(sent).toHaveLength(2);
+    await page.close();
+  }, 45_000);
+
+  it('writes a new poem for a free visitor without poems left, and shows only its start', async () => {
+    const page = await createPage();
+    await paymentsWork(page);
+    await page.addInitScript(() => {
+      localStorage.setItem('sinterklaas-payment', JSON.stringify({ poemCount: 1 }));
+    });
+    const sent: unknown[] = [];
+    await page.route('**/api/poem/preview', (route) => {
+      sent.push(route.request().postDataJSON());
+      return route.fulfill({ json: {
+        id: 'abcdefghijklmnopqrstuv',
+        shown: ['Lieve Sanne,', '', 'Regel een van het gedicht,', 'Regel twee rijmt erop.'],
+        hidden: [30, 28, 0, 31, 29, 0, 15],
+        expiresAt: Date.now() + 2 * 60 * 60 * 1000,
+      } });
+    });
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+    await page.fill('#poem-name', 'Sanne');
+    await page.locator('#poem-form button[type=submit]').click();
+    await page.getByText('Regel twee rijmt erop.').waitFor({ timeout: 15_000 });
+    expect(sent).toHaveLength(1);
+    expect(sent[0]).toMatchObject({ name: 'Sanne' });
+    expect(await page.locator('.preview-bar').count()).toBe(7);
+
+    await page.getByRole('button', { name: 'Lees het hele gedicht' }).click();
+    await page.locator('dialog[open]').getByText('Je nieuwe gedicht is klaar.').waitFor();
+    const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('sintgpt-poem-preview') || 'null'));
+    expect(stored).toMatchObject({ id: 'abcdefghijklmnopqrstuv', recipient: 'Sanne' });
+    await page.close();
+  }, 45_000);
+
+  it('opens the payment window as before when no preview can be written', async () => {
+    const page = await createPage();
+    await paymentsWork(page);
+    await page.addInitScript(() => {
+      localStorage.setItem('sinterklaas-payment', JSON.stringify({ poemCount: 1 }));
+    });
+    await page.route('**/api/poem/preview', route =>
+      route.fulfill({ status: 429, json: { data: { reason: 'limit' } } }));
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+    await page.fill('#poem-name', 'Sanne');
+    await page.locator('#poem-form button[type=submit]').click();
+    await page.locator('dialog[open]').getByText('Je gratis gedicht is klaar.').waitFor();
+    await page.close();
+  }, 30_000);
+
+  it('opens the poem written before payment once the visitor has paid', async () => {
+    const page = await createPage();
+    await page.context().addCookies([{ name: 'sintgpt-access', value: await buyerToken('pay_preview'), url: url('/') }]);
+    await page.addInitScript(() => {
+      if (sessionStorage.getItem('seeded')) return;
+      sessionStorage.setItem('seeded', '1');
+      localStorage.setItem('sintgpt-poem-preview', JSON.stringify({
+        id: 'abcdefghijklmnopqrstuv',
+        shown: ['Lieve Sanne,', '', 'Regel een.'],
+        hidden: [20, 0, 12],
+        expiresAt: Date.now() + 60 * 60 * 1000,
+        recipient: 'Sanne',
+      }));
+    });
+    const unlocks: unknown[] = [];
+    await page.route('**/api/poem/unlock', (route) => {
+      unlocks.push(route.request().postDataJSON());
+      return route.fulfill({ json: {
+        poem: 'Lieve Sanne,\n\nHet hele gedicht.\n\nVan Sint & Piet',
+        share: null,
+        style: 'funny',
+        rhymeScheme: 'AABB',
+        language: 'dutch',
+        lines: 8,
+      } });
+    });
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+    await page.getByText('Het hele gedicht.').waitFor({ timeout: 15_000 });
+    expect(unlocks).toEqual([{ id: 'abcdefghijklmnopqrstuv' }]);
+    const state = await page.evaluate(() => ({
+      preview: localStorage.getItem('sintgpt-poem-preview'),
+      history: JSON.parse(localStorage.getItem('sintgpt-poem-history') || '[]'),
+    }));
+    expect(state.preview).toBeNull();
+    expect(state.history[0]).toMatchObject({ recipient: 'Sanne', poem: 'Lieve Sanne,\n\nHet hele gedicht.\n\nVan Sint & Piet' });
     await page.close();
   }, 45_000);
 });
