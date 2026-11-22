@@ -9,7 +9,7 @@ findings worth keeping. Newest information first within each section.
   `docs/pricing-tiers.md`.
 - Never put API keys, webhook secrets or gift codes in this file.
 
-Last updated: 22 November 2026. Live version: `bd4ee5c1-804e-4d4f-8daa-4bda09dfb55b` (d0aaafb plus the preview on Gemini 3.1 Pro and the check-access race fix, not committed at deploy time)
+Last updated: 22 November 2026. Live version: `f81e38f9-fb85-4319-90c9-368836924a38` (35a9dfc: the preview on Gemini 3.1 Pro, the check-access race fix, the preview after a server-only limit)
 (commit `6061832`, on GitHub).
 
 ## Priorities
@@ -544,7 +544,7 @@ Owner steps:
 - **What:** a free visitor without poems left gets the new poem written; the page shows the greeting and the first stanza, the rest as blurred bars, and "Lees het hele gedicht". After payment the page opens the whole poem.
 - **Safeguards:** 2 previews per IP per 24 hours; only while payments work; KV for 2 hours, the browser gets only the start; unlocking needs access and counts as a poem; `NUXT_POEM_PREVIEW=off`.
 - **Cost:** each preview is a poem. Since 22 Nov from Gemini 3.1 Pro (`PREVIEW_POEM_MODEL`, owner's choice): $0.06 to $0.08 and 55 to 65 s, measured on 2 poems; with Flash it was about $0.012 and 16 s. Worst case 2 per IP per day. Watch whether visitors leave during the longer wait: `Poem preview` against `No poems left` `free:submit`.
-- **Server-only limit (fixed 22 Nov, not deployed yet):** a visitor whose page did not know the free poem was used (another device, a private window) got 429 `limit` on every try and never a preview (22 Nov 11:23: 8 refusals in 2 minutes). Now the page records it and writes the preview at once. First live previews from Pro on 22 Nov: 2, at 64 to 65 s and $0.08 each, 0 payments.
+- **Server-only limit (fixed and live 22 Nov, f81e38f9):** a visitor whose page did not know the free poem was used (another device, a private window) got 429 `limit` on every try and never a preview (22 Nov 11:23: 8 refusals in 2 minutes). Now the page records it and writes the preview at once. First live previews from Pro on 22 Nov: 2, at 64 to 65 s and $0.08 each, 0 payments.
 - **Measure:** `Poem preview` → `Show payment modal` `preview` → `Proceed to payment` → `Poem unlocked` `new`. Compare with `Show payment modal` `submit` → `Proceed to payment` before (18 → few).
 - **Before the deploy:** test once on a preview deploy or `wrangler dev` with KV: preview, pay in Dodo test mode, return, poem opens.
 - **Test 22 Nov 2026 (passed):** `wrangler dev` with local KV and the test key from `.env`, Playwright, `sinterklaas-payment` set to 1 poem used.
