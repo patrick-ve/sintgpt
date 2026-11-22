@@ -39,6 +39,12 @@ const freeRewriteUsed = ref(false);
 // True while Dodo refuses checkouts. Then the page does not offer payment and
 // only the server's daily limit applies.
 const paymentsUnavailable = ref(false);
+// Counts changes of access in this page (a granted payment or gift, a reset).
+// A check-access answer whose request left before the last change is stale:
+// it was sent without the cookie the claim set, so it would take the access
+// away again ("Gelukt!", then the payment window; seen in the e2e test with a
+// fast claim on 22 Nov 2026).
+let accessChanges = 0;
 
 export const usePaymentTracking = () => {
   const loadFromStorage = () => {
@@ -78,14 +84,16 @@ export const usePaymentTracking = () => {
   const checkServerAccess = async () => {
     if (import.meta.server) return;
 
+    const changesBefore = accessChanges;
     try {
       const response = await $fetch<AccessResponse>('/api/payment/check-access');
+      if (changesBefore !== accessChanges) return;
       tier.value = response.hasAccess ? response.tier : null;
       expiresAt.value = response.expiresAt;
       poemsLeft.value = response.poemsLeft;
     } catch (error) {
       console.error('Error checking access:', error);
-      tier.value = null;
+      if (changesBefore === accessChanges) tier.value = null;
     }
   };
 
@@ -164,6 +172,15 @@ export const usePaymentTracking = () => {
     saveToStorage();
   };
 
+  // The server refused a free poem with `limit` (another device, a private
+  // window, cleared site data on the same IP): the page now knows too, so the
+  // next poem goes to "write first, then pay" instead of the server again.
+  const markFreePoemsUsed = () => {
+    if (isPaid.value || poemCount.value >= MAX_FREE_POEMS) return;
+    poemCount.value = MAX_FREE_POEMS;
+    saveToStorage();
+  };
+
   // Ask the server to verify a payment with Dodo. A payment can take a moment
   // to settle, so keep trying while it is pending or the request fails.
   // `source` tells analytics whether a buyer came back from Dodo or typed
@@ -184,6 +201,7 @@ export const usePaymentTracking = () => {
         const { status } = claim;
         if (status === 'granted') {
           // The server set the cookie. A payment from before the tiers is Gezin.
+          accessChanges += 1;
           tier.value = claim.tier ?? RECOMMENDED_TIER;
           expiresAt.value = claim.expiresAt ?? null;
           poemsLeft.value = TIERS[tier.value].poems;
@@ -213,6 +231,7 @@ export const usePaymentTracking = () => {
       );
       if (claim.status === 'full') return 'full';
       if (claim.status !== 'granted' || !claim.tier) return 'denied';
+      accessChanges += 1;
       tier.value = claim.tier;
       expiresAt.value = claim.expiresAt ?? null;
       poemsLeft.value = TIERS[claim.tier].poems;
@@ -236,6 +255,7 @@ export const usePaymentTracking = () => {
   const resetPaymentState = () => {
     if (import.meta.server) return;
     poemCount.value = 0;
+    accessChanges += 1;
     tier.value = null;
     poemsLeft.value = null;
     try {
@@ -261,6 +281,7 @@ export const usePaymentTracking = () => {
     canFreeRewrite,
     markFreeRewriteUsed,
     incrementPoemCount,
+    markFreePoemsUsed,
     claimPayment,
     claimGift,
     resetPaymentState,

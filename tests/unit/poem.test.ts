@@ -6,6 +6,7 @@ import {
   estimateCostUsd,
   poemProviderOptions,
   PoemRequestSchema,
+  PREVIEW_POEM_MODEL,
   REGENERATE_POEM_MODEL,
   withPoemLength,
 } from '../../server/utils/poem';
@@ -258,6 +259,12 @@ describe('prompt injection', () => {
 describe('model and cost', () => {
   it('uses Gemini 3.7 Flash through AI Gateway', () => {
     expect(DEFAULT_POEM_MODEL).toBe('google/gemini-3.7-flash');
+  });
+
+  it('writes the blurred preview and rewrites with Gemini 3.1 Pro, at a medium thinking level', () => {
+    expect(REGENERATE_POEM_MODEL).toBe('google/gemini-3.1-pro-preview');
+    expect(PREVIEW_POEM_MODEL).toBe(REGENERATE_POEM_MODEL);
+    expect(poemProviderOptions(PREVIEW_POEM_MODEL).google).toEqual({ thinkingConfig: { thinkingLevel: 'medium' } });
   });
 
   it('estimates cost from input and output tokens', () => {

@@ -9,7 +9,7 @@ findings worth keeping. Newest information first within each section.
   `docs/pricing-tiers.md`.
 - Never put API keys, webhook secrets or gift codes in this file.
 
-Last updated: 21 November 2026. Live version: `74d468bd-75ee-488d-b423-d15d2c34c35a` (commit 076c25a)
+Last updated: 22 November 2026. Live version: `bd4ee5c1-804e-4d4f-8daa-4bda09dfb55b` (d0aaafb plus the preview on Gemini 3.1 Pro and the check-access race fix, not committed at deploy time)
 (commit `6061832`, on GitHub).
 
 ## Priorities
@@ -46,7 +46,7 @@ Last updated: 21 November 2026. Live version: `74d468bd-75ee-488d-b423-d15d2c34c
 | [#29](#29-error-alerts-to-telegram-and-a-waf-rule) | High | Error alerts to Telegram and a WAF rule | Built, not deployed; owner setup open |
 | [#30](#30-gift-mail-to-last-seasons-buyers) | High | Gift mail to last season's buyers | Sent 17 Nov (53 mails); clean-up after pakjesavond |
 | [#31](#31-free-rewrite-with-a-wish) | High | Free rewrite with a wish | Live 21 Nov |
-| [#32](#32-write-first-then-pay) | High | Write first, then pay | Deployed 21 Nov, off (`NUXT_POEM_PREVIEW=off`) until the KV + Dodo test |
+| [#32](#32-write-first-then-pay) | High | Write first, then pay | Live and on since 22 Nov (KV + Dodo test passed); measure the funnel |
 | [#33](#33-sint-reads-the-poem-video) | Low | Sint reads the poem (video) | Researched; decision needed |
 
 ## Open
@@ -540,12 +540,19 @@ Owner steps:
 
 ### #32 Write first, then pay
 
-- **Status:** built 18 November 2026, not deployed. Details in `CLAUDE.md` (Payments).
+- **Status:** built 18 November 2026, deployed 21 November (off), tested and switched on 22 November (`NUXT_POEM_PREVIEW=on`; the live route answers 400 to an empty request instead of 503). Details in `CLAUDE.md` (Payments).
 - **What:** a free visitor without poems left gets the new poem written; the page shows the greeting and the first stanza, the rest as blurred bars, and "Lees het hele gedicht". After payment the page opens the whole poem.
 - **Safeguards:** 2 previews per IP per 24 hours; only while payments work; KV for 2 hours, the browser gets only the start; unlocking needs access and counts as a poem; `NUXT_POEM_PREVIEW=off`.
-- **Cost:** each preview is a poem (about $0.012). Worst case 2 per IP per day.
+- **Cost:** each preview is a poem. Since 22 Nov from Gemini 3.1 Pro (`PREVIEW_POEM_MODEL`, owner's choice): $0.06 to $0.08 and 55 to 65 s, measured on 2 poems; with Flash it was about $0.012 and 16 s. Worst case 2 per IP per day. Watch whether visitors leave during the longer wait: `Poem preview` against `No poems left` `free:submit`.
+- **Server-only limit (fixed 22 Nov, not deployed yet):** a visitor whose page did not know the free poem was used (another device, a private window) got 429 `limit` on every try and never a preview (22 Nov 11:23: 8 refusals in 2 minutes). Now the page records it and writes the preview at once. First live previews from Pro on 22 Nov: 2, at 64 to 65 s and $0.08 each, 0 payments.
 - **Measure:** `Poem preview` → `Show payment modal` `preview` → `Proceed to payment` → `Poem unlocked` `new`. Compare with `Show payment modal` `submit` → `Proceed to payment` before (18 → few).
 - **Before the deploy:** test once on a preview deploy or `wrangler dev` with KV: preview, pay in Dodo test mode, return, poem opens.
+- **Test 22 Nov 2026 (passed):** `wrangler dev` with local KV and the test key from `.env`, Playwright, `sinterklaas-payment` set to 1 poem used.
+  - Preview: 200 in about 16 s; greeting, first stanza and 12 bars; `sintgpt-poem-preview` kept in localStorage.
+  - Payment: "Lees het hele gedicht" → Gezin → Dodo test checkout → iDEAL (Stripe test page, authorize) → `claim-access` 200 → `unlock` 200 within 3.3 s. The whole poem (same start as the preview) shown with the success notice, saved in the history with a share link; the preview removed from localStorage.
+  - Unlock without access 403, with a bad ID 400; a preview request from another site 403. The same buyer fetches again: 200.
+  - Local test only: `wrangler dev` sets the Host header to the route's domain, so Dodo returned to `https://sintgpt.com/` instead of localhost (create-checkout builds `return_url` from the Host header). Opening the return URL on localhost by hand finished the test. Production is not affected.
+- **Switch on:** `! printf on | npx wrangler secret put NUXT_POEM_PREVIEW --name sintgpt`. Off again: the same with `off`.
 
 ### #33 Sint reads the poem (video)
 

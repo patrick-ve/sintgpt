@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { writingProgress, writingStepIndex } from '~/utils/writingSteps';
+import { writingProgress, writingStepIndex, type WritingKind } from '~/utils/writingSteps';
 
 // Shown until the first text of the poem arrives: about 28 s for a new poem
-// (Flash), about a minute for a rewrite (Pro). The steps tell the visitor what
-// happens while the model reasons, so the wait does not feel like a hang.
-const props = defineProps<{ rewrite?: boolean }>();
+// (Flash), about a minute for a rewrite and for the preview of "write first,
+// then pay" (Pro). The steps tell the visitor what happens while the model
+// reasons, so the wait does not feel like a hang.
+const props = withDefaults(defineProps<{ kind?: WritingKind }>(), { kind: 'new' });
 const { t } = useI18n();
 
 // Number of skeleton lines to show
@@ -15,7 +16,7 @@ const lineWidths = [
   '92%', '78%', '85%', '70%', '88%', '65%', '80%', '73%'
 ];
 
-const kind = computed(() => (props.rewrite ? 'rewrite' : 'new'));
+const kind = computed(() => props.kind);
 const elapsed = ref(0);
 let timer: ReturnType<typeof setInterval> | undefined;
 
@@ -27,10 +28,12 @@ onMounted(() => {
 });
 onBeforeUnmount(() => clearInterval(timer));
 
-const steps = computed<string[]>(() => t(props.rewrite ? 'poem.writing.rewriteSteps' : 'poem.writing.steps'));
+const steps = computed<string[]>(() => t(kind.value === 'rewrite' ? 'poem.writing.rewriteSteps' : 'poem.writing.steps'));
 const stepIndex = computed(() => Math.min(writingStepIndex(kind.value, elapsed.value), steps.value.length - 1));
 const progress = computed(() => writingProgress(kind.value, elapsed.value));
-const hint = computed(() => t(props.rewrite ? 'poem.writing.rewriteHint' : 'poem.writing.hint'));
+const hint = computed(() => t(
+  kind.value === 'rewrite' ? 'poem.writing.rewriteHint' : kind.value === 'preview' ? 'poem.writing.previewHint' : 'poem.writing.hint',
+));
 </script>
 
 <template>

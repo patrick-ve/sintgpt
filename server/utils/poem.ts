@@ -17,6 +17,12 @@ export const FALLBACK_POEM_MODEL = 'openai/gpt-6.1-terra';
 // About 3x the price of the default model per token, and slower.
 export const REGENERATE_POEM_MODEL = 'google/gemini-3.1-pro-preview';
 
+// "Write first, then pay" (server/utils/poemPreview.ts): the poem a free
+// visitor sees blurred, after the free one, comes from the rewrite model, with
+// its thinking level. It ignores NUXT_AI_GATEWAY_MODEL. Measured 22 Nov 2026
+// (12 and 16 lines): 55 to 65 s for the whole poem, $0.06 to $0.08.
+export const PREVIEW_POEM_MODEL = REGENERATE_POEM_MODEL;
+
 /**
  * Provider options for a poem: the fallback model, and for the rewrite model
  * its thinking level.

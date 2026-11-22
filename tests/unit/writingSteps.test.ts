@@ -8,6 +8,10 @@ describe('writing steps while the poem is written', () => {
     for (const locale of [nl, en]) {
       expect(locale.poem.writing.steps).toHaveLength(WRITING_STEP_SECONDS.new.length);
       expect(locale.poem.writing.rewriteSteps).toHaveLength(WRITING_STEP_SECONDS.rewrite.length);
+      // The preview is a new poem from the slower model: the same texts, later.
+      expect(locale.poem.writing.steps).toHaveLength(WRITING_STEP_SECONDS.preview.length);
+      expect(locale.poem.writing.previewHint).toBeTruthy();
+      expect(locale.form.submit.timePreview).toBeTruthy();
     }
   });
 
@@ -25,5 +29,7 @@ describe('writing steps while the poem is written', () => {
     expect(writingProgress('new', 30)).toBeLessThan(0.9);
     expect(writingProgress('new', 3600)).toBeLessThanOrEqual(0.95);
     expect(writingProgress('rewrite', 30)).toBeLessThan(writingProgress('new', 30));
+    expect(writingProgress('preview', 30)).toBeLessThan(writingProgress('new', 30));
+    expect(writingProgress('preview', 60)).toBeLessThan(0.9);
   });
 });

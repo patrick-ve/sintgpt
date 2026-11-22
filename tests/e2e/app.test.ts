@@ -527,6 +527,7 @@ describe('poem area states', () => {
   }
 
   it('offers to keep writing when the server limit is reached', async () => {
+    // The page then tries a preview; the Node build has no KV, so it shows the limit.
     const page = await submitWith({ status: 429, json: { statusMessage: 'limit' } });
     await page.getByRole('heading', { name: 'Het gratis gedicht is al gebruikt' }).waitFor();
     await page.getByText('Op deze internetverbinding is de afgelopen 24 uur al een gratis gedicht geschreven.').waitFor();
@@ -1344,6 +1345,12 @@ describe('keeping the form during payment', () => {
       route.fulfill({ json: { checkoutUrl: url('/?payment_id=pay_ok&status=succeeded') } }));
     await page.route('**/api/payment/claim-access', route =>
       route.fulfill({ json: { status: 'granted' } }));
+    // The check on page load left before the claim set the cookie, and answers
+    // after it: its "no access" must not take the payment away again.
+    await page.route('**/api/payment/check-access', async (route) => {
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      return route.continue();
+    });
     const requests: Record<string, unknown>[] = [];
     await page.route('**/api/poem/generate', (route) => {
       requests.push(route.request().postDataJSON());
@@ -1362,9 +1369,12 @@ describe('keeping the form during payment', () => {
     await dialog.getByText('Bij 7 gedichten minder dan €1 per gedicht').waitFor();
     expect(await dialog.textContent()).not.toContain('Oma Truus');
     expect(await dialog.locator('input[value=gezin]').isChecked()).toBe(true);
+    // The check that the page after the payment sends on load.
+    const lateCheck = page.waitForResponse(response => response.url().includes('/api/payment/check-access'));
     await dialog.getByRole('button', { name: 'Verder met Gezin · €6,99' }).click();
 
     await page.getByText('Gelukt! Je kunt verder schrijven').waitFor({ timeout: 15_000 });
+    await lateCheck;
     await page.getByText('Wat je invulde, staat nog in het formulier.').waitFor();
     expect(await page.inputValue('#poem-name')).toBe('Oma Truus');
     expect(await page.inputValue('#poem-present')).toBe('warme sokken');
@@ -1811,8 +1821,10 @@ describe('free rewrite and write first, then pay', () => {
       localStorage.setItem('sinterklaas-payment', JSON.stringify({ poemCount: 1 }));
     });
     const sent: unknown[] = [];
-    await page.route('**/api/poem/preview', (route) => {
+    await page.route('**/api/poem/preview', async (route) => {
       sent.push(route.request().postDataJSON());
+      // The slower model: long enough to see the writing animation.
+      await new Promise(resolve => setTimeout(resolve, 1500));
       return route.fulfill({ json: {
         id: 'abcdefghijklmnopqrstuv',
         shown: ['Lieve Sanne,', '', 'Regel een van het gedicht,', 'Regel twee rijmt erop.'],
@@ -1822,7 +1834,10 @@ describe('free rewrite and write first, then pay', () => {
     });
     await page.goto(url('/'), { waitUntil: 'networkidle' });
     await page.fill('#poem-name', 'Sanne');
+    // Without free poems the next poem is the preview from Gemini 3.1 Pro: about a minute.
+    await page.locator('#poem-form').getByText('Klaar in ongeveer een minuut.').waitFor();
     await page.locator('#poem-form button[type=submit]').click();
+    await page.getByText('Dit gedicht schrijft de Sint extra zorgvuldig. Dat duurt ongeveer een minuut.').waitFor();
     await page.getByText('Regel twee rijmt erop.').waitFor({ timeout: 15_000 });
     expect(sent).toHaveLength(1);
     expect(sent[0]).toMatchObject({ name: 'Sanne' });
@@ -1832,6 +1847,42 @@ describe('free rewrite and write first, then pay', () => {
     await page.locator('dialog[open]').getByText('Je nieuwe gedicht is klaar.').waitFor();
     const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('sintgpt-poem-preview') || 'null'));
     expect(stored).toMatchObject({ id: 'abcdefghijklmnopqrstuv', recipient: 'Sanne' });
+    await page.close();
+  }, 45_000);
+
+  it('writes the preview at once when only the server knew the free poem was used', async () => {
+    const page = await createPage();
+    await paymentsWork(page);
+    let generateCalls = 0;
+    await page.route('**/api/poem/generate', (route) => {
+      generateCalls += 1;
+      return route.fulfill({ status: 429, json: { statusCode: 429, data: { reason: 'limit', retryAfterSeconds: 3600 } } });
+    });
+    const sent: unknown[] = [];
+    await page.route('**/api/poem/preview', (route) => {
+      sent.push(route.request().postDataJSON());
+      return route.fulfill({ json: {
+        id: 'abcdefghijklmnopqrstuv',
+        shown: ['Lieve Sanne,', '', 'Regel een van het gedicht,', 'Regel twee rijmt erop.'],
+        hidden: [30, 28, 0, 31],
+        expiresAt: Date.now() + 2 * 60 * 60 * 1000,
+      } });
+    });
+    // A fresh browser: the page thinks the free poem is still there.
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+    await page.fill('#poem-name', 'Sanne');
+    await page.locator('#poem-form button[type=submit]').click();
+
+    await page.getByText('Regel twee rijmt erop.').waitFor({ timeout: 15_000 });
+    expect(generateCalls).toBe(1);
+    expect(sent).toHaveLength(1);
+    expect(sent[0]).toMatchObject({ name: 'Sanne' });
+    expect(await page.getByRole('heading', { name: 'Het gratis gedicht is al gebruikt' }).count()).toBe(0);
+    await page.getByRole('button', { name: 'Lees het hele gedicht' }).waitFor();
+    // The page now knows: the note under the button says the preview's time.
+    const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('sinterklaas-payment') || 'null'));
+    expect(stored).toMatchObject({ poemCount: 1 });
+    await page.locator('#poem-form').getByText('Klaar in ongeveer een minuut.').waitFor();
     await page.close();
   }, 45_000);
 

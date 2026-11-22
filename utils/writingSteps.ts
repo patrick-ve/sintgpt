@@ -1,21 +1,25 @@
 // Timing of the steps the writing animation shows while the model reasons,
 // before the first text arrives. Measured waits (November 2026): a new poem
 // (Gemini 3.7 Flash) gets its first text after about 28 s; a rewrite
-// (Gemini 3.1 Pro, medium) after 45 to 100 s. The texts are in the locales
-// (`poem.writing.steps`, `poem.writing.rewriteSteps`), one per entry here.
+// (Gemini 3.1 Pro, medium) after 45 to 100 s; the preview of "write first,
+// then pay" (Gemini 3.1 Pro, medium, the whole poem at once) after 55 to 65 s.
+// The texts are in the locales (`poem.writing.steps` for a new poem and the
+// preview, `poem.writing.rewriteSteps`), one per entry here.
 
-export type WritingKind = 'new' | 'rewrite';
+export type WritingKind = 'new' | 'rewrite' | 'preview';
 
 /** Second at which each step starts. The last step waits for a slow answer. */
 export const WRITING_STEP_SECONDS: Record<WritingKind, readonly number[]> = {
   new: [0, 5, 11, 18, 25, 33, 50],
   rewrite: [0, 8, 18, 30, 45, 65, 100],
+  preview: [0, 8, 18, 30, 42, 55, 85],
 };
 
 /** The usual wait for the first text, in seconds. */
 export const EXPECTED_WRITING_SECONDS: Record<WritingKind, number> = {
   new: 30,
   rewrite: 70,
+  preview: 60,
 };
 
 export function writingStepIndex(kind: WritingKind, elapsedSeconds: number): number {

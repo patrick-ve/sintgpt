@@ -19,6 +19,7 @@ const { t, locale, setLocale } = useI18n();
 const {
   canGeneratePoem,
   incrementPoemCount,
+  markFreePoemsUsed,
   remainingFreePoems,
   isPaid,
   claimPayment,
@@ -417,8 +418,9 @@ const showingPreview = ref(false);
 const previewUnlocked = ref(false);
 const previewError = ref('');
 
-const startPreview = async () => {
-  const request = { ...formData.value };
+// `afterServerLimit`: the server just refused this poem with `limit`. Without a
+// preview the page then shows that limit, as before, instead of the window.
+const startPreview = async (request: PoemFormData = { ...formData.value }, afterServerLimit = false) => {
   if (window.innerWidth < 1024 && poemSectionRef.value) {
     poemSectionRef.value.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
   }
@@ -443,6 +445,11 @@ const startPreview = async () => {
   // with the poem that was on screen back.
   showingPreview.value = false;
   poemAnnouncement.value = '';
+  if (afterServerLimit) {
+    isRateLimitError.value = true;
+    rateLimitReason.value = 'limit';
+    return;
+  }
   restoreTrialPoem();
   openPaymentModal('submit');
 };
@@ -551,6 +558,18 @@ const runGeneration = async (request: PoemFormData, regenerate = false, hint?: s
   resetSurprise();
   await generatePoem({ ...request, regenerate, ...(hint ? { rewriteHint: hint, previousPoem, previousShare } : {}) });
   if (rateLimitReason.value === 'rewrite') markFreeRewriteUsed();
+
+  // Only the server knew the free poem was used (another device, a private
+  // window): write this poem as the preview right away, like a visitor whose
+  // page knew. Before 22 Nov 2026 every try went to the server again and got
+  // the limit again (8 refusals in 2 minutes for one visitor).
+  if (!regenerate && isRateLimitError.value && rateLimitReason.value === 'limit' && !isPaid.value) {
+    markFreePoemsUsed();
+    if (!paymentsUnavailable.value) {
+      await startPreview(request, true);
+      return;
+    }
+  }
 
   // A rate limit shows the upgrade offer in the poem area.
   poemAnnouncement.value = poem.value ? t('poem.ready') : '';
@@ -1865,7 +1884,8 @@ useHead({
                 <template v-if="mounted && isPaid">{{ accessHint }}</template>
                 <template v-else-if="mounted && paymentsUnavailable">{{ t('payment.unavailable.hint') }}</template>
                 <template v-else>{{ t('payment.remainingPoems', { count: shownFreePoems }) }}.</template>
-                {{ t('form.submit.time') }}
+                <!-- Without free poems the next poem is the preview, from the slower model. -->
+                {{ mounted && !isPaid && !paymentsUnavailable && shownFreePoems === 0 ? t('form.submit.timePreview') : t('form.submit.time') }}
               </p>
             </div>
           </form>
@@ -1947,7 +1967,7 @@ useHead({
 
                 <!-- Writing -->
                 <div v-if="(isLoading && !poem) || previewWriting" class="flex flex-col items-center justify-center gap-3 py-6">
-                  <PoemWritingAnimation :rewrite="writingRewrite" />
+                  <PoemWritingAnimation :kind="previewWriting ? 'preview' : writingRewrite ? 'rewrite' : 'new'" />
                   <p v-if="retrying" class="m-0 text-center text-[0.9375rem] font-bold text-[#5c0f26]" role="status">
                     {{ t('poem.retrying') }}
                   </p>

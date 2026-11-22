@@ -17,10 +17,10 @@ import {
 } from '../../utils/poemPreview';
 import {
   buildPrompt,
-  DEFAULT_POEM_MODEL,
   estimateCostUsd,
   poemProviderOptions,
   PoemRequestSchema,
+  PREVIEW_POEM_MODEL,
   withPoemLength,
 } from '../../utils/poem';
 import { framePoem, poemFrame } from '../../../utils/poemFrame';
@@ -75,14 +75,16 @@ export default defineEventHandler(async (event) => {
     plan: 'free' as const,
     ...formFacts(input),
   };
-  const modelId = config.aiGatewayModel || DEFAULT_POEM_MODEL;
+  // Always the preview model, also with an NUXT_AI_GATEWAY_MODEL override.
+  const modelId = PREVIEW_POEM_MODEL;
   const startedAt = Date.now();
 
   try {
     const result = await generateText({
       model: createGateway({ apiKey: config.aiGatewayApiKey || undefined })(modelId),
       prompt: buildPrompt(input),
-      // Same settings as a poem: see generate.post.ts.
+      // Same settings as a poem (see generate.post.ts); poemProviderOptions
+      // gives the preview model its thinking level.
       temperature: 1,
       maxRetries: 3,
       providerOptions: poemProviderOptions(modelId),
