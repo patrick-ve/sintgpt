@@ -48,6 +48,7 @@ Last updated: 22 November 2026. Live version: `f81e38f9-fb85-4319-90c9-368836924
 | [#31](#31-free-rewrite-with-a-wish) | High | Free rewrite with a wish | Live 21 Nov |
 | [#32](#32-write-first-then-pay) | High | Write first, then pay | Live and on since 22 Nov (KV + Dodo test passed); measure the funnel |
 | [#33](#33-sint-reads-the-poem-video) | Low | Sint reads the poem (video) | Researched; decision needed |
+| [#34](#34-gezin-at-499-and-honest-persuasion) | High | Gezin at €4,99 and honest persuasion | Built 23 Nov; Dodo price change + deploy |
 
 ## Open
 
@@ -561,6 +562,13 @@ Owner steps:
 - **Cost and wait:** about $3.20 (480p) to $6.35 (720p) for a 45 s poem; about 3–6 minutes. Too costly for the 100/day cap: at most 1–3 videos per Hele familie purchase, or a separate product.
 - **Needs:** Pro plan or above for the Image & Video API (check what the account's grant includes); a front-facing Sint image with a visible mouth (`sint.png` is three-quarter, beard over the mouth); one 10 s test clip to read the real cost.
 - **Risks:** the ElevenLabs use policy needs written approval for products aimed at under-18s (children watch); EU AI Act art. 50 labelling of synthetic video versus the "no AI-gegenereerd" text rule; the poem (with names) goes to ElevenLabs and Creatify (privacy text; opt out of training).
+
+### #34 Gezin at €4,99 and honest persuasion
+
+- **Decisions (owner):** on 22 Nov an introductory price (€6,99 for the first 100 until 30 Nov, then €8,99) with a real sales bar, plus urgency, reciprocity and commitment in the payment window. The owner first asked for a struck-through €8,99 and "62 of 150 sold"; both were not true, so real versions were built. On 23 Nov, before any of it was deployed, the owner chose a flat **€4,99 incl. btw** instead: 0 of 15 payment windows on 22–23 Nov led to a checkout. The introductory price, the cap, the bar and the €8,99 product were removed again.
+- **Built 23 Nov (not deployed):** `TIERS.gezin.priceCents` 499; `gezinPriceText` for `{gezinPrice}` (hero, payment description, examples, lootjes); `poemsBelowOneEuro` ("Bij 5 gedichten"); the nudge says "Voor €1 meer". Window: "Nog N dagen tot pakjesavond", "Je eerste gedicht kreeg je van de Sint", and after a preview "Je nieuwe gedicht is al geschreven en staat voor je klaar". FAQ, terms, `llms.txt`, JSON-LD, docs and the marketing drafts say €4,99.
+- **Deploy order:** set the live Dodo product `pdt_0NrhkxiUQYJFJOJ7Y9GRb` to €4,99 right before the deploy (step 6 in `docs/dodo-payments-todo.md`). Between the two steps the page and the checkout differ by €2, in the buyer's favour. After the deploy, open a checkout and check €4,99.
+- **Watch:** Drie (€3,99 for 3) is now only €1 cheaper than Gezin, so it works as a decoy; Hele familie (€12,99) is 2.6 times Gezin. Measure `Show payment modal` → `Proceed to payment` per tier, before and after.
 
 ## Findings
 

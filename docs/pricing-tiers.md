@@ -7,7 +7,7 @@ Open Dodo and Cloudflare steps: `docs/dodo-payments-todo.md`.
 
 | | 3 gedichten | Gezin (recommended) | Hele familie |
 |---|---|---|---|
-| Price (incl. VAT, once) | €3,99 | €6,99 | €12,99 |
+| Price (incl. VAT, once) | €3,99 | €4,99 (€6,99 until 23 Nov 2026) | €12,99 |
 | Poems | 3 in total | as many as you like, max 100/day | as many as you like, max 100/day |
 | Valid | until the next pakjesavond | 365 days from payment | until the second pakjesavond |
 | Rewrites ("Gedichten herschrijven met AI") | no | yes | yes |
@@ -18,8 +18,8 @@ Source of truth: `utils/pricingTiers.ts`.
 ## Why it looks like this
 
 - **Compromise effect:** three options, the middle one highlighted with "Aanbevolen" and selected by default.
-- **Decoy:** 3 gedichten costs €1,33 per poem; Gezin is under €1 per poem from 7 poems. The window says "Voor €3 meer schrijf je met Gezin zoveel gedichten als je wilt" when 3 gedichten is selected.
-- **Anchor:** €12,99 makes €6,99 look modest. Hele familie has real extras, so it is a real offer.
+- **Decoy:** 3 gedichten costs €1,33 per poem; Gezin is under €1 per poem from 5 poems. The window says "Voor €1 meer schrijf je met Gezin zoveel gedichten als je wilt" when 3 gedichten is selected.
+- **Anchor:** €12,99 makes €4,99 look modest. Hele familie has real extras, so it is a real offer.
 - **Honest claims only:** no "meest gekozen" or "populair" without data, no struck-through old price, no countdown on a price. All numbers on the page are plain maths from the prices.
 
 ## Decisions to remember

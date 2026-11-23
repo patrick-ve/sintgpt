@@ -32,7 +32,7 @@ Local Worker preview: `npm run build:cloudflare && npx wrangler --cwd .output de
 - **Framework**: Nuxt 4 (legacy root layout, no `app/` dir) with TypeScript
 - **UI**: Nuxt UI 4 + Tailwind CSS 4, fonts self-hosted by `@nuxt/fonts`
 - **AI**: AI SDK 7 through **Vercel AI Gateway** (`createGateway` from `ai`). Default model `google/gemini-3.7-flash` (`server/utils/poem.ts`, picked by a blind test in Nov 2026), override with `NUXT_AI_GATEWAY_MODEL`
-- **Payments**: Dodo Payments, three tiers (€3.99 / €6.99 / €12.99, see Pricing tiers)
+- **Payments**: Dodo Payments, three tiers (€3.99 / €4.99 / €12.99, see Pricing tiers)
 - **Hosting**: Cloudflare Workers via Nitro `cloudflare_module`
 
 ### Poem generation
@@ -76,7 +76,7 @@ Notes:
 | Tier | Price | Poems | Valid | Extras |
 |---|---|---|---|---|
 | `drie` ("3 gedichten") | €3.99 | 3 in total | until the next pakjesavond (end of 5 Dec, NL time) | no rewrites |
-| `gezin` ("Gezin", recommended) | €6.99 | max 100/day | 365 days | rewrites |
+| `gezin` ("Gezin", recommended) | €4.99 (€6.99 until 23 Nov 2026) | max 100/day | 365 days | rewrites |
 | `familie` ("Hele familie") | €12.99 | max 100/day | until the second pakjesavond | rewrites, 2 extra PDF designs, surprise ideas |
 
 - Each tier is its own Dodo product: `NUXT_DODO_PRODUCT_ID` (Gezin, the product from before the tiers), `NUXT_DODO_PRODUCT_ID_DRIE`, `NUXT_DODO_PRODUCT_ID_FAMILIE`. A tier without a product is not on sale: `/api/payment/status` lists the tiers on sale and the window shows only those. The browser sends a tier name, never a product ID.
@@ -131,11 +131,12 @@ Notes:
 
 ### Persuasion: what the page may say
 - Three tiers, Gezin in the middle (compromise effect), with "Aanbevolen" on it. Never write "meest gekozen" or "populair" without real data. Never show a struck-through "old" price.
-- Gezin is described as poems for the whole family, €6,99 once, one year in that browser, at most 100 a day. "Bij 7 gedichten minder dan €1 per gedicht" is plain maths (6,99 / 7); "€1,33 per gedicht" for Drie is 3,99 / 3 rounded up; "Voor €3 meer schrijf je met Gezin zoveel gedichten als je wilt" is 6,99 − 3,99. Keep these in line with `utils/pricingTiers.ts`.
+- Gezin is described as poems for the whole family, €4,99 once (lowered from €6,99 on 23 Nov 2026, the owner's decision), one year in that browser, at most 100 a day. "Bij 5 gedichten minder dan €1 per gedicht" is plain maths (`poemsBelowOneEuro`: 4,99 / 5); "€1,33 per gedicht" for Drie is 3,99 / 3 rounded up; "Voor €1 meer schrijf je met Gezin zoveel gedichten als je wilt" is 4,99 − 3,99. The window computes them from `utils/pricingTiers.ts`; texts outside it use `{gezinPrice}` (`gezinPriceText`). The FAQ, terms, `llms.txt` and the marketing drafts state the price as text: change them with it.
+- The window also has, all true: the days to pakjesavond above the tiers (urgency, the real date of the hero countdown), "Je eerste gedicht kreeg je van de Sint" (reciprocity) and, after a preview, "Je nieuwe gedicht is al geschreven en staat voor je klaar" (commitment). A price drop is not an offer: never show the old €6,99 struck through (Dutch price rules) or invent scarcity.
 - Every tier is a real offer with real value; the extras of Hele familie (a second season, extra designs, surprise ideas) really exist.
 - Use warm, plain words in visible text: "schrijven", not "genereren"; no "upgrade", "onbeperkt toegang", "AI-gegenereerd" or "tool". Search meta (`seo.title`, `seo.description`) may keep search terms.
 - Do not name the AI model in public text, except where the privacy statement must name the services that process data.
-- The countdown in the hero (`utils/pakjesavond.ts`) counts Dutch calendar days to 5 December, from 60 days before. From 3 days before it adds that a poem takes 30 seconds. It is a real date: never add a countdown to a price or an offer.
+- The countdown in the hero (`utils/pakjesavond.ts`) counts Dutch calendar days to 5 December, from 60 days before. From 3 days before it adds that a poem takes 30 seconds. It is a real date: never add a countdown to a price or an offer. The payment window shows the same days to pakjesavond, never a ticking timer.
 
 ### Example poems
 `utils/examplePoems.ts` holds poems that SintGPT wrote with `scripts/generate-example-poems.ts`, each next to the input it came from. The people are made up, and the page says so. They show on the home page (`components/ExamplePoems.vue`, one per style) and on `/voorbeelden` (all).
@@ -208,7 +209,7 @@ Runtime config is read from `NUXT_*` env vars at runtime (not baked into the bui
 | `NUXT_AI_GATEWAY_API_KEY` | AI Gateway key (required) |
 | `NUXT_AI_GATEWAY_MODEL` | Optional model override, e.g. `openai/gpt-6.1-terra` |
 | `NUXT_DODO_PAYMENTS_API_KEY` | Dodo Payments API key. The `dodo_live_` prefix selects live mode, anything else test mode |
-| `NUXT_DODO_PRODUCT_ID` | Dodo product for Gezin (€6.99). Payments are off without it |
+| `NUXT_DODO_PRODUCT_ID` | Dodo product for Gezin (€4.99). Payments are off without it |
 | `NUXT_DODO_PRODUCT_ID_DRIE` | Dodo product for 3 gedichten (€3.99). Optional: without it the tier is not offered |
 | `NUXT_DODO_PRODUCT_ID_FAMILIE` | Dodo product for Hele familie (€12.99). Optional: without it the tier is not offered |
 | `NUXT_DODO_PAYMENTS_WEBHOOK_SECRET` | Dodo webhook signing secret. Without it the webhook rejects every event |

@@ -18,7 +18,7 @@ Hieronder vier manieren om een sinterklaasgedicht te maken, met wat elke manier 
 ### 1. SintGPT (best als je weinig tijd hebt en het gedicht persoonlijk moet zijn)
 - **Website:** https://sintgpt.com
 - **Hoe het werkt:** je vult de naam, het cadeau, weetjes en het publiek in, en kiest een stijl: Grappig, Klassiek, Ironisch, Ouderwets, Pikant of Roast. In ongeveer 30 seconden staat het gedicht op je scherm, in het Nederlands of het Engels, van 8 tot 40 regels.
-- **Prijs:** het eerste gedicht is gratis; daarna eenmalig €3,99 (3 gedichten), €6,99 (Gezin) of €12,99 (Hele familie). Geen abonnement.
+- **Prijs:** het eerste gedicht is gratis; daarna eenmalig €3,99 (3 gedichten), €4,99 (Gezin) of €12,99 (Hele familie). Geen abonnement.
 - **Let op:** je leest het gedicht voor je het gebruikt en past aan wat niet klopt. Het gedicht is zo goed als de weetjes die je invult.
 
 ### 2. Zelf schrijven met een rijmwoordenboek (best als je zelf wilt dichten)

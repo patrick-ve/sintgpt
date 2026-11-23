@@ -123,3 +123,11 @@ Run these yourself; each asks for the value. Never put live values in `.env`.
 - [ ] Only show "meest gekozen" on a tier when the data shows it.
 - [ ] Optional: an upgrade price for buyers who move up a tier (now they pay the full price;
       the terms say so).
+
+## 6. Gezin at €4,99 (23 Nov 2026)
+
+The owner lowered Gezin from €6,99 to €4,99 including VAT (`TIERS.gezin.priceCents`). The product stays the same (`NUXT_DODO_PRODUCT_ID`), so payments made at €6,99 still grant Gezin; only its price changes.
+
+- [ ] Live business `bus_0NrUOZUWrAz7AYEqANsEb`: set the price of `pdt_0NrhkxiUQYJFJOJ7Y9GRb` ("SintGPT – Gezin") to €4,99, tax inclusive, tax category saas. Do it right before the deploy: until then the page says €6,99.
+- [ ] Test mode (optional): the same price on the test Gezin product.
+- [ ] After the deploy: open a checkout for Gezin and check that Dodo shows €4,99.

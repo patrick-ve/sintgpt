@@ -19,7 +19,7 @@ export default {
       roast: 'Sinterklaas in pixel sunglasses and a gold chain',
     },
     photoCaption: 'Even Sinterklaas finds rhyming hard sometimes.',
-    note: 'Your first poem is free. After that, a one-time €6.99 covers poems for the whole family, or €3.99 buys 3 poems.',
+    note: 'Your first poem is free. After that, a one-time {gezinPrice} covers poems for the whole family, or €3.99 buys 3 poems.',
   },
   countdown: {
     days: 'Pakjesavond is in {count} day | Pakjesavond is in {count} days',
@@ -296,7 +296,7 @@ export default {
       {
         question: 'Is SintGPT free?',
         answer:
-          'Your first poem is free, with everything included: sharing, copying and saving as a PDF. After that, you choose what suits you, with one payment including VAT: 3 poems for €3.99, Family for €6.99 (as many poems as you like for a year, rewrites included) or Whole family for €12.99 (everything in Family until pakjesavond next year, with 2 extra PDF designs and surprise ideas). With 7 poems, Family costs less than €1 per poem.',
+          'Your first poem is free, with everything included: sharing, copying and saving as a PDF. After that, you choose what suits you, with one payment including VAT: 3 poems for €3.99, Family for €4.99 (as many poems as you like for a year, rewrites included) or Whole family for €12.99 (everything in Family until pakjesavond next year, with 2 extra PDF designs and surprise ideas). With 5 poems, Family costs less than €1 per poem.',
       },
       {
         question: 'What poem styles are available?',
@@ -353,10 +353,10 @@ export default {
   },
   payment: {
     title: 'Choose how you keep writing',
-    nextStep: 'Your free poem is ready. What you filled in stays: after paying, you continue right away.',
+    nextStep: 'Your first poem was a gift from Sinterklaas. What you filled in stays: after paying, you continue right away.',
     limitReached: 'The free poem has already been used',
     limitReason: 'Someone on this internet connection already wrote a free poem in the last 24 hours.',
-    description: 'Want to write for more people? Keep writing from €3.99. A one-time €6.99 covers poems for the whole family.',
+    description: 'Want to write for more people? Keep writing from €3.99. A one-time {gezinPrice} covers poems for the whole family.',
     oneTimePayment: 'Pay once',
     includesVAT: 'incl. VAT',
     freeEdit: {
@@ -365,7 +365,7 @@ export default {
     },
     intro: {
       rewriteTier: 'Rewriting poems with AI comes with Family and Whole family. What you filled in stays.',
-      preview: 'Your new poem is ready. After paying, you read the whole of it right away, and keep writing.',
+      preview: 'Your first poem was a gift from Sinterklaas. Your new poem is already written and waiting for you: after paying, you read all of it right away.',
       credits: 'You have written your 3 poems. Want to keep writing? What you filled in stays.',
       surprise: 'Surprise ideas for your poem come with Whole family.',
       design: 'This PDF design comes with Whole family.',
@@ -385,7 +385,7 @@ export default {
       },
       gezin: {
         name: 'Family',
-        note: 'With 7 poems, less than €1 per poem',
+        note: 'With {count} poems, less than €1 per poem',
         features: ['As many poems as you like', 'Rewrite poems with AI', 'For a whole year'],
         missing: [],
       },
@@ -510,7 +510,7 @@ export default {
       emma: 'Sinterklaas poem in English',
     },
     pageIntro: 'SintGPT wrote these poems. The people are made up. Each poem is in one of the PDF designs you can also choose for your own poem. Turn a sheet over to see what Sint knew.',
-    ctaText: 'Your first poem is free. After that, a one-time €6.99 covers poems for the whole family, or €3.99 buys 3 poems.',
+    ctaText: 'Your first poem is free. After that, a one-time {gezinPrice} covers poems for the whole family, or €3.99 buys 3 poems.',
   },
   lootjes: {
     seoTitle: 'Draw names for Sinterklaas | SintGPT',
@@ -744,7 +744,7 @@ export default {
           body: [
             'After your free poem, you choose from three options. You pay once; prices include VAT. There is no subscription.',
             '3 poems costs €3.99. You write 3 poems, until the next pakjesavond (5 December). Rewriting poems with AI is not included.',
-            'Family costs €6.99. For a year from your payment, you write as many poems as you like, and you can rewrite poems.',
+            'Family costs €4.99. For a year from your payment, you write as many poems as you like, and you can rewrite poems.',
             'Whole family costs €12.99. You get everything in Family, until the second pakjesavond after your payment: if you pay before 6 December 2026, until 5 December 2027. You also get 2 extra PDF designs and surprise ideas for your poems.',
             'With Family and Whole family you write as many poems as you reasonably need, with a maximum of 100 poems per 24 hours; surprise ideas count too. This keeps the service affordable.',
             'You write in the browser you paid with. In another browser, you continue with your payment ID. If you want more later, you buy another option separately; we do not offset what you already paid.',

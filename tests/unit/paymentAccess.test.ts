@@ -13,7 +13,9 @@ import {
   accessExpiry,
   fillSeasons,
   formatPrice,
+  gezinPriceText,
   pakjesavondEnd,
+  poemsBelowOneEuro,
   pricePerPoemCents,
   RECOMMENDED_TIER,
   tiersAbove,
@@ -136,11 +138,19 @@ describe('pricing tiers', () => {
 
   it('prices match the page and the terms', () => {
     expect(formatPrice(TIERS.drie.priceCents)).toBe('€3,99');
-    expect(formatPrice(TIERS.gezin.priceCents)).toBe('€6,99');
+    expect(formatPrice(TIERS.gezin.priceCents)).toBe('€4,99');
+    expect(gezinPriceText('nl')).toBe('€4,99');
+    expect(gezinPriceText('en')).toBe('€4.99');
     expect(formatPrice(TIERS.familie.priceCents, 'en')).toBe('€12.99');
     expect(formatPrice(pricePerPoemCents(TIERS.drie)!)).toBe('€1,33');
-    // "Bij 7 gedichten minder dan €1 per gedicht" is plain maths.
-    expect(TIERS.gezin.priceCents / 7).toBeLessThan(100);
+    // "Bij 5 gedichten minder dan €1 per gedicht" is plain maths: 5 is the
+    // smallest number of poems that brings the price under €1 per poem.
+    const poems = poemsBelowOneEuro(TIERS.gezin.priceCents);
+    expect(poems).toBe(5);
+    expect(TIERS.gezin.priceCents / poems).toBeLessThan(100);
+    expect(TIERS.gezin.priceCents / (poems - 1)).toBeGreaterThanOrEqual(100);
+    // "Voor €1 meer schrijf je met Gezin zoveel gedichten als je wilt".
+    expect(TIERS.gezin.priceCents - TIERS.drie.priceCents).toBe(100);
   });
 
   it('recommends the middle tier and lets buyers only move up', () => {

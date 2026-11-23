@@ -20,7 +20,7 @@ export default {
       roast: 'Sinterklaas met een pixelzonnebril en een gouden ketting',
     },
     photoCaption: 'Ook de Sint rijmt niet altijd vanzelf.',
-    note: 'Je eerste gedicht is gratis. Daarna schrijf je voor eenmalig €6,99 gedichten voor het hele gezin, of 3 gedichten voor €3,99.',
+    note: 'Je eerste gedicht is gratis. Daarna schrijf je voor eenmalig {gezinPrice} gedichten voor het hele gezin, of 3 gedichten voor €3,99.',
   },
   countdown: {
     days: 'Nog {count} dag tot pakjesavond | Nog {count} dagen tot pakjesavond',
@@ -297,7 +297,7 @@ export default {
       {
         question: 'Is SintGPT gratis?',
         answer:
-          'Je eerste gedicht is gratis, met alles erop en eraan: delen, kopiëren en opslaan als PDF. Daarna kies je wat bij je past, met één betaling inclusief btw: 3 gedichten voor €3,99, Gezin voor €6,99 (een jaar lang zoveel gedichten als je wilt, ook herschrijven) of Hele familie voor €12,99 (alles van Gezin tot en met pakjesavond volgend jaar, met 2 extra PDF-ontwerpen en surprise-ideeën). Bij 7 gedichten kost Gezin minder dan €1 per gedicht.',
+          'Je eerste gedicht is gratis, met alles erop en eraan: delen, kopiëren en opslaan als PDF. Daarna kies je wat bij je past, met één betaling inclusief btw: 3 gedichten voor €3,99, Gezin voor €4,99 (een jaar lang zoveel gedichten als je wilt, ook herschrijven) of Hele familie voor €12,99 (alles van Gezin tot en met pakjesavond volgend jaar, met 2 extra PDF-ontwerpen en surprise-ideeën). Bij 5 gedichten kost Gezin minder dan €1 per gedicht.',
       },
       {
         question:
@@ -356,10 +356,10 @@ export default {
   },
   payment: {
     title: 'Kies hoe je verder schrijft',
-    nextStep: 'Je gratis gedicht is klaar. Wat je invulde, blijft staan: na het betalen schrijf je meteen verder.',
+    nextStep: 'Je eerste gedicht kreeg je van de Sint. Wat je invulde, blijft staan: na het betalen schrijf je meteen verder.',
     limitReached: 'Het gratis gedicht is al gebruikt',
     limitReason: 'Op deze internetverbinding is de afgelopen 24 uur al een gratis gedicht geschreven.',
-    description: 'Wil je voor meer mensen schrijven? Vanaf €3,99 schrijf je verder. Voor eenmalig €6,99 schrijf je gedichten voor het hele gezin.',
+    description: 'Wil je voor meer mensen schrijven? Vanaf €3,99 schrijf je verder. Voor eenmalig {gezinPrice} schrijf je gedichten voor het hele gezin.',
     oneTimePayment: 'Eenmalig betalen',
     includesVAT: 'incl. btw',
     freeEdit: {
@@ -371,7 +371,7 @@ export default {
       credits: 'Je 3 gedichten zijn geschreven. Wil je verder schrijven? Wat je invulde, blijft staan.',
       surprise: 'Surprise-ideeën bij je gedicht horen bij Hele familie.',
       design: 'Dit PDF-ontwerp hoort bij Hele familie.',
-      preview: 'Je nieuwe gedicht is klaar. Na het betalen lees je het meteen helemaal, en schrijf je verder.',
+      preview: 'Je eerste gedicht kreeg je van de Sint. Je nieuwe gedicht is al geschreven en staat voor je klaar: na het betalen lees je het meteen helemaal.',
     },
     rewriteUsedTitle: 'Je gratis herschrijving is al gebruikt',
     rewriteUsedMessage: 'Op deze internetverbinding is de afgelopen 24 uur al een gedicht gratis herschreven. Vaker herschrijven zit in Gezin en Hele familie.',
@@ -390,7 +390,7 @@ export default {
       },
       gezin: {
         name: 'Gezin',
-        note: 'Bij 7 gedichten minder dan €1 per gedicht',
+        note: 'Bij {count} gedichten minder dan €1 per gedicht',
         features: ['Zoveel gedichten als je wilt', 'Gedichten herschrijven met AI', 'Een jaar lang'],
         missing: [],
       },
@@ -513,7 +513,7 @@ export default {
       emma: 'Sinterklaasgedicht in het Engels',
     },
     pageIntro: 'SintGPT schreef deze gedichten. De mensen zijn verzonnen. Elk gedicht staat in een van de PDF-ontwerpen die je ook voor je eigen gedicht kunt kiezen. Draai een blad om en je ziet wat de Sint wist.',
-    ctaText: 'Je eerste gedicht is gratis. Daarna schrijf je voor eenmalig €6,99 gedichten voor het hele gezin, of 3 gedichten voor €3,99.',
+    ctaText: 'Je eerste gedicht is gratis. Daarna schrijf je voor eenmalig {gezinPrice} gedichten voor het hele gezin, of 3 gedichten voor €3,99.',
   },
   lootjes: {
     seoTitle: 'Lootjes trekken online: gratis en zonder e-mail | SintGPT',
@@ -747,7 +747,7 @@ export default {
           body: [
             'Na je gratis gedicht kies je uit drie mogelijkheden. Je betaalt één keer; de prijzen zijn inclusief btw. Er is geen abonnement.',
             '3 gedichten kost €3,99. Je schrijft 3 gedichten, tot en met de eerstvolgende pakjesavond (5 december). Gedichten herschrijven met AI hoort er niet bij.',
-            'Gezin kost €6,99. Je schrijft een jaar lang, gerekend vanaf je betaling, zoveel gedichten als je wilt, en je kunt gedichten herschrijven.',
+            'Gezin kost €4,99. Je schrijft een jaar lang, gerekend vanaf je betaling, zoveel gedichten als je wilt, en je kunt gedichten herschrijven.',
             'Hele familie kost €12,99. Je krijgt alles van Gezin, tot en met de tweede pakjesavond na je betaling: betaal je vóór 6 december 2026, dan tot en met 5 december 2027. Je krijgt ook 2 extra PDF-ontwerpen en surprise-ideeën bij je gedichten.',
             'Bij Gezin en Hele familie schrijf je zoveel gedichten als je redelijkerwijs nodig hebt, met een maximum van 100 gedichten per 24 uur; surprise-ideeën tellen mee. Zo houden we de dienst betaalbaar.',
             'Je schrijft in de browser waarmee je betaalde. In een andere browser ga je verder met je betalings-ID. Wil je later meer, dan koop je een andere mogelijkheid los; wat je al betaalde, verrekenen we niet.',

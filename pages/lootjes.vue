@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import { gezinPriceText } from '~/utils/pricingTiers';
 import { checkNames, drawLootjes, parseNames, type NamesProblem } from '~/utils/lootjes';
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 const { track } = useAnalytics();
 
 // Search engines see the Dutch text, like on every other page.
@@ -229,7 +230,7 @@ const startAgain = () => {
 
       <div class="mt-12 flex flex-col items-start gap-4 rounded-xl border-2 border-[#d4a853] bg-white/70 p-6">
         <h2 class="font-display font-bold text-2xl text-[#8b1538]">{{ t('lootjes.ctaTitle') }}</h2>
-        <p class="font-text text-lg">{{ t('examples.ctaText') }}</p>
+        <p class="font-text text-lg">{{ t('examples.ctaText', { gezinPrice: gezinPriceText(locale) }) }}</p>
         <NuxtLink to="/#poem-form" data-cta="lootjes" class="btn-festive inline-flex items-center min-h-12 px-6 text-lg">
           {{ t('lootjes.cta') }}
         </NuxtLink>

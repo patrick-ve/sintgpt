@@ -3,7 +3,7 @@
 // (payment.tiers, legal.terms) in line with these numbers.
 //
 // Gezin is the recommended tier: the small tier makes it look like good value
-// ("voor €3 meer schrijf je zoveel gedichten als je wilt"), the large tier
+// ("voor €1 meer schrijf je zoveel gedichten als je wilt"), the large tier
 // makes its price look modest. Every tier is a real offer.
 
 export const TIER_IDS = ['drie', 'gezin', 'familie'] as const;
@@ -44,7 +44,8 @@ export const TIERS: Record<TierId, Tier> = {
   },
   gezin: {
     id: 'gezin',
-    priceCents: 699,
+    // €4,99 from 23 Nov 2026 (the owner's decision); €6,99 before.
+    priceCents: 499,
     poems: null,
     rewrites: true,
     extraDesigns: false,
@@ -62,6 +63,16 @@ export const TIERS: Record<TierId, Tier> = {
   },
 };
 
+/** `{gezinPrice}` in texts outside the payment window (hero, FAQ, examples): "€4,99". */
+export function gezinPriceText(locale: 'nl' | 'en'): string {
+  return formatPrice(TIERS.gezin.priceCents, locale);
+}
+
+/** From this many poems a tier without a poem limit costs less than €1 per poem. */
+export function poemsBelowOneEuro(priceCents: number): number {
+  return Math.floor(priceCents / 100) + 1;
+}
+
 export function isTierId(value: unknown): value is TierId {
   return typeof value === 'string' && (TIER_IDS as readonly string[]).includes(value);
 }
@@ -72,13 +83,13 @@ export function tiersAbove(tier: TierId | null): TierId[] {
   return TIER_IDS.slice(TIER_IDS.indexOf(tier) + 1);
 }
 
-/** "€6,99" in Dutch, "€6.99" in English. */
+/** "€4,99" in Dutch, "€4.99" in English. */
 export function formatPrice(cents: number, locale: 'nl' | 'en' = 'nl'): string {
   const amount = (cents / 100).toFixed(2);
   return `€${locale === 'nl' ? amount.replace('.', ',') : amount}`;
 }
 
-/** The price per poem, rounded up to whole cents, so the page never claims too little. */
+/** The price per poem of a tier with a poem limit, rounded up to whole cents, so the page never claims too little. */
 export function pricePerPoemCents(tier: Tier): number | null {
   return tier.poems ? Math.ceil(tier.priceCents / tier.poems) : null;
 }

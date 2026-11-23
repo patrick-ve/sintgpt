@@ -5,7 +5,7 @@ import { LIMERICK_LINES, POEM_INPUT_LIMITS, POEM_LINES } from '~/utils/poemLimit
 import { saveFormDraft, takeFormDraft } from '~/utils/formDraft';
 import { pakjesavondCountdown } from '~/utils/pakjesavond';
 import { PDF_DESIGNS, type PdfDesignId } from '~/utils/pdfDesigns';
-import { fillSeasons, pakjesavondEnd, TIERS, type TierId } from '~/utils/pricingTiers';
+import { fillSeasons, gezinPriceText, pakjesavondEnd, TIERS, type TierId } from '~/utils/pricingTiers';
 import { findBlogPost } from '~/utils/blogPosts';
 import { STYLE_PARAM, styleFromQuery } from '~/utils/stylePreset';
 import { hasOwnPhoto, sintStyleAvatar, sintStylePhoto, type SintStyle } from '~/utils/sintStyles';
@@ -1523,7 +1523,7 @@ useHead({
           </div>
 
           <p class="text-base text-[#f7e6c0]">
-            {{ t('hero.note') }}
+            {{ t('hero.note', { gezinPrice: gezinPriceText(locale) }) }}
           </p>
         </div>
 
@@ -1927,7 +1927,7 @@ useHead({
                     {{ rateLimitReason === 'credits' ? t('payment.creditsUsedTitle') : rateLimitReason === 'rewrite' ? t('payment.rewriteUsedTitle') : t('payment.limitReached') }}
                   </h3>
                   <p class="text-[#5c0f26] mb-8 max-w-md font-medium">
-                    {{ rateLimitReason === 'credits' ? t('payment.creditsUsedMessage') : rateLimitReason === 'rewrite' ? t('payment.rewriteUsedMessage') : `${t('payment.limitReason')} ${t('payment.description')}` }}
+                    {{ rateLimitReason === 'credits' ? t('payment.creditsUsedMessage') : rateLimitReason === 'rewrite' ? t('payment.rewriteUsedMessage') : `${t('payment.limitReason')} ${t('payment.description', { gezinPrice: gezinPriceText(locale) })}` }}
                   </p>
                   <button
                     type="button"

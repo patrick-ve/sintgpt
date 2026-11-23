@@ -25,7 +25,7 @@ Op https://sintgpt.com/lootjes vul je 3 tot 50 namen in. Niemand trekt zichzelf,
 SintGPT is nu te gebruiken op https://sintgpt.com. Het eerste gedicht is gratis. Daarna betaal je eenmalig, zonder abonnement:
 
 - **3 gedichten:** €3,99, geldig tot en met pakjesavond.
-- **Gezin:** €6,99, een jaar lang gedichten voor het hele gezin in één browser (hooguit 100 per dag), ook herschrijven.
+- **Gezin:** €4,99, een jaar lang gedichten voor het hele gezin in één browser (hooguit 100 per dag), ook herschrijven.
 - **Hele familie:** €12,99, tot en met pakjesavond volgend jaar, met 2 extra PDF-ontwerpen en surprise-ideeën.
 
 Lootjes trekken is gratis. Voorbeeldgedichten in alle zes stijlen staan op https://sintgpt.com/voorbeelden.

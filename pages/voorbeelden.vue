@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import { gezinPriceText } from '~/utils/pricingTiers';
 import { EXAMPLE_POEMS } from '~/utils/examplePoems';
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 // Search engines see the Dutch text, like on every other page.
 useSeoMeta({
@@ -93,7 +94,7 @@ useHead({
       </div>
 
       <div class="mt-16 mx-auto max-w-[760px] flex flex-col items-start gap-4 rounded-xl border-2 border-[#d4a853] bg-white/70 p-6">
-        <p class="font-text text-lg">{{ t('examples.ctaText') }}</p>
+        <p class="font-text text-lg">{{ t('examples.ctaText', { gezinPrice: gezinPriceText(locale) }) }}</p>
         <NuxtLink to="/#poem-form" data-cta="voorbeelden" class="btn-festive inline-flex items-center min-h-12 px-6 text-lg">
           {{ t('examples.cta') }}
         </NuxtLink>

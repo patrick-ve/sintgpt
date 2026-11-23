@@ -133,7 +133,7 @@ describe('privacy and terms', () => {
     expect(terms).toContain('1 keer gratis laten herschrijven met een wens');
     expect(privacy).toContain('hooguit 2 uur bij Cloudflare (Workers KV)');
     expect(terms).toContain('100 gedichten per 24 uur');
-    expect(terms).toContain('€6,99');
+    expect(terms).toContain('€4,99');
     expect(terms).toContain('€3,99');
     expect(terms).toContain('€12,99');
     expect(terms).toContain('tot en met de eerstvolgende pakjesavond');
@@ -738,7 +738,7 @@ describe('honest claims', () => {
     expect(html).not.toContain('aggregateRating');
     expect(html).not.toContain('28.912');
     expect(html).not.toContain('blije hulpsinterklazen');
-    expect(html).toMatch(/"price":\s*"6\.99"/);
+    expect(html).toMatch(/"price":\s*"4\.99"/);
   });
 });
 
@@ -1366,12 +1366,12 @@ describe('keeping the form during payment', () => {
     // selected, without the name from the form.
     const dialog = page.locator('dialog[open]');
     await dialog.getByText('na het betalen schrijf je meteen verder').waitFor();
-    await dialog.getByText('Bij 7 gedichten minder dan €1 per gedicht').waitFor();
+    await dialog.getByText('Bij 5 gedichten minder dan €1 per gedicht').waitFor();
     expect(await dialog.textContent()).not.toContain('Oma Truus');
     expect(await dialog.locator('input[value=gezin]').isChecked()).toBe(true);
     // The check that the page after the payment sends on load.
     const lateCheck = page.waitForResponse(response => response.url().includes('/api/payment/check-access'));
-    await dialog.getByRole('button', { name: 'Verder met Gezin · €6,99' }).click();
+    await dialog.getByRole('button', { name: 'Verder met Gezin · €4,99' }).click();
 
     await page.getByText('Gelukt! Je kunt verder schrijven').waitFor({ timeout: 15_000 });
     await lateCheck;
@@ -1844,7 +1844,7 @@ describe('free rewrite and write first, then pay', () => {
     expect(await page.locator('.preview-bar').count()).toBe(7);
 
     await page.getByRole('button', { name: 'Lees het hele gedicht' }).click();
-    await page.locator('dialog[open]').getByText('Je nieuwe gedicht is klaar.').waitFor();
+    await page.locator('dialog[open]').getByText('Je nieuwe gedicht is al geschreven en staat voor je klaar').waitFor();
     const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('sintgpt-poem-preview') || 'null'));
     expect(stored).toMatchObject({ id: 'abcdefghijklmnopqrstuv', recipient: 'Sanne' });
     await page.close();
@@ -1897,7 +1897,7 @@ describe('free rewrite and write first, then pay', () => {
     await page.goto(url('/'), { waitUntil: 'networkidle' });
     await page.fill('#poem-name', 'Sanne');
     await page.locator('#poem-form button[type=submit]').click();
-    await page.locator('dialog[open]').getByText('Je gratis gedicht is klaar.').waitFor();
+    await page.locator('dialog[open]').getByText('Je eerste gedicht kreeg je van de Sint.').waitFor();
     await page.close();
   }, 30_000);
 
@@ -1967,7 +1967,7 @@ describe('pricing tiers', () => {
 
     // The small tier says what the step up costs.
     await dialog.locator('[data-tier=drie]').click();
-    await dialog.getByText('Voor €3 meer schrijf je met Gezin zoveel gedichten als je wilt.').waitFor();
+    await dialog.getByText('Voor €1 meer schrijf je met Gezin zoveel gedichten als je wilt.').waitFor();
 
     const bodies: unknown[] = [];
     await page.route('**/api/payment/create-checkout', (route) => {
@@ -1976,6 +1976,31 @@ describe('pricing tiers', () => {
     });
     await dialog.getByRole('button', { name: 'Verder met 3 gedichten · €3,99' }).click();
     await expect.poll(() => bodies).toEqual([{ tier: 'drie' }]);
+    await page.close();
+  }, 30_000);
+
+  it('shows Gezin at €4,99 with the days to pakjesavond and no struck-through price', async () => {
+    const page = await createPage();
+    await page.clock.setFixedTime(new Date('2026-11-27T10:00:00+01:00'));
+    await paymentsWork(page);
+    await page.addInitScript(() => {
+      localStorage.setItem('sinterklaas-payment', JSON.stringify({ poemCount: 1 }));
+    });
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+    await page.fill('#poem-name', 'Sanne');
+    await page.locator('#poem-form button[type=submit]').click();
+    const dialog = page.locator('dialog[open]');
+    const gezin = dialog.locator('[data-tier=gezin]');
+    await gezin.getByText('€4,99').waitFor();
+    await gezin.getByText('Bij 5 gedichten minder dan €1 per gedicht').waitFor();
+    await dialog.getByText('Nog 8 dagen tot pakjesavond').waitFor();
+    // Reciprocity: the free poem was a gift.
+    await dialog.getByText('Je eerste gedicht kreeg je van de Sint.').waitFor();
+    // Never a struck-through "old" price, never a made-up stock bar.
+    expect(await dialog.locator('s, del, strike, .tier-stock').count()).toBe(0);
+    await dialog.getByRole('button', { name: 'Verder met Gezin · €4,99' }).waitFor();
+    await dialog.locator('[data-tier=drie]').click();
+    await dialog.getByText('Voor €1 meer schrijf je met Gezin zoveel gedichten als je wilt.').waitFor();
     await page.close();
   }, 30_000);
 

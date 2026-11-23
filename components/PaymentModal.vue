@@ -1,5 +1,15 @@
 <script setup lang="ts">
-import { fillSeasons, formatPrice, pricePerPoemCents, RECOMMENDED_TIER, TIER_IDS, TIERS, type TierId } from '~/utils/pricingTiers';
+import { pakjesavondCountdown } from '~/utils/pakjesavond';
+import {
+  fillSeasons,
+  formatPrice,
+  poemsBelowOneEuro,
+  pricePerPoemCents,
+  RECOMMENDED_TIER,
+  TIER_IDS,
+  TIERS,
+  type TierId,
+} from '~/utils/pricingTiers';
 
 export type PaymentTrigger = 'submit' | 'rewrite' | 'limit' | 'credits' | 'surprise' | 'design' | 'preview';
 
@@ -44,7 +54,7 @@ const tierCards = computed(() => TIER_IDS.filter(id => tiersOnSale.value.include
     price: formatPrice(tier.priceCents, locale.value),
     note: perPoem
       ? t('payment.tiers.perPoem', { price: formatPrice(perPoem, locale.value) })
-      : t(`payment.tiers.${id}.note`),
+      : t(`payment.tiers.${id}.note`, { count: poemsBelowOneEuro(tier.priceCents) }),
     features: (t(`payment.tiers.${id}.features`) as string[]).map(feature => fillSeasons(feature)),
     missing: t(`payment.tiers.${id}.missing`) as string[],
     recommended: id === RECOMMENDED_TIER,
@@ -54,7 +64,16 @@ const tierCards = computed(() => TIER_IDS.filter(id => tiersOnSale.value.include
 
 const selectedCard = computed(() => tierCards.value.find(card => card.id === selectedTier.value));
 
-// "Voor €3 meer schrijf je met Gezin zoveel gedichten als je wilt": plain maths.
+// A real deadline: the days to pakjesavond, the date the hero counts down to.
+const countdownText = computed(() => {
+  const countdown = pakjesavondCountdown(new Date());
+  if (!countdown) return '';
+  if (countdown.days === 0) return t('countdown.today');
+  if (countdown.days === 1) return t('countdown.tomorrow');
+  return t('countdown.days', { count: countdown.days });
+});
+
+// "Voor €1 meer schrijf je met Gezin zoveel gedichten als je wilt": plain maths.
 const upgradeNudge = computed(() => {
   if (selectedTier.value !== 'drie' || !tiersOnSale.value.includes('gezin')) return '';
   const difference = TIERS.gezin.priceCents - TIERS.drie.priceCents;
@@ -248,6 +267,11 @@ const closeModal = (how: 'button' | 'backdrop' | 'continue free' | 'edit') => {
         </div>
         <p class="banner-text">{{ intro }}</p>
       </div>
+
+      <!-- A real deadline: the days to pakjesavond -->
+      <p v-if="!paymentsUnavailable && countdownText" class="deadline">
+        <span aria-hidden="true">🎁</span><span>{{ countdownText }}</span>
+      </p>
 
       <!-- The tiers: one choice, Gezin selected -->
       <fieldset v-if="!paymentsUnavailable" class="tiers">
@@ -496,6 +520,28 @@ const closeModal = (how: 'button' | 'backdrop' | 'continue free' | 'edit') => {
   line-height: 1.15;
   font-variant-numeric: tabular-nums;
   color: #3d0716;
+}
+
+.deadline {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  gap: 0.375rem;
+  /* Room for the badge of the recommended card, which sticks out above it. */
+  margin: 0 0 1.25rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  text-align: center;
+  color: #8b1538;
+}
+
+@media (min-width: 720px) {
+  /* The recommended card also stands 0.5rem taller there. */
+  .deadline {
+    margin-bottom: 1.75rem;
+  }
 }
 
 .tier-note {
