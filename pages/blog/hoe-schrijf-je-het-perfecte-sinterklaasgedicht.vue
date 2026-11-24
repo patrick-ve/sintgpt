@@ -236,7 +236,7 @@
     <div class="bg-red-50 border-2 border-red-600 rounded-xl p-8 my-8 text-center shadow-lg">
       <h3 class="text-2xl font-bold text-red-900 mb-4 font-display">Snel een sinterklaasgedicht laten schrijven?</h3>
       <p class="text-red-800 mb-6 font-medium">
-        Heb je weinig tijd of zoek je inspiratie? Vul een paar weetjes in en ontvang in ongeveer 30 seconden een persoonlijk sinterklaasgedicht.
+        Heb je weinig tijd of zoek je inspiratie? Vul een paar weetjes in en ontvang in ongeveer een minuut een persoonlijk sinterklaasgedicht.
       </p>
       <NuxtLink
         to="/"

@@ -125,13 +125,13 @@
       Wil je zien hoe andere onderwerpen en rijmschema's uitpakken? Bekijk dan onze <NuxtLink to="/voorbeelden" class="text-red-700 underline underline-offset-2 hover:text-red-900">voorbeeldgedichten voor andere ontvangers</NuxtLink>.
     </p>
     <p class="leading-relaxed mb-4">
-      Trek je met een groep vrienden of familie lootjes voor pakjesavond? Op <NuxtLink to="/lootjes" class="text-red-700 underline underline-offset-2 hover:text-red-900">lootjes trekken</NuxtLink> regel je dat gratis en zonder account. Heb je weinig tijd om zelf te rijmen? Op SintGPT vul je weetjes over je partner in en kies je voor welk publiek het gedicht is. In ongeveer 30 seconden staat er een persoonlijk gedicht.
+      Trek je met een groep vrienden of familie lootjes voor pakjesavond? Op <NuxtLink to="/lootjes" class="text-red-700 underline underline-offset-2 hover:text-red-900">lootjes trekken</NuxtLink> regel je dat gratis en zonder account. Heb je weinig tijd om zelf te rijmen? Op SintGPT vul je weetjes over je partner in en kies je voor welk publiek het gedicht is. In ongeveer een minuut staat er een persoonlijk gedicht.
     </p>
 
     <div class="bg-red-50 border-2 border-red-600 rounded-xl p-8 my-8 text-center shadow-lg">
       <h3 class="text-2xl font-bold text-red-900 mb-4 font-display">Laat een sinterklaasgedicht voor je partner schrijven</h3>
       <p class="text-red-800 mb-6 font-medium">
-        Vul een paar weetjes in over je partner en ontvang in ongeveer 30 seconden een persoonlijk gedicht. Je eerste gedicht is gratis.
+        Vul een paar weetjes in over je partner en ontvang in ongeveer een minuut een persoonlijk gedicht. Je eerste gedicht is gratis.
       </p>
       <NuxtLink
         to="/"

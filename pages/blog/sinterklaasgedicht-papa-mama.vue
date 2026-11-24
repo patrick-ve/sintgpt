@@ -126,13 +126,13 @@
       Schrijf je dit jaar niet alleen voor je ouders, maar voor het hele gezin of de hele familie? Lees dan ook onze handleiding voor een <NuxtLink to="/blog/sinterklaasgedicht-opa-oma" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht voor opa en oma</NuxtLink> voor meer ideeën en voorbeelden.
     </p>
     <p class="leading-relaxed mb-4">
-      Wil je snel een passend gedicht zonder urenlang te puzzelen op rijmwoorden? Op SintGPT laat je in ongeveer 30 seconden een persoonlijk sinterklaasgedicht schrijven met jouw eigen weetjes. Je kiest eenvoudig een stijl die bij je vader of moeder past, zoals Klassiek voor een respectvolle toon of Grappig voor een speelse noot. Je eerste gedicht is gratis.
+      Wil je snel een passend gedicht zonder urenlang te puzzelen op rijmwoorden? Op SintGPT laat je in ongeveer een minuut een persoonlijk sinterklaasgedicht schrijven met jouw eigen weetjes. Je kiest eenvoudig een stijl die bij je vader of moeder past, zoals Klassiek voor een respectvolle toon of Grappig voor een speelse noot. Je eerste gedicht is gratis.
     </p>
 
     <div class="bg-red-50 border-2 border-red-600 rounded-xl p-8 my-8 text-center shadow-lg">
       <h3 class="text-2xl font-bold text-red-900 mb-4 font-display">Laat een persoonlijk sinterklaasgedicht schrijven</h3>
       <p class="text-red-800 mb-6 font-medium">
-        Vul een paar herkenbare gewoontes in over je vader of moeder en lees in ongeveer 30 seconden een passend sinterklaasgedicht.
+        Vul een paar herkenbare gewoontes in over je vader of moeder en lees in ongeveer een minuut een passend sinterklaasgedicht.
       </p>
       <NuxtLink
         to="/"

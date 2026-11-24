@@ -17,7 +17,7 @@ export interface BlogBrief {
 }
 
 export const SITE_FACTS = `
-- SintGPT (sintgpt.com) schrijft in ongeveer 30 seconden een persoonlijk sinterklaasgedicht, in het Nederlands of het Engels.
+- SintGPT (sintgpt.com) schrijft in ongeveer een minuut een persoonlijk sinterklaasgedicht, in het Nederlands of het Engels.
 - Je vult in: de naam van de ontvanger, het cadeau (en of het cadeau geheim blijft), weetjes over de ontvanger, wie het gedicht schrijft en voor welk publiek het is.
 - Zes stijlen: Grappig, Klassiek, Ironisch, Ouderwets, Pikant en Roast. Rijmschema's: AABB, ABAB, ABBA en limerick. Lengte: 8 tot 40 regels; een limerick heeft altijd 5 regels.
 - Wat elke stijl op SintGPT schrijft: Grappig is speels en luchtig; Klassiek is traditioneel, warm en respectvol; Ironisch is geestig en subtiel sarcastisch; Ouderwets is formeel en traditioneel in taal en toon; Pikant heeft suggestieve dubbelzinnigheden en gewaagde knipogen, maar blijft smaakvol en is nooit expliciet; Roast is een genadeloze maar liefdevolle roast.
@@ -79,7 +79,7 @@ export const BLOG_BRIEFS: BlogBrief[] = [
     slug: 'sinterklaasgedicht-last-minute',
     keyword: 'sinterklaasgedicht last minute',
     secondary: ['snel een sinterklaasgedicht schrijven', 'sinterklaasgedicht vergeten', 'sinterklaasgedicht in 10 minuten', 'sinterklaasgedicht morgen pakjesavond'],
-    angle: `Voor wie het gedicht vergeten is: pakjesavond is vanavond of morgen, en er is nog geen regel. Een plan voor een goed gedicht in ongeveer 10 minuten: eerst 2 minuten weetjes verzamelen (één gewoonte, één gebeurtenis van dit jaar, het cadeau), dan een kort gedicht van 8 regels in AABB, dan hardop lezen. Geef een invulsjabloon van 8 regels met [naam], [gewoonte] en [cadeau] dat echt rijmt, plus twee ingevulde voorbeelden. Geef rijmparen die altijd werken (Sint, Piet, cadeau, gedicht), en wat je vermijdt als je haast hebt (te lang, geen grap, het cadeau verraden). Zeg eerlijk dat je op SintGPT in ongeveer 30 seconden een persoonlijk gedicht laat schrijven en dat het eerste gratis is; noem dat één keer in de tekst en verder alleen in de afsluitende oproep. Ook: wat als je het gedicht niet kunt printen (voorlezen van je telefoon, op een kaartje overschrijven), en een gedicht voor meerdere pakjes tegelijk. ${AABB_ONLY}`,
+    angle: `Voor wie het gedicht vergeten is: pakjesavond is vanavond of morgen, en er is nog geen regel. Een plan voor een goed gedicht in ongeveer 10 minuten: eerst 2 minuten weetjes verzamelen (één gewoonte, één gebeurtenis van dit jaar, het cadeau), dan een kort gedicht van 8 regels in AABB, dan hardop lezen. Geef een invulsjabloon van 8 regels met [naam], [gewoonte] en [cadeau] dat echt rijmt, plus twee ingevulde voorbeelden. Geef rijmparen die altijd werken (Sint, Piet, cadeau, gedicht), en wat je vermijdt als je haast hebt (te lang, geen grap, het cadeau verraden). Zeg eerlijk dat je op SintGPT in ongeveer een minuut een persoonlijk gedicht laat schrijven en dat het eerste gratis is; noem dat één keer in de tekst en verder alleen in de afsluitende oproep. Ook: wat als je het gedicht niet kunt printen (voorlezen van je telefoon, op een kaartje overschrijven), en een gedicht voor meerdere pakjes tegelijk. ${AABB_ONLY}`,
     material: RHYMES,
     cta: '/',
   },

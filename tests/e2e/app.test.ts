@@ -1411,7 +1411,7 @@ describe('days until pakjesavond', () => {
   it('counts the days in the hero', async () => {
     const page = await homeAt('2026-11-20T10:00:00+01:00');
     await page.locator('.countdown').getByText('Nog 15 dagen tot pakjesavond').waitFor();
-    // The FAQ also says it takes 30 seconds; the hint belongs only in the countdown.
+    // The FAQ also says it takes about a minute; the hint belongs only in the countdown.
     expect(await page.locator('.countdown').getByText('Op het laatste moment?').count()).toBe(0);
     await page.close();
   }, 30_000);
@@ -1419,7 +1419,7 @@ describe('days until pakjesavond', () => {
   it('adds the time hint close to the date', async () => {
     const page = await homeAt('2026-12-04T10:00:00+01:00');
     await page.locator('.countdown').getByText('Morgen is het pakjesavond').waitFor();
-    await page.locator('.countdown').getByText('Op het laatste moment? Binnen 30 seconden heb je een gedicht.').waitFor();
+    await page.locator('.countdown').getByText('Op het laatste moment? In ongeveer een minuut heb je een gedicht.').waitFor();
     await page.close();
   }, 30_000);
 
@@ -1834,10 +1834,10 @@ describe('free rewrite and write first, then pay', () => {
     });
     await page.goto(url('/'), { waitUntil: 'networkidle' });
     await page.fill('#poem-name', 'Sanne');
-    // Without free poems the next poem is the preview from Gemini 3.1 Pro: about a minute.
+    // Every poem, the preview too, comes from Gemini 3.1 Pro: about a minute.
     await page.locator('#poem-form').getByText('Klaar in ongeveer een minuut.').waitFor();
     await page.locator('#poem-form button[type=submit]').click();
-    await page.getByText('Dit gedicht schrijft de Sint extra zorgvuldig. Dat duurt ongeveer een minuut.').waitFor();
+    await page.getByText('De Sint schrijft zorgvuldig. Meestal is het gedicht in ongeveer een minuut klaar.').waitFor();
     await page.getByText('Regel twee rijmt erop.').waitFor({ timeout: 15_000 });
     expect(sent).toHaveLength(1);
     expect(sent[0]).toMatchObject({ name: 'Sanne' });
@@ -1879,7 +1879,7 @@ describe('free rewrite and write first, then pay', () => {
     expect(sent[0]).toMatchObject({ name: 'Sanne' });
     expect(await page.getByRole('heading', { name: 'Het gratis gedicht is al gebruikt' }).count()).toBe(0);
     await page.getByRole('button', { name: 'Lees het hele gedicht' }).waitFor();
-    // The page now knows: the note under the button says the preview's time.
+    // The page now knows the free poem is used.
     const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('sinterklaas-payment') || 'null'));
     expect(stored).toMatchObject({ poemCount: 1 });
     await page.locator('#poem-form').getByText('Klaar in ongeveer een minuut.').waitFor();

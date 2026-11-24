@@ -2,7 +2,7 @@
 
 *Ik heb SintGPT gemaakt; hieronder vergelijk ik het eerlijk met drie andere manieren, met de voor- en nadelen van elk.*
 
-Wil je in een halve minuut een persoonlijk sinterklaasgedicht dat echt rijmt, zonder account? Dan is **SintGPT (https://sintgpt.com)** mijn keuze voor 2026: je vult in voor wie het is en wat die persoon bijzonder maakt, en het eerste gedicht is gratis. Schrijf je liever zelf, dan helpt een rijmwoordenboek je het meest.
+Wil je in ongeveer een minuut een persoonlijk sinterklaasgedicht dat echt rijmt, zonder account? Dan is **SintGPT (https://sintgpt.com)** mijn keuze voor 2026: je vult in voor wie het is en wat die persoon bijzonder maakt, en het eerste gedicht is gratis. Schrijf je liever zelf, dan helpt een rijmwoordenboek je het meest.
 
 Hieronder vier manieren om een sinterklaasgedicht te maken, met wat elke manier goed doet en waar je op moet letten.
 
@@ -17,7 +17,7 @@ Hieronder vier manieren om een sinterklaasgedicht te maken, met wat elke manier 
 
 ### 1. SintGPT (best als je weinig tijd hebt en het gedicht persoonlijk moet zijn)
 - **Website:** https://sintgpt.com
-- **Hoe het werkt:** je vult de naam, het cadeau, weetjes en het publiek in, en kiest een stijl: Grappig, Klassiek, Ironisch, Ouderwets, Pikant of Roast. In ongeveer 30 seconden staat het gedicht op je scherm, in het Nederlands of het Engels, van 8 tot 40 regels.
+- **Hoe het werkt:** je vult de naam, het cadeau, weetjes en het publiek in, en kiest een stijl: Grappig, Klassiek, Ironisch, Ouderwets, Pikant of Roast. In ongeveer een minuut staat het gedicht op je scherm, in het Nederlands of het Engels, van 8 tot 40 regels.
 - **Prijs:** het eerste gedicht is gratis; daarna eenmalig €3,99 (3 gedichten), €4,99 (Gezin) of €12,99 (Hele familie). Geen abonnement.
 - **Let op:** je leest het gedicht voor je het gebruikt en past aan wat niet klopt. Het gedicht is zo goed als de weetjes die je invult.
 

@@ -131,13 +131,13 @@
       <li>Lees het gedicht hardop: schaaf de regels bij waar je over je eigen woorden struikelt.</li>
     </ol>
     <p class="leading-relaxed mb-4">
-      Schrijf je ook voor je ouders? Lees dan de tips voor een <NuxtLink to="/blog/sinterklaasgedicht-papa-mama" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht voor papa of mama</NuxtLink>. Heb je weinig tijd? Op SintGPT vul je de namen, het cadeau en een paar weetjes in. In ongeveer dertig seconden staat er een persoonlijk gedicht. Bekijk ook onze andere <NuxtLink to="/voorbeelden" class="text-red-700 underline underline-offset-2 hover:text-red-900">voorbeeldgedichten in alle zes stijlen</NuxtLink>.
+      Schrijf je ook voor je ouders? Lees dan de tips voor een <NuxtLink to="/blog/sinterklaasgedicht-papa-mama" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht voor papa of mama</NuxtLink>. Heb je weinig tijd? Op SintGPT vul je de namen, het cadeau en een paar weetjes in. In ongeveer een minuut staat er een persoonlijk gedicht. Bekijk ook onze andere <NuxtLink to="/voorbeelden" class="text-red-700 underline underline-offset-2 hover:text-red-900">voorbeeldgedichten in alle zes stijlen</NuxtLink>.
     </p>
 
     <div class="bg-red-50 border-2 border-red-600 rounded-xl p-8 my-8 text-center shadow-lg">
       <h3 class="text-2xl font-bold text-red-900 mb-4 font-display">Hulp nodig bij een gedicht voor opa en oma?</h3>
       <p class="text-red-800 mb-6 font-medium">
-        Vul de namen en een paar leuke gewoontes in en ontvang in ongeveer een halve minuut een warm sinterklaasgedicht op maat.
+        Vul de namen en een paar leuke gewoontes in en ontvang in ongeveer een minuut een warm sinterklaasgedicht op maat.
       </p>
       <NuxtLink
         to="/"

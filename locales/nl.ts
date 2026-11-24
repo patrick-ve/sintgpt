@@ -3,12 +3,12 @@ export default {
     title: 'SintGPT',
     subtitle1:
       'Maak gepersonaliseerde Sinterklaasgedichten en laat AI het rijmen doen.',
-    subtitle2: 'Snel & makkelijk. Klaar binnen 30 seconden!',
+    subtitle2: 'Snel & makkelijk. Klaar in ongeveer een minuut!',
   },
   hero: {
     question: 'Wil het rijmen met ChatGPT maar niet lukken?',
-    answer: 'SintGPT schrijft je sinterklaasgedicht in 30 seconden.',
-    subtitle: 'Een persoonlijk gedicht dat echt rijmt, in 30 seconden. Je eerste gedicht is gratis.',
+    answer: 'SintGPT schrijft je sinterklaasgedicht in ongeveer een minuut.',
+    subtitle: 'Een persoonlijk gedicht dat echt rijmt, in ongeveer een minuut. Je eerste gedicht is gratis.',
     cta: 'Begin met rijmen',
     moreInfo: 'Hoe werkt het?',
     photoAlt: 'Sinterklaas wijst met een knipoog naar zijn slaap',
@@ -26,7 +26,7 @@ export default {
     days: 'Nog {count} dag tot pakjesavond | Nog {count} dagen tot pakjesavond',
     tomorrow: 'Morgen is het pakjesavond',
     today: 'Vanavond is het pakjesavond',
-    hint: 'Op het laatste moment? Binnen 30 seconden heb je een gedicht.',
+    hint: 'Op het laatste moment? In ongeveer een minuut heb je een gedicht.',
   },
   form: {
     title: 'Schrijf je sinterklaasgedicht in drie stappen',
@@ -106,8 +106,7 @@ export default {
     submit: {
       generate: 'Schrijf mijn gedicht',
       generating: 'De Sint schrijft…',
-      time: 'Klaar in ongeveer 30 seconden.',
-      timePreview: 'Klaar in ongeveer een minuut.',
+      time: 'Klaar in ongeveer een minuut.',
     },
     required: '*',
   },
@@ -161,9 +160,8 @@ export default {
         'Bijna klaar. Herschrijven kost wat meer denkwerk…',
         'Het duurt wat langer dan anders. Je gedicht komt eraan.',
       ],
-      hint: 'Meestal klaar in ongeveer 30 seconden.',
+      hint: 'De Sint schrijft zorgvuldig. Meestal is het gedicht in ongeveer een minuut klaar.',
       rewriteHint: 'Herschrijven duurt meestal ongeveer een minuut.',
-      previewHint: 'Dit gedicht schrijft de Sint extra zorgvuldig. Dat duurt ongeveer een minuut.',
     },
     retrying: 'De verbinding viel even weg. De Sint begint opnieuw…',
     connectionLost: 'De verbinding viel weg. Controleer je internet en probeer het nog eens.',
@@ -235,7 +233,7 @@ export default {
     partial: 'De rest van dit gedicht kon niet worden gecontroleerd en wordt daarom niet getoond.',
     ctaLead: 'Ook zo\'n gedicht voor iemand anders?',
     cta: 'Schrijf gratis je eigen gedicht',
-    ctaNote: 'Klaar in 30 seconden. Je eerste gedicht is gratis.',
+    ctaNote: 'Klaar in ongeveer een minuut. Je eerste gedicht is gratis.',
     bar: 'Schrijf je eigen gedicht, gratis',
   },
   history: {
@@ -275,10 +273,10 @@ export default {
   },
   seo: {
     title: "Sinterklaasgedicht maken met AI: gratis generator | SintGPT",
-    description: "Lukt dichten met ChatGPT maar niet? SintGPT schrijft leuke en persoonlijke sinterklaasgedichten in minder dan 30 seconden. Gratis en geen account nodig.",
-    ogTitle: 'SintGPT: je sinterklaasgedicht in 30 seconden',
+    description: "Lukt dichten met ChatGPT maar niet? SintGPT schrijft leuke en persoonlijke sinterklaasgedichten in ongeveer een minuut. Gratis en geen account nodig.",
+    ogTitle: 'SintGPT: je sinterklaasgedicht in ongeveer een minuut',
     ogDescription:
-      'Persoonlijke sinterklaasgedichten die echt rijmen. Klaar in 30 seconden, en je eerste gedicht is gratis.',
+      'Persoonlijke sinterklaasgedichten die echt rijmen. Klaar in ongeveer een minuut, en je eerste gedicht is gratis.',
     ogImageAlt:
       'SintGPT: ChatGPT kan niet rijmen, SintGPT wél',
   },
@@ -292,7 +290,7 @@ export default {
       {
         question: 'Hoe maak ik een sinterklaasgedicht met SintGPT?',
         answer:
-          'Vul de naam van de ontvanger in en vertel iets over hobby\'s, werk of grappige gewoontes. Kies een stijl en een rijmschema, en klik op "Schrijf mijn gedicht". Binnen 30 seconden heb je een gedicht dat echt over die persoon gaat.',
+          'Vul de naam van de ontvanger in en vertel iets over hobby\'s, werk of grappige gewoontes. Kies een stijl en een rijmschema, en klik op "Schrijf mijn gedicht". In ongeveer een minuut heb je een gedicht dat echt over die persoon gaat.',
       },
       {
         question: 'Is SintGPT gratis?',
@@ -333,7 +331,7 @@ export default {
       {
         question: 'Hoe lang duurt het om een gedicht te schrijven?',
         answer:
-          'Gemiddeld 20 tot 30 seconden. Je ziet het gedicht regel voor regel verschijnen.',
+          'Meestal ongeveer een minuut. Eerst bedenkt de Sint rijm en grappen, daarna zie je het gedicht regel voor regel verschijnen.',
       },
       {
         question:

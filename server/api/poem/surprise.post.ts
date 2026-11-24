@@ -3,7 +3,7 @@ import { createGateway, generateText, Output } from 'ai';
 import { trackServerEvent } from '../../utils/analytics';
 import { paidAccess } from '../../utils/paymentCookie';
 import { checkPoemRateLimit } from '../../utils/poemRateLimit';
-import { DEFAULT_POEM_MODEL, estimateCostUsd } from '../../utils/poem';
+import { FLASH_MODEL, estimateCostUsd } from '../../utils/poem';
 import { BUYER_RATE_LIMIT } from '../../utils/rateLimit';
 import { buildSurprisePrompt, SurpriseIdeasSchema, SurpriseRequestSchema, trimIdeas } from '../../utils/surprise';
 import { TIERS } from '../../../utils/pricingTiers';
@@ -46,7 +46,7 @@ export default defineEventHandler(async (event) => {
   try {
     const gateway = createGateway({ apiKey: runtimeConfig.aiGatewayApiKey || undefined });
     const result = await generateText({
-      model: gateway(DEFAULT_POEM_MODEL),
+      model: gateway(FLASH_MODEL),
       prompt: buildSurprisePrompt(parsed.data),
       output: Output.object({ schema: SurpriseIdeasSchema }),
       temperature: 1,
@@ -58,10 +58,10 @@ export default defineEventHandler(async (event) => {
       language: parsed.data.language,
       plan: 'paid',
       tier: access.tier,
-      detail: DEFAULT_POEM_MODEL,
+      detail: FLASH_MODEL,
       inputTokens: result.usage.inputTokens ?? 0,
       outputTokens: result.usage.outputTokens ?? 0,
-      costUsd: estimateCostUsd(result.usage, DEFAULT_POEM_MODEL),
+      costUsd: estimateCostUsd(result.usage, FLASH_MODEL),
       totalSeconds: Math.round((Date.now() - startedAt) / 100) / 10,
     });
     return trimIdeas(result.output);

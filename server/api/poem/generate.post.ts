@@ -19,12 +19,11 @@ import { TIERS } from '../../../utils/pricingTiers';
 import { framePoem, framePoemStream, poemFrame } from '../../../utils/poemFrame';
 import {
   buildPrompt,
-  DEFAULT_POEM_MODEL,
   FALLBACK_POEM_MODEL,
   estimateCostUsd,
+  POEM_MODEL,
   poemProviderOptions,
   PoemRequestSchema,
-  REGENERATE_POEM_MODEL,
   withPoemLength,
 } from '../../utils/poem';
 
@@ -59,7 +58,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // A free visitor's one free rewrite of a poem SintGPT wrote, with a wish:
-    // its own counter and the poem model (safeguards in freeRewrite.ts).
+    // its own counter (safeguards in freeRewrite.ts).
     const freeRewrite = !access
       && freeRewriteEnabled(runtimeConfig.freeRewrite)
       && await qualifiesForFreeRewrite(await readBody(event).catch(() => null), runtimeConfig.accessCookieSecret);
@@ -145,11 +144,11 @@ export default defineEventHandler(async (event) => {
     // Build the prompt
     const prompt = buildPrompt(validatedData);
 
-    // A rewrite always uses the larger model, whatever the override says.
-    // The free rewrite uses the poem model: cheaper, and as quick as a poem.
-    const modelId = validatedData.regenerate && !freeRewrite
-      ? REGENERATE_POEM_MODEL
-      : runtimeConfig.aiGatewayModel || DEFAULT_POEM_MODEL;
+    // Every poem uses the poem model. Only a new poem follows an override;
+    // a rewrite (also the free one) never does.
+    const modelId = validatedData.regenerate
+      ? POEM_MODEL
+      : runtimeConfig.aiGatewayModel || POEM_MODEL;
     consola.info(`Sending request to AI Gateway (${modelId})...`);
 
     // Pass the key explicitly: on Cloudflare Workers secrets arrive as

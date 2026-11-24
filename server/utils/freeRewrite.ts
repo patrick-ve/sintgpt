@@ -8,7 +8,8 @@ import { verifyPoemShare } from './poemShare';
  * - only with a wish, and only of a poem on screen;
  * - the poem must carry SintGPT's signature (the `data-share` of the stream,
  *   or of a signed edit), so a script cannot send any text;
- * - it uses the poem model, not the rewrite model (about a third of the cost);
+ * - it has its own counter, so it never gives a second new poem (since
+ *   24 Nov 2026 it uses the same model as every poem, POEM_MODEL);
  * - `NUXT_FREE_REWRITE=off` turns it off without a deploy.
  * A request that does not qualify is an ordinary rewrite: it counts as a poem.
  */

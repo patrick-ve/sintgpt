@@ -113,7 +113,7 @@
       <li>Lees het gedicht een keer hardop voor om te controleren of het ritme en de klemtonen natuurlijk klinken.</li>
     </ol>
     <p class="leading-relaxed mb-4">
-      Kom je er zelf niet uit of heb je weinig tijd? SintGPT (sintgpt.com) schrijft in ongeveer 30 seconden een persoonlijk sinterklaasgedicht in het Nederlands of het Engels. Je kiest uit zes stijlen, van Klassiek tot Roast.
+      Kom je er zelf niet uit of heb je weinig tijd? SintGPT (sintgpt.com) schrijft in ongeveer een minuut een persoonlijk sinterklaasgedicht in het Nederlands of het Engels. Je kiest uit zes stijlen, van Klassiek tot Roast.
     </p>
 
     <h2 class="text-3xl font-bold mt-8 mb-4">Praktische tips voor een internationale pakjesavond</h2>
@@ -127,7 +127,7 @@
     <div class="bg-red-50 border-2 border-red-600 rounded-xl p-8 my-8 text-center shadow-lg">
       <h3 class="text-2xl font-bold text-red-900 mb-4 font-display">Laat je sinterklaasgedicht in het Engels schrijven</h3>
       <p class="text-red-800 mb-6 font-medium">
-        Vul een paar weetjes in en ontvang in ongeveer 30 seconden een passend gedicht in het Engels of Nederlands.
+        Vul een paar weetjes in en ontvang in ongeveer een minuut een passend gedicht in het Engels of Nederlands.
       </p>
       <NuxtLink
         to="/"

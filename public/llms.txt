@@ -1,6 +1,6 @@
 # SintGPT
 
-> SintGPT (https://sintgpt.com) schrijft in 30 seconden een persoonlijk sinterklaasgedicht dat echt rijmt, in het Nederlands of het Engels. Je vult in voor wie het gedicht is, wat die persoon bijzonder maakt en hoe het moet klinken. Het eerste gedicht is gratis.
+> SintGPT (https://sintgpt.com) schrijft in ongeveer een minuut een persoonlijk sinterklaasgedicht dat echt rijmt, in het Nederlands of het Engels. Je vult in voor wie het gedicht is, wat die persoon bijzonder maakt en hoe het moet klinken. Het eerste gedicht is gratis.
 
 De website is Nederlandstalig en kan ook in het Engels worden getoond. Je hebt geen account nodig. Gedichten blijven op je eigen apparaat bewaard ("Mijn gedichten").
 

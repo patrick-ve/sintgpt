@@ -49,6 +49,7 @@ Last updated: 23 November 2026. Live version: `c4423eeb-c1fb-4a71-afa7-ddd47bc38
 | [#32](#32-write-first-then-pay) | High | Write first, then pay | Live and on since 22 Nov (KV + Dodo test passed); measure the funnel |
 | [#33](#33-sint-reads-the-poem-video) | Low | Sint reads the poem (video) | Researched; decision needed |
 | [#34](#34-gezin-at-499-and-honest-persuasion) | High | Gezin at €4,99 and honest persuasion | Live 23 Nov (Dodo at €4,99, checkout checked); measure the funnel |
+| [#35](#35-every-poem-on-gemini-31-pro) | High | Every poem on Gemini 3.1 Pro | Built 24 Nov, not deployed; measure aborts and cost |
 
 ## Open
 
@@ -569,6 +570,14 @@ Owner steps:
 - **Live 23 Nov, 22:40** (`c4423eeb`, Dodo product set to 499 cents just before; checkout showed €4.99 = €4.12 + €0.87 btw): `TIERS.gezin.priceCents` 499; `gezinPriceText` for `{gezinPrice}` (hero, payment description, examples, lootjes); `poemsBelowOneEuro` ("Bij 5 gedichten"); the nudge says "Voor €1 meer". Window: "Nog N dagen tot pakjesavond", "Je eerste gedicht kreeg je van de Sint", and after a preview "Je nieuwe gedicht is al geschreven en staat voor je klaar". FAQ, terms, `llms.txt`, JSON-LD, docs and the marketing drafts say €4,99.
 - **Deploy order:** set the live Dodo product `pdt_0NrhkxiUQYJFJOJ7Y9GRb` to €4,99 right before the deploy (step 6 in `docs/dodo-payments-todo.md`). Between the two steps the page and the checkout differ by €2, in the buyer's favour. After the deploy, open a checkout and check €4,99.
 - **Watch:** Drie (€3,99 for 3) is now only €1 cheaper than Gezin, so it works as a decoy; Hele familie (€12,99) is 2.6 times Gezin. Measure `Show payment modal` → `Proceed to payment` per tier, before and after.
+
+### #35 Every poem on Gemini 3.1 Pro
+
+- **Decision (owner, 24 Nov 2026):** "maximum quality": every poem (new, free rewrite, rewrite, preview) uses `POEM_MODEL` = `google/gemini-3.1-pro-preview` at thinking level `medium`. Before, new poems and free rewrites used Gemini 3.7 Flash. The owner was told first that the blind test of 15 Nov found no measurable difference (Pro 54%, Flash 46%, p=0.84; Pro better on rhythm, Flash on using the facts; Pro did not finish 2 of 14 in 5 minutes) and chose Pro anyway. `FLASH_MODEL` stays for surprise ideas and the blog-post script. No `NUXT_AI_GATEWAY_MODEL` secret is set on the Worker (checked 24 Nov).
+- **Cost and wait:** a new poem goes from about 23 s and $0.012 to about 60 s (28 to 108 s measured on previews) and $0.06 to $0.08. The free poem and the free rewrite now cost as much as a preview: worst case per free visitor 1 poem + 1 free rewrite + 2 previews, about $0.30.
+- **Texts:** every "30 seconden" claim now says "ongeveer een minuut": hero, SEO title and description, FAQ, the countdown hint, the shared-poem page, 21 blog posts, the blog index, `llms.txt`, the blog brief (`SITE_FACTS`), the home share image (`public/og/home.jpg`), the sticker specs and the marketing drafts. The writing animation of a new poem uses the preview timing (60 s); `form.submit.timePreview` and `poem.writing.previewHint` are gone (every poem is now as slow).
+- **Not changed:** printed stickers say "Klaar in 30 seconden" (the specs are fixed; render again with `npx tsx scripts/build-stickers.ts` before printing more).
+- **Watch after the deploy:** `Poem aborted` (`before text`) against `Generate poem`, the seconds to the first text, `Poem stream failed`, the cost per day, and the 👍/👎 per style. Before: 23.7 s to the first text, about $0.012 per poem, 3× 👎 on Grappig in 2 days.
 
 ## Findings
 

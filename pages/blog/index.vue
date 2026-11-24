@@ -121,8 +121,8 @@ useHead({
           </h2>
           <p class="text-gray-800 mb-8 text-lg font-medium max-w-2xl mx-auto">
             {{ locale === 'nl'
-              ? 'SintGPT schrijft binnen 30 seconden een persoonlijk sinterklaasgedicht. Je eerste gedicht is gratis.'
-              : 'SintGPT writes a personal Sinterklaas poem in 30 seconds. Your first poem is free.' }}
+              ? 'SintGPT schrijft in ongeveer een minuut een persoonlijk sinterklaasgedicht. Je eerste gedicht is gratis.'
+              : 'SintGPT writes a personal Sinterklaas poem in about a minute. Your first poem is free.' }}
           </p>
           <NuxtLink
             to="/"

@@ -30,7 +30,7 @@ export const OG_IMAGES: OgImageSpec[] = [
     kind: 'home',
     hook: 'ChatGPT kan niet rijmen…',
     headline: 'SintGPT wél!',
-    claim: 'Gedicht klaar in 30 seconden',
+    claim: 'Gedicht klaar in een minuut',
   },
   {
     name: 'voorbeelden',

@@ -344,7 +344,7 @@ const templates: Record<StickerTemplate, Design> = {
         <p class="head anton" data-fit="58">${spec.head}</p>
         <div class="photo"><img src="${face}" alt=""></div>
         ${onFace(spec.face, 24, 360 - 24 - 84, 84)}
-        <p class="sub">${spec.sub ?? 'Rijmt echt. In 30 seconden.'}</p>
+        <p class="sub">${spec.sub ?? 'Rijmt echt. In een minuut.'}</p>
         <div class="qr-tile">${qr(spec)}<span class="scan">${scan}</span></div>`,
     };
   },

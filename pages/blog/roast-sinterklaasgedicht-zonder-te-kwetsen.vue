@@ -126,7 +126,7 @@
     <div class="bg-red-50 border-2 border-red-600 rounded-xl p-8 my-8 text-center shadow-lg">
       <h3 class="text-2xl font-bold text-red-900 mb-4 font-display">Direct een roast sinterklaasgedicht schrijven?</h3>
       <p class="text-red-800 mb-6 font-medium">
-        Vul de gewoontes en blunders van je lootje in en kies voor de stijl Roast. In ongeveer 30 seconden heb je een persoonlijk gedicht dat flink plaagt en warm eindigt.
+        Vul de gewoontes en blunders van je lootje in en kies voor de stijl Roast. In ongeveer een minuut heb je een persoonlijk gedicht dat flink plaagt en warm eindigt.
       </p>
       <NuxtLink
         to="/?stijl=roast#poem-form"

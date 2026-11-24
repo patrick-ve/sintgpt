@@ -1,13 +1,13 @@
 ---
 title: "A Sinterklaas poem writer on Cloudflare Workers: streaming, rate limits and share links without a database"
 published: false
-description: "How sintgpt.com streams a rhyming poem in about 30 seconds, counts free poems per IP with Durable Objects, and signs share links so the poem never reaches the server."
+description: "How sintgpt.com streams a rhyming poem in about a minute, counts free poems per IP with Durable Objects, and signs share links so the poem never reaches the server."
 tags: cloudflare, nuxt, webdev, ai
 ---
 
 <!-- No canonical_url: sintgpt.com has no English technical post to point at, so this article is the original. Add canonical_url only if you publish the same text on sintgpt.com first. -->
 
-[SintGPT](https://sintgpt.com) writes a personal Dutch or English Sinterklaas poem in about 30 seconds. It runs on Cloudflare Workers with Nuxt 4, has no user database, and keeps every poem on the visitor's device. These are the parts that were less obvious than they look.
+[SintGPT](https://sintgpt.com) writes a personal Dutch or English Sinterklaas poem in about a minute. It runs on Cloudflare Workers with Nuxt 4, has no user database, and keeps every poem on the visitor's device. These are the parts that were less obvious than they look.
 
 ## Streaming without a waiting screen that lies
 

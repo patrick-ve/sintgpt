@@ -1884,8 +1884,7 @@ useHead({
                 <template v-if="mounted && isPaid">{{ accessHint }}</template>
                 <template v-else-if="mounted && paymentsUnavailable">{{ t('payment.unavailable.hint') }}</template>
                 <template v-else>{{ t('payment.remainingPoems', { count: shownFreePoems }) }}.</template>
-                <!-- Without free poems the next poem is the preview, from the slower model. -->
-                {{ mounted && !isPaid && !paymentsUnavailable && shownFreePoems === 0 ? t('form.submit.timePreview') : t('form.submit.time') }}
+                {{ t('form.submit.time') }}
               </p>
             </div>
           </form>

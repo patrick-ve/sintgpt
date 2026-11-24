@@ -9,8 +9,8 @@ import { writeFileSync } from 'node:fs';
 import { createGateway, generateText } from 'ai';
 import {
   buildPrompt,
-  DEFAULT_POEM_MODEL,
-  FALLBACK_POEM_MODEL,
+  POEM_MODEL,
+  poemProviderOptions,
   PoemRequestSchema,
   type PoemRequest,
 } from '../server/utils/poem';
@@ -27,11 +27,11 @@ const results = [];
 for (const input of EXAMPLE_POEMS.filter(i => !ids.length || ids.includes(i.id))) {
   const request: PoemRequest = PoemRequestSchema.parse(input.request);
   const { text } = await generateText({
-    model: gateway(DEFAULT_POEM_MODEL),
+    model: gateway(POEM_MODEL),
     prompt: buildPrompt(request),
     temperature: 1,
     maxRetries: 3,
-    providerOptions: { gateway: { models: [FALLBACK_POEM_MODEL] } },
+    providerOptions: poemProviderOptions(POEM_MODEL),
   });
   console.log(`${input.id}: ${text.split('\n').length} lines`);
   results.push({ id: input.id, poem: text.trim() });

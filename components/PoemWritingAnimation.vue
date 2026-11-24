@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { writingProgress, writingStepIndex, type WritingKind } from '~/utils/writingSteps';
 
-// Shown until the first text of the poem arrives: about 28 s for a new poem
-// (Flash), about a minute for a rewrite and for the preview of "write first,
-// then pay" (Pro). The steps tell the visitor what happens while the model
-// reasons, so the wait does not feel like a hang.
+// Shown until the first text of the poem arrives: about a minute for a new
+// poem, a rewrite and the preview of "write first, then pay" (all Gemini 3.1
+// Pro). The steps tell the visitor what happens while the model reasons, so
+// the wait does not feel like a hang.
 const props = withDefaults(defineProps<{ kind?: WritingKind }>(), { kind: 'new' });
 const { t } = useI18n();
 
@@ -32,7 +32,7 @@ const steps = computed<string[]>(() => t(kind.value === 'rewrite' ? 'poem.writin
 const stepIndex = computed(() => Math.min(writingStepIndex(kind.value, elapsed.value), steps.value.length - 1));
 const progress = computed(() => writingProgress(kind.value, elapsed.value));
 const hint = computed(() => t(
-  kind.value === 'rewrite' ? 'poem.writing.rewriteHint' : kind.value === 'preview' ? 'poem.writing.previewHint' : 'poem.writing.hint',
+  kind.value === 'rewrite' ? 'poem.writing.rewriteHint' : 'poem.writing.hint',
 ));
 </script>
 

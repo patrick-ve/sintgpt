@@ -3,12 +3,12 @@ export default {
     title: 'SintGPT',
     subtitle1:
       'Create personalized Sinterklaas poems and let AI do the rhyming.',
-    subtitle2: 'Fast & easy. Ready in 30 seconds!',
+    subtitle2: 'Fast & easy. Ready in about a minute!',
   },
   hero: {
     question: "Can't get ChatGPT to rhyme?",
-    answer: 'SintGPT writes your Sinterklaas poem in 30 seconds.',
-    subtitle: 'A personal poem that really rhymes, in 30 seconds. Your first poem is free.',
+    answer: 'SintGPT writes your Sinterklaas poem in about a minute.',
+    subtitle: 'A personal poem that really rhymes, in about a minute. Your first poem is free.',
     cta: 'Start rhyming',
     moreInfo: 'How does it work?',
     photoAlt: 'Sinterklaas winks and taps his temple',
@@ -25,7 +25,7 @@ export default {
     days: 'Pakjesavond is in {count} day | Pakjesavond is in {count} days',
     tomorrow: 'Pakjesavond is tomorrow',
     today: 'Pakjesavond is tonight',
-    hint: 'Last minute? You will have a poem in 30 seconds.',
+    hint: 'Last minute? You will have a poem in about a minute.',
   },
   form: {
     title: 'Write your poem in three steps',
@@ -105,8 +105,7 @@ export default {
     submit: {
       generate: 'Write my poem',
       generating: 'Sinterklaas is writing…',
-      time: 'Ready in about 30 seconds.',
-      timePreview: 'Ready in about a minute.',
+      time: 'Ready in about a minute.',
     },
     required: '*',
   },
@@ -160,9 +159,8 @@ export default {
         'Almost done. A rewrite takes a bit more thought…',
         'This takes a bit longer than usual. Your poem is on its way.',
       ],
-      hint: 'Usually ready in about 30 seconds.',
+      hint: 'Sinterklaas writes with care. The poem is usually ready in about a minute.',
       rewriteHint: 'A rewrite usually takes about a minute.',
-      previewHint: 'Sinterklaas takes extra care with this poem. It takes about a minute.',
     },
     retrying: 'The connection dropped for a moment. Sinterklaas starts again…',
     connectionLost: 'The connection dropped. Check your internet and try again.',
@@ -234,7 +232,7 @@ export default {
     partial: 'The rest of this poem could not be verified, so it is not shown.',
     ctaLead: 'Want a poem like this for someone else?',
     cta: 'Write your own poem for free',
-    ctaNote: 'Ready in 30 seconds. Your first poem is free.',
+    ctaNote: 'Ready in about a minute. Your first poem is free.',
     bar: 'Write your own poem, for free',
   },
   history: {
@@ -274,10 +272,10 @@ export default {
   },
   seo: {
     title: "Sinterklaas poem generator with AI | SintGPT",
-    description: "Create a personal Sinterklaas poem that really rhymes in 30 seconds. First poem free. Unlike ChatGPT, SintGPT rhymes properly in Dutch and English.",
-    ogTitle: 'SintGPT: your Sinterklaas poem in 30 seconds',
+    description: "Create a personal Sinterklaas poem that really rhymes in about a minute. First poem free. Unlike ChatGPT, SintGPT rhymes properly in Dutch and English.",
+    ogTitle: 'SintGPT: your Sinterklaas poem in about a minute',
     ogDescription:
-      'Personal Sinterklaas poems that really rhyme. Ready in 30 seconds, and your first poem is free.',
+      'Personal Sinterklaas poems that really rhyme. Ready in about a minute, and your first poem is free.',
     ogImageAlt:
       'SintGPT: ChatGPT cannot rhyme, SintGPT can',
   },
@@ -291,7 +289,7 @@ export default {
       {
         question: 'How do I create a Sinterklaas poem with SintGPT?',
         answer:
-          'Fill in the name of the recipient and tell us about their hobbies, work or funny habits. Choose a style and a rhyme scheme, and click "Write my poem". Within 30 seconds you have a poem that is really about that person.',
+          'Fill in the name of the recipient and tell us about their hobbies, work or funny habits. Choose a style and a rhyme scheme, and click "Write my poem". In about a minute you have a poem that is really about that person.',
       },
       {
         question: 'Is SintGPT free?',
@@ -331,7 +329,7 @@ export default {
       {
         question: 'How long does it take to write a poem?',
         answer:
-          'About 20 to 30 seconds. You see the poem appear line by line.',
+          'Usually about a minute. First Sinterklaas works out the rhymes and jokes, then you see the poem appear line by line.',
       },
       {
         question: 'Can I change a poem or have it written again?',

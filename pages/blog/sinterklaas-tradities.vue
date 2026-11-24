@@ -133,13 +133,13 @@
       Naast lootjes en surprises spelen vriendengroepen en collega's ook het sinterklaasdobbelspel. Met dobbelstenen en opdrachten wisselen de cadeaus van eigenaar.
     </p>
     <p class="leading-relaxed mb-4">
-      Lootjes trekken kan ook op een telefoon, zonder papieren briefjes. En wie weinig tijd heeft om zelf te dichten, laat SintGPT in ongeveer dertig seconden een persoonlijk sinterklaasgedicht schrijven.
+      Lootjes trekken kan ook op een telefoon, zonder papieren briefjes. En wie weinig tijd heeft om zelf te dichten, laat SintGPT in ongeveer een minuut een persoonlijk sinterklaasgedicht schrijven.
     </p>
 
     <div class="bg-red-50 border-2 border-red-600 rounded-xl p-8 my-8 text-center shadow-lg">
       <h3 class="text-2xl font-bold text-red-900 mb-4 font-display">Hulp nodig bij je sinterklaasgedicht?</h3>
       <p class="text-red-800 mb-6 font-medium">
-        Laat SintGPT in ongeveer 30 seconden een persoonlijk gedicht schrijven voor pakjesavond. Je eerste gedicht is gratis.
+        Laat SintGPT in ongeveer een minuut een persoonlijk gedicht schrijven voor pakjesavond. Je eerste gedicht is gratis.
       </p>
       <NuxtLink
         to="/"

@@ -19,8 +19,8 @@ import {
   buildPrompt,
   estimateCostUsd,
   poemProviderOptions,
+  POEM_MODEL,
   PoemRequestSchema,
-  PREVIEW_POEM_MODEL,
   withPoemLength,
 } from '../../utils/poem';
 import { framePoem, poemFrame } from '../../../utils/poemFrame';
@@ -75,8 +75,8 @@ export default defineEventHandler(async (event) => {
     plan: 'free' as const,
     ...formFacts(input),
   };
-  // Always the preview model, also with an NUXT_AI_GATEWAY_MODEL override.
-  const modelId = PREVIEW_POEM_MODEL;
+  // Always the poem model, also with an NUXT_AI_GATEWAY_MODEL override.
+  const modelId = POEM_MODEL;
   const startedAt = Date.now();
 
   try {

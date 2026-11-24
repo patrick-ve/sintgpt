@@ -94,7 +94,7 @@
       </p>
     </div>
     <p class="leading-relaxed mb-4">
-      Heb je weinig tijd om zelf te rijmen? Op <NuxtLink to="/" class="text-red-700 underline underline-offset-2 hover:text-red-900">SintGPT</NuxtLink> schrijf je in ongeveer 30 seconden een persoonlijk sinterklaasgedicht, met het cadeau en de weetjes over de ontvanger die jij invult.
+      Heb je weinig tijd om zelf te rijmen? Op <NuxtLink to="/" class="text-red-700 underline underline-offset-2 hover:text-red-900">SintGPT</NuxtLink> schrijf je in ongeveer een minuut een persoonlijk sinterklaasgedicht, met het cadeau en de weetjes over de ontvanger die jij invult.
     </p>
 
     <h2 class="text-3xl font-bold mt-8 mb-4">Natte vullingen, veiligheid en afval</h2>
@@ -125,7 +125,7 @@
     <div class="bg-red-50 border-2 border-red-600 rounded-xl p-8 my-8 text-center shadow-lg">
       <h3 class="text-2xl font-bold text-red-900 mb-4 font-display">Surprise klaar? Laat nu je gedicht schrijven</h3>
       <p class="text-red-800 mb-6 font-medium">
-        Vul een paar gegevens over de ontvanger in en ontvang in ongeveer 30 seconden een passend sinterklaasgedicht.
+        Vul een paar gegevens over de ontvanger in en ontvang in ongeveer een minuut een passend sinterklaasgedicht.
       </p>
       <NuxtLink
         to="/"

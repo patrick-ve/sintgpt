@@ -109,13 +109,13 @@
       Het traditionele AABB-schema geeft houvast, maar je kunt ook kiezen voor ABAB of een limerick. Wil je weten hoe je jouw regels soepel laat lopen? Lees dan onze uitleg over het <NuxtLink to="/blog/rijm-en-ritme-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">rijmschema van een sinterklaasgedicht</NuxtLink>.
     </p>
     <p class="leading-relaxed mb-4">
-      Op SintGPT kies je de stijl Pikant voor suggestieve dubbelzinnigheden en gewaagde knipogen. Het gedicht blijft smaakvol en wordt nooit expliciet. In ongeveer dertig seconden heb je een persoonlijk gedicht.
+      Op SintGPT kies je de stijl Pikant voor suggestieve dubbelzinnigheden en gewaagde knipogen. Het gedicht blijft smaakvol en wordt nooit expliciet. In ongeveer een minuut heb je een persoonlijk gedicht.
     </p>
 
     <div class="bg-red-50 border-2 border-red-600 rounded-xl p-8 my-8 text-center shadow-lg">
       <h3 class="text-2xl font-bold text-red-900 mb-4 font-display">Laat een pikant sinterklaasgedicht schrijven</h3>
       <p class="text-red-800 mb-6 font-medium">
-        Vul de naam, het cadeau en wat weetjes in en kies de stijl Pikant. In ongeveer dertig seconden heb je een rijm op maat.
+        Vul de naam, het cadeau en wat weetjes in en kies de stijl Pikant. In ongeveer een minuut heb je een rijm op maat.
       </p>
       <NuxtLink
         to="/?stijl=pikant#poem-form"

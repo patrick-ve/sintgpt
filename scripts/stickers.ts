@@ -87,24 +87,24 @@ const vs = (n: number, spec: Omit<StickerSpec, 'id' | 'style'>): StickerSpec =>
 
 export const STICKERS: StickerSpec[] = [
   pikant(1, { name: 'Spicy gedicht', template: 'corner', palette: P.blackRed,
-    head: 'Een <em>spicy</em><i class="chili"></i> sinterklaasgedicht nodig?', sub: 'Klaar in 30 seconden…' }),
+    head: 'Een <em>spicy</em><i class="chili"></i> sinterklaasgedicht nodig?', sub: 'Klaar in een minuut…' }),
   pikant(3, { name: 'Vorig weekend', template: 'bleed', palette: P.wine, face: 'kiss',
-    head: 'Sint weet wat je <em>vannacht</em> deed…', sub: 'Een spicy gedicht. Klaar in 30 seconden.' }),
+    head: 'Sint weet wat je <em>vannacht</em> deed…', sub: 'Een spicy gedicht. Klaar in een minuut.' }),
   pikant(5, { name: 'Hij komt', template: 'bleed', palette: P.blackRed,
-    head: 'Hij komt,<br><em>hij komt…</em>', sub: 'Een spicy gedicht. Klaar in 30 seconden.' }),
+    head: 'Hij komt,<br><em>hij komt…</em>', sub: 'Een spicy gedicht. Klaar in een minuut.' }),
   pikant(9, { name: 'Ondeugend rijmpje', template: 'corner', palette: P.pink,
-    head: 'Sint heeft een <em>ondeugend</em> rijmpje voor je.', sub: 'Pikant en spicy. Klaar in 30 seconden.' }),
+    head: 'Sint heeft een <em>ondeugend</em> rijmpje voor je.', sub: 'Pikant en spicy. Klaar in een minuut.' }),
   pikant(11, { name: 'Een beetje spicy', template: 'bleed', palette: P.blackRed,
     head: 'Pakjesavond wordt een beetje <em>spicy.</em>', sub: 'Een pikant gedicht van Sint.', subSize: 22 }),
 
   roast(1, { name: 'Sint ziet alles', template: 'ember', palette: P.blackOrange,
     head: 'Sint ziet alles.<br><em>En zegt het ook.</em>', sub: 'Een Sinterklaas roast voor je familie, vrienden en collega’s.', subSize: 17 }),
   roast(13, { name: 'Je huisgenoot', template: 'corner', palette: P.blackOrange,
-    head: 'Je huisgenoot gaat dit <em>niet</em> leuk vinden.', sub: 'Jij wel. Een Sinterklaas roast klaar in 30 seconden.' }),
+    head: 'Je huisgenoot gaat dit <em>niet</em> leuk vinden.', sub: 'Jij wel. Een Sinterklaas roast klaar in een minuut.' }),
   roast(14, { name: 'Je collega', template: 'corner', palette: P.blackOrange,
     head: 'Je collega heeft dit <em>verdiend.</em>', sub: 'Een roast op rijm voor de sinterklaasborrel op kantoor.' }),
   roast(15, { name: 'Niet voor jou', template: 'band', palette: P.blackOrange,
-    head: 'Sint is lief voor kinderen.<em>Niet voor jou.</em>', sub: 'Een Sinterklaas roast. Klaar in 30 seconden.' }),
+    head: 'Sint is lief voor kinderen.<em>Niet voor jou.</em>', sub: 'Een Sinterklaas roast. Klaar in een minuut.' }),
 
   // ChatGPT vs Sint: ChatGPT cannot write a sinterklaasgedicht (2 chosen out of 5).
   vs(3, { name: 'Sint ziet het', template: 'bleed', palette: P.wine,

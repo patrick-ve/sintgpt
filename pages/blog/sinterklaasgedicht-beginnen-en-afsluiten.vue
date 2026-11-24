@@ -250,7 +250,7 @@
     <div class="bg-red-50 border-2 border-red-600 rounded-xl p-8 my-8 text-center shadow-lg">
       <h3 class="text-2xl font-bold text-red-900 mb-4 font-display">Snel een compleet sinterklaasgedicht schrijven?</h3>
       <p class="text-red-800 mb-6 font-medium">
-        Geen tijd om zelf te puzzelen op rijmwoorden en zinnen? Laat SintGPT in ongeveer 30 seconden een passend en persoonlijk sinterklaasgedicht voor je schrijven.
+        Geen tijd om zelf te puzzelen op rijmwoorden en zinnen? Laat SintGPT in ongeveer een minuut een passend en persoonlijk sinterklaasgedicht voor je schrijven.
       </p>
       <NuxtLink
         to="/"

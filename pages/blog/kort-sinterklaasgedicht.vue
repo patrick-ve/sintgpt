@@ -156,7 +156,7 @@
       Heb je voor een grote groep <NuxtLink to="/lootjes" class="text-red-700 underline underline-offset-2 hover:text-red-900">gratis lootjes</NuxtLink> getrokken? Met korte gedichten komt iedereen aan bod en duurt de avond niet te lang.
     </p>
     <p class="leading-relaxed mb-4">
-      Heb je weinig tijd om zelf te rijmen? SintGPT schrijft in ongeveer 30 seconden een persoonlijk sinterklaasgedicht van 8 tot 40 regels. Jij kiest de stijl en vult de weetjes in.
+      Heb je weinig tijd om zelf te rijmen? SintGPT schrijft in ongeveer een minuut een persoonlijk sinterklaasgedicht van 8 tot 40 regels. Jij kiest de stijl en vult de weetjes in.
     </p>
 
     <div class="bg-red-50 border-2 border-red-600 rounded-xl p-8 my-8 text-center shadow-lg">

@@ -3,7 +3,7 @@
 
 /** Shown from about the first week of October until 5 December. */
 export const COUNTDOWN_FROM_DAYS = 60;
-/** From this many days before, the page adds that a poem takes 30 seconds. */
+/** From this many days before, the page adds that a poem takes about a minute. */
 export const HURRY_FROM_DAYS = 3;
 
 export interface PakjesavondCountdown {

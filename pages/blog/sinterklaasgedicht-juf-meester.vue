@@ -139,7 +139,7 @@
     <div class="bg-red-50 border-2 border-red-600 rounded-xl p-8 my-8 text-center shadow-lg">
       <h3 class="text-2xl font-bold text-red-900 mb-4 font-display">Laat snel een sinterklaasgedicht schrijven</h3>
       <p class="text-red-800 mb-6 font-medium">
-        Vul een paar leuke weetjes over de juf of meester in, kies een stijl, en lees in ongeveer 30 seconden een persoonlijk gedicht. Je eerste gedicht is gratis.
+        Vul een paar leuke weetjes over de juf of meester in, kies een stijl, en lees in ongeveer een minuut een persoonlijk gedicht. Je eerste gedicht is gratis.
       </p>
       <NuxtLink
         to="/"

@@ -2,12 +2,11 @@ import { describe, expect, it } from 'vitest';
 import {
   asPromptData,
   buildPrompt,
-  DEFAULT_POEM_MODEL,
   estimateCostUsd,
+  FLASH_MODEL,
+  POEM_MODEL,
   poemProviderOptions,
   PoemRequestSchema,
-  PREVIEW_POEM_MODEL,
-  REGENERATE_POEM_MODEL,
   withPoemLength,
 } from '../../server/utils/poem';
 
@@ -257,29 +256,25 @@ describe('prompt injection', () => {
 });
 
 describe('model and cost', () => {
-  it('uses Gemini 3.7 Flash through AI Gateway', () => {
-    expect(DEFAULT_POEM_MODEL).toBe('google/gemini-3.7-flash');
+  it('writes every poem with Gemini 3.1 Pro, at a medium thinking level', () => {
+    expect(POEM_MODEL).toBe('google/gemini-3.1-pro-preview');
+    expect(poemProviderOptions(POEM_MODEL).google).toEqual({ thinkingConfig: { thinkingLevel: 'medium' } });
   });
 
-  it('writes the blurred preview and rewrites with Gemini 3.1 Pro, at a medium thinking level', () => {
-    expect(REGENERATE_POEM_MODEL).toBe('google/gemini-3.1-pro-preview');
-    expect(PREVIEW_POEM_MODEL).toBe(REGENERATE_POEM_MODEL);
-    expect(poemProviderOptions(PREVIEW_POEM_MODEL).google).toEqual({ thinkingConfig: { thinkingLevel: 'medium' } });
+  it('keeps Gemini 3.7 Flash for text that is not a poem', () => {
+    expect(FLASH_MODEL).toBe('google/gemini-3.7-flash');
   });
 
   it('estimates cost from input and output tokens', () => {
-    // 1M input at $0.75 + 1M output at $3.75
-    expect(estimateCostUsd({ inputTokens: 1_000_000, outputTokens: 1_000_000 })).toBe(4.5);
+    // 1M input at $2 + 1M output at $12
+    expect(estimateCostUsd({ inputTokens: 1_000_000, outputTokens: 1_000_000 })).toBe(14);
     expect(estimateCostUsd({})).toBe(0);
   });
 
-  it('prices a rewrite at the larger model', () => {
-    // 1M input at $2 + 1M output at $12
-    expect(
-      estimateCostUsd({ inputTokens: 1_000_000, outputTokens: 1_000_000 }, REGENERATE_POEM_MODEL),
-    ).toBe(14);
-    // An unknown override falls back to the default price.
-    expect(estimateCostUsd({ inputTokens: 1_000_000 }, 'other/model')).toBe(0.75);
+  it('prices Flash at its own price and an unknown model at the poem model', () => {
+    // 1M input at $0.75 + 1M output at $3.75
+    expect(estimateCostUsd({ inputTokens: 1_000_000, outputTokens: 1_000_000 }, FLASH_MODEL)).toBe(4.5);
+    expect(estimateCostUsd({ inputTokens: 1_000_000 }, 'other/model')).toBe(2);
   });
 
   it('accepts an optional regenerate flag', () => {
@@ -393,11 +388,11 @@ describe('greeting and signature', () => {
 });
 
 describe('poemProviderOptions', () => {
-  it('gives the rewrite model a medium thinking level and leaves the default model at its own', () => {
-    expect(poemProviderOptions(REGENERATE_POEM_MODEL)).toEqual({
+  it('gives the poem model a medium thinking level and leaves an override at its own', () => {
+    expect(poemProviderOptions(POEM_MODEL)).toEqual({
       gateway: { models: ['openai/gpt-6.1-terra'] },
       google: { thinkingConfig: { thinkingLevel: 'medium' } },
     });
-    expect(poemProviderOptions(DEFAULT_POEM_MODEL)).toEqual({ gateway: { models: ['openai/gpt-6.1-terra'] } });
+    expect(poemProviderOptions(FLASH_MODEL)).toEqual({ gateway: { models: ['openai/gpt-6.1-terra'] } });
   });
 });

@@ -12,7 +12,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { createGateway, generateText, Output } from 'ai';
 import { z } from 'zod';
-import { DEFAULT_POEM_MODEL } from '../server/utils/poem';
+import { FLASH_MODEL } from '../server/utils/poem';
 import { BLOG_BRIEFS, SITE_FACTS, STYLE_RULES, type BlogBrief } from './blogBriefs';
 
 // Every field is required (empty when unused): with optional fields the model
@@ -244,7 +244,7 @@ async function one(brief: BlogBrief) {
   } else {
     const started = Date.now();
     const settings = {
-      model: gateway!(DEFAULT_POEM_MODEL),
+      model: gateway!(FLASH_MODEL),
       output: Output.object({ schema: PostSchema }),
       temperature: 1,
       maxRetries: 3,

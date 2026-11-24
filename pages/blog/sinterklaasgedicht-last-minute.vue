@@ -140,13 +140,13 @@
       <li>Kijk af en toe op van het papier. Zoek oogcontact met de ontvanger, vooral bij de grap.</li>
     </ol>
     <p class="leading-relaxed mb-4">
-      Loop je toch vast, of heb je geen minuut meer over? Op SintGPT vul je de naam, het cadeau en een paar weetjes in, en in ongeveer 30 seconden staat er een persoonlijk sinterklaasgedicht. Je eerste gedicht is gratis.
+      Loop je toch vast, of heb je bijna geen tijd meer? Op SintGPT vul je de naam, het cadeau en een paar weetjes in, en in ongeveer een minuut staat er een persoonlijk sinterklaasgedicht. Je eerste gedicht is gratis.
     </p>
 
     <div class="bg-red-50 border-2 border-red-600 rounded-xl p-8 my-8 text-center shadow-lg">
-      <h3 class="text-2xl font-bold text-red-900 mb-4 font-display">Nog geen gedicht? Over een halve minuut wel</h3>
+      <h3 class="text-2xl font-bold text-red-900 mb-4 font-display">Nog geen gedicht? Over een minuut wel</h3>
       <p class="text-red-800 mb-6 font-medium">
-        Vul de naam, het cadeau en een paar weetjes in, en lees in ongeveer 30 seconden een persoonlijk gedicht voor pakjesavond.
+        Vul de naam, het cadeau en een paar weetjes in, en lees in ongeveer een minuut een persoonlijk gedicht voor pakjesavond.
       </p>
       <NuxtLink
         to="/"

@@ -266,7 +266,7 @@
       <li>Sluit af met een vriendelijke wens en een verwijzing naar het uitgekozen cadeau.</li>
     </ol>
     <p class="leading-relaxed mb-4">
-      Weinig tijd? SintGPT schrijft in ongeveer 30 seconden een speels gedicht in de stijl Grappig, met jouw weetjes.
+      Weinig tijd? SintGPT schrijft in ongeveer een minuut een speels gedicht in de stijl Grappig, met jouw weetjes.
     </p>
 
     <h2 class="text-3xl font-bold mt-8 mb-4">Veelgestelde vragen over een grappig sinterklaasgedicht</h2>
@@ -290,7 +290,7 @@
     <div class="bg-red-50 border-2 border-red-600 rounded-xl p-8 my-8 text-center shadow-lg">
       <h3 class="text-2xl font-bold text-red-900 mb-4 font-display">Laat een grappig sinterklaasgedicht schrijven</h3>
       <p class="text-red-800 mb-6 font-medium">
-        Heb je weinig tijd of zoek je vrolijke rijmregels voor pakjesavond? Vul een paar weetjes in en laat in ongeveer 30 seconden een persoonlijk gedicht schrijven.
+        Heb je weinig tijd of zoek je vrolijke rijmregels voor pakjesavond? Vul een paar weetjes in en laat in ongeveer een minuut een persoonlijk gedicht schrijven.
       </p>
       <NuxtLink
         to="/?stijl=grappig#poem-form"

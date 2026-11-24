@@ -130,13 +130,13 @@
       <li>Lees de tekst hardop na: controleer of het ritme soepel loopt en pas zinnen aan waar je over struikelt.</li>
     </ol>
     <p class="leading-relaxed mb-4">
-      Heb je weinig tijd? Op SintGPT schrijf je in ongeveer dertig seconden een persoonlijk sinterklaasgedicht. In de <NuxtLink to="/voorbeelden" class="text-red-700 underline underline-offset-2 hover:text-red-900">voorbeeldgedichten voor verzonnen ontvangers</NuxtLink> zie je hoe de zes stijlen klinken.
+      Heb je weinig tijd? Op SintGPT schrijf je in ongeveer een minuut een persoonlijk sinterklaasgedicht. In de <NuxtLink to="/voorbeelden" class="text-red-700 underline underline-offset-2 hover:text-red-900">voorbeeldgedichten voor verzonnen ontvangers</NuxtLink> zie je hoe de zes stijlen klinken.
     </p>
 
     <div class="bg-red-50 border-2 border-red-600 rounded-xl p-8 my-8 text-center shadow-lg">
       <h3 class="text-2xl font-bold text-red-900 mb-4 font-display">Snel een gedicht voor een kind schrijven?</h3>
       <p class="text-red-800 mb-6 font-medium">
-        Vul de gegevens in en ontvang in ongeveer 30 seconden een persoonlijk sinterklaasgedicht op maat.
+        Vul de gegevens in en ontvang in ongeveer een minuut een persoonlijk sinterklaasgedicht op maat.
       </p>
       <NuxtLink
         to="/"

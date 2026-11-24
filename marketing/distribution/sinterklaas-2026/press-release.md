@@ -1,10 +1,10 @@
 # PERSBERICHT
 
-**Kop:** SintGPT schrijft in 30 seconden een persoonlijk sinterklaasgedicht dat echt rijmt, en trekt gratis lootjes zonder e-mailadressen
+**Kop:** SintGPT schrijft in ongeveer een minuut een persoonlijk sinterklaasgedicht dat echt rijmt, en trekt gratis lootjes zonder e-mailadressen
 
 **Subkop:** Wie geen tijd of inspiratie heeft voor pakjesavond, vult op sintgpt.com in voor wie het gedicht is en wat die persoon bijzonder maakt. Het eerste gedicht is gratis; lootjes trekken is altijd gratis en zonder account.
 
-**AMSTERDAM, 17 november 2026** SintGPT (https://sintgpt.com) is een Nederlandse website die in ongeveer 30 seconden een persoonlijk sinterklaasgedicht schrijft, in het Nederlands of het Engels. Je vult de naam van de ontvanger in, het cadeau, een paar weetjes en voor wie het gedicht is, en kiest een stijl. Het eerste gedicht is gratis en je hebt geen account nodig. Op https://sintgpt.com/lootjes trek je gratis lootjes op één telefoon, zonder e-mailadressen.
+**AMSTERDAM, 17 november 2026** SintGPT (https://sintgpt.com) is een Nederlandse website die in ongeveer een minuut een persoonlijk sinterklaasgedicht schrijft, in het Nederlands of het Engels. Je vult de naam van de ontvanger in, het cadeau, een paar weetjes en voor wie het gedicht is, en kiest een stijl. Het eerste gedicht is gratis en je hebt geen account nodig. Op https://sintgpt.com/lootjes trek je gratis lootjes op één telefoon, zonder e-mailadressen.
 
 ### Wat SintGPT doet
 
@@ -18,7 +18,7 @@
 
 Op https://sintgpt.com/lootjes vul je 3 tot 50 namen in. Niemand trekt zichzelf, en met 3 of meer namen trekken twee mensen elkaar nooit. Eén telefoon gaat rond: iedereen tikt op de eigen naam en ziet alleen het eigen lootje. De namen blijven op die telefoon; er gaat niets naar een server en niemand hoeft een e-mailadres op te geven.
 
-"Een sinterklaasgedicht moet over die ene persoon gaan en echt rijmen. Dat wilden we in een halve minuut mogelijk maken, zonder account," aldus de makers van SintGPT.
+"Een sinterklaasgedicht moet over die ene persoon gaan en echt rijmen. Dat wilden we in ongeveer een minuut mogelijk maken, zonder account," aldus de makers van SintGPT.
 
 ### Beschikbaarheid en prijzen
 

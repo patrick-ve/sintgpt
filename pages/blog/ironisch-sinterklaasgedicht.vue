@@ -154,13 +154,13 @@
       <li>Schrijf een warme ontknoping: verbind de ironische anekdote aan het cadeau en sluit af met een vriendelijke wens.</li>
     </ol>
     <p class="leading-relaxed mb-4">
-      Wil je snel een ironisch gedicht zonder uren te puzzelen op rijmwoorden? Op sintgpt.com schrijf je in ongeveer 30 seconden een persoonlijk sinterklaasgedicht in de stijl Ironisch: geestig en subtiel sarcastisch.
+      Wil je snel een ironisch gedicht zonder uren te puzzelen op rijmwoorden? Op sintgpt.com schrijf je in ongeveer een minuut een persoonlijk sinterklaasgedicht in de stijl Ironisch: geestig en subtiel sarcastisch.
     </p>
 
     <div class="bg-red-50 border-2 border-red-600 rounded-xl p-8 my-8 text-center shadow-lg">
       <h3 class="text-2xl font-bold text-red-900 mb-4 font-display">Snel een ironisch sinterklaasgedicht schrijven?</h3>
       <p class="text-red-800 mb-6 font-medium">
-        Kies de stijl Ironisch op SintGPT en vul een paar leuke gewoontes in. In ongeveer dertig seconden heb je een rijm met een knipoog.
+        Kies de stijl Ironisch op SintGPT en vul een paar leuke gewoontes in. In ongeveer een minuut heb je een rijm met een knipoog.
       </p>
       <NuxtLink
         to="/?stijl=ironisch#poem-form"

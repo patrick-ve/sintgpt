@@ -135,7 +135,7 @@
     <div class="bg-red-50 border-2 border-red-600 rounded-xl p-8 my-8 text-center shadow-lg">
       <h3 class="text-2xl font-bold text-red-900 mb-4 font-display">Laat een ouderwets sinterklaasgedicht schrijven</h3>
       <p class="text-red-800 mb-6 font-medium">
-        Wil je snel een persoonlijk gedicht in plechtige stijl voor jouw lootje? Vul je gegevens in en SintGPT schrijft in ongeveer dertig seconden een persoonlijk rijm.
+        Wil je snel een persoonlijk gedicht in plechtige stijl voor jouw lootje? Vul je gegevens in en SintGPT schrijft in ongeveer een minuut een persoonlijk rijm.
       </p>
       <NuxtLink
         to="/?stijl=ouderwets#poem-form"

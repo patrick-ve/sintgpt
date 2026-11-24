@@ -133,7 +133,7 @@
     <div class="bg-red-50 border-2 border-red-600 rounded-xl p-8 my-8 text-center shadow-lg">
       <h3 class="text-2xl font-bold text-red-900 mb-4 font-display">Laat jouw sinterklaasgedicht schrijven</h3>
       <p class="text-red-800 mb-6 font-medium">
-        Kies de stijl die bij jouw ontvanger past en laat SintGPT in ongeveer dertig seconden een persoonlijk sinterklaasgedicht schrijven.
+        Kies de stijl die bij jouw ontvanger past en laat SintGPT in ongeveer een minuut een persoonlijk sinterklaasgedicht schrijven.
       </p>
       <NuxtLink
         to="/"

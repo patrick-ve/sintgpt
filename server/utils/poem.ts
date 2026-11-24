@@ -2,47 +2,48 @@ import { z } from 'zod';
 import { LIMERICK_LINES, POEM_INPUT_LIMITS, POEM_LINES } from '../../utils/poemLimits';
 import { poemFrame, unframePoem } from '../../utils/poemFrame';
 
-// Default AI Gateway model. Override with the NUXT_AI_GATEWAY_MODEL env var.
-// Gemini 3.7 Flash won a blind test against Gemini 3.8 Flash and
-// GPT-6.1 Terra (Nov 2026) and is ~6x cheaper and 2-3x faster than
-// Gemini 3.1 Pro. With the prompt of 14 Nov 2026 a poem takes 2,600 to 3,300
-// reasoning tokens (~$0.011 to $0.014, first text after 20 to 30 s); the
-// prompt before it took about 1,750 (~$0.008, first text after ~14 s).
-export const DEFAULT_POEM_MODEL = 'google/gemini-3.7-flash';
+// Every poem: a new poem, a rewrite, the free rewrite and the preview of
+// "write first, then pay". Gemini 3.1 Pro at thinking level `medium` (see
+// poemProviderOptions), the owner's choice on 24 Nov 2026 for the best
+// quality. Measured: first text after 44 to 83 s for 20 lines (probe of
+// 15 Nov), 28 to 108 s for the whole preview (live, 23 Nov, 57 s on average);
+// $0.06 to $0.08 per poem. A new poem can override it with
+// NUXT_AI_GATEWAY_MODEL; a rewrite and the preview never do.
+//
+// Gemini 3.7 Flash wrote new poems and free rewrites until 24 Nov 2026: about
+// 23 s and $0.012 per poem. In a blind test on 14 requests (15 Nov 2026) Pro
+// `medium` and Flash were not measurably different (54% against 46%): Pro won
+// on rhythm and language, Flash on using the facts. Pro did not finish 2 of
+// the 14 in 5 minutes; Flash finished all. See ISSUES.md.
+export const POEM_MODEL = 'google/gemini-3.1-pro-preview';
+
+// Surprise ideas and the blog-post script: fast, cheap structured text, not
+// a poem. Gemini 3.7 Flash won a blind test against Gemini 3.8 Flash and
+// GPT-6.1 Terra (Nov 2026) and is ~6x cheaper and 2-3x faster than Pro.
+export const FLASH_MODEL = 'google/gemini-3.7-flash';
 
 // A different provider, so poems still work during a Google outage.
 export const FALLBACK_POEM_MODEL = 'openai/gpt-6.1-terra';
 
-// "Herschrijf dit gedicht" writes a new version with a larger model.
-// About 3x the price of the default model per token, and slower.
-export const REGENERATE_POEM_MODEL = 'google/gemini-3.1-pro-preview';
-
-// "Write first, then pay" (server/utils/poemPreview.ts): the poem a free
-// visitor sees blurred, after the free one, comes from the rewrite model, with
-// its thinking level. It ignores NUXT_AI_GATEWAY_MODEL. Measured 22 Nov 2026
-// (12 and 16 lines): 55 to 65 s for the whole poem, $0.06 to $0.08.
-export const PREVIEW_POEM_MODEL = REGENERATE_POEM_MODEL;
-
 /**
- * Provider options for a poem: the fallback model, and for the rewrite model
+ * Provider options for a poem: the fallback model, and for the poem model
  * its thinking level.
  *
- * Flash: no thinking level on purpose. Its default equals `medium` in a blind
- * test (Nov 2026). At `low` it often does not reason at all: 3 times cheaper
- * and faster, but the poems lose 2 of 3 comparisons, some miss the line count
- * or the name. `high` doubles the wait and the cost.
+ * Pro: `medium`. Its default reasons about 9,000 tokens: first text after
+ * about 2 minutes, and 3 of 14 poems took over 5 minutes. In a blind test on
+ * 14 requests (15 Nov 2026) the default and `medium` were not measurably
+ * different (59% against 41%, within the noise), while `medium` took 20 to
+ * 45% less time and 40% less money. `low` lost clearly to the default (27%
+ * against 73%, humor 3 against 17).
  *
- * Pro (rewrites): `medium`. Its default reasons about 9,000 tokens: first
- * text after about 2 minutes, and 3 of 14 poems took over 5 minutes. In a
- * blind test on 14 requests (15 Nov 2026) the default and `medium` were not
- * measurably different (59% against 41%, within the noise), while `medium`
- * took 20 to 45% less time and 40% less money. `low` lost clearly to the
- * default (27% against 73%, humor 3 against 17).
+ * Flash (an override): no thinking level on purpose. Its default equals
+ * `medium` in a blind test (Nov 2026). At `low` it often does not reason at
+ * all, and the poems lose 2 of 3 comparisons.
  */
 export function poemProviderOptions(modelId: string) {
   return {
     gateway: { models: [FALLBACK_POEM_MODEL] },
-    ...(modelId === REGENERATE_POEM_MODEL
+    ...(modelId === POEM_MODEL
       ? { google: { thinkingConfig: { thinkingLevel: 'medium' as const } } }
       : {}),
   };
@@ -50,10 +51,10 @@ export function poemProviderOptions(modelId: string) {
 
 // AI Gateway pricing (USD per 1M tokens). Output tokens include reasoning
 // tokens. The estimate is a log hint, not billing. Unknown models (an
-// NUXT_AI_GATEWAY_MODEL override) use the default model's price.
+// NUXT_AI_GATEWAY_MODEL override) use the poem model's price.
 const PRICES_PER_M: Record<string, { input: number; output: number }> = {
-  [DEFAULT_POEM_MODEL]: { input: 0.75, output: 3.75 },
-  [REGENERATE_POEM_MODEL]: { input: 2, output: 12 },
+  [POEM_MODEL]: { input: 2, output: 12 },
+  [FLASH_MODEL]: { input: 0.75, output: 3.75 },
 };
 
 export function estimateCostUsd(
@@ -61,9 +62,9 @@ export function estimateCostUsd(
     inputTokens?: number;
     outputTokens?: number;
   },
-  modelId: string = DEFAULT_POEM_MODEL,
+  modelId: string = POEM_MODEL,
 ): number {
-  const price = PRICES_PER_M[modelId] ?? PRICES_PER_M[DEFAULT_POEM_MODEL]!;
+  const price = PRICES_PER_M[modelId] ?? PRICES_PER_M[POEM_MODEL]!;
   return (
     ((usage.inputTokens ?? 0) / 1_000_000) * price.input
     + ((usage.outputTokens ?? 0) / 1_000_000) * price.output
@@ -95,7 +96,7 @@ export const PoemRequestSchema = z.object({
   // and "Van Sint & Piet" below it (utils/poemFrame.ts). Off for clients
   // from before the option, which do not send it.
   greeting: z.boolean().default(false),
-  // A new version of the poem on screen, written by REGENERATE_POEM_MODEL.
+  // A new version of the poem on screen, always written by POEM_MODEL.
   // The server picks the model; the client only asks for a rewrite.
   regenerate: z.boolean().optional(),
   // Only with regenerate: what should change, and the poem it changes.

@@ -263,7 +263,7 @@
       <li><strong>Een verdraaide zin</strong>: 'Voor jou de Sint een mooi cadeau toen kocht' zegt niemand. Herschrijf de zin liever, zodat het rijmwoord vanzelf achteraan komt.</li>
     </ul>
     <p class="leading-relaxed mb-4">
-      Wil je horen hoe zuiver rijm in een heel gedicht klinkt? Lees dan de <NuxtLink to="/voorbeelden" class="text-red-700 underline underline-offset-2 hover:text-red-900">voorbeeldgedichten</NuxtLink> in zes stijlen. Heb je weinig tijd om alle rijmwoorden zelf te zoeken? Met SintGPT schrijf je in ongeveer 30 seconden een persoonlijk sinterklaasgedicht.
+      Wil je horen hoe zuiver rijm in een heel gedicht klinkt? Lees dan de <NuxtLink to="/voorbeelden" class="text-red-700 underline underline-offset-2 hover:text-red-900">voorbeeldgedichten</NuxtLink> in zes stijlen. Heb je weinig tijd om alle rijmwoorden zelf te zoeken? Met SintGPT schrijf je in ongeveer een minuut een persoonlijk sinterklaasgedicht.
     </p>
 
     <h2 id="vragen" class="text-3xl font-bold mt-8 mb-4">Veelgestelde vragen over rijmwoorden voor Sinterklaas</h2>
@@ -291,7 +291,7 @@
     <div class="bg-red-50 border-2 border-red-600 rounded-xl p-8 my-8 text-center shadow-lg">
       <h3 class="text-2xl font-bold text-red-900 mb-4 font-display">Laat je sinterklaasgedicht schrijven</h3>
       <p class="text-red-800 mb-6 font-medium">
-        Geen tijd om zelf naar rijmwoorden te zoeken? Vul een paar weetjes in en ontvang in ongeveer 30 seconden een persoonlijk gedicht.
+        Geen tijd om zelf naar rijmwoorden te zoeken? Vul een paar weetjes in en ontvang in ongeveer een minuut een persoonlijk gedicht.
       </p>
       <NuxtLink
         to="/"

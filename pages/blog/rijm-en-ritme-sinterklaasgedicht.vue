@@ -132,7 +132,7 @@
       <li><strong>Timing van de clou</strong>: Valt de clou precies op het laatste woord van de strofe? Als de grap halverwege een zin valt, verliest hij zijn effect.</li>
     </ul>
     <p class="leading-relaxed mb-4">
-      In de <NuxtLink to="/voorbeelden" class="text-red-700 underline underline-offset-2 hover:text-red-900">voorbeeldgedichten voor Sinterklaas</NuxtLink> zie je hoe het ritme in alle zes stijlen uitpakt. Weinig tijd? Bij SintGPT kies je de stijl en het rijmschema, en ongeveer 30 seconden later staat je gedicht er.
+      In de <NuxtLink to="/voorbeelden" class="text-red-700 underline underline-offset-2 hover:text-red-900">voorbeeldgedichten voor Sinterklaas</NuxtLink> zie je hoe het ritme in alle zes stijlen uitpakt. Weinig tijd? Bij SintGPT kies je de stijl en het rijmschema, en ongeveer een minuut later staat je gedicht er.
     </p>
 
     <div class="bg-red-50 border-2 border-red-600 rounded-xl p-8 my-8 text-center shadow-lg">
