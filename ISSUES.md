@@ -9,7 +9,7 @@ findings worth keeping. Newest information first within each section.
   `docs/pricing-tiers.md`.
 - Never put API keys, webhook secrets or gift codes in this file.
 
-Last updated: 23 November 2026. Live version: `c4423eeb-c1fb-4a71-afa7-ddd47bc384d6` (76023ec: Gezin at €4,99, the days to pakjesavond, reciprocity and commitment in the payment window)
+Last updated: 24 November 2026. Live version: `5244eedd-efec-43eb-8d00-3b227b4b4c23` (4ca91c0: every poem on Gemini 3.1 Pro medium, "ongeveer een minuut" instead of "30 seconden")
 (commit `6061832`, on GitHub).
 
 ## Priorities
@@ -49,7 +49,7 @@ Last updated: 23 November 2026. Live version: `c4423eeb-c1fb-4a71-afa7-ddd47bc38
 | [#32](#32-write-first-then-pay) | High | Write first, then pay | Live and on since 22 Nov (KV + Dodo test passed); measure the funnel |
 | [#33](#33-sint-reads-the-poem-video) | Low | Sint reads the poem (video) | Researched; decision needed |
 | [#34](#34-gezin-at-499-and-honest-persuasion) | High | Gezin at €4,99 and honest persuasion | Live 23 Nov (Dodo at €4,99, checkout checked); measure the funnel |
-| [#35](#35-every-poem-on-gemini-31-pro) | High | Every poem on Gemini 3.1 Pro | Built 24 Nov, not deployed; measure aborts and cost |
+| [#35](#35-every-poem-on-gemini-31-pro) | High | Every poem on Gemini 3.1 Pro | Live 24 Nov (5244eedd); measure aborts and cost |
 
 ## Open
 
