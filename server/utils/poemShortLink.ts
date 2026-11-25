@@ -57,7 +57,9 @@ export async function createShortLink(
   const id = await shortLinkId(share, secret);
   // The free plan has a low daily write limit, so do not write a poem twice.
   if ((await store.get(id)) === null) {
-    const stored = JSON.stringify({ s: share.s, l: share.l, d: share.d, sig: share.sig, poem });
+    // The style only when its tag is valid, so nothing unchecked is stored.
+    const st = verified.style && share.st ? { st: share.st } : {};
+    const stored = JSON.stringify({ s: share.s, l: share.l, d: share.d, sig: share.sig, ...st, poem });
     await store.put(id, stored, { expirationTtl: SHORT_LINK_TTL_SECONDS });
   }
   return id;

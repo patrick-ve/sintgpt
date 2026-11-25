@@ -41,6 +41,13 @@ function styleCrop(style: (typeof SINT_STYLES)[number], region: typeof SINT_PORT
   const scaled = Object.fromEntries(Object.entries(region).map(([key, value]) => [key, Math.round(value * STYLE_SCALE)])) as typeof region;
   return sharp(path.join(root, 'scripts/sint-styles', `${style}.jpg`)).extract(scaled);
 }
+/**
+ * The photo in the share image of a poem (388x568 there). The style photos
+ * end at 864 px of the original, so they cannot use SINT_PORTRAIT (1024 high).
+ */
+const SINT_STYLE_PORTRAIT = { left: 430, top: 0, width: 590, height: 864 };
+/** Pikant moves to the right, so the rose and the hearts are in the picture. */
+const SINT_STYLE_PORTRAIT_LEFT: Partial<Record<(typeof SINT_STYLES)[number], number>> = { spicy: 606 };
 /** Face and mitre only, so a small icon stays readable. */
 const SINT_ICON = { left: 480, top: 90, width: 560, height: 560 };
 
@@ -90,6 +97,13 @@ async function main() {
         .resize(width, Math.round(width * 1.25))
         .webp({ quality: 78 })
         .toFile(path.join(root, `public/sint-styles/${style}-${width}.webp`));
+    }
+    // The share image of a poem in this style (server/routes/gedicht/preview.png.get.ts).
+    if (style !== 'classic') {
+      await styleCrop(style, { ...SINT_STYLE_PORTRAIT, left: SINT_STYLE_PORTRAIT_LEFT[style] ?? SINT_STYLE_PORTRAIT.left })
+        .resize(400, 586)
+        .jpeg({ quality: 65, mozjpeg: true })
+        .toFile(path.join(root, `server/assets/share/sint-${style}.jpg`));
     }
     await styleCrop(style, SINT_STYLE_SQUARE)
       .resize(176, 176)

@@ -984,6 +984,28 @@ describe('poem links', () => {
     expect(bytes.length).toBeLessThan(600 * 1024);
   }, 30_000);
 
+  it('draws the Sint of the poem style in the share image, and the usual Sint for a style it did not sign', async () => {
+    const share = await signPoemShare(POEM, 'nl', 'e2e-access-secret', 'roast');
+    const image = async (st?: string) => {
+      const query = new URLSearchParams({ s: share.s, l: share.l, d: share.d, sig: share.sig, ...(st ? { st } : {}) });
+      const res = await fetch(`/gedicht/preview.png?${query}`);
+      expect(res.status).toBe(200);
+      return Buffer.from(await res.arrayBuffer());
+    };
+    const usual = await image();
+    const roast = await image(share.st);
+    expect([...roast.subarray(0, 4)]).toEqual([0x89, 0x50, 0x4e, 0x47]);
+    expect(roast.length).toBeLessThan(600 * 1024);
+    expect(roast.equals(usual)).toBe(false);
+    // Another style under the roast tag, and a made-up tag: the usual photo.
+    expect((await image(share.st!.replace('roast', 'spicy'))).equals(usual)).toBe(true);
+    expect((await image('roast.made-up-tag')).equals(usual)).toBe(true);
+
+    // The page of the link hands the style to the image.
+    const html = await (await fetch(`/gedicht?${new URLSearchParams({ ...share })}`)).text();
+    expect(html).toMatch(/property="og:image" content="[^"]*\/gedicht\/preview\.png\?[^"]*st=roast\.[A-Za-z0-9_-]{16}/);
+  }, 60_000);
+
   it('refuses a forged link and a forged image', async () => {
     const query = (await shareQuery()).replace(/s=[^&]+/, `s=${encodeText('Lelijke tekst')}`);
     expect((await fetch(`/gedicht?${query}`)).status).toBe(404);

@@ -17,6 +17,12 @@ export interface PoemShare {
   d: string;
   /** Server signature over s, l and d, base64url. */
   sig: string;
+  /**
+   * The poem style and its own signature, `<style>.<tag>`, for the styles with
+   * their own Sint photo in the share image. A link without it, or with a
+   * wrong one, still works and shows the usual photo.
+   */
+  st?: string;
 }
 
 const OPENING_LINES = 2;
@@ -142,5 +148,6 @@ export async function buildShareUrl(
   poem: string,
 ): Promise<string> {
   const query = new URLSearchParams({ s: share.s, l: share.l, d: share.d, sig: share.sig });
+  if (share.st) query.set('st', share.st);
   return `${origin}/gedicht?${query}#${await encodePoem(poem)}`;
 }

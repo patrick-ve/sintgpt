@@ -50,6 +50,7 @@ Last updated: 24 November 2026. Live version: `5244eedd-efec-43eb-8d00-3b227b4b4
 | [#33](#33-sint-reads-the-poem-video) | Low | Sint reads the poem (video) | Researched; decision needed |
 | [#34](#34-gezin-at-499-and-honest-persuasion) | High | Gezin at €4,99 and honest persuasion | Live 23 Nov (Dodo at €4,99, checkout checked); measure the funnel |
 | [#35](#35-every-poem-on-gemini-31-pro) | High | Every poem on Gemini 3.1 Pro | Live 24 Nov (5244eedd); measure aborts and cost |
+| [#37](#37-share-image-shows-the-sint-of-the-poem-style) | Low | Share image shows the Sint of the poem style | Built 25 Nov; see the status in the item |
 
 ## Open
 
@@ -578,6 +579,13 @@ Owner steps:
 - **Texts:** every "30 seconden" claim now says "ongeveer een minuut": hero, SEO title and description, FAQ, the countdown hint, the shared-poem page, 21 blog posts, the blog index, `llms.txt`, the blog brief (`SITE_FACTS`), the home share image (`public/og/home.jpg`), the sticker specs and the marketing drafts. The writing animation of a new poem uses the preview timing (60 s); `form.submit.timePreview` and `poem.writing.previewHint` are gone (every poem is now as slow).
 - **Not changed:** printed stickers say "Klaar in 30 seconden" (the specs are fixed; render again with `npx tsx scripts/build-stickers.ts` before printing more).
 - **Watch after the deploy:** `Poem aborted` (`before text`) against `Generate poem`, the seconds to the first text, `Poem stream failed`, the cost per day, and the 👍/👎 per style. Before: 23.7 s to the first text, about $0.012 per poem, 3× 👎 on Grappig in 2 days.
+
+### #37 Share image shows the Sint of the poem style
+
+- **Request (owner, 25 Nov 2026):** the link preview of a shared poem showed the usual Sint for every style. It now shows the Sint of the poem's style, like the hero does: Ironisch, Ouderwets, Pikant and Roast have their own photo; Grappig and Klassiek keep the usual one.
+- **How:** the share data gets `st=<style>.<tag>`, signed apart from the link (see "Poem links" in `CLAUDE.md`). Old links, and links from a page opened before the deploy, stay valid and keep the usual photo. Images already in the edge cache do not change.
+- **Not possible:** poems written before the deploy have no style in their link, so they keep the usual photo, also when shared again from the history.
+- **Checked:** unit tests (sign, verify, forged style, cache key, short link, edit, free rewrite), the e2e test of the image, and the four images by eye. Not checked live with a real poem: a live check writes no poem (it would cost a poem and an AI call).
 
 ## Findings
 

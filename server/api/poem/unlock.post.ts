@@ -71,7 +71,7 @@ export default defineEventHandler(async (event) => {
 
   return {
     poem: stored.poem,
-    share: await signPoemShare(stored.poem, stored.language === 'dutch' ? 'nl' : 'en', config.accessCookieSecret),
+    share: await signPoemShare(stored.poem, stored.language === 'dutch' ? 'nl' : 'en', config.accessCookieSecret, stored.style),
     style: stored.style,
     rhymeScheme: stored.rhymeScheme,
     language: stored.language,

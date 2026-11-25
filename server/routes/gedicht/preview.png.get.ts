@@ -4,6 +4,7 @@ import { initWasm, Resvg } from '@resvg/resvg-wasm';
 import resvgWasm from '@resvg/resvg-wasm/index_bg.wasm?module';
 import { shareImageCacheUrl, verifyPoemShare } from '../../utils/poemShare';
 import { buildShareSvg } from '../../utils/shareImageSvg';
+import type { SintStyle } from '../../../utils/sintStyles';
 
 const YEAR_SECONDS = 60 * 60 * 24 * 365;
 
@@ -13,7 +14,9 @@ function toBytes(value: unknown): Uint8Array {
   return value instanceof Uint8Array ? value : new Uint8Array(value as ArrayBuffer);
 }
 
-async function renderPng(opening: string, language: 'nl' | 'en'): Promise<Uint8Array> {
+// `style` is a style with its own photo (server/assets/share/sint-<style>.jpg,
+// from scripts/build-sint-images.ts), or null for the usual photo.
+async function renderPng(opening: string, language: 'nl' | 'en', style: SintStyle | null): Promise<Uint8Array> {
   wasmReady ??= initWasm(resvgWasm);
   await wasmReady;
 
@@ -23,7 +26,7 @@ async function renderPng(opening: string, language: 'nl' | 'en'): Promise<Uint8A
     load('texturina-700.ttf'),
     load('alegreya-500.ttf'),
     load('alegreya-sans-700.ttf'),
-    load('sint.jpg'),
+    load(style ? `sint-${style}.jpg` : 'sint.jpg'),
   ]);
 
   const sintDataUrl = `data:image/jpeg;base64,${btoa(String.fromCharCode(...sint))}`;
@@ -53,11 +56,11 @@ export default defineEventHandler(async (event) => {
   }
 
   const edgeCache = (globalThis as { caches?: { default?: Cache } }).caches?.default;
-  const cacheKey = new Request(shareImageCacheUrl(getRequestURL(event)));
+  const cacheKey = new Request(shareImageCacheUrl(getRequestURL(event), share.style));
   const cached = await edgeCache?.match(cacheKey);
   if (cached) return cached;
 
-  const response = new Response((await renderPng(share.opening, share.language)) as BodyInit, {
+  const response = new Response((await renderPng(share.opening, share.language, share.style)) as BodyInit, {
     headers: {
       'content-type': 'image/png',
       'cache-control': `public, max-age=${YEAR_SECONDS}, immutable`,

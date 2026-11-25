@@ -240,6 +240,7 @@ export default defineEventHandler(async (event) => {
                 text,
                 validatedData.language === 'dutch' ? 'nl' : 'en',
                 secret,
+                validatedData.style,
               ),
             });
           } catch {

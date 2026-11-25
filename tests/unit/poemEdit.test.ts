@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { checkPoemEdit, editDistance, reSignEditedPoem, wordChange } from '../../server/utils/poemEdit';
+import { checkPoemEdit, editDistance, PoemEditSchema, reSignEditedPoem, wordChange } from '../../server/utils/poemEdit';
 import { signPoemShare, verifyPoemShare } from '../../server/utils/poemShare';
 import { poemDigest } from '../../utils/poemLink';
 
@@ -67,6 +67,19 @@ describe('reSignEditedPoem', () => {
     const verified = await verifyPoemShare({ ...result.share }, SECRET);
     expect(verified?.digest).toBe(await poemDigest(text));
     expect(verified?.language).toBe('nl');
+  });
+
+  it('keeps the style of the poem, so an edited poem keeps its Sint photo', async () => {
+    const share = await signPoemShare(ORIGINAL, 'nl', SECRET, 'roast');
+    const text = ORIGINAL.replace('groot en rood', 'glimmend en rood');
+    // Through the schema, as the route does: it must not drop `st`.
+    const request = PoemEditSchema.parse({ share, original: ORIGINAL, text });
+    const result = await reSignEditedPoem(request, SECRET);
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.share.st).toMatch(/^roast\./);
+    expect(result.share.st).not.toBe(share.st);
+    expect((await verifyPoemShare({ ...result.share }, SECRET))?.style).toBe('roast');
   });
 
   it('refuses an original that does not match the signature', async () => {

@@ -23,6 +23,7 @@ export const PoemEditSchema = z.object({
     l: z.enum(['nl', 'en']),
     d: z.string().max(64),
     sig: z.string().max(64),
+    st: z.string().max(40).optional(),
   }),
   original: z.string().min(1).max(POEM_INPUT_LIMITS.previousPoem),
   text: z.string().max(POEM_INPUT_LIMITS.previousPoem),
@@ -89,5 +90,5 @@ export async function reSignEditedPoem(request: PoemEditRequest, secret: string)
   }
   const verdict = checkPoemEdit(request.original, request.text);
   if (!verdict.ok) return verdict;
-  return { ok: true, share: await signPoemShare(request.text.trim(), verified.language, secret) };
+  return { ok: true, share: await signPoemShare(request.text.trim(), verified.language, secret, verified.style) };
 }

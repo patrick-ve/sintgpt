@@ -26,6 +26,14 @@ describe('free rewrite', () => {
     expect(await qualifiesForFreeRewrite(null, SECRET)).toBe(false);
   });
 
+  it('accepts a poem in a style with its own Sint photo, with or without `st` (the request schema drops it)', async () => {
+    const previousShare = await signPoemShare(POEM, 'nl', SECRET, 'roast');
+    const body = { regenerate: true, rewriteHint: 'korter', previousPoem: POEM, previousShare };
+    expect(await qualifiesForFreeRewrite(body, SECRET)).toBe(true);
+    const { st: _st, ...withoutStyle } = previousShare;
+    expect(await qualifiesForFreeRewrite({ ...body, previousShare: withoutStyle }, SECRET)).toBe(true);
+  });
+
   it('refuses text that is not the signed poem, or a signature with another secret', async () => {
     const previousShare = await signPoemShare(POEM, 'nl', SECRET);
     const body = { regenerate: true, rewriteHint: 'korter', previousPoem: `${POEM}\nEen eigen regel`, previousShare };

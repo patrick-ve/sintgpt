@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  buildShareUrl,
   decodePoem,
   decodeText,
   encodePoem,
@@ -95,6 +96,7 @@ describe('signed share data', () => {
       opening: extractOpening(POEM),
       language: 'nl',
       digest: await poemDigest(POEM),
+      style: null,
     });
   });
 
@@ -116,6 +118,61 @@ describe('signed share data', () => {
     const share = await signPoemShare(POEM, 'nl', 'other');
     expect(await verifyPoemShare({ ...share }, SECRET)).toBeNull();
     expect(await verifyPoemShare({ ...share }, '')).toBeNull();
+  });
+
+  it.each(['ironic', 'old-fashioned', 'spicy', 'roast'] as const)('signs the style %s, which has its own Sint photo', async (style) => {
+    const share = await signPoemShare(POEM, 'nl', SECRET, style);
+    expect(share.st).toMatch(new RegExp(`^${style}\\.[A-Za-z0-9_-]{16}$`));
+    expect((await verifyPoemShare({ ...share }, SECRET))?.style).toBe(style);
+  });
+
+  it.each(['funny', 'classic', undefined, null, 'unknown'])('leaves the style %s out: it has the usual photo', async (style) => {
+    const share = await signPoemShare(POEM, 'nl', SECRET, style);
+    expect(share).not.toHaveProperty('st');
+    expect(share).toEqual(await signPoemShare(POEM, 'nl', SECRET));
+  });
+
+  it('keeps the link of a poem the same with a style: only `st` is added', async () => {
+    const { st, ...rest } = await signPoemShare(POEM, 'nl', SECRET, 'roast');
+    expect(st).toBeTruthy();
+    expect(rest).toEqual(await signPoemShare(POEM, 'nl', SECRET));
+  });
+
+  it('shows the usual photo for a link without its style, as a page from before the styles makes it', async () => {
+    const { st: _st, ...rest } = await signPoemShare(POEM, 'nl', SECRET, 'roast');
+    expect((await verifyPoemShare({ ...rest }, SECRET))?.style).toBeNull();
+  });
+
+  it('does not accept a style it did not sign', async () => {
+    const roast = await signPoemShare(POEM, 'nl', SECRET, 'roast');
+    const tag = roast.st!.split('.')[1]!;
+    const otherPoem = await signPoemShare(`${POEM}\nEn nog een regel.`, 'nl', SECRET, 'roast');
+    for (const st of [
+      `spicy.${tag}`,
+      'roast',
+      'roast.',
+      `roast.${tag}x`,
+      `funny.${tag}`,
+      `.${tag}`,
+      otherPoem.st,
+      `roast.${'A'.repeat(60)}`,
+      42,
+      ['roast', tag],
+    ]) {
+      // The link itself stays valid; only the photo is the usual one.
+      expect(await verifyPoemShare({ ...roast, st }, SECRET)).toMatchObject({ language: 'nl', style: null });
+    }
+    expect((await verifyPoemShare({ ...roast }, 'other'))).toBeNull();
+  });
+
+  it('puts the style in the link the visitor shares, and only then', async () => {
+    const roast = await signPoemShare(POEM, 'nl', SECRET, 'roast');
+    const link = new URL(await buildShareUrl('https://sintgpt.com', roast, POEM));
+    expect(link.searchParams.get('st')).toBe(roast.st);
+    expect((await verifyPoemShare(Object.fromEntries(link.searchParams), SECRET))?.style).toBe('roast');
+
+    const usual = new URL(await buildShareUrl('https://sintgpt.com', await signPoemShare(POEM, 'nl', SECRET, 'funny'), POEM));
+    expect([...usual.searchParams.keys()]).toEqual(['s', 'l', 'd', 'sig']);
   });
 
   it('gets the same digest for the trimmed poem on both sides', async () => {
@@ -252,6 +309,15 @@ describe('shareImageCacheUrl', () => {
     const other = new URL('https://sintgpt.com/gedicht/preview.png?s=xyz&l=nl&d=def&sig=ghi');
     expect(shareImageCacheUrl(other)).not.toBe(canonical);
   });
+
+  it('adds only a verified style, so a made-up `st` cannot force a new render', () => {
+    const url = new URL(`${link}&st=roast.made-up-tag`);
+    // Not verified: the same key as the link without a style.
+    expect(shareImageCacheUrl(url)).toBe(canonical);
+    expect(shareImageCacheUrl(url, null)).toBe(canonical);
+    expect(shareImageCacheUrl(url, 'roast')).toBe(`${link}&st=roast&v=2`);
+    expect(shareImageCacheUrl(url, 'roast')).not.toBe(shareImageCacheUrl(url, 'spicy'));
+  });
 });
 
 describe('short poem links', () => {
@@ -279,6 +345,26 @@ describe('short poem links', () => {
     expect(stored?.poem).toBe(POEM);
     expect(stored?.language).toBe('nl');
     expect(stored?.share).toEqual(share);
+  });
+
+  it('keeps the style of the poem, for the photo in the share image', async () => {
+    const { store } = fakeStore();
+    const share = await signPoemShare(POEM, 'nl', SECRET, 'roast');
+    const id = await createShortLink(store, share, POEM, SECRET);
+    const stored = await readShortLink(store, id!, SECRET);
+    expect(stored?.share).toEqual(share);
+    expect(stored?.style).toBe('roast');
+    // The same poem without a style is the same link.
+    expect(await createShortLink(store, await signPoemShare(POEM, 'nl', SECRET), POEM, SECRET)).toBe(id);
+  });
+
+  it('does not store a style it did not sign', async () => {
+    const { store, values } = fakeStore();
+    const share = { ...(await signPoemShare(POEM, 'nl', SECRET)), st: 'roast.made-up-tag' };
+    const id = await createShortLink(store, share, POEM, SECRET);
+    expect(id).toBeTruthy();
+    expect([...values.values()][0]).not.toContain('made-up-tag');
+    expect((await readShortLink(store, id!, SECRET))?.style).toBeNull();
   });
 
   it('gives the same poem the same link, and writes it once', async () => {
