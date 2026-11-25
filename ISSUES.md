@@ -9,7 +9,7 @@ findings worth keeping. Newest information first within each section.
   `docs/pricing-tiers.md`.
 - Never put API keys, webhook secrets or gift codes in this file.
 
-Last updated: 24 November 2026. Live version: `5244eedd-efec-43eb-8d00-3b227b4b4c23` (4ca91c0: every poem on Gemini 3.1 Pro medium, "ongeveer een minuut" instead of "30 seconden")
+Last updated: 25 November 2026. Live version: `dab5b377-df03-42f9-bade-f2052820dd62` (31a6cda: the share image shows the Sint of the poem style)
 (commit `6061832`, on GitHub).
 
 ## Priorities
@@ -50,7 +50,7 @@ Last updated: 24 November 2026. Live version: `5244eedd-efec-43eb-8d00-3b227b4b4
 | [#33](#33-sint-reads-the-poem-video) | Low | Sint reads the poem (video) | Researched; decision needed |
 | [#34](#34-gezin-at-499-and-honest-persuasion) | High | Gezin at €4,99 and honest persuasion | Live 23 Nov (Dodo at €4,99, checkout checked); measure the funnel |
 | [#35](#35-every-poem-on-gemini-31-pro) | High | Every poem on Gemini 3.1 Pro | Live 24 Nov (5244eedd); measure aborts and cost |
-| [#37](#37-share-image-shows-the-sint-of-the-poem-style) | Low | Share image shows the Sint of the poem style | Built 25 Nov; see the status in the item |
+| [#37](#37-share-image-shows-the-sint-of-the-poem-style) | Low | Share image shows the Sint of the poem style | Live 25 Nov (dab5b377); check one real roast link |
 
 ## Open
 
@@ -585,7 +585,8 @@ Owner steps:
 - **Request (owner, 25 Nov 2026):** the link preview of a shared poem showed the usual Sint for every style. It now shows the Sint of the poem's style, like the hero does: Ironisch, Ouderwets, Pikant and Roast have their own photo; Grappig and Klassiek keep the usual one.
 - **How:** the share data gets `st=<style>.<tag>`, signed apart from the link (see "Poem links" in `CLAUDE.md`). Old links, and links from a page opened before the deploy, stay valid and keep the usual photo. Images already in the edge cache do not change.
 - **Not possible:** poems written before the deploy have no style in their link, so they keep the usual photo, also when shared again from the history.
-- **Checked:** unit tests (sign, verify, forged style, cache key, short link, edit, free rewrite), the e2e test of the image, and the four images by eye. Not checked live with a real poem: a live check writes no poem (it would cost a poem and an AI call).
+- **Live 25 Nov, 23:35** (`dab5b377`, commit `31a6cda`). Checked: unit tests (sign, verify, forged style, cache key, short link, edit, free rewrite), the e2e test of the image, the four images by eye, and the Worker build under `wrangler dev` with a test secret (five different images, a forged style gets the usual photo, a forged signature 404). On the live site: the smoke test, and a forged link gets 404.
+- **Open check:** not checked live with a real poem, because a live check writes no poem. Write one Roast poem, share it, and look at the preview in WhatsApp (Sint with the pixel sunglasses).
 
 ## Findings
 
