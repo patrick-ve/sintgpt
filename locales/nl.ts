@@ -45,8 +45,10 @@ export default {
     },
     name: {
       label: 'Naam ontvanger',
-      placeholder: 'Sint Nicolaas',
+      placeholder: 'Bijvoorbeeld: Marieke',
       required: 'Vul de naam van de ontvanger in.',
+      hint: 'Je hebt bij stap 1 nog geen naam ingevuld.',
+      hintAction: 'Vul de naam in',
     },
     present: {
       label: 'Sinterklaascadeau',

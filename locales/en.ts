@@ -44,8 +44,10 @@ export default {
     },
     name: {
       label: 'Recipient name',
-      placeholder: 'Saint Nicholas',
+      placeholder: 'For example: Emma',
       required: "Enter the recipient's name.",
+      hint: 'You have not entered a name in step 1 yet.',
+      hintAction: 'Enter the name',
     },
     present: {
       label: 'Sinterklaas present',

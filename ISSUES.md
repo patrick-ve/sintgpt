@@ -52,6 +52,7 @@ Last updated: 25 November 2026. Live version: `dab5b377-df03-42f9-bade-f2052820d
 | [#35](#35-every-poem-on-gemini-31-pro) | High | Every poem on Gemini 3.1 Pro | Live 24 Nov (5244eedd); measure aborts and cost |
 | [#36](#36-an-empty-answer-used-the-free-poem) | High | An empty answer used the free poem | Fixed, not deployed |
 | [#37](#37-share-image-shows-the-sint-of-the-poem-style) | Low | Share image shows the Sint of the poem style | Live 25 Nov (dab5b377); check one real roast link |
+| [#38](#38-hint-for-writers-who-forget-the-name) | Low | Hint for writers who forget the name | Built 26 Nov, not deployed |
 
 ## Open
 
@@ -596,6 +597,12 @@ Owner steps:
 - **Not possible:** poems written before the deploy have no style in their link, so they keep the usual photo, also when shared again from the history.
 - **Live 25 Nov, 23:35** (`dab5b377`, commit `31a6cda`). Checked: unit tests (sign, verify, forged style, cache key, short link, edit, free rewrite), the e2e test of the image, the four images by eye, and the Worker build under `wrangler dev` with a test secret (five different images, a forged style gets the usual photo, a forged signature 404). On the live site: the smoke test, and a forged link gets 404.
 - **Open check:** not checked live with a real poem, because a live check writes no poem. Write one Roast poem, share it, and look at the preview in WhatsApp (Sint with the pixel sunglasses).
+
+### #38 Hint for writers who forget the name
+
+- **Finding (26 Nov 2026):** 3 of the 7 writers that day pressed "Schrijf mijn gedicht" without a name (`Form refused` `no name`). All three fixed it and wrote a poem within 80 s, but the form is long: the error sits under the name field in step 1, far above the button. The placeholder "Sint Nicolaas" could also look like a name that is already filled in.
+- **Fix (built, not deployed):** once the visitor has typed or picked anything in the form, a line above the button says "Je hebt bij stap 1 nog geen naam ingevuld." with a button "Vul de naam in" that scrolls to the field and focuses it (`showNameHint` in `pages/index.vue`; the submit button gets `aria-describedby`). It goes away when the name is filled in. The placeholder is now "Bijvoorbeeld: Marieke" ("For example: Emma"). The refusal on submit is unchanged. E2e test: "warns above the button while the name is empty".
+- **Watch:** the share of `Form refused` `no name` per `Generate poem` after the deploy (26 Nov: 3 of 7).
 
 ## Findings
 

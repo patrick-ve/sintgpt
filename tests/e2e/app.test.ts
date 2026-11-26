@@ -309,6 +309,23 @@ describe('home page UI', () => {
     await page.close();
   });
 
+  it('warns above the button while the name is empty, once the visitor uses the form', async () => {
+    const page = await createPage('/');
+    const hint = page.locator('#poem-name-hint');
+    expect(await hint.count()).toBe(0);
+
+    await page.locator('#poem-present').fill('Een fiets');
+    await hint.waitFor();
+    expect(await page.locator('#poem-form button[type=submit]').getAttribute('aria-describedby')).toBe('poem-name-hint');
+
+    await hint.locator('button').click();
+    expect(await page.evaluate(() => document.activeElement?.id)).toBe('poem-name');
+
+    await page.locator('#poem-name').fill('Marieke');
+    await hint.waitFor({ state: 'detached' });
+    await page.close();
+  });
+
   it('reveals a streamed poem gradually and offers sharing when it is done', async () => {
     const lines = Array.from({ length: 12 }, (_, i) => `Regel ${i + 1} van het gedicht voor de Sint,`);
     const poem = lines.join('\n');

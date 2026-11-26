@@ -506,10 +506,24 @@ watch(isPaid, (paid) => {
 
 // The first time the visitor types or picks something in the form.
 let formStarted = false;
+const formTouched = ref(false);
 const onFormActivity = () => {
+  formTouched.value = true;
   if (formStarted) return;
   formStarted = true;
   track('Form started');
+};
+
+// 3 of the 7 writers on 26 Nov 2026 filled in the form, pressed the button and
+// only then saw that the name (step 1) was empty. Once the visitor has typed or
+// picked anything, a line above the button says so while the name is empty.
+const showNameHint = computed(() =>
+  mounted.value && formTouched.value && !formData.value.name.trim() && !isLoading.value && !previewWriting.value,
+);
+const goToNameField = () => {
+  const field = document.getElementById('poem-name');
+  field?.scrollIntoView({ behavior: scrollBehavior(), block: 'center' });
+  field?.focus({ preventScroll: true });
 };
 
 const startFromShowcase = () => {
@@ -1865,9 +1879,25 @@ useHead({
               </details>
             </fieldset>
 
+            <p
+              v-if="showNameHint"
+              id="poem-name-hint"
+              class="-mb-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.9375rem] font-bold text-[#8b1538]"
+            >
+              <UIcon name="i-heroicons-exclamation-circle" class="size-5 shrink-0" aria-hidden="true" />
+              <span>{{ t('form.name.hint') }}</span>
+              <button
+                type="button"
+                class="underline underline-offset-2 hover:text-[#3d0716] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8b1538] rounded-sm"
+                @click="goToNameField"
+              >
+                {{ t('form.name.hintAction') }}
+              </button>
+            </p>
             <div class="flex flex-wrap items-center gap-4">
               <button
                 type="submit"
+                :aria-describedby="showNameHint ? 'poem-name-hint' : undefined"
                 :disabled="isLoading || previewWriting"
                 class="btn-festive flex-[1_1_280px] min-h-[3.625rem] px-6 text-[1.375rem] disabled:opacity-70 disabled:cursor-wait"
               >
