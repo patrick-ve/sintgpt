@@ -1,4 +1,5 @@
 import type { PoemShare } from '~/utils/poemLink';
+import { EMPTY_POEM_ERRORS } from '~/utils/poemStream';
 
 interface PoemRequest {
   name: string;
@@ -117,10 +118,21 @@ export const usePoemGenerator = () => {
           continue;
         }
         console.error('Poem generation error:', e);
+        // The model sent no text; the server says whether the poem still counts.
+        const empty = e?.message === EMPTY_POEM_ERRORS.released
+          ? 'released'
+          : e?.message === EMPTY_POEM_ERRORS.counted ? 'counted' : null;
         // A dropped connection never reaches the server's own failure event.
-        track('Poem stream failed', { detail: isNetworkError(e) ? 'network' : 'stream', value: retry + 1 });
+        track('Poem stream failed', {
+          detail: empty ? `empty:${empty}` : isNetworkError(e) ? 'network' : 'stream',
+          value: retry + 1,
+        });
         if (isNetworkError(e)) dropped = { attempt, request: requestKey, at: Date.now() };
-        error.value = isNetworkError(e) ? t('poem.connectionLost') : (e.message || 'Failed to generate poem');
+        error.value = isNetworkError(e)
+          ? t('poem.connectionLost')
+          : empty === 'released' ? t('poem.emptyReleased')
+          : empty === 'counted' ? t('poem.empty')
+          : (e.message || 'Failed to generate poem');
         poem.value = null;
         break;
       }

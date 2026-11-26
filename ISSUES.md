@@ -50,6 +50,7 @@ Last updated: 25 November 2026. Live version: `dab5b377-df03-42f9-bade-f2052820d
 | [#33](#33-sint-reads-the-poem-video) | Low | Sint reads the poem (video) | Researched; decision needed |
 | [#34](#34-gezin-at-499-and-honest-persuasion) | High | Gezin at €4,99 and honest persuasion | Live 23 Nov (Dodo at €4,99, checkout checked); measure the funnel |
 | [#35](#35-every-poem-on-gemini-31-pro) | High | Every poem on Gemini 3.1 Pro | Live 24 Nov (5244eedd); measure aborts and cost |
+| [#36](#36-an-empty-answer-used-the-free-poem) | High | An empty answer used the free poem | Fixed, not deployed |
 | [#37](#37-share-image-shows-the-sint-of-the-poem-style) | Low | Share image shows the Sint of the poem style | Live 25 Nov (dab5b377); check one real roast link |
 
 ## Open
@@ -579,6 +580,14 @@ Owner steps:
 - **Texts:** every "30 seconden" claim now says "ongeveer een minuut": hero, SEO title and description, FAQ, the countdown hint, the shared-poem page, 21 blog posts, the blog index, `llms.txt`, the blog brief (`SITE_FACTS`), the home share image (`public/og/home.jpg`), the sticker specs and the marketing drafts. The writing animation of a new poem uses the preview timing (60 s); `form.submit.timePreview` and `poem.writing.previewHint` are gone (every poem is now as slow).
 - **Not changed:** printed stickers say "Klaar in 30 seconden" (the specs are fixed; render again with `npx tsx scripts/build-stickers.ts` before printing more).
 - **Watch after the deploy:** `Poem aborted` (`before text`) against `Generate poem`, the seconds to the first text, `Poem stream failed`, the cost per day, and the 👍/👎 per style. Before: 23.7 s to the first text, about $0.012 per poem, 3× 👎 on Grappig in 2 days.
+- **Measured 24–25 Nov:** 14 new Pro poems with text; first text after 26 to 183 s, median about 60 s. Two poems on 24 Nov (15:36 and 18:13) took about 180 s at about 25 output tokens per second against 90–98 for the others: a wait in the gateway or at Google, not more reasoning (a guess; check the AI Gateway logs). None on 25 Nov.
+
+### #36 An empty answer used the free poem
+
+- **Found 25 Nov 2026 (13:47, BE):** `Generate poem` ended after 2.2 s with 0 output tokens ($0.0025, about 1,250 input tokens). The route saw no error, so it counted the free poem and the page showed nothing. The visitor sent the form 5 times in 6 s (`debounce`), then got `limit` (`free:server`), a preview, closed the payment window and left. Most likely Gemini's safety filter (finish reason `SAFETY`); the event did not hold the reason.
+- **Fix (built, not deployed):** an answer without text, or a gateway failure before the first word, gives the poem back: `releasePoemCount` → `POST /release` on the counter → `releaseAttempt` (only the last counted attempt, in its window, at most `MAX_POEM_RELEASES` = 2 per window, so an input that is always blocked cannot write for free all day; the 10 s wait stays). The page gets the error `empty-poem:released` (or `:counted`) and says "De Sint kreeg dit gedicht niet op papier. Het telt niet mee. …". Analytics: `Poem generation failed` `empty:<finish reason>` (with tokens and cost) instead of `Generate poem`; `Poem stream failed` `empty:released|counted` from the page. Checked with a mock model that ends with `content-filter`/`SAFETY`.
+- **Not changed:** `Poem aborted` (the visitor leaves) still counts, also before the first text: with Pro that is about 60 s of waiting. One case on 25 Nov (06:40, during text). The preview already refuses an empty text (`Empty poem`), but its count of 2 a day stays.
+- **Watch:** `Poem generation failed` with `empty:` and which finish reason; if it is `SAFETY` often, find which styles or inputs cause it.
 
 ### #37 Share image shows the Sint of the poem style
 

@@ -131,6 +131,28 @@ export async function checkPoemRateLimit(
   return memory[subject.kind].check(subject.id, Date.now(), rule, attempt);
 }
 
+/**
+ * Gives back the poem of an attempt that came back without text, so it does
+ * not count (releaseAttempt in rateLimit.ts). Returns whether it was given back.
+ */
+export async function releasePoemCount(event: H3Event, subject: RateLimitSubject, attemptId: string): Promise<boolean> {
+  const env = (event.context as { cloudflare?: { env?: RateLimitEnv } }).cloudflare?.env;
+  if (env?.RATE_LIMITER) {
+    try {
+      const name = await counterName(subject, useRuntimeConfig(event).accessCookieSecret);
+      const counter = env.RATE_LIMITER.get(env.RATE_LIMITER.idFromName(name));
+      const res = await counter.fetch('https://rate-limit.internal/release', {
+        method: 'POST',
+        body: JSON.stringify({ attempt: attemptId }),
+      });
+      if (res.ok) return ((await res.json()) as { released: boolean }).released;
+    } catch (error: any) {
+      consola.warn('Rate limit counter failed, using memory:', error?.message);
+    }
+  }
+  return memory[subject.kind].release(subject.id, attemptId);
+}
+
 /** How many requests the subject's current window has used. Counts nothing. */
 export async function poemsUsed(event: H3Event, subject: RateLimitSubject): Promise<number> {
   const env = (event.context as { cloudflare?: { env?: RateLimitEnv } }).cloudflare?.env;

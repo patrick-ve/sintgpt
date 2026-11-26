@@ -1,4 +1,4 @@
-import { applyRateLimit, usedInWindow, type PoemAttempt, type RateLimitEntry, type RateLimitRule } from '../utils/rateLimit';
+import { applyRateLimit, releaseAttempt, usedInWindow, type PoemAttempt, type RateLimitEntry, type RateLimitRule } from '../utils/rateLimit';
 
 /** The parts of the Durable Object state this class uses. */
 export interface CounterState {
@@ -27,8 +27,18 @@ export class RateLimitCounter {
   async fetch(request: Request): Promise<Response> {
     const now = Date.now();
     // How many poems this window has used, without counting one.
-    if (new URL(request.url).pathname === '/peek') {
+    const { pathname } = new URL(request.url);
+    if (pathname === '/peek') {
       return Response.json({ used: usedInWindow(await this.state.storage.get<RateLimitEntry>(ENTRY), now) });
+    }
+    // Give back the poem of an attempt that came back empty.
+    if (pathname === '/release') {
+      const { attempt } = (await request.json()) as { attempt?: unknown };
+      const entry = typeof attempt === 'string'
+        ? releaseAttempt(await this.state.storage.get<RateLimitEntry>(ENTRY), now, attempt)
+        : undefined;
+      if (entry) await this.state.storage.put(ENTRY, entry);
+      return Response.json({ released: !!entry });
     }
     // The rule, plus the poem attempt when the page sent one.
     const { attempt, ...rule } = (await request.json()) as RateLimitRule & { attempt?: PoemAttempt };

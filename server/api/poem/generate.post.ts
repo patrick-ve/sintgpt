@@ -10,7 +10,8 @@ import {
 import { formFacts, trackServerEvent } from '../../utils/analytics';
 import { clientDisconnectSignal } from '../../utils/clientDisconnect';
 import { paidAccess } from '../../utils/paymentCookie';
-import { checkPoemRateLimit, rateLimitIp } from '../../utils/poemRateLimit';
+import { checkPoemRateLimit, rateLimitIp, releasePoemCount, type RateLimitSubject } from '../../utils/poemRateLimit';
+import { EMPTY_POEM_ERRORS } from '../../../utils/poemStream';
 import { freeRewriteEnabled, qualifiesForFreeRewrite } from '../../utils/freeRewrite';
 import { signPoemShare } from '../../utils/poemShare';
 import { paymentsAvailable } from '../../utils/paymentsStatus';
@@ -63,6 +64,10 @@ export default defineEventHandler(async (event) => {
       && freeRewriteEnabled(runtimeConfig.freeRewrite)
       && await qualifiesForFreeRewrite(await readBody(event).catch(() => null), runtimeConfig.accessCookieSecret);
 
+    // Gives the poem back when the model sends no text (set below once the
+    // poem counted). Without an attempt ID nothing can be given back.
+    let releasePoem = async (): Promise<boolean> => false;
+
     if (!import.meta.dev) {
       // Free visitors get the one poem the page offers, per connection, so a
       // private window (which resets the page's count) gets nothing extra.
@@ -73,15 +78,12 @@ export default defineEventHandler(async (event) => {
       // The same attempt again after a dropped connection does not count
       // (MAX_POEM_RETRIES in server/utils/rateLimit.ts).
       const attempt = poemAttempt(await readBody(event).catch(() => null));
-      const verdict = await checkPoemRateLimit(
-        event,
-        access
-          ? { kind: 'buyer', id: access.paymentId }
-          : { kind: freeRewrite ? 'rewrite' : 'ip', id: rateLimitIp(ip) },
-        rule,
-        attempt,
-      );
+      const subject: RateLimitSubject = access
+        ? { kind: 'buyer', id: access.paymentId }
+        : { kind: freeRewrite ? 'rewrite' : 'ip', id: rateLimitIp(ip) };
+      const verdict = await checkPoemRateLimit(event, subject, rule, attempt);
       if (verdict.ok && verdict.retry) consola.info('Poem retry after a dropped connection: not counted');
+      if (verdict.ok && attempt) releasePoem = () => releasePoemCount(event, subject, attempt.id);
       if (!verdict.ok) {
         // The client shows the payment window for `limit` (free poems) and
         // `credits` (the three Drie poems are used). A buyer who reaches the
@@ -157,6 +159,10 @@ export default defineEventHandler(async (event) => {
       apiKey: runtimeConfig.aiGatewayApiKey || undefined,
     });
 
+    // The stream reported an error (onError), so an empty end is not reported twice.
+    let streamFailed = false;
+    const disconnect = clientDisconnectSignal(event);
+
     const result = streamText({
       model: gateway(modelId),
       prompt,
@@ -169,7 +175,7 @@ export default defineEventHandler(async (event) => {
       // fails) and the thinking level: see poemProviderOptions.
       providerOptions: poemProviderOptions(modelId),
       // Stop paying for tokens when the visitor leaves during generation.
-      abortSignal: clientDisconnectSignal(event),
+      abortSignal: disconnect,
       // Models send text in bursts; release it word by word instead.
       experimental_transform: smoothStream({ delayInMs: 15, chunking: 'word' }),
       onChunk({ chunk }) {
@@ -184,6 +190,7 @@ export default defineEventHandler(async (event) => {
         });
       },
       onError({ error }) {
+        streamFailed = true;
         // The message only: AI SDK errors can carry the whole prompt.
         consola.error('Poem stream failed:', (error as Error | undefined)?.message);
         trackServerEvent(event, 'Poem generation failed', {
@@ -191,11 +198,16 @@ export default defineEventHandler(async (event) => {
           detail: (error as Error | undefined)?.name ?? 'stream error',
         });
       },
-      onEnd({ usage }) {
-        consola.info('Poem generated successfully');
-        trackServerEvent(event, validatedData.regenerate ? 'Regenerate poem' : 'Generate poem', {
+      onEnd({ usage, text, finishReason, rawFinishReason }) {
+        // No text at all (an empty answer, such as a safety block): not a
+        // poem. It still cost input tokens. The finish reason says why.
+        const empty = !text.trim();
+        if (empty && streamFailed) return;
+        if (empty) consola.warn(`Poem came back empty (${rawFinishReason ?? finishReason})`);
+        else consola.info('Poem generated successfully');
+        trackServerEvent(event, empty ? 'Poem generation failed' : validatedData.regenerate ? 'Regenerate poem' : 'Generate poem', {
           ...poemFields,
-          detail: modelId,
+          detail: empty ? `empty:${rawFinishReason ?? finishReason}` : modelId,
           inputTokens: usage.inputTokens ?? 0,
           outputTokens: usage.outputTokens ?? 0,
           costUsd: estimateCostUsd(usage, modelId),
@@ -225,13 +237,31 @@ export default defineEventHandler(async (event) => {
         async execute({ writer }) {
           writer.merge(toUIMessageStream({ stream: poemStream }));
 
+          let poemText: string;
+          try {
+            poemText = (await result.text).trim();
+          } catch {
+            // The stream failed (it reports the error itself) or the visitor
+            // left. A failure before the first word gives the poem back.
+            if (firstTextAt === null && !disconnect.aborted) await releasePoem();
+            return;
+          }
+
+          // No text (an empty answer, such as a safety block): give the poem
+          // back and tell the page, which would otherwise show nothing while
+          // the free poem was used (25 Nov 2026).
+          if (!poemText) {
+            if (disconnect.aborted) return;
+            const released = await releasePoem();
+            writer.write({ type: 'error', errorText: released ? EMPTY_POEM_ERRORS.released : EMPTY_POEM_ERRORS.counted });
+            return;
+          }
+
           // Sign the finished poem, so the visitor can share it as a link.
           // Without a secret the app still works, only without poem links.
           const secret = runtimeConfig.accessCookieSecret;
           if (!secret) return;
           try {
-            const poemText = (await result.text).trim();
-            if (!poemText) return;
             // The same text the page received: the frame is part of it.
             const text = frame ? framePoem(poemText, frame) : poemText;
             writer.write({

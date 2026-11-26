@@ -165,6 +165,9 @@ export default {
     },
     retrying: 'De verbinding viel even weg. De Sint begint opnieuw…',
     connectionLost: 'De verbinding viel weg. Controleer je internet en probeer het nog eens.',
+    // The model sent no text. emptyReleased: the server gave the poem back.
+    emptyReleased: 'De Sint kreeg dit gedicht niet op papier. Het telt niet mee. Probeer het over een paar seconden opnieuw, eventueel met andere woorden.',
+    empty: 'De Sint kreeg dit gedicht niet op papier. Probeer het over een paar seconden opnieuw, eventueel met andere woorden.',
     ready: 'Je gedicht is klaar.',
     error: 'Dat ging mis',
     freeComplete: 'Dit gratis gedicht is helemaal van jou: deel het, kopieer het of bewaar het als PDF.',

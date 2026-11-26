@@ -164,6 +164,9 @@ export default {
     },
     retrying: 'The connection dropped for a moment. Sinterklaas starts again…',
     connectionLost: 'The connection dropped. Check your internet and try again.',
+    // The model sent no text. emptyReleased: the server gave the poem back.
+    emptyReleased: 'Sinterklaas could not get this poem on paper. It does not count. Try again in a few seconds, perhaps with other words.',
+    empty: 'Sinterklaas could not get this poem on paper. Try again in a few seconds, perhaps with other words.',
     error: 'That did not work',
     freeComplete: 'This free poem is all yours: share it, copy it or save it as a PDF.',
     ready: 'Your poem is ready.',

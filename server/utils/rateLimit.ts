@@ -32,6 +32,8 @@ export interface RateLimitEntry {
   attempt?: string;
   /** Retries of that attempt so far. */
   retries?: number;
+  /** Poems given back in this window because they came back empty (MAX_POEM_RELEASES). */
+  released?: number;
 }
 
 /**
@@ -201,6 +203,36 @@ export function applyRateLimit(
   return { verdict: { ok: true }, entry: counted({ ...entry, count: entry.count + 1, last: now }, attempt) };
 }
 
+/**
+ * Poems per window that may be given back because the model sent no text (an
+ * empty answer, such as a safety block, or a gateway failure before the first
+ * word). The cap keeps a request that is always blocked from writing for free
+ * all day: it still costs input tokens.
+ */
+export const MAX_POEM_RELEASES = 2;
+
+/**
+ * Gives back the count of the attempt that came back empty. Only the last
+ * counted attempt, only in its window, and at most MAX_POEM_RELEASES times.
+ * The attempt is forgotten, so a retry of it counts again. The 10 s wait
+ * stays. Returns no entry when nothing is given back.
+ */
+export function releaseAttempt(
+  entry: RateLimitEntry | undefined,
+  now: number,
+  attemptId: string,
+): RateLimitEntry | undefined {
+  if (
+    !entry
+    || entry.attempt !== attemptId
+    || now >= entry.resetTime
+    || entry.count < 1
+    || (entry.released ?? 0) >= MAX_POEM_RELEASES
+  ) return undefined;
+  const { attempt: _attempt, retries: _retries, ...rest } = entry;
+  return { ...rest, count: entry.count - 1, released: (entry.released ?? 0) + 1 };
+}
+
 /** A counted poem replaces the attempt a retry may refer to. */
 function counted(entry: RateLimitEntry, attempt?: PoemAttempt): RateLimitEntry {
   const { attempt: _attempt, retries: _retries, ...rest } = entry;
@@ -244,8 +276,16 @@ export function createRateLimiter(options: RateLimiterOptions = {}) {
     return verdict;
   };
 
+  /** Gives back the count of an attempt that came back empty (releaseAttempt). */
+  const release = (key: string, attemptId: string, now = Date.now()): boolean => {
+    const entry = releaseAttempt(entries.get(key), now, attemptId);
+    if (entry) entries.set(key, entry);
+    return !!entry;
+  };
+
   return {
     check,
+    release,
     peek: (key: string, now = Date.now()) => usedInWindow(entries.get(key), now),
     /** Number of keys with a counter, for tests. */
     trackedCount: () => entries.size,

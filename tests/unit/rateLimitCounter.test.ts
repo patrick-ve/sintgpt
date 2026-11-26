@@ -101,4 +101,28 @@ describe('Drie: 3 poems until pakjesavond', () => {
     expect(await send({ id: 'attempt-1234', retry: true })).toEqual({ ok: true, retry: true });
     expect(data.get('entry')).toMatchObject({ count: 1, attempt: 'attempt-1234', retries: 1 });
   });
+
+  it('gives back the poem of the counted attempt when it came back empty', async () => {
+    const { state, data } = fakeState();
+    const counter = new RateLimitCounter(state);
+    const expiresAt = T0 + 26 * DAY;
+    const ask = (id: string) => counter.fetch(new Request('https://rate-limit.internal/check', {
+      method: 'POST',
+      body: JSON.stringify({ ...creditsRule(3, expiresAt, Date.now()), attempt: { id, retry: false } }),
+    })).then(res => res.json());
+    const release = (attempt: unknown) => counter.fetch(new Request('https://rate-limit.internal/release', {
+      method: 'POST',
+      body: JSON.stringify({ attempt }),
+    })).then(res => res.json());
+
+    expect(await ask('attempt-1234')).toEqual({ ok: true });
+    expect(await release('other-12345')).toEqual({ released: false });
+    expect(await release(12345678)).toEqual({ released: false });
+    expect(await peek(counter)).toBe(1);
+    expect(await release('attempt-1234')).toEqual({ released: true });
+    expect(await peek(counter)).toBe(0);
+    // Only once per attempt.
+    expect(await release('attempt-1234')).toEqual({ released: false });
+    expect(data.get('entry')).toMatchObject({ count: 0, released: 1 });
+  });
 });

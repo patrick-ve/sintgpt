@@ -1,6 +1,16 @@
 import type { PoemShare } from './poemLink';
 
 /**
+ * The error text of a poem that came back without text (an empty answer, such
+ * as a safety block). `released`: the server gave the poem back, so it does
+ * not count; `counted`: it could not (MAX_POEM_RELEASES used, or no attempt).
+ */
+export const EMPTY_POEM_ERRORS = {
+  released: 'empty-poem:released',
+  counted: 'empty-poem:counted',
+} as const;
+
+/**
  * Reads an AI SDK UI message stream (SSE) and calls `onDelta` for every
  * text delta. Lines can arrive split across chunks, so incomplete lines
  * are buffered until the next chunk. Throws when the stream reports an

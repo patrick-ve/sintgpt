@@ -4,11 +4,14 @@ import {
   BUYER_RATE_LIMIT,
   createRateLimiter,
   freeRateLimit,
+  MAX_POEM_RELEASES,
   MAX_POEM_RETRIES,
   PAYMENTS_DOWN_RATE_LIMIT,
   POEM_RATE_LIMIT,
   POEM_RETRY_WINDOW_MS,
   poemAttempt,
+  releaseAttempt,
+  type RateLimitEntry,
 } from '../../server/utils/rateLimit';
 
 const HOUR = 60 * 60 * 1000;
@@ -164,6 +167,51 @@ describe('retries after a dropped connection', () => {
     const next = applyRateLimit(counted, T0 + 20_000, BUYER_RATE_LIMIT).entry!;
     expect(next).toEqual({ count: 2, resetTime: counted.resetTime, last: T0 + 20_000 });
     expect(applyRateLimit(next, T0 + 40_000, BUYER_RATE_LIMIT, again).verdict).toEqual({ ok: true });
+  });
+
+  it('gives back the poem of an attempt that came back empty, and forgets the attempt', () => {
+    const released = releaseAttempt(counted, T0 + 3_000, 'attempt-1234')!;
+    expect(released).toEqual({ count: 0, resetTime: counted.resetTime, last: T0, released: 1 });
+    // The 10 s wait stays; after it the visitor may write the free poem.
+    expect(applyRateLimit(released, T0 + 5_000, POEM_RATE_LIMIT, first).verdict).toMatchObject({ ok: false, reason: 'debounce' });
+    expect(applyRateLimit(released, T0 + 20_000, POEM_RATE_LIMIT, { id: 'attempt-5678', retry: false }).verdict).toEqual({ ok: true });
+    // A retry of the given-back attempt is a new poem: it counts.
+    expect(applyRateLimit(released, T0 + 20_000, POEM_RATE_LIMIT, again).entry).toMatchObject({ count: 1, attempt: 'attempt-1234' });
+  });
+
+  it('gives back only the last counted attempt, in its window', () => {
+    expect(releaseAttempt(undefined, T0, 'attempt-1234')).toBeUndefined();
+    expect(releaseAttempt(counted, T0, 'other-12345')).toBeUndefined();
+    expect(releaseAttempt(counted, counted.resetTime, 'attempt-1234')).toBeUndefined();
+    const { attempt: _attempt, ...withoutAttempt } = counted;
+    expect(releaseAttempt(withoutAttempt, T0, 'attempt-1234')).toBeUndefined();
+  });
+
+  it(`gives back at most ${MAX_POEM_RELEASES} poems a window, and starts again in the next one`, () => {
+    let entry: RateLimitEntry = counted;
+    let now = T0;
+    for (let i = 1; i <= MAX_POEM_RELEASES; i++) {
+      entry = releaseAttempt(entry, now, entry.attempt!)!;
+      expect(entry).toMatchObject({ count: 0, released: i });
+      now += 20_000;
+      entry = applyRateLimit(entry, now, POEM_RATE_LIMIT, { id: `attempt-${i}000`, retry: false }).entry!;
+      expect(entry).toMatchObject({ count: 1, released: i });
+    }
+    // Always blocked: the third empty answer counts.
+    expect(releaseAttempt(entry, now, entry.attempt!)).toBeUndefined();
+    const nextDay = applyRateLimit(entry, entry.resetTime, POEM_RATE_LIMIT, { id: 'attempt-next1', retry: false }).entry!;
+    expect(nextDay.released).toBeUndefined();
+    expect(releaseAttempt(nextDay, entry.resetTime, 'attempt-next1')).toMatchObject({ count: 0, released: 1 });
+  });
+
+  it('gives back a poem in the in-memory limiter too', () => {
+    const limiter = createRateLimiter(POEM_RATE_LIMIT);
+    expect(limiter.check('1.2.3.4', T0, POEM_RATE_LIMIT, first)).toEqual({ ok: true });
+    expect(limiter.release('1.2.3.4', 'other-12345', T0)).toBe(false);
+    expect(limiter.peek('1.2.3.4', T0)).toBe(1);
+    expect(limiter.release('1.2.3.4', 'attempt-1234', T0)).toBe(true);
+    expect(limiter.peek('1.2.3.4', T0)).toBe(0);
+    expect(limiter.release('5.6.7.8', 'attempt-1234', T0)).toBe(false);
   });
 
   it('reads the attempt from the request body, and only a valid ID', () => {
