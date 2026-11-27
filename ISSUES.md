@@ -9,7 +9,7 @@ findings worth keeping. Newest information first within each section.
   `docs/pricing-tiers.md`.
 - Never put API keys, webhook secrets or gift codes in this file.
 
-Last updated: 27 November 2026. Live version: `42e5987d-5339-4b25-88a6-a54ec0273d31` (74909e1: SEO title for begin and end, more rhyme words; IndexNow sent for both posts)
+Last updated: 27 November 2026. Live version: `6495006a-0039-4b41-a65a-b04fab5ac177` (7f146fb: blog design "Het Grote Boek"; IndexNow sent for /blog)
 (commit `6061832`, on GitHub).
 
 ## Priorities
