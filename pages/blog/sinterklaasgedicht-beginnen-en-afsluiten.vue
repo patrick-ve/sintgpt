@@ -2,8 +2,8 @@
   <BlogPost
     slug="sinterklaasgedicht-beginnen-en-afsluiten"
     lead="Een goed begin van een sinterklaasgedicht noemt meteen de Sint, de ontvanger of een grap over de ontvanger. Een goed slot kondigt het cadeau aan of sluit warm af. Hieronder vind je 4 manieren om te beginnen, 15 rijmende openingszinnen en 9 slotzinnen."
-    seo-title="Hoe begin je een sinterklaasgedicht? 24 zinnen | SintGPT"
-    seo-description="Loop je vast met dichten? Leer hoe je het begin en einde van een sinterklaasgedicht schrijft, inclusief meer dan 20 rijmende voorbeeldzinnen."
+    seo-title="Sinterklaasgedicht beginnen en afsluiten: 24 zinnen | SintGPT"
+    seo-description="Hoe begin je een sinterklaasgedicht, en hoe sluit je het af? 4 manieren om te beginnen, 15 rijmende openingszinnen en 9 slotzinnen."
     og-image="blog-sinterklaasgedicht-beginnen-en-afsluiten"
   >
     <h2 class="text-3xl font-bold mt-8 mb-4">Waarom het begin van een sinterklaasgedicht en het slot zo belangrijk zijn</h2>
@@ -150,7 +150,7 @@
       Zoek je meer inspiratie voor humor of de werkvloer? Bekijk dan onze <NuxtLink to="/blog/grappige-sinterklaasgedichten-tips" class="text-red-700 underline underline-offset-2 hover:text-red-900">tips voor een grappig sinterklaasgedicht</NuxtLink> of lees specifieke tips voor een <NuxtLink to="/blog/sinterklaas-op-het-werk" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht voor een collega</NuxtLink>.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Hoe zorg je voor een passend einde van je sinterklaasgedicht?</h2>
+    <h2 class="text-3xl font-bold mt-8 mb-4">Hoe sluit je een sinterklaasgedicht af?</h2>
     <p class="leading-relaxed mb-4">
       Het <strong>slot van het sinterklaasgedicht</strong> kondigt het cadeau aan, geeft een warme wens mee of komt terug op het begin. Een rommelig einde laat de ontvanger twijfelen of het pakje al open mag. Kies een van deze drie manieren.
     </p>

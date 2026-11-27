@@ -1,9 +1,9 @@
 <template>
   <BlogPost
     slug="rijmwoorden-sinterklaas"
-    lead="Rijmwoorden voor Sinterklaas staan hieronder per woord, en elk woord rijmt zuiver op klank. Op Sinterklaas rijmen onder meer baas, kaas en speculaas, op Piet rijmen niet, ziet en lied, en op cadeau rijmen zo, bureau en niveau. Je leest ook hoe je op een naam rijmt en wat je doet als een woord niet wil rijmen."
+    lead="Rijmwoorden voor Sinterklaas staan hieronder per woord, en elk woord rijmt zuiver op klank. Op Sinterklaas rijmen onder meer baas, kaas en speculaas, op Piet rijmen niet, ziet en lied, en op cadeau rijmen zo, bureau en niveau. Je vindt ook rijmwoorden voor lekkers, veelgegeven cadeaus, familie en 22 veelvoorkomende namen, en wat je doet als een woord niet wil rijmen."
     seo-title="Rijmwoorden Sinterklaas: lijst met zuiver rijm | SintGPT"
-    seo-description="Rijmwoorden Sinterklaas per woord: zuiver rijm op Sint, Piet, cadeau, pepernoten en namen, plus tips als een woord niet wil rijmen."
+    seo-description="Rijmwoorden Sinterklaas per woord: zuiver rijm op Sint, Piet, cadeau, lekkers, familie en 22 namen, plus tips als een woord niet wil rijmen."
     og-image="blog-rijmwoorden-sinterklaas"
   >
     <nav aria-label="Rijmwoorden per onderwerp" class="not-prose bg-[#fff3c9] p-6 rounded-lg my-6 border border-[#F4CD60]">
@@ -11,9 +11,12 @@
       <ul class="flex flex-wrap gap-x-5 gap-y-2 text-base">
         <li><a href="#sint-en-piet" class="text-red-700 underline underline-offset-2 hover:text-red-900">Sinterklaas, Sint en Piet</a></li>
         <li><a href="#cadeau-en-lekkers" class="text-red-700 underline underline-offset-2 hover:text-red-900">Cadeau, pakjes en lekkers</a></li>
+        <li><a href="#cadeaus" class="text-red-700 underline underline-offset-2 hover:text-red-900">Veelgegeven cadeaus</a></li>
         <li><a href="#ontvanger" class="text-red-700 underline underline-offset-2 hover:text-red-900">Jaar, lief, stout en blij</a></li>
+        <li><a href="#familie" class="text-red-700 underline underline-offset-2 hover:text-red-900">Familie en vrienden</a></li>
         <li><a href="#sfeer" class="text-red-700 underline underline-offset-2 hover:text-red-900">Sfeer, winter en het gedicht</a></li>
         <li><a href="#naam" class="text-red-700 underline underline-offset-2 hover:text-red-900">Rijmen op een naam</a></li>
+        <li><a href="#namen" class="text-red-700 underline underline-offset-2 hover:text-red-900">22 namen</a></li>
         <li><a href="#klank" class="text-red-700 underline underline-offset-2 hover:text-red-900">Rijm op klank</a></li>
         <li><a href="#lastige-woorden" class="text-red-700 underline underline-offset-2 hover:text-red-900">Lastige woorden</a></li>
         <li><a href="#rijmfouten" class="text-red-700 underline underline-offset-2 hover:text-red-900">Rijmfouten</a></li>
@@ -30,7 +33,7 @@
       Deze woorden rijmen zuiver op de naam van de Sint. Speculaas rijmt op dezelfde klank als Sinterklaas.
     </p>
     <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
-      <li>Sinterklaas en speculaas: baas, kaas, haas, dwaas, vaas, gaas, verbaas, geraas, relaas</li>
+      <li>Sinterklaas en speculaas: baas, kaas, haas, dwaas, vaas, gaas, blaas, verbaas, geraas, relaas</li>
       <li>Sint: kind, vindt, wint, begint, lint, print, bemint, blind, wind, tint, verslindt, verzint, bezint, hint</li>
     </ul>
     <p class="leading-relaxed mb-4">
@@ -53,6 +56,8 @@
     </p>
     <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
       <li>Piet: niet, ziet, verdriet, lied, riet, geniet, biedt, verschiet, gebied</li>
+      <li>Pieten: genieten, schieten, gieten, bieten, verlieten</li>
+      <li>Hooi: mooi, gooi, strooi, kooi, prooi, tooi</li>
       <li>Paard en baard: waard, haard, aard, bewaard, gespaard, verklaard, verjaard, kaart, taart, staart, vaart, maart, zwaard</li>
       <li>Spanje: oranje, kastanje, franje</li>
       <li>Staf: af, straf, laf, draf, gaf</li>
@@ -95,7 +100,12 @@
       <li>Pakje: zakje, takje, dakje, plakje, vlakje, bakje</li>
       <li>Boek: zoek, hoek, broek, koek, doek, bezoek, onderzoek, verzoek</li>
       <li>Chocolade: schade, genade, salade, parade, ballade, marmelade, limonade, tirade</li>
-      <li>Marsepein: fijn, klein, zijn, trein, plein, lijn, konijn, gordijn, fontein</li>
+      <li>Marsepein, wijn en mandarijn: fijn, klein, zijn, trein, plein, lijn, konijn, gordijn, fontein</li>
+      <li>Taai-taai: draai, kraai, zwaai, saai, haai, fraai, aai, baai</li>
+      <li>Snoep: groep, roep, soep, stoep, sloep, troep, oproep</li>
+      <li>Chocola: ja, na, sla, ha, hoera, aha</li>
+      <li>Chocoladeletter: spetter, pletter, vetter</li>
+      <li>Melk: elk, welk, kelk</li>
       <li>Pepernoot en stoomboot: groot, boot, brood, rood, schoot, poot, genoot, sloot, vloot</li>
       <li>Pepernoten: boten, poten, sloten, loten, stoten, schoten, genoten, gesloten, besloten, vergroten</li>
       <li>Lootje: bootje, pootje, broodje, slootje, stootje</li>
@@ -103,6 +113,30 @@
       <li>Sokken: lokken, rokken, brokken, jokken, klokken, vlokken</li>
       <li>Sjaal: taal, verhaal, maal, schaal, normaal, totaal, allemaal, signaal</li>
     </ul>
+    <h3 id="cadeaus" class="text-2xl font-bold mt-6 mb-3">Wat rijmt op veelgegeven cadeaus?</h3>
+    <p class="leading-relaxed mb-4">
+      Het cadeau staat vaak aan het eind van de laatste regel. Voor deze cadeaus is er zuiver rijm:
+    </p>
+    <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
+      <li>Telefoon: gewoon, schoon, toon, zoon, kroon, loon, persoon, beloon, icoon</li>
+      <li>Spel: wel, snel, bel, tel, vel, vertel, hotel, model</li>
+      <li>Fiets: iets, niets</li>
+      <li>Bal: al, val, stal, wal, knal, geval, carnaval</li>
+      <li>Tas en jas: was, pas, glas, gras, plas, das, kas</li>
+      <li>Mok: rok, klok, stok, blok, sok, schok, hok, brok</li>
+      <li>Doos: roos, boos, poos, koos, matroos</li>
+      <li>Pyjama: drama, lama, panorama</li>
+      <li>Bier: hier, plezier, vier, mier, dier, papier, manier, kwartier</li>
+      <li>Thee: mee, twee, zee, nee, idee, oké, café</li>
+      <li>Wekker: lekker, stekker, trekker</li>
+    </ul>
+    <div class="bg-red-50 border-l-4 border-red-600 p-6 my-6 rounded-r-lg">
+      <p class="font-bold text-red-900 mb-2">Voorbeeld met een cadeau aan het eind</p>
+      <p class="font-text text-lg text-red-900 leading-relaxed mb-3 last:mb-0">
+        Je zit de hele dag op je telefoon,<br>
+        en spant met honderd appjes steeds de kroon.
+      </p>
+    </div>
 
     <h2 id="ontvanger" class="text-3xl font-bold mt-8 mb-4">Rijmwoorden over de ontvanger: jaar, lief, stout en blij</h2>
     <p class="leading-relaxed mb-4">
@@ -126,6 +160,33 @@
       <p class="font-text text-lg text-red-900 leading-relaxed mb-3 last:mb-0">
         Je was dit jaar soms stout en soms heel lief,<br>
         dat schreef de Sint vannacht nog in een brief.
+      </p>
+    </div>
+
+    <h2 id="familie" class="text-3xl font-bold mt-8 mb-4">Rijmwoorden voor familie en vrienden</h2>
+    <p class="leading-relaxed mb-4">
+      Een gedicht voor pa, oma of je zus noemt die persoon vaak aan het eind van een regel. Hierop rijm je zuiver:
+    </p>
+    <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
+      <li>Pa en ma: ja, na, sla, ha, hoera, aha</li>
+      <li>Oma: coma, aroma, diploma</li>
+      <li>Opa: Europa</li>
+      <li>Broer: boer, vloer, snoer, toer, roer, loer</li>
+      <li>Zus: kus, dus, bus, plus, sus</li>
+      <li>Man: kan, dan, van, pan, plan, span</li>
+      <li>Vriend: verdiend, bediend, dient, verdient</li>
+      <li>Vriendin: in, zin, begin, kin, win, spin, koningin</li>
+      <li>Schat: wat, dat, had, kat, bad, pad, nat, glad, stad, gat</li>
+      <li>Juf: suf, duf, puf</li>
+    </ul>
+    <p class="leading-relaxed mb-4">
+      Op opa rijmt bijna niets. Zet opa daarom vooraan in de regel, net als meester en collega. Meer tips staan in de posts over <NuxtLink to="/blog/sinterklaasgedicht-opa-oma" class="text-red-700 underline underline-offset-2 hover:text-red-900">rijmen voor opa en oma</NuxtLink> en een <NuxtLink to="/blog/sinterklaasgedicht-papa-mama" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht voor papa en mama</NuxtLink>.
+    </p>
+    <div class="bg-red-50 border-l-4 border-red-600 p-6 my-6 rounded-r-lg">
+      <p class="font-bold text-red-900 mb-2">Voorbeeld met familie</p>
+      <p class="font-text text-lg text-red-900 leading-relaxed mb-3 last:mb-0">
+        De Sint kreeg dit jaar een klacht van je broer:<br>
+        je sokken liggen altijd op de vloer.
       </p>
     </div>
 
@@ -171,6 +232,37 @@
     <p class="leading-relaxed mb-4">
       Geen goed rijm? Zet de naam dan vooraan of midden in de regel.
     </p>
+    <h3 id="namen" class="text-2xl font-bold mt-6 mb-3">Rijmwoorden voor 22 veelvoorkomende namen</h3>
+    <p class="leading-relaxed mb-4">
+      De meeste van deze namen hebben één lettergreep of de klemtoon aan het eind. Daardoor zijn er veel zuivere rijmwoorden:
+    </p>
+    <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
+      <li>Daan: gaan, staan, maan, baan, aan, slaan, banaan, ontstaan</li>
+      <li>Sem: hem, stem, klem, rem, zwem</li>
+      <li>Bram: kwam, nam, dam, kam, lam, stam, ham</li>
+      <li>Jan: kan, dan, man, pan, van, plan</li>
+      <li>Kees en Mees: lees, vrees, wees, pees</li>
+      <li>Tim en Kim: slim, klim, schim</li>
+      <li>Finn: in, zin, begin, kin, win, spin</li>
+      <li>Rik: ik, dik, blik, schrik, klik, prik, ogenblik</li>
+      <li>Tom: om, dom, krom, som, kom, trom</li>
+      <li>Bas: tas, jas, glas, was, pas, gras</li>
+      <li>Bart: hart, start, zwart, apart, verward</li>
+      <li>Mark: park, kwark, ark</li>
+      <li>Henk: denk, schenk, geschenk, bedenk, wenk</li>
+      <li>Joost: troost, oost, kroost, getroost</li>
+      <li>Teun: steun, leun, deun, kreun</li>
+      <li>Thijs en Gijs: prijs, reis, wijs, ijs, grijs, paradijs</li>
+      <li>Tess: les, mes, fles, zes, bes, succes</li>
+      <li>Fleur: deur, geur, kleur, sleur, humeur, chauffeur</li>
+      <li>Roos: doos, boos, poos, matroos</li>
+      <li>Floor en Noor: door, voor, oor, koor, spoor, gehoor</li>
+      <li>Anouk (klemtoon op noek): boek, zoek, hoek, broek, koek, bezoek</li>
+      <li>Peter: beter, meter, eter, veter, kilometer</li>
+    </ul>
+    <p class="leading-relaxed mb-4">
+      Peter heeft de klemtoon op de eerste lettergreep, maar rijmt toch zuiver op beter en meter: vanaf de klemtoon klinkt het hetzelfde.
+    </p>
     <div class="bg-red-50 border-l-4 border-red-600 p-6 my-6 rounded-r-lg">
       <p class="font-bold text-red-900 mb-2">Voorbeeld met een naam</p>
       <p class="font-text text-lg text-red-900 leading-relaxed mb-3 last:mb-0">
@@ -209,7 +301,7 @@
 
     <h2 id="lastige-woorden" class="text-3xl font-bold mt-8 mb-4">Wat doe je als een woord niet wil rijmen?</h2>
     <p class="leading-relaxed mb-4">
-      Zet het woord midden in de regel, of kies een ander woord. Voor december, pakjesavond, surprise en twaalf bestaan in het Nederlands nauwelijks zuivere rijmwoorden. Aan het eind van een regel lopen ze bijna altijd vast.
+      Zet het woord midden in de regel, of kies een ander woord. Voor december, pakjesavond, surprise, twaalf, mijter, schimmel, wortel en puzzel bestaan in het Nederlands nauwelijks zuivere rijmwoorden. Aan het eind van een regel lopen ze bijna altijd vast.
     </p>
     <p class="leading-relaxed mb-4">
       Loop je vast? Kies dan een van deze twee oplossingen:

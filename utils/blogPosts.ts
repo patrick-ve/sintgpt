@@ -57,8 +57,8 @@ export const BLOG_POSTS: BlogPostSummary[] = [
     title: 'Rijmwoorden voor Sinterklaas: handige rijmwoordenlijst en tips',
     description: 'Vind snel de juiste rijmwoorden voor Sinterklaas, Sint en cadeaus, en schrijf met onze praktische tips een soepel sinterklaasgedicht.',
     published: '2026-11-10',
-    modified: '2026-11-12',
-    readMinutes: 9,
+    modified: '2026-11-27',
+    readMinutes: 10,
     related: ['rijm-en-ritme-sinterklaasgedicht', 'sinterklaasgedicht-beginnen-en-afsluiten', 'grappige-sinterklaasgedichten-tips'],
   },
   {
