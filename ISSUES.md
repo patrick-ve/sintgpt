@@ -9,7 +9,7 @@ findings worth keeping. Newest information first within each section.
   `docs/pricing-tiers.md`.
 - Never put API keys, webhook secrets or gift codes in this file.
 
-Last updated: 26 November 2026. Live version: `db1ad86b-9ef5-402d-bddb-8d88f36439ff` (7f6f8ce: an empty answer no longer uses the poem, and the name hint)
+Last updated: 27 November 2026. Live version: `42e5987d-5339-4b25-88a6-a54ec0273d31` (74909e1: SEO title for begin and end, more rhyme words; IndexNow sent for both posts)
 (commit `6061832`, on GitHub).
 
 ## Priorities
