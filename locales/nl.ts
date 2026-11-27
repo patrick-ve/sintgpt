@@ -47,6 +47,7 @@ export default {
       label: 'Naam ontvanger',
       placeholder: 'Bijvoorbeeld: Marieke',
       required: 'Vul de naam van de ontvanger in.',
+      requiredMark: 'verplicht',
       hint: 'Je hebt bij stap 1 nog geen naam ingevuld.',
       hintAction: 'Vul de naam in',
     },
@@ -164,6 +165,7 @@ export default {
       ],
       hint: 'De Sint schrijft zorgvuldig. Meestal is het gedicht in ongeveer een minuut klaar.',
       rewriteHint: 'Herschrijven duurt meestal ongeveer een minuut.',
+      previewHint: 'Over ongeveer een minuut zie je hier de eerste regels van je nieuwe gedicht. Het hele gedicht lees je daarna, vanaf {fromPrice}.',
     },
     retrying: 'De verbinding viel even weg. De Sint begint opnieuw…',
     connectionLost: 'De verbinding viel weg. Controleer je internet en probeer het nog eens.',
@@ -184,7 +186,7 @@ export default {
       ready: 'Het begin van je gedicht is klaar.',
       title: 'Je gedicht is klaar',
       text: 'Hierboven zie je hoe het begint. Kies hoe je verder schrijft, dan lees je meteen het hele gedicht.',
-      button: 'Lees het hele gedicht',
+      button: 'Lees het hele gedicht · vanaf {fromPrice}',
       keep: 'We bewaren je gedicht 2 uur.',
       hidden: 'De andere {count} regels zie je na het betalen.',
       opening: 'Je gedicht wordt geopend…',
@@ -214,6 +216,7 @@ export default {
     },
     rating: {
       question: 'Hoe vind je dit gedicht?',
+      afterCopy: 'Gekopieerd! Hoe vind je dit gedicht?',
       up: 'Goed gedicht',
       down: 'Niet goed gedicht',
       thanksUp: 'Fijn! Dank je wel.',
@@ -240,6 +243,8 @@ export default {
     cta: 'Schrijf gratis je eigen gedicht',
     ctaNote: 'Klaar in ongeveer een minuut. Je eerste gedicht is gratis.',
     bar: 'Schrijf je eigen gedicht, gratis',
+    underPoem: 'Ook een gedicht van de Sint voor iemand die jij kent?',
+    underPoemLink: 'Laat het gratis schrijven →',
   },
   history: {
     open: 'Mijn gedichten',
@@ -300,7 +305,7 @@ export default {
       {
         question: 'Is SintGPT gratis?',
         answer:
-          'Je eerste gedicht is gratis, met alles erop en eraan: delen, kopiëren en opslaan als PDF. Daarna kies je wat bij je past, met één betaling inclusief btw: 3 gedichten voor €3,99, Gezin voor €4,99 (een jaar lang zoveel gedichten als je wilt, ook herschrijven) of Hele familie voor €12,99 (alles van Gezin tot en met pakjesavond volgend jaar, met 2 extra PDF-ontwerpen en surprise-ideeën). Bij 5 gedichten kost Gezin minder dan €1 per gedicht.',
+          'Je eerste gedicht is gratis, met alles erop en eraan: delen, kopiëren en opslaan als PDF. Daarna kies je wat bij je past, met één betaling inclusief btw: 1 gedicht voor €1,99, 3 gedichten voor €3,99, Gezin voor €4,99 (een jaar lang zoveel gedichten als je wilt, ook herschrijven) of Hele familie voor €12,99 (alles van Gezin tot en met pakjesavond volgend jaar, met 2 extra PDF-ontwerpen en surprise-ideeën). Bij 5 gedichten kost Gezin minder dan €1 per gedicht.',
       },
       {
         question:
@@ -362,7 +367,7 @@ export default {
     nextStep: 'Je eerste gedicht kreeg je van de Sint. Wat je invulde, blijft staan: na het betalen schrijf je meteen verder.',
     limitReached: 'Het gratis gedicht is al gebruikt',
     limitReason: 'Op deze internetverbinding is de afgelopen 24 uur al een gratis gedicht geschreven.',
-    description: 'Wil je voor meer mensen schrijven? Vanaf €3,99 schrijf je verder. Voor eenmalig {gezinPrice} schrijf je gedichten voor het hele gezin.',
+    description: 'Wil je voor meer mensen schrijven? Vanaf {fromPrice} schrijf je verder. Voor eenmalig {gezinPrice} schrijf je gedichten voor het hele gezin.',
     oneTimePayment: 'Eenmalig betalen',
     includesVAT: 'incl. btw',
     freeEdit: {
@@ -371,7 +376,7 @@ export default {
     },
     intro: {
       rewriteTier: 'Gedichten herschrijven met AI zit in Gezin en Hele familie. Wat je invulde, blijft staan.',
-      credits: 'Je 3 gedichten zijn geschreven. Wil je verder schrijven? Wat je invulde, blijft staan.',
+      credits: 'Je gedicht is geschreven. Wil je verder schrijven? Wat je invulde, blijft staan. | Je {count} gedichten zijn geschreven. Wil je verder schrijven? Wat je invulde, blijft staan.',
       surprise: 'Surprise-ideeën bij je gedicht horen bij Hele familie.',
       design: 'Dit PDF-ontwerp hoort bij Hele familie.',
       preview: 'Je eerste gedicht kreeg je van de Sint. Je nieuwe gedicht is al geschreven en staat voor je klaar: na het betalen lees je het meteen helemaal.',
@@ -385,6 +390,14 @@ export default {
       notIncluded: 'Niet inbegrepen',
       perPoem: '{price} per gedicht',
       nudge: 'Voor {difference} meer schrijf je met Gezin zoveel gedichten als je wilt.',
+      single: 'Wil je maar één gedicht?',
+      singleNudge: 'Voor {difference} meer schrijf je 3 gedichten.',
+      een: {
+        name: '1 gedicht',
+        note: '',
+        features: ['1 gedicht, voor wie je maar wilt', 'Tot en met pakjesavond {season}'],
+        missing: ['Gedichten herschrijven met AI'],
+      },
       drie: {
         name: '3 gedichten',
         note: '',
@@ -404,6 +417,8 @@ export default {
         missing: [],
       },
     },
+    methods: 'Betaalmethoden',
+    methodCard: 'Creditcard',
     payNow: 'Verder met {tier} · {price}',
     processing: 'Even geduld…',
     securePayment: 'Veilig betalen via Dodo Payments',
@@ -428,7 +443,7 @@ export default {
     giftFullTitle: 'Deze cadeaulink is al in gebruik',
     giftFullMessage: 'De link werkt in 3 browsers, en die zijn al gekozen. Open SintGPT op een van die apparaten, of stuur ons een bericht via de contactpagina.',
     successMessage: 'Schrijf zoveel gedichten als je wilt, voor het hele gezin.',
-    successMessageDrie: 'Je kunt nog 3 gedichten schrijven, tot en met pakjesavond.',
+    successMessageCredits: 'Je kunt nog {count} gedicht schrijven, tot en met pakjesavond. | Je kunt nog {count} gedichten schrijven, tot en met pakjesavond.',
     successMessageFamilie: 'Schrijf zoveel gedichten als je wilt, ook volgend jaar. Bij elk gedicht kun je surprise-ideeën vragen.',
     successMessageFamilieSeason: 'Schrijf zoveel gedichten als je wilt, tot en met pakjesavond. Bij elk gedicht kun je surprise-ideeën vragen.',
     successDraft: 'Wat je invulde, staat nog in het formulier.',
@@ -447,7 +462,7 @@ export default {
     unlimitedAccess: 'Kies hoe je verder schrijft',
     unlimitedUnlocked: 'Je schrijft zoveel gedichten als je wilt.',
     poemsLeft: 'Je kunt nog {count} gedicht schrijven. | Je kunt nog {count} gedichten schrijven.',
-    creditsUsedTitle: 'Je 3 gedichten zijn geschreven',
+    creditsUsedTitle: 'Je gedicht is geschreven | Je {count} gedichten zijn geschreven',
     creditsUsedMessage: 'Wil je verder schrijven? Met Gezin schrijf je zoveel gedichten als je wilt.',
     unavailable: {
       title: 'Betalen lukt nu even niet',
@@ -673,7 +688,7 @@ export default {
         {
           heading: 'Je IP-adres',
           body: [
-            'Gratis gebruikers mogen 1 gedicht per dag maken, of 3 als betalen tijdelijk niet werkt. Daarbij mogen ze 1 gedicht per dag gratis laten herschrijven met een wens, en 2 nieuwe gedichten per dag alvast laten schrijven om na het betalen te lezen. Om dat te tellen gebruiken we je IP-adres. We bewaren het niet zelf: Cloudflare bewaart alleen een versleutelde afgeleide (een hash) en een teller. Die verdwijnen na hooguit 24 uur. Voor betalende gebruikers tellen we op dezelfde manier per betaling, met een maximum van 100 gedichten per dag. Bij 3 gedichten tellen we per betaling hoeveel gedichten je schreef; die teller verdwijnt na pakjesavond.',
+            'Gratis gebruikers mogen 1 gedicht per dag maken, of 3 als betalen tijdelijk niet werkt. Daarbij mogen ze 1 gedicht per dag gratis laten herschrijven met een wens, en 2 nieuwe gedichten per dag alvast laten schrijven om na het betalen te lezen. Om dat te tellen gebruiken we je IP-adres. We bewaren het niet zelf: Cloudflare bewaart alleen een versleutelde afgeleide (een hash) en een teller. Die verdwijnen na hooguit 24 uur. Voor betalende gebruikers tellen we op dezelfde manier per betaling, met een maximum van 100 gedichten per dag. Bij 1 gedicht en 3 gedichten tellen we per betaling hoeveel gedichten je schreef; die teller verdwijnt na pakjesavond.',
             'Cloudflare host de website en houdt technische logs bij, zoals het tijdstip en het adres van een aanvraag. Die logs bewaren we hooguit 7 dagen, om storingen en misbruik op te sporen.',
             'Grondslag: ons gerechtvaardigd belang om de dienst betaalbaar, veilig en beschikbaar te houden.',
           ],
@@ -730,7 +745,7 @@ export default {
     terms: {
       title: 'Voorwaarden',
       seoTitle: 'Voorwaarden | SintGPT',
-      description: 'De voorwaarden voor het gebruik van SintGPT en voor wat je kunt kopen: 3 gedichten, Gezin en Hele familie.',
+      description: 'De voorwaarden voor het gebruik van SintGPT en voor wat je kunt kopen: 1 gedicht, 3 gedichten, Gezin en Hele familie.',
       intro: 'Deze voorwaarden gelden als je SintGPT gebruikt. Ze zijn kort, en we hebben ze zo duidelijk mogelijk geschreven.',
       sections: [
         {
@@ -748,7 +763,8 @@ export default {
         {
           heading: 'Wat je kunt kopen',
           body: [
-            'Na je gratis gedicht kies je uit drie mogelijkheden. Je betaalt één keer; de prijzen zijn inclusief btw. Er is geen abonnement.',
+            'Na je gratis gedicht kies je uit de mogelijkheden hieronder. Het betaalvenster toont welke er nu te koop zijn. Je betaalt één keer; de prijzen zijn inclusief btw. Er is geen abonnement.',
+            '1 gedicht kost €1,99. Je schrijft 1 gedicht, tot en met de eerstvolgende pakjesavond (5 december). Gedichten herschrijven met AI hoort er niet bij.',
             '3 gedichten kost €3,99. Je schrijft 3 gedichten, tot en met de eerstvolgende pakjesavond (5 december). Gedichten herschrijven met AI hoort er niet bij.',
             'Gezin kost €4,99. Je schrijft een jaar lang, gerekend vanaf je betaling, zoveel gedichten als je wilt, en je kunt gedichten herschrijven.',
             'Hele familie kost €12,99. Je krijgt alles van Gezin, tot en met de tweede pakjesavond na je betaling: betaal je vóór 6 december 2026, dan tot en met 5 december 2027. Je krijgt ook 2 extra PDF-ontwerpen en surprise-ideeën bij je gedichten.',

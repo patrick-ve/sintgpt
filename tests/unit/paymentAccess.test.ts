@@ -11,6 +11,7 @@ import {
 import { dodoEnvironment } from '../../server/utils/dodo';
 import {
   accessExpiry,
+  CARD_TIER_IDS,
   fillSeasons,
   formatPrice,
   gezinPriceText,
@@ -153,10 +154,24 @@ describe('pricing tiers', () => {
     expect(TIERS.gezin.priceCents - TIERS.drie.priceCents).toBe(100);
   });
 
+  it('sells a single poem for €1,99, until pakjesavond, without rewrites', () => {
+    expect(TIERS.een).toMatchObject({ priceCents: 199, poems: 1, rewrites: false, extraDesigns: false, surpriseIdeas: false });
+    // "Voor €2 meer schrijf je 3 gedichten".
+    expect(TIERS.drie.priceCents - TIERS.een.priceCents).toBe(200);
+    expect(decidePaymentAccess(
+      { status: 'succeeded', created_at: '2026-11-27T12:00:00Z', product_cart: [{ product_id: 'pdt_een' }] },
+      { ...PRODUCTS, een: 'pdt_een' },
+      Date.parse('2026-11-27T12:05:00Z'),
+    )).toEqual({ status: 'granted', tier: 'een', expiresAt: Date.parse('2026-12-05T23:00:00Z') });
+  });
+
   it('recommends the middle tier and lets buyers only move up', () => {
     expect(RECOMMENDED_TIER).toBe('gezin');
-    expect(tiersAbove(null)).toEqual(['drie', 'gezin', 'familie']);
+    expect(tiersAbove(null)).toEqual(['een', 'drie', 'gezin', 'familie']);
+    expect(tiersAbove('een')).toEqual(['drie', 'gezin', 'familie']);
     expect(tiersAbove('drie')).toEqual(['gezin', 'familie']);
+    // The cards stay three; the single poem is the small option under them.
+    expect(CARD_TIER_IDS).toEqual(['drie', 'gezin', 'familie']);
     expect(tiersAbove('familie')).toEqual([]);
   });
 

@@ -114,7 +114,7 @@
     <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
       <li><strong>Regels van verschillende lengte</strong>: telt de ene regel zes lettergrepen en de volgende zestien, dan struikelt de voorlezer. Houd elke regel ongeveer even lang, rond de tien lettergrepen.</li>
       <li><strong>Te veel opvulregels</strong>: één regel over de boot uit Spanje is prima, maar vul niet het hele gedicht met clichés. Gebruik de meeste regels voor de ontvanger.</li>
-      <li><strong>Het cadeau te vroeg verraden</strong>: noem of verklap het cadeau pas in de laatste twee regels. Ook een <NuxtLink to="/blog/kort-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">kort sinterklaasgedicht</NuxtLink> blijft spannend zolang de ontvanger nog moet raden wat er in het papier zit.</li>
+      <li><strong>Het cadeau te vroeg verraden</strong>: noem of verklap het cadeau pas in de laatste twee regels. Ook een <NuxtLink to="/blog/kort-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">kort sinterklaasgedicht</NuxtLink> blijft spannend zolang de ontvanger nog moet raden wat er in het papier zit. Hoe je hint zonder te verklappen, lees je bij <NuxtLink to="/blog/sinterklaasgedicht-bij-cadeau" class="text-red-700 underline underline-offset-2 hover:text-red-900">een sinterklaasgedicht bij een cadeau</NuxtLink>.</li>
       <li><strong>Grappen voor twee</strong>: luistert er een hele groep mee, kies dan een anekdote die iedereen begrijpt. Een grap die alleen jij en de ontvanger snappen, valt stil.</li>
     </ul>
     <p class="leading-relaxed mb-4">

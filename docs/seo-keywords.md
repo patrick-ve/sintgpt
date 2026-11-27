@@ -54,6 +54,7 @@ Example poems in the posts use rhyme scheme AABB only (the owner's choice, 11 No
 | `sinterklaas-tradities` | sinterklaas tradities |
 | `sinterklaasgedicht-last-minute` | sinterklaasgedicht last minute (snel, vergeten, in 10 minuten) |
 | `sinterklaasgedicht-papa-mama` | sinterklaasgedicht voor papa of mama (vader, moeder, ouders) |
+| `sinterklaasgedicht-bij-cadeau` | sinterklaasgedicht bij een cadeau (chocoladeletter 70, geld 50, voetbal 50, sokken 40, boek 30, cadeaubon 20 per month, NL, OpenSEO 27 Nov 2026) |
 | `sinterklaasgedicht-juf-meester` | sinterklaasgedicht voor de juf of meester (leerkracht, klassencadeau) |
 
 ## Ideas for later

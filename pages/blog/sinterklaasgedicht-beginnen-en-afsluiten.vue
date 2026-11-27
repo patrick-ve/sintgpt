@@ -14,6 +14,9 @@
       { id: 'valkuilen-bij-het-begin-en-einde-van-een-gedicht', label: 'Valkuilen bij het begin en einde van een gedicht' },
     ]"
   >
+    <BlogFormOffer cta="blog:sinterklaasgedicht-beginnen-en-afsluiten:blok" title="Liever een begin en slot op maat?">
+      Vul de naam en een paar weetjes in. De Sint schrijft je hele gedicht, met een openingszin en een slotzin over de ontvanger, in ongeveer een minuut. Je eerste gedicht is gratis.
+    </BlogFormOffer>
     <h2 id="waarom-het-begin-van-een-sinterklaasgedicht-en-het-slot-zo-belangrijk-zijn" class="text-3xl font-bold mt-8 mb-4">Waarom het begin van een sinterklaasgedicht en het slot zo belangrijk zijn</h2>
     <p class="leading-relaxed mb-4">
       Leest iemand het gedicht hardop voor, dan luistert de hele kamer mee. De <strong>openingszin</strong> zet de toon: na één regel weet iedereen of het gedicht grappig of klassiek wordt. Een warrige eerste regel laat de voorlezer meteen struikelen.
@@ -37,7 +40,7 @@
       <li>Meteen de grap maken: noem in de eerste regel een blunder of een bekende eigenschap van de ontvanger.</li>
     </ol>
     <p class="leading-relaxed mb-4">
-      Wil je weten hoe je na de start de rest van het gedicht opbouwt? Lees dan onze uitgebreide gids over <NuxtLink to="/blog/hoe-schrijf-je-het-perfecte-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">een sinterklaasgedicht schrijven</NuxtLink>. Heb je haast, gebruik dan het sjabloon voor een <NuxtLink to="/blog/sinterklaasgedicht-last-minute" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht last minute</NuxtLink>. Kom je er zelf niet uit, dan kun je met een paar weetjes ook <NuxtLink to="/" data-cta="blog:sinterklaasgedicht-beginnen-en-afsluiten:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">een gedicht met begin en slot laten schrijven</NuxtLink>.
+      Wil je weten hoe je na de start de rest van het gedicht opbouwt? Lees dan onze uitgebreide gids over <NuxtLink to="/blog/hoe-schrijf-je-het-perfecte-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">een sinterklaasgedicht schrijven</NuxtLink>. Heb je haast, gebruik dan het sjabloon voor een <NuxtLink to="/blog/sinterklaasgedicht-last-minute" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht last minute</NuxtLink>. Kom je er zelf niet uit, dan kun je met een paar weetjes ook <NuxtLink to="/#poem-form" data-cta="blog:sinterklaasgedicht-beginnen-en-afsluiten:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">een gedicht met begin en slot laten schrijven</NuxtLink>.
     </p>
 
     <h2 id="15-rijmende-openingszinnen-voor-je-sinterklaasgedicht" class="text-3xl font-bold mt-8 mb-4">15 rijmende openingszinnen voor je sinterklaasgedicht</h2>
@@ -156,6 +159,10 @@
     </div>
     <p class="leading-relaxed mb-4">
       Zoek je meer inspiratie voor humor of de werkvloer? Bekijk dan onze <NuxtLink to="/blog/grappige-sinterklaasgedichten-tips" class="text-red-700 underline underline-offset-2 hover:text-red-900">tips voor een grappig sinterklaasgedicht</NuxtLink> of lees specifieke tips voor een <NuxtLink to="/blog/sinterklaas-op-het-werk" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht voor een collega</NuxtLink>.
+    </p>
+
+    <p class="leading-relaxed mb-4">
+      Wil je zien hoe zo'n opening in een heel gedicht werkt? Lees de <NuxtLink to="/voorbeelden" class="text-red-700 underline underline-offset-2 hover:text-red-900">voorbeelden van sinterklaasgedichten</NuxtLink>, elk met de weetjes waar de Sint mee begon.
     </p>
 
     <h2 id="hoe-sluit-je-een-sinterklaasgedicht-af" class="text-3xl font-bold mt-8 mb-4">Hoe sluit je een sinterklaasgedicht af?</h2>

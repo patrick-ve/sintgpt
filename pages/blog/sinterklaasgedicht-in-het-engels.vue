@@ -15,6 +15,10 @@
       { id: 'praktische-tips-voor-een-internationale-pakjesavond', label: 'Praktische tips voor een internationale pakjesavond' },
     ]"
   >
+    <p class="leading-relaxed mb-4">
+      Lezen je gasten geen Nederlands? Stuur ze dan naar de Engelse pagina <NuxtLink to="/sinterklaas-poem" lang="en" class="text-red-700 underline underline-offset-2 hover:text-red-900">Sinterklaas poem in English</NuxtLink>.
+    </p>
+
     <h2 id="wanneer-kies-je-voor-een-sinterklaasgedicht-in-het-engels" class="text-3xl font-bold mt-8 mb-4">Wanneer kies je voor een sinterklaasgedicht in het Engels?</h2>
     <p class="leading-relaxed mb-4">
       Kies Engels als er iemand meeluistert die geen Nederlands verstaat. Denk aan een studentenhuis met buitenlandse studenten, een vriendengroep met expats of een familie met een buitenlandse partner. Ook op veel werkplekken is de voertaal Engels. Met een <strong>sinterklaasgedicht in het Engels</strong> kan iedereen meedoen.
@@ -85,6 +89,10 @@
         Unwrap it right now to reveal what is new!
       </p>
     </div>
+
+    <p class="leading-relaxed mb-4">
+      Een heel Engels gedicht, voor een hardloopster met een marathon in april, staat bij de <NuxtLink to="/voorbeelden#emma" class="text-red-700 underline underline-offset-2 hover:text-red-900">voorbeeldgedichten</NuxtLink>. Daar zie je ook wat de Sint over haar wist.
+    </p>
 
     <h2 id="een-tweetalig-sinterklaasgedicht-schrijven" class="text-3xl font-bold mt-8 mb-4">Een tweetalig sinterklaasgedicht schrijven</h2>
     <p class="leading-relaxed mb-4">

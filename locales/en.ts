@@ -46,6 +46,7 @@ export default {
       label: 'Recipient name',
       placeholder: 'For example: Emma',
       required: "Enter the recipient's name.",
+      requiredMark: 'required',
       hint: 'You have not entered a name in step 1 yet.',
       hintAction: 'Enter the name',
     },
@@ -163,6 +164,7 @@ export default {
       ],
       hint: 'Sinterklaas writes with care. The poem is usually ready in about a minute.',
       rewriteHint: 'A rewrite usually takes about a minute.',
+      previewHint: 'In about a minute you see the first lines of your new poem here. You read the whole poem after that, from {fromPrice}.',
     },
     retrying: 'The connection dropped for a moment. Sinterklaas starts again…',
     connectionLost: 'The connection dropped. Check your internet and try again.',
@@ -181,7 +183,7 @@ export default {
       ready: 'The start of your poem is ready.',
       title: 'Your poem is ready',
       text: 'Above you see how it starts. Choose how to keep writing, and you read the whole poem right away.',
-      button: 'Read the whole poem',
+      button: 'Read the whole poem · from {fromPrice}',
       keep: 'We keep your poem for 2 hours.',
       hidden: 'You see the other {count} lines after paying.',
       opening: 'Opening your poem…',
@@ -213,6 +215,7 @@ export default {
     },
     rating: {
       question: 'What do you think of this poem?',
+      afterCopy: 'Copied! What do you think of this poem?',
       up: 'Good poem',
       down: 'Not a good poem',
       thanksUp: 'Great! Thank you.',
@@ -239,6 +242,8 @@ export default {
     cta: 'Write your own poem for free',
     ctaNote: 'Ready in about a minute. Your first poem is free.',
     bar: 'Write your own poem, for free',
+    underPoem: 'Want a poem from Sinterklaas for someone you know?',
+    underPoemLink: 'Have it written for free →',
   },
   history: {
     open: 'My poems',
@@ -299,7 +304,7 @@ export default {
       {
         question: 'Is SintGPT free?',
         answer:
-          'Your first poem is free, with everything included: sharing, copying and saving as a PDF. After that, you choose what suits you, with one payment including VAT: 3 poems for €3.99, Family for €4.99 (as many poems as you like for a year, rewrites included) or Whole family for €12.99 (everything in Family until pakjesavond next year, with 2 extra PDF designs and surprise ideas). With 5 poems, Family costs less than €1 per poem.',
+          'Your first poem is free, with everything included: sharing, copying and saving as a PDF. After that, you choose what suits you, with one payment including VAT: 1 poem for €1.99, 3 poems for €3.99, Family for €4.99 (as many poems as you like for a year, rewrites included) or Whole family for €12.99 (everything in Family until pakjesavond next year, with 2 extra PDF designs and surprise ideas). With 5 poems, Family costs less than €1 per poem.',
       },
       {
         question: 'What poem styles are available?',
@@ -359,7 +364,7 @@ export default {
     nextStep: 'Your first poem was a gift from Sinterklaas. What you filled in stays: after paying, you continue right away.',
     limitReached: 'The free poem has already been used',
     limitReason: 'Someone on this internet connection already wrote a free poem in the last 24 hours.',
-    description: 'Want to write for more people? Keep writing from €3.99. A one-time {gezinPrice} covers poems for the whole family.',
+    description: 'Want to write for more people? Keep writing from {fromPrice}. A one-time {gezinPrice} covers poems for the whole family.',
     oneTimePayment: 'Pay once',
     includesVAT: 'incl. VAT',
     freeEdit: {
@@ -369,7 +374,7 @@ export default {
     intro: {
       rewriteTier: 'Rewriting poems with AI comes with Family and Whole family. What you filled in stays.',
       preview: 'Your first poem was a gift from Sinterklaas. Your new poem is already written and waiting for you: after paying, you read all of it right away.',
-      credits: 'You have written your 3 poems. Want to keep writing? What you filled in stays.',
+      credits: 'You have written your poem. Want to keep writing? What you filled in stays. | You have written your {count} poems. Want to keep writing? What you filled in stays.',
       surprise: 'Surprise ideas for your poem come with Whole family.',
       design: 'This PDF design comes with Whole family.',
     },
@@ -380,6 +385,14 @@ export default {
       notIncluded: 'Not included',
       perPoem: '{price} per poem',
       nudge: 'For {difference} more, Family lets you write as many poems as you like.',
+      single: 'Need just one poem?',
+      singleNudge: 'For {difference} more, you write 3 poems.',
+      een: {
+        name: '1 poem',
+        note: '',
+        features: ['1 poem, for anyone you like', 'Until pakjesavond {season}'],
+        missing: ['Rewrite poems with AI'],
+      },
       drie: {
         name: '3 poems',
         note: '',
@@ -399,6 +412,8 @@ export default {
         missing: [],
       },
     },
+    methods: 'Payment methods',
+    methodCard: 'Credit card',
     payNow: 'Continue with {tier} · {price}',
     processing: 'One moment…',
     securePayment: 'Secure payment via Dodo Payments',
@@ -423,7 +438,7 @@ export default {
     giftFullTitle: 'This gift link is already in use',
     giftFullMessage: 'The link works in 3 browsers, and those are already taken. Open SintGPT on one of those devices, or send us a message through the contact page.',
     successMessage: 'Write as many poems as you like, for the whole family.',
-    successMessageDrie: 'You can write 3 more poems, until pakjesavond.',
+    successMessageCredits: 'You can write {count} more poem, until pakjesavond. | You can write {count} more poems, until pakjesavond.',
     successMessageFamilie: 'Write as many poems as you like, next year too. With every poem you can ask for surprise ideas.',
     successMessageFamilieSeason: 'Write as many poems as you like, until pakjesavond. Ask for surprise ideas with every poem.',
     successDraft: 'What you filled in is still in the form.',
@@ -444,7 +459,7 @@ export default {
     unlimitedAccess: 'Choose how to keep writing',
     unlimitedUnlocked: 'Write as many poems as you like.',
     poemsLeft: 'You can write {count} more poem. | You can write {count} more poems.',
-    creditsUsedTitle: 'You have written your 3 poems',
+    creditsUsedTitle: 'You have written your poem | You have written your {count} poems',
     creditsUsedMessage: 'Want to keep writing? With Family you write as many poems as you like.',
     unavailable: {
       title: 'Payments are not working right now',
@@ -670,7 +685,7 @@ export default {
         {
           heading: 'Your IP address',
           body: [
-            'Free users can make 1 poem a day, or 3 while payments do not work. They may also have 1 poem a day rewritten for free with a wish, and have 2 new poems a day written ahead, to read after paying. To count them, we use your IP address. We do not keep it ourselves: Cloudflare keeps only a keyed hash and a counter. Both are deleted after 24 hours at most. For paying users we count per payment in the same way, with a maximum of 100 poems a day. With 3 poems, we count per payment how many poems you wrote; that counter is deleted after pakjesavond.',
+            'Free users can make 1 poem a day, or 3 while payments do not work. They may also have 1 poem a day rewritten for free with a wish, and have 2 new poems a day written ahead, to read after paying. To count them, we use your IP address. We do not keep it ourselves: Cloudflare keeps only a keyed hash and a counter. Both are deleted after 24 hours at most. For paying users we count per payment in the same way, with a maximum of 100 poems a day. With 1 poem and 3 poems, we count per payment how many poems you wrote; that counter is deleted after pakjesavond.',
             'Cloudflare hosts the website and keeps technical logs, such as the time and the address of a request. We keep those logs for 7 days at most, to find outages and abuse.',
             'Legal basis: our legitimate interest in keeping the service affordable, safe and available.',
           ],
@@ -727,7 +742,7 @@ export default {
     terms: {
       title: 'Terms',
       seoTitle: 'Terms | SintGPT',
-      description: 'The terms for using SintGPT and for what you can buy: 3 poems, Family and Whole family.',
+      description: 'The terms for using SintGPT and for what you can buy: 1 poem, 3 poems, Family and Whole family.',
       intro: 'These terms apply when you use SintGPT. They are short, and we wrote them as clearly as we could.',
       sections: [
         {
@@ -745,7 +760,8 @@ export default {
         {
           heading: 'What you can buy',
           body: [
-            'After your free poem, you choose from three options. You pay once; prices include VAT. There is no subscription.',
+            'After your free poem, you choose from the options below. The payment window shows which ones are on sale now. You pay once; prices include VAT. There is no subscription.',
+            '1 poem costs €1.99. You write 1 poem, until the next pakjesavond (5 December). Rewriting poems with AI is not included.',
             '3 poems costs €3.99. You write 3 poems, until the next pakjesavond (5 December). Rewriting poems with AI is not included.',
             'Family costs €4.99. For a year from your payment, you write as many poems as you like, and you can rewrite poems.',
             'Whole family costs €12.99. You get everything in Family, until the second pakjesavond after your payment: if you pay before 6 December 2026, until 5 December 2027. You also get 2 extra PDF designs and surprise ideas for your poems.',

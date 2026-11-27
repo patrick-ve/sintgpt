@@ -5,9 +5,10 @@ import { LIMERICK_LINES, POEM_INPUT_LIMITS, POEM_LINES } from '~/utils/poemLimit
 import { saveFormDraft, takeFormDraft } from '~/utils/formDraft';
 import { pakjesavondCountdown } from '~/utils/pakjesavond';
 import { PDF_DESIGNS, type PdfDesignId } from '~/utils/pdfDesigns';
-import { fillSeasons, gezinPriceText, pakjesavondEnd, TIERS, type TierId } from '~/utils/pricingTiers';
+import { fillSeasons, formatPrice, gezinPriceText, pakjesavondEnd, TIERS, type TierId } from '~/utils/pricingTiers';
 import { findBlogPost } from '~/utils/blogPosts';
 import { STYLE_PARAM, styleFromQuery } from '~/utils/stylePreset';
+import { RECIPIENT_PARAM, recipientFromQuery } from '~/utils/recipientPreset';
 import { hasOwnPhoto, sintStyleAvatar, sintStylePhoto, type SintStyle } from '~/utils/sintStyles';
 import { isSignatureLine, poemFrame, salutation } from '~/utils/poemFrame';
 import type { PoemHistoryEntry } from '~/composables/usePoemHistory';
@@ -36,7 +37,14 @@ const {
   hasFeature,
   canFreeRewrite,
   markFreeRewriteUsed,
+  lowestPriceCents,
 } = usePaymentTracking();
+
+// The poems a tier with a fixed number includes (1 or 3), for the texts that count them.
+const boughtPoems = computed(() => (ownedTier.value ? TIERS[ownedTier.value].poems : null) ?? 3);
+
+// The lowest price on sale now, for "Vanaf €… schrijf je verder" and the preview button.
+const fromPrice = computed(() => formatPrice(lowestPriceCents.value, locale.value));
 const poemPreview = usePoemPreview();
 const { preview: previewState, writing: previewWriting, unlocking: previewUnlocking } = poemPreview;
 
@@ -106,6 +114,25 @@ onMounted(async () => {
     const presetStyle = styleFromQuery(route.query[STYLE_PARAM]);
     if (presetStyle && !restoredDraft.value) formData.value.style = presetStyle;
     const { [STYLE_PARAM]: _stijl, ...rest } = route.query;
+    router.replace({ query: rest, hash: route.hash });
+  }
+
+  // A link from a blog post about one kind of recipient (/?voor=partner#poem-form)
+  // starts the fun facts with the relation, unless the visitor already has some.
+  if (RECIPIENT_PARAM in route.query) {
+    const start = recipientFromQuery(route.query[RECIPIENT_PARAM]);
+    if (start && !formData.value.funFacts.trim()) formData.value.funFacts = start;
+    // Also without ?stijl=: the replace above has not reached route.query yet.
+    const { [RECIPIENT_PARAM]: _voor, [STYLE_PARAM]: _stijl, ...rest } = route.query;
+    router.replace({ query: rest, hash: route.hash });
+  }
+
+  // The English page (/sinterklaas-poem) links to /?lang=en#poem-form: English
+  // labels and an English poem, unless a restored draft already has a language.
+  if (route.query.lang === 'en') {
+    setLocale('en');
+    if (!restoredDraft.value) formData.value.language = 'english';
+    const { lang: _lang, [RECIPIENT_PARAM]: _voor, [STYLE_PARAM]: _stijl, ...rest } = route.query;
     router.replace({ query: rest, hash: route.hash });
   }
 
@@ -230,11 +257,12 @@ watch(() => formData.value.style, (style) => {
 });
 const heroPhoto = computed(() => sintStylePhoto(heroStyle.value));
 
-// Two rows of three: the lively styles first, the calmer ones below.
+// Two rows of three: the lively styles first, the calmer ones below. Roast
+// right after Grappig: it is the second most chosen style (11% of the poems, Nov 2026).
 const styleOptions = computed(() => [
   { value: 'funny', label: t('form.style.funny') },
-  { value: 'spicy', label: t('form.style.spicy') },
   { value: 'roast', label: t('form.style.roast') },
+  { value: 'spicy', label: t('form.style.spicy') },
   { value: 'classic', label: t('form.style.classic') },
   { value: 'ironic', label: t('form.style.ironic') },
   { value: 'old-fashioned', label: t('form.style.oldFashioned') },
@@ -363,6 +391,9 @@ const toggleChip = (chip: string) => {
 // 👍/👎 for the poem on screen. Only an analytics event, with the style, so we
 // see which styles disappoint. A 👎 opens the wish for a rewrite.
 const poemRating = ref<'up' | 'down' | null>(null);
+// After "Kopieer" the visitor is done with the poem: ask for the 👍/👎 there,
+// next to the button. Before 27 Nov 2026 only 6% of the poems got a rating.
+const askRatingAfterCopy = ref(false);
 
 // Why the payment window opened (for analytics and its first line), and the
 // tier it selects.
@@ -431,6 +462,7 @@ const startPreview = async (request: PoemFormData = { ...formData.value }, after
   resetSurprise();
   closeHint();
   poemRating.value = null;
+  askRatingAfterCopy.value = false;
   previewError.value = '';
   error.value = null;
   isRateLimitError.value = false;
@@ -567,6 +599,7 @@ const runGeneration = async (request: PoemFormData, regenerate = false, hint?: s
   activeHistoryId.value = null;
   lastRequest.value = { ...request };
   poemRating.value = null;
+  askRatingAfterCopy.value = false;
   stopEditing();
   editStatus.value = '';
   resetSurprise();
@@ -784,6 +817,7 @@ const copyToClipboard = async () => {
     }
     copySuccess.value = true;
     track('Copy to clipboard');
+    if (!poemRating.value) askRatingAfterCopy.value = true;
     setTimeout(() => {
       copySuccess.value = false;
     }, 2000);
@@ -907,7 +941,7 @@ const accessHint = computed(() => {
 const successMessage = computed(() => {
   if (previewUnlocked.value) return t('payment.successPreview');
   if (restoredDraft.value) return t('payment.successDraft');
-  if (ownedTier.value === 'drie') return t('payment.successMessageDrie');
+  if (ownedTier.value && TIERS[ownedTier.value].poems) return t('payment.successMessageCredits', { count: TIERS[ownedTier.value].poems! });
   // A season gift ends at this pakjesavond, so "ook volgend jaar" is not true for it.
   if (ownedTier.value === 'familie' && giftReceived.value && accessExpiresAt.value && accessExpiresAt.value <= pakjesavondEnd(new Date()).getTime()) {
     return t('payment.successMessageFamilieSeason');
@@ -1182,6 +1216,7 @@ const openPoemFromHistory = (entry: PoemHistoryEntry) => {
   activeHistoryId.value = entry.id;
   lastRequest.value = null;
   poemRating.value = null;
+  askRatingAfterCopy.value = false;
   closeHint();
   stopEditing();
   editStatus.value = '';
@@ -1261,7 +1296,7 @@ const structuredData = computed(() => ({
           priceCurrency: 'EUR',
           description: locale.value === 'nl' ? '1 gedicht gratis' : '1 free poem',
         },
-        ...(['drie', 'gezin', 'familie'] as const).map(id => ({
+        ...(['een', 'drie', 'gezin', 'familie'] as const).map(id => ({
         '@type': 'Offer',
         name: t(`payment.tiers.${id}.name`),
         price: (TIERS[id].priceCents / 100).toFixed(2),
@@ -1593,7 +1628,7 @@ useHead({
               <div class="flex flex-wrap gap-4">
                 <div class="flex-[1_1_200px] min-w-0">
                   <label for="poem-name" class="field-label">
-                    {{ t('form.name.label') }}<span class="ms-1" aria-hidden="true">*</span>
+                    {{ t('form.name.label') }}<span class="ms-1.5 text-sm font-semibold text-[#8b1538]">({{ t('form.name.requiredMark') }})</span>
                   </label>
                   <UInput
                     id="poem-name"
@@ -1953,10 +1988,10 @@ useHead({
                 </template>
                 <template v-else>
                   <h3 id="poem-title" class="text-2xl font-bold text-[#8b1538] mb-3 font-display">
-                    {{ rateLimitReason === 'credits' ? t('payment.creditsUsedTitle') : rateLimitReason === 'rewrite' ? t('payment.rewriteUsedTitle') : t('payment.limitReached') }}
+                    {{ rateLimitReason === 'credits' ? t('payment.creditsUsedTitle', { count: boughtPoems }) : rateLimitReason === 'rewrite' ? t('payment.rewriteUsedTitle') : t('payment.limitReached') }}
                   </h3>
                   <p class="text-[#5c0f26] mb-8 max-w-md font-medium">
-                    {{ rateLimitReason === 'credits' ? t('payment.creditsUsedMessage') : rateLimitReason === 'rewrite' ? t('payment.rewriteUsedMessage') : `${t('payment.limitReason')} ${t('payment.description', { gezinPrice: gezinPriceText(locale) })}` }}
+                    {{ rateLimitReason === 'credits' ? t('payment.creditsUsedMessage') : rateLimitReason === 'rewrite' ? t('payment.rewriteUsedMessage') : `${t('payment.limitReason')} ${t('payment.description', { gezinPrice: gezinPriceText(locale), fromPrice })}` }}
                   </p>
                   <button
                     type="button"
@@ -2024,7 +2059,7 @@ useHead({
                     <p class="m-0 font-display font-bold text-xl text-[#8b1538]">{{ t('poem.preview.title') }}</p>
                     <p class="m-0 text-[#5c0f26]">{{ t('poem.preview.text') }}</p>
                     <button type="button" class="btn-festive px-6 min-h-12 text-lg" @click="openPaymentModal('preview')">
-                      {{ t('poem.preview.button') }}
+                      {{ t('poem.preview.button', { fromPrice }) }}
                     </button>
                     <p class="m-0 text-sm text-[#5c0f26]">{{ t('poem.preview.keep') }}</p>
                   </div>
@@ -2112,7 +2147,7 @@ useHead({
             <p v-if="editNoLink && poem && !isLoading && !editing" class="m-0 text-sm text-center text-[#5c0f26]">
               {{ t('poem.edit.noLink') }}
             </p>
-            <div v-if="poem && !isLoading && !error && !isRateLimitError && !editing" class="poem-rating">
+            <div v-if="poem && !isLoading && !error && !isRateLimitError && !editing && !askRatingAfterCopy" class="poem-rating">
               <template v-if="!poemRating">
                 <span id="poem-rating-question">{{ t('poem.rating.question') }}</span>
                 <span role="group" aria-labelledby="poem-rating-question" class="flex gap-2">
@@ -2138,6 +2173,36 @@ useHead({
               class="grid grid-cols-[repeat(auto-fill,minmax(12.5rem,1fr))] gap-2"
               :class="{ invisible: isLoading }"
             >
+              <!-- Copy is the main action: used 5 times as often as the PDF (Nov 2026). -->
+              <div class="col-span-full grid gap-2">
+                <button
+                  type="button"
+                  class="poem-action poem-action-copy"
+                  @click="copyToClipboard"
+                >
+                  <UIcon name="i-heroicons-clipboard-document" class="size-5" aria-hidden="true" />
+                  {{ copySuccess ? t('poem.copied') : t('poem.copy') }}
+                </button>
+                <div v-if="askRatingAfterCopy" class="poem-rating poem-rating-after-copy">
+                  <template v-if="!poemRating">
+                    <span id="poem-rating-copy-question">{{ t('poem.rating.afterCopy') }}</span>
+                    <span role="group" aria-labelledby="poem-rating-copy-question" class="flex gap-2">
+                      <button type="button" class="rating-button" :aria-label="t('poem.rating.up')" @click="ratePoem('up')">
+                        <UIcon name="i-heroicons-hand-thumb-up" class="size-5" aria-hidden="true" />
+                      </button>
+                      <button type="button" class="rating-button" :aria-label="t('poem.rating.down')" @click="ratePoem('down')">
+                        <UIcon name="i-heroicons-hand-thumb-down" class="size-5" aria-hidden="true" />
+                      </button>
+                    </span>
+                  </template>
+                  <p role="status" class="m-0 text-center">
+                    <template v-if="poemRating === 'up'">{{ t('poem.rating.thanksUp') }}</template>
+                    <template v-else-if="poemRating === 'down'">
+                      {{ lastRequest ? t('poem.rating.thanksDown') : t('poem.rating.thanksDownNoRewrite') }}
+                    </template>
+                  </p>
+                </div>
+              </div>
               <div v-if="lastRequest" class="col-span-full grid gap-2">
                 <!-- The wish for the rewrite: above the button that sends it. -->
                 <div v-if="hintOpen" class="rewrite-hint">
@@ -2200,14 +2265,6 @@ useHead({
               >
                 <UIcon name="i-heroicons-link" class="size-[1.125rem]" aria-hidden="true" />
                 {{ linkCopied ? t('poem.linkCopied') : t('poem.copyLink') }}
-              </button>
-              <button
-                type="button"
-                class="poem-action"
-                @click="copyToClipboard"
-              >
-                <UIcon name="i-heroicons-clipboard-document" class="size-[1.125rem]" aria-hidden="true" />
-                {{ copySuccess ? t('poem.copied') : t('poem.copy') }}
               </button>
               <button
                 type="button"
@@ -2459,6 +2516,14 @@ useHead({
             class="inline-flex items-center min-h-11 px-4 rounded-md border-2 border-[#d4a853] text-[#f4cd60] font-bold hover:bg-[#d4a853]/15"
           >
             {{ t('footer.lootjes') }}
+          </NuxtLink>
+          <!-- English in its own words, also on the Dutch page: it is the English page. -->
+          <NuxtLink
+            to="/sinterklaas-poem"
+            lang="en"
+            class="inline-flex items-center min-h-11 px-4 rounded-md border-2 border-[#d4a853] text-[#f4cd60] font-bold hover:bg-[#d4a853]/15"
+          >
+            Sinterklaas poem in English
           </NuxtLink>
           <NuxtLink
             to="/privacy"
@@ -2916,6 +2981,27 @@ useHead({
   transition-property: background-color, border-color, scale;
   transition-duration: 150ms;
   transition-timing-function: ease-out;
+}
+.poem-action-copy {
+  justify-content: center;
+  min-height: 3.25rem;
+  border: 2px solid #8b1538;
+  background: #8b1538;
+  color: #fff8e7;
+  font-size: 1.0625rem;
+}
+@media (hover: hover) {
+  /* Beats the light hover of .poem-action:enabled:hover further down. */
+  .poem-action.poem-action-copy:enabled:hover {
+    background: #6e1030;
+    border-color: #6e1030;
+  }
+}
+.poem-rating-after-copy {
+  padding: 0.5rem 0.75rem;
+  background: #fffaf0;
+  border: 1.5px dashed #d4a853;
+  border-radius: 10px;
 }
 .poem-action-main {
   justify-content: center;

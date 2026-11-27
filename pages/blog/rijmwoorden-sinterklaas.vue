@@ -20,6 +20,9 @@
       { id: 'vragen', label: 'Veelgestelde vragen' },
     ]"
   >
+    <BlogFormOffer cta="blog:rijmwoorden-sinterklaas:blok" title="Geen rijmwoord dat past?">
+      Laat de Sint het rijm zoeken. Vul de naam en een paar weetjes in, dan schrijft hij je hele gedicht in ongeveer een minuut. Je eerste gedicht is gratis.
+    </BlogFormOffer>
     <h2 id="sint-en-piet" class="text-3xl font-bold mt-8 mb-4">Rijmwoorden voor Sinterklaas, Sint en Piet</h2>
     <p class="leading-relaxed mb-4">
       Bijna elk sinterklaasgedicht noemt de Sint of Piet, en op die namen rijmt veel. Voor de eerste en de laatste regel zijn er ook <NuxtLink to="/blog/sinterklaasgedicht-beginnen-en-afsluiten" class="text-red-700 underline underline-offset-2 hover:text-red-900">zinnen om een sinterklaasgedicht te beginnen en af te sluiten</NuxtLink>.

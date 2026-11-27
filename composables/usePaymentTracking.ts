@@ -1,4 +1,4 @@
-import { RECOMMENDED_TIER, TIER_IDS, TIERS, type Tier, type TierId } from '~/utils/pricingTiers';
+import { CARD_TIER_IDS, RECOMMENDED_TIER, TIER_IDS, TIERS, type Tier, type TierId } from '~/utils/pricingTiers';
 
 export type ClaimStatus = 'granted' | 'pending' | 'denied' | 'expired';
 
@@ -31,7 +31,8 @@ const expiresAt = ref<number | null>(null);
 // Poems left for a tier with a fixed number (Drie); null for the others.
 const poemsLeft = ref<number | null>(null);
 // The tiers the server can sell now.
-const tiersOnSale = ref<TierId[]>([...TIER_IDS]);
+// Until the server says otherwise: the three cards. The single poem shows only once the server lists it.
+const tiersOnSale = ref<TierId[]>([...CARD_TIER_IDS]);
 const isInitialized = ref(false);
 const storedTrialPoem = ref<string | null>(null);
 const storedTrialPoemName = ref<string | null>(null);
@@ -112,6 +113,9 @@ export const usePaymentTracking = () => {
   const hasFeature = (feature: 'rewrites' | 'extraDesigns' | 'surpriseIdeas') =>
     currentTier.value?.[feature] ?? false;
 
+  /** The lowest price on sale now, for "vanaf €…" in the texts. */
+  const lowestPriceCents = computed(() => Math.min(...tiersOnSale.value.map(id => TIERS[id].priceCents)));
+
   /** Drie with all its poems written. */
   const creditsUsed = computed(() => poemsLeft.value !== null && poemsLeft.value <= 0);
 
@@ -125,7 +129,8 @@ export const usePaymentTracking = () => {
     const above = tiersOnSale.value.filter(id => TIER_IDS.indexOf(id) > (tier.value ? TIER_IDS.indexOf(tier.value) : -1));
     if (wanted && above.includes(wanted)) return wanted;
     if (above.includes(RECOMMENDED_TIER)) return RECOMMENDED_TIER;
-    return above[0] ?? RECOMMENDED_TIER;
+    // Select a card, not the small single-poem option below them.
+    return above.find(id => CARD_TIER_IDS.includes(id)) ?? above[0] ?? RECOMMENDED_TIER;
   };
 
   /** Asks the server whether a checkout can work now. */
@@ -274,6 +279,7 @@ export const usePaymentTracking = () => {
     creditsUsed,
     hasFeature,
     tiersOnSale: readonly(tiersOnSale),
+    lowestPriceCents,
     suggestedTier,
     refreshAccess: checkServerAccess,
     canGeneratePoem,

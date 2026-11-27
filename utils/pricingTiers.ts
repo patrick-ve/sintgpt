@@ -1,16 +1,24 @@
-// The three things a visitor can buy after the free poem. The page, the
-// server and the legal texts all read from here, so keep the locales
-// (payment.tiers, legal.terms) in line with these numbers.
+// The things a visitor can buy after the free poem. The page, the server and
+// the legal texts all read from here, so keep the locales (payment.tiers,
+// legal.terms) in line with these numbers.
 //
 // Gezin is the recommended tier: the small tier makes it look like good value
 // ("voor €1 meer schrijf je zoveel gedichten als je wilt"), the large tier
 // makes its price look modest. Every tier is a real offer.
+//
+// `een` (one poem, 27 Nov 2026) is for the visitor who wants just one more
+// poem: 77% of the free writers asked for a second one, and the smallest offer
+// was 3 poems. The window shows it as a small option under the three cards, so
+// the three-card choice stays as it was.
 
-export const TIER_IDS = ['drie', 'gezin', 'familie'] as const;
+export const TIER_IDS = ['een', 'drie', 'gezin', 'familie'] as const;
 export type TierId = (typeof TIER_IDS)[number];
 
 /** Highlighted and selected by default. Never call it "most chosen" without data. */
 export const RECOMMENDED_TIER: TierId = 'gezin';
+
+/** The tiers on the three cards of the payment window; the others are a small option below them. */
+export const CARD_TIER_IDS: readonly TierId[] = ['drie', 'gezin', 'familie'];
 
 export type TierValidity =
   | { kind: 'days'; days: number }
@@ -33,6 +41,15 @@ export interface Tier {
 }
 
 export const TIERS: Record<TierId, Tier> = {
+  een: {
+    id: 'een',
+    priceCents: 199,
+    poems: 1,
+    rewrites: false,
+    extraDesigns: false,
+    surpriseIdeas: false,
+    validity: { kind: 'pakjesavond', seasons: 1 },
+  },
   drie: {
     id: 'drie',
     priceCents: 399,

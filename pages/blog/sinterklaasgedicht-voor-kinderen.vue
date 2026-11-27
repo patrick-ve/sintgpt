@@ -28,7 +28,7 @@
       Voor peuters en kleuters draait pakjesavond om liedjes, de schoen en het pakje. Beeldspraak en lange zinnen begrijpen ze nog niet. Houd de zinnen kort en gebruik eenvoudige woorden die aansluiten bij wat ze elke dag meemaken, zoals buiten spelen, blokken stapelen of het zetten van de schoen. Een <NuxtLink to="/blog/kort-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">kort sinterklaasgedicht</NuxtLink> van vier tot acht regels is voor deze leeftijd vaak genoeg.
     </p>
     <p class="leading-relaxed mb-4">
-      In een gedicht voor deze leeftijd vertel je dat de Sint en zijn Pieten het kind hebben zien spelen. Noem iets tastbaars wat het kind graag doet, zoals een toren van blokken of een tekening. Het kind herkent zichzelf en is daar trots op. Houd het verhaal positief en vriendelijk. Met zo'n weetje kun je ook <NuxtLink to="/" data-cta="blog:sinterklaasgedicht-voor-kinderen:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">een kindergedicht op maat laten schrijven</NuxtLink>.
+      In een gedicht voor deze leeftijd vertel je dat de Sint en zijn Pieten het kind hebben zien spelen. Noem iets tastbaars wat het kind graag doet, zoals een toren van blokken of een tekening. Het kind herkent zichzelf en is daar trots op. Houd het verhaal positief en vriendelijk. Met zo'n weetje kun je ook <NuxtLink to="/?voor=kind#poem-form" data-cta="blog:sinterklaasgedicht-voor-kinderen:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">een kindergedicht op maat laten schrijven</NuxtLink>.
     </p>
     <div class="bg-red-50 border-l-4 border-red-600 p-6 my-6 rounded-r-lg">
       <p class="font-bold text-red-900 mb-2">Voorbeeld voor een peuter (Luuk, 3 jaar)</p>
@@ -148,7 +148,7 @@
         Vul de gegevens in en ontvang in ongeveer een minuut een persoonlijk sinterklaasgedicht op maat.
       </p>
       <NuxtLink
-        to="/"
+        to="/?voor=kind#poem-form"
         data-cta="blog:sinterklaasgedicht-voor-kinderen"
         class="inline-block px-8 py-3 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-transform transform hover:scale-105 text-lg border border-[#F4CD60]"
       >

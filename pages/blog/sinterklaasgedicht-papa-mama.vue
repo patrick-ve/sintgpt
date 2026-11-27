@@ -45,7 +45,7 @@
       <li>Specifieke hobby's zoals tuinieren, klussen in de schuur, hardlopen of uitgebreid koken.</li>
     </ul>
     <p class="leading-relaxed mb-4">
-      Kies er twee of drie die iedereen aan tafel herkent. Met die weetjes kun je ook <NuxtLink to="/" data-cta="blog:sinterklaasgedicht-papa-mama:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">een gedicht voor je vader of moeder laten schrijven</NuxtLink>.
+      Kies er twee of drie die iedereen aan tafel herkent. Met die weetjes kun je ook <NuxtLink to="/?voor=ouder#poem-form" data-cta="blog:sinterklaasgedicht-papa-mama:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">een gedicht voor je vader of moeder laten schrijven</NuxtLink>.
     </p>
 
     <h2 id="liefdevol-plagen-en-waardering-tonen" class="text-3xl font-bold mt-8 mb-4">Liefdevol plagen en waardering tonen</h2>
@@ -144,7 +144,7 @@
         Vul een paar herkenbare gewoontes in over je vader of moeder en lees in ongeveer een minuut een passend sinterklaasgedicht.
       </p>
       <NuxtLink
-        to="/"
+        to="/?voor=ouder#poem-form"
         data-cta="blog:sinterklaasgedicht-papa-mama"
         class="inline-block px-8 py-3 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-transform transform hover:scale-105 text-lg border border-[#F4CD60]"
       >

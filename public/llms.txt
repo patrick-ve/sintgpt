@@ -15,6 +15,7 @@ Wat je met een gedicht kunt doen: delen via een korte link (90 dagen geldig), Wh
 Prijzen (eenmalig, inclusief btw, geen abonnement):
 
 - Het eerste gedicht is gratis, met delen, kopiëren en opslaan als PDF. Per internetaansluiting is dat 1 gratis gedicht per 24 uur. Dat gedicht mag je 1 keer gratis laten herschrijven met een wens.
+- 1 gedicht: €1,99, geldig tot en met pakjesavond.
 - 3 gedichten: €3,99, geldig tot en met pakjesavond.
 - Gezin: €4,99, een jaar lang zoveel gedichten als je redelijkerwijs nodig hebt (hooguit 100 per 24 uur), ook gedichten herschrijven.
 - Hele familie: €12,99, alles van Gezin tot en met pakjesavond volgend jaar, plus 2 extra PDF-ontwerpen en surprise-ideeën bij je gedicht.
@@ -24,6 +25,7 @@ Wat de site actueel aanbiedt, staat in het betaalvenster en in de voorwaarden. B
 ## Pagina's
 
 - [Gedicht maken](https://sintgpt.com/): het formulier, voorbeelden en veelgestelde vragen
+- [Sinterklaas poem in English](https://sintgpt.com/sinterklaas-poem): de Engelse pagina, voor wie een sinterklaasgedicht in het Engels zoekt
 - [Voorbeelden](https://sintgpt.com/voorbeelden): voorbeeldgedichten in zes stijlen, elk naast wat er werd ingevuld (de personen zijn verzonnen)
 - [Lootjes trekken](https://sintgpt.com/lootjes): gratis lootjes trekken op één telefoon; niemand trekt zichzelf en er gaat niets naar de server
 
@@ -41,6 +43,7 @@ Wat de site actueel aanbiedt, staat in het betaalvenster en in de voorwaarden. B
 - [Ironisch sinterklaasgedicht](https://sintgpt.com/blog/ironisch-sinterklaasgedicht): droge humor, technieken en voorlezen met een strak gezicht
 - [Ouderwets sinterklaasgedicht](https://sintgpt.com/blog/ouderwets-sinterklaasgedicht): deftige taal, een woordenlijst en voorbeelden
 - [Pikant sinterklaasgedicht](https://sintgpt.com/blog/pikant-sinterklaasgedicht): dubbelzinnig en nooit expliciet, en voor wie het past
+- [Sinterklaasgedicht bij een cadeau](https://sintgpt.com/blog/sinterklaasgedicht-bij-cadeau): hint naar het cadeau zonder het te verklappen, met voorbeelden voor een chocoladeletter, geld, sokken, een boek en sportspullen
 - [Sinterklaasgedicht last minute](https://sintgpt.com/blog/sinterklaasgedicht-last-minute): in tien minuten een gedicht, met een invulsjabloon en rijmwoorden die altijd werken
 - [Sinterklaasgedicht voor papa of mama](https://sintgpt.com/blog/sinterklaasgedicht-papa-mama): voor kinderen, tieners en volwassenen, met voorbeelden
 - [Sinterklaasgedicht voor de juf of meester](https://sintgpt.com/blog/sinterklaasgedicht-juf-meester): een vriendelijke toon voor de klas, bij een klassencadeau of surprise

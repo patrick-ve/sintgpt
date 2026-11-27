@@ -20,12 +20,20 @@ export interface BlogPostSummary {
 
 export const BLOG_POSTS: BlogPostSummary[] = [
   {
+    slug: 'sinterklaasgedicht-bij-cadeau',
+    title: 'Sinterklaasgedicht bij een cadeau: zo hint je zonder het te verklappen',
+    description: 'Hints en rijmende voorbeelden voor een sinterklaasgedicht bij een chocoladeletter, geld of een cadeaubon, sokken, een boek of sportspullen.',
+    published: '2026-11-27',
+    readMinutes: 7,
+    related: ['rijmwoorden-sinterklaas', 'surprise-maken-ideeen', 'sinterklaasgedicht-last-minute'],
+  },
+  {
     slug: 'sinterklaasgedicht-last-minute',
     title: 'Sinterklaasgedicht last minute: in 10 minuten klaar',
     description: 'Pakjesavond en nog geen gedicht? Met een invulsjabloon en rijmwoorden die altijd werken schrijf je in tien minuten een persoonlijk rijm.',
     published: '2026-11-16',
     readMinutes: 6,
-    related: ['kort-sinterklaasgedicht', 'rijmwoorden-sinterklaas', 'sinterklaasgedicht-beginnen-en-afsluiten'],
+    related: ['kort-sinterklaasgedicht', 'sinterklaasgedicht-bij-cadeau', 'rijmwoorden-sinterklaas'],
   },
   {
     slug: 'sinterklaasgedicht-papa-mama',
@@ -176,7 +184,7 @@ export const BLOG_POSTS: BlogPostSummary[] = [
     published: '2026-10-09',
     modified: '2026-11-12',
     readMinutes: 5,
-    related: ['lootjes-trekken-tips', 'sinterklaasgedicht-juf-meester', 'hoe-schrijf-je-het-perfecte-sinterklaasgedicht'],
+    related: ['sinterklaasgedicht-bij-cadeau', 'lootjes-trekken-tips', 'sinterklaasgedicht-juf-meester'],
   },
   {
     slug: 'ouderwets-sinterklaasgedicht',
@@ -265,10 +273,11 @@ export const BLOG_CHAPTERS: BlogChapter[] = [
     numeral: 'II',
     name: 'Pakjesavond',
     question: 'Wat hoort er bij pakjesavond?',
-    intro: 'Lootjes, surprises en tradities.',
+    intro: 'Lootjes, surprises, het gedicht bij je cadeau en tradities.',
     slugs: [
       'lootjes-trekken-tips',
       'surprise-maken-ideeen',
+      'sinterklaasgedicht-bij-cadeau',
       'sinterklaas-tradities',
     ],
   },

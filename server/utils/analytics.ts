@@ -24,7 +24,7 @@ import { isInternalCookie } from '../../utils/internalTraffic';
  *   blob10  utm_source      blob13 fun facts: empty | short | long
  *   blob11  utm_medium      blob14 present: none | named | secret
  *   blob12  utm_campaign    blob15 written by: yes | no   blob16 audience: yes | no
- *   blob17  tier: drie | gezin | familie, empty for free visitors
+ *   blob17  tier: een | drie | gezin | familie, empty for free visitors
  *   blob18  greeting ("Lieve <name>," and "Van Sint & Piet"): yes | no
  *   double1 poem lines      double3 output tokens   double5 value
  *   double2 input tokens    double4 estimated cost in USD

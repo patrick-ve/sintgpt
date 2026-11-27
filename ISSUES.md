@@ -53,6 +53,7 @@ Last updated: 27 November 2026. Live version: `9b63ad55-1d7f-4f2f-8277-74cdbd930
 | [#36](#36-an-empty-answer-used-the-free-poem) | High | An empty answer used the free poem | Live 26 Nov (db1ad86b); watch `empty:` failures |
 | [#37](#37-share-image-shows-the-sint-of-the-poem-style) | Low | Share image shows the Sint of the poem style | Live 25 Nov (dab5b377); check one real roast link |
 | [#38](#38-hint-for-writers-who-forget-the-name) | Low | Hint for writers who forget the name | Live 26 Nov (db1ad86b); watch `no name` refusals |
+| [#40](#40-analytics-review-27-november) | High | Analytics review: single poem, English page, form offers | Built 27 Nov; measure from 28 Nov |
 
 ## Open
 
@@ -63,7 +64,9 @@ Last updated: 27 November 2026. Live version: `9b63ad55-1d7f-4f2f-8277-74cdbd930
 - **Now in use:** business `bus_0NrUOZUWrAz7AYEqANsEb` (account `patrick@careerdeck.ai`),
   live mode. Products made on 11 November: drie `pdt_0Nrhkxf4vJf5ynevsPHK3` (€3.99),
   gezin `pdt_0NrhkxiUQYJFJOJ7Y9GRb` (€6.99, "SintGPT – Gezin"), familie
-  `pdt_0NrhkxlsT5qqHb4fn4ZHO` (€12.99); tax `saas`, tax included. Webhook
+  `pdt_0NrhkxlsT5qqHb4fn4ZHO` (€12.99); tax `saas`, tax included. On 27 November (owner's go-ahead) Claude added een
+  `pdt_0NsrD80x8tLCsvXDupQ1Y` ("SintGPT – 1 gedicht", €1.99, metadata `tier` = `een`) for
+  the single poem; secret `NUXT_DODO_PRODUCT_ID_EEN`. Webhook
   `ep_3LxE0vOc7DgJjc07acocOsGh41K` to `/api/webhooks/dodo-payments`, all events. The Worker
   secrets (key, three product IDs, webhook secret) were set the same morning. A checkout
   through the site then opened Dodo's page with "SintGPT – 3 gedichten", €3.99 incl. €0.69 BTW,
@@ -622,6 +625,32 @@ Owner steps:
 - 27 November 2026: every post has the contents list (`toc`); all h2 headings got an id.
 - 27 November 2026: the 24 Open Graph images of the blog have the look of the book (cream page,
   red title, chapter label). Home, Voorbeelden and Lootjes keep the red look.
+
+### #40 Analytics review (27 November)
+
+- **Why:** the analysis of all data from 9 to 27 November 2026: 77% of the free writers asked for a second
+  poem, but since 18 November 48 payment windows gave 0 `Proceed to payment`; the begin-and-end post brought a
+  quarter of the blog visits and 1% of them to the form; shared poems sent 5% of their readers to the form;
+  copy was used 5 times as often as the PDF; 6% of the poems got a rating.
+- **Built (owner: "implement all SEO/UX/UI points", except removing the video and the FAQ jump):**
+  - Tier `een`: 1 gedicht, €1,99, until pakjesavond, no rewrites. Live Dodo product `pdt_0NsrD80x8tLCsvXDupQ1Y`
+    (created by Claude with the owner's go-ahead). A small option under the three cards.
+  - Payment window: iDEAL and Creditcard above the button; checkout with `minimal_address`.
+  - Preview: "Lees het hele gedicht · vanaf €1,99" on the button, and the wait says the first lines come in
+    about a minute and the whole poem after paying.
+  - Shared poem: an offer right under the last line (`Shared poem to form` `poem`).
+  - Poem actions: copy is the main button; a rating question after a copy.
+  - Form: Roast second in the style choice; "(verplicht)" on the name.
+  - Blog: an offer box near the top of the begin-and-end and rhyme words posts (`blog:<slug>:blok`); recipient
+    posts link to `/?voor=…` (fun facts start with the relation); links to `/voorbeelden` from the begin-and-end
+    and English posts; new post `sinterklaasgedicht-bij-cadeau` (OpenSEO NL volumes: chocoladeletter 70,
+    geld 50, voetbal 50, sokken 40, boek 30, cadeaubon 20 a month).
+  - English page `/sinterklaas-poem` ("sinterklaas poem" 90 a month, English variants 50 each, generator 40).
+- **Owner:** set the secret (see the deploy report); request indexing in Search Console for `/sinterklaas-poem`
+  and `/blog/sinterklaasgedicht-bij-cadeau`; finish the Dynadot contact check (#1 outage of 26 November).
+- **Measure from 28 November:** `Proceed to payment` per `Show payment modal` (by tier, `een` against the
+  others); `Poem unlocked` per `Poem preview`; `Shared poem to form` `poem` per `Open shared poem`; `Rate poem`
+  per `Poem ready`; `Go to poem form` `blog:sinterklaasgedicht-beginnen-en-afsluiten:blok` per view of that post.
 
 ## Findings
 

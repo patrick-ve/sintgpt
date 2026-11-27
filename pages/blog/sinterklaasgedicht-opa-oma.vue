@@ -40,7 +40,7 @@
 
     <h2 id="de-juiste-toon-plagen-met-respect-en-warmte" class="text-3xl font-bold mt-8 mb-4">De juiste toon: plagen met respect en warmte</h2>
     <p class="leading-relaxed mb-4">
-      Sinterklaas mag plagen, maar bij opa en oma moet een grapje goed vallen. Plaag de familie zelf, of noem onschuldige gewoontes. Een overvol snoepkastje of een stapel ongelezen kranten werkt goed, zolang de toon liefdevol blijft. Vind je die toon lastig, dan kun je met een paar weetjes ook <NuxtLink to="/" data-cta="blog:sinterklaasgedicht-opa-oma:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">een gedicht voor opa en oma laten schrijven</NuxtLink>.
+      Sinterklaas mag plagen, maar bij opa en oma moet een grapje goed vallen. Plaag de familie zelf, of noem onschuldige gewoontes. Een overvol snoepkastje of een stapel ongelezen kranten werkt goed, zolang de toon liefdevol blijft. Vind je die toon lastig, dan kun je met een paar weetjes ook <NuxtLink to="/?voor=grootouder#poem-form" data-cta="blog:sinterklaasgedicht-opa-oma:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">een gedicht voor opa en oma laten schrijven</NuxtLink>.
     </p>
     <div class="bg-[#fff3c9] p-6 rounded-lg my-6 border border-[#F4CD60]">
       <h3 class="text-xl font-bold text-red-900 mb-3 font-display">Blijf weg van gevoelige onderwerpen</h3>
@@ -149,7 +149,7 @@
         Vul de namen en een paar leuke gewoontes in en ontvang in ongeveer een minuut een warm sinterklaasgedicht op maat.
       </p>
       <NuxtLink
-        to="/"
+        to="/?voor=grootouder#poem-form"
         data-cta="blog:sinterklaasgedicht-opa-oma"
         class="inline-block px-8 py-3 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-transform transform hover:scale-105 text-lg border border-[#F4CD60]"
       >

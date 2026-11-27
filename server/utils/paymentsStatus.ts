@@ -26,6 +26,7 @@ let memoryUntil = 0;
 export function tierProducts(event: H3Event): TierProducts {
   const config = useRuntimeConfig(event);
   const products: TierProducts = {
+    een: String(config.dodoProductIdEen || ''),
     drie: String(config.dodoProductIdDrie || ''),
     gezin: String(config.dodoProductId || ''),
     familie: String(config.dodoProductIdFamilie || ''),

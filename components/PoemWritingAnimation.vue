@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { writingProgress, writingStepIndex, type WritingKind } from '~/utils/writingSteps';
+import { formatPrice } from '~/utils/pricingTiers';
 
 // Shown until the first text of the poem arrives: about a minute for a new
 // poem, a rewrite and the preview of "write first, then pay" (all Gemini 3.1
 // Pro). The steps tell the visitor what happens while the model reasons, so
 // the wait does not feel like a hang.
 const props = withDefaults(defineProps<{ kind?: WritingKind }>(), { kind: 'new' });
-const { t } = useI18n();
+const { t, locale } = useI18n();
+const { lowestPriceCents } = usePaymentTracking();
 
 // Number of skeleton lines to show
 const lineCount = 8;
@@ -31,8 +33,10 @@ onBeforeUnmount(() => clearInterval(timer));
 const steps = computed<string[]>(() => t(kind.value === 'rewrite' ? 'poem.writing.rewriteSteps' : 'poem.writing.steps'));
 const stepIndex = computed(() => Math.min(writingStepIndex(kind.value, elapsed.value), steps.value.length - 1));
 const progress = computed(() => writingProgress(kind.value, elapsed.value));
+// The preview says up front what the visitor will see: the first lines, then the offer.
 const hint = computed(() => t(
-  kind.value === 'rewrite' ? 'poem.writing.rewriteHint' : 'poem.writing.hint',
+  kind.value === 'rewrite' ? 'poem.writing.rewriteHint' : kind.value === 'preview' ? 'poem.writing.previewHint' : 'poem.writing.hint',
+  { fromPrice: formatPrice(lowestPriceCents.value, locale.value) },
 ));
 </script>
 

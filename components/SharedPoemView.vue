@@ -72,6 +72,17 @@ onBeforeUnmount(() => observer?.disconnect());
         <p v-if="partial" class="mt-4 text-base font-medium text-[#5c0f26]">
           {{ t('share.partial') }}
         </p>
+        <!-- Right under the last line, where the reader finishes: before
+             27 Nov 2026 the only offer sat below the card, and 5% of the
+             readers went to the form. -->
+        <p class="under-poem mt-6 pt-4 border-t-2 border-dashed border-[#d4a853] text-center text-base md:text-lg text-[#5c0f26] text-pretty">
+          {{ t('share.underPoem') }}
+          <NuxtLink
+            :to="FORM"
+            class="under-poem-link font-bold text-[#8b1538] underline underline-offset-4 decoration-2 hover:text-[#5c0f26]"
+            @click="track('Shared poem to form', { detail: 'poem' })"
+          >{{ t('share.underPoemLink') }}</NuxtLink>
+        </p>
       </div>
 
       <div class="mt-10 text-center">
@@ -121,6 +132,15 @@ onBeforeUnmount(() => observer?.disconnect());
 }
 .share-cta:active {
   scale: 0.96;
+}
+.under-poem-link {
+  display: inline-block;
+  padding-block: 0.5rem;
+}
+.under-poem-link:focus-visible {
+  outline: 2px solid #8b1538;
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 .share-cta:focus-visible {
   outline: 2px solid #fff8e7;

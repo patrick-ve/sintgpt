@@ -489,11 +489,11 @@ describe('poem form', () => {
     expect(await reveal.evaluate(el => getComputedStyle(el).opacity)).toBe('1');
 
     // The style buttons are radios too: arrow keys move the choice, in the
-    // order the buttons show (Grappig, Pikant, Roast on the first row).
+    // order the buttons show (Grappig, Roast, Pikant on the first row).
     const funny = page.getByRole('radio', { name: /Grappig/ });
     await funny.focus();
     await page.keyboard.press('ArrowRight');
-    expect(await page.getByRole('radio', { name: /Pikant/ }).isChecked()).toBe(true);
+    expect(await page.getByRole('radio', { name: /Roast/ }).isChecked()).toBe(true);
     expect(await funny.isChecked()).toBe(false);
     await page.close();
   });
@@ -501,7 +501,7 @@ describe('poem form', () => {
   it('shows the poem styles with their emoji, in two rows of three', async () => {
     const page = await createPage('/');
     const styles = [
-      ['😄', 'Grappig'], ['🌶️', 'Pikant'], ['🔥', 'Roast'],
+      ['😄', 'Grappig'], ['🔥', 'Roast'], ['🌶️', 'Pikant'],
       ['📜', 'Klassiek'], ['😏', 'Ironisch'], ['🎩', 'Ouderwets'],
     ];
     const labels = page.locator('.style-choices label');
@@ -607,6 +607,70 @@ describe('poem area states', () => {
     expect(history[0]).toMatchObject({ recipient: 'Oma Truus', style: 'funny', lines: 12 });
     await page.close();
   }, 30_000);
+});
+
+describe('changes of 27 November 2026', () => {
+  it('serves the English page in English, with its own address and a link to an English poem', async () => {
+    const res = await fetch('/sinterklaas-poem');
+    expect(res.status).toBe(200);
+    const html = await res.text();
+    expect(html).toMatch(/<html[^>]* lang="en"/);
+    expect(html).toContain('<link rel="canonical" href="https://sintgpt.com/sinterklaas-poem"');
+    expect(html).toMatch(/<h1[^>]*>\s*Sinterklaas poem in English\s*<\/h1>/);
+    expect(html).toContain('href="/?lang=en#poem-form"');
+    expect(html).toContain('"@type":"FAQPage"');
+    expect(await (await fetch('/')).text()).toContain('href="/sinterklaas-poem"');
+  });
+
+  it('opens the form in English for ?lang=en, and removes the parameter', async () => {
+    const page = await createPage('/?lang=en#poem-form');
+    await page.getByText('Recipient name').first().waitFor();
+    expect(await page.locator('input[type=radio][value=english]').isChecked()).toBe(true);
+    await expect.poll(() => new URL(page.url()).search).toBe('');
+    await page.evaluate(() => localStorage.removeItem('locale'));
+    await page.close();
+  }, 30_000);
+
+  it('starts the fun facts with the recipient for ?voor=', async () => {
+    const page = await createPage('/?voor=partner#poem-form');
+    await expect.poll(() => page.locator('textarea#poem-facts, #poem-facts textarea').first().inputValue()).toBe('Mijn partner. ');
+    await expect.poll(() => new URL(page.url()).search).toBe('');
+    await page.close();
+  }, 30_000);
+
+  it('marks the name as required and puts Roast second', async () => {
+    const page = await createPage('/');
+    expect(await page.locator('label[for=poem-name]').textContent()).toMatch(/Naam ontvanger\s*\(verplicht\)/);
+    expect((await page.locator('.style-choices label').nth(1).innerText())).toContain('Roast');
+    await page.close();
+  }, 30_000);
+
+  it('makes copy the main action and asks for a rating after copying', async () => {
+    const page = await createPage();
+    await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
+    await page.route('**/api/poem/generate', route => route.fulfill({
+      status: 200, contentType: 'text/event-stream', body: poemStream('Lieve Sanne,\nje bent een schat.'),
+    }));
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+    await page.fill('#poem-name', 'Sanne');
+    await page.locator('#poem-form button[type=submit]').click();
+    const copy = page.getByRole('button', { name: 'Kopieer gedicht' });
+    await copy.waitFor({ timeout: 15_000 });
+    expect(await copy.evaluate(el => el.classList.contains('poem-action-copy'))).toBe(true);
+    await copy.click();
+    await page.getByText('Gekopieerd! Hoe vind je dit gedicht?').waitFor();
+    await page.locator('.poem-rating-after-copy').getByRole('button', { name: 'Goed gedicht', exact: true }).click();
+    await page.getByText('Fijn! Dank je wel.').waitFor();
+    await page.close();
+  }, 30_000);
+
+  it('offers the poem form near the top of the begin-and-end post', async () => {
+    const html = await (await fetch('/blog/sinterklaasgedicht-beginnen-en-afsluiten')).text();
+    const offer = html.indexOf('data-cta="blog:sinterklaasgedicht-beginnen-en-afsluiten:blok"');
+    expect(offer).toBeGreaterThan(0);
+    expect(offer).toBeLessThan(html.indexOf('id="hoe-begin-je-een-sinterklaasgedicht"'));
+    expect(html).toContain('href="/voorbeelden"');
+  });
 });
 
 describe('Herschrijf dit gedicht', () => {
@@ -1029,10 +1093,12 @@ describe('poem links', () => {
     expect((await fetch(`/gedicht/preview.png?${query}`)).status).toBe(404);
   });
 
-  it('shows the whole poem from the link', async () => {
+  it('shows the whole poem from the link, with the form offered right under it', async () => {
     const page = await createPage();
     await page.goto(url(`/gedicht?${await shareQuery()}#${await encodePoem(POEM)}`), { waitUntil: 'networkidle' });
     await page.getByText('voor mens en voor beest').waitFor();
+    const under = page.locator('.sint-card').getByRole('link', { name: 'Laat het gratis schrijven →' });
+    expect(await under.getAttribute('href')).toBe('/#poem-form');
     await page.close();
   }, 30_000);
 
@@ -1876,8 +1942,10 @@ describe('free rewrite and write first, then pay', () => {
     // Every poem, the preview too, comes from Gemini 3.1 Pro: about a minute.
     await page.locator('#poem-form').getByText('Klaar in ongeveer een minuut.').waitFor();
     await page.locator('#poem-form button[type=submit]').click();
-    await page.getByText('De Sint schrijft zorgvuldig. Meestal is het gedicht in ongeveer een minuut klaar.').waitFor();
+    // The wait says up front what comes: the first lines, then the whole poem after paying.
+    await page.getByText('Over ongeveer een minuut zie je hier de eerste regels van je nieuwe gedicht. Het hele gedicht lees je daarna, vanaf €3,99.').waitFor();
     await page.getByText('Regel twee rijmt erop.').waitFor({ timeout: 15_000 });
+    await page.getByRole('button', { name: 'Lees het hele gedicht · vanaf €3,99' }).waitFor();
     expect(sent).toHaveLength(1);
     expect(sent[0]).toMatchObject({ name: 'Sanne' });
     expect(await page.locator('.preview-bar').count()).toBe(7);
@@ -2015,6 +2083,40 @@ describe('pricing tiers', () => {
     });
     await dialog.getByRole('button', { name: 'Verder met 3 gedichten · €3,99' }).click();
     await expect.poll(() => bodies).toEqual([{ tier: 'drie' }]);
+    await page.close();
+  }, 30_000);
+
+  it('offers a single poem under the three cards once it is on sale, with iDEAL in view', async () => {
+    const page = await createPage();
+    await page.route('**/api/payment/status', route =>
+      route.fulfill({ json: { available: true, tiers: ['een', 'drie', 'gezin', 'familie'] } }));
+    await page.addInitScript(() => {
+      localStorage.setItem('sinterklaas-payment', JSON.stringify({ poemCount: 1 }));
+    });
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+    await page.fill('#poem-name', 'Sanne');
+    await page.locator('#poem-form button[type=submit]').click();
+    const dialog = page.locator('dialog[open]');
+    await dialog.locator('.tier-single').waitFor();
+    // Still three cards, Gezin selected; the single poem is the small option.
+    expect(await dialog.locator('.tier').count()).toBe(3);
+    expect(await dialog.locator('input[value=gezin]').isChecked()).toBe(true);
+    expect(await dialog.locator('.pay-method-ideal').isVisible()).toBe(true);
+    await dialog.getByText('1 gedicht · €1,99').click();
+    await dialog.getByText('Voor €2 meer schrijf je 3 gedichten.').waitFor();
+    const bodies: unknown[] = [];
+    await page.route('**/api/payment/create-checkout', (route) => {
+      bodies.push(route.request().postDataJSON());
+      return route.fulfill({ status: 503, json: { data: { code: 'payments_unavailable' } } });
+    });
+    await dialog.getByRole('button', { name: 'Verder met 1 gedicht · €1,99' }).click();
+    await expect.poll(() => bodies).toEqual([{ tier: 'een' }]);
+    await page.close();
+  }, 30_000);
+
+  it('shows no single poem while the server does not sell it', async () => {
+    const { page, dialog } = await freeVisitorAtPaywall();
+    expect(await dialog.locator('.tier-single').count()).toBe(0);
     await page.close();
   }, 30_000);
 

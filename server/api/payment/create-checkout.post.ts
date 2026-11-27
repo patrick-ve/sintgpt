@@ -66,6 +66,10 @@ export default defineEventHandler(async (event): Promise<CheckoutResponse> => {
       // /api/payment/claim-access, which verifies it with Dodo.
       return_url: `${baseUrl}/`,
       cancel_url: `${baseUrl}/?payment=cancelled`,
+      // A digital product needs no street address: only the country (for VAT
+      // and for iDEAL, which shows for a Dutch country) and, where tax needs
+      // it, the postcode. One step less before the buyer can pay.
+      minimal_address: true,
       // Configure allowed payment methods (excludes Klarna and other BNPL)
       allowed_payment_method_types: [
         'ideal',

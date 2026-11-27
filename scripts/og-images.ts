@@ -47,6 +47,13 @@ export const OG_IMAGES: OgImageSpec[] = [
     subtitle: 'Gratis, op één telefoon, en niemand trekt zichzelf',
   },
   {
+    name: 'sinterklaas-poem',
+    kind: 'article',
+    label: 'English',
+    title: 'Sinterklaas poem in English',
+    subtitle: 'Rhyming, personal and ready in about a minute',
+  },
+  {
     name: 'blog',
     kind: 'article',
     title: 'Tips & inspiratie voor sinterklaasgedichten',
@@ -69,6 +76,12 @@ export const OG_IMAGES: OgImageSpec[] = [
     kind: 'article',
     title: 'Kort sinterklaasgedicht schrijven',
     subtitle: 'In 4 of 8 regels raak en persoonlijk dichten',
+  },
+  {
+    name: 'blog-sinterklaasgedicht-bij-cadeau',
+    kind: 'article',
+    title: 'Sinterklaasgedicht bij een cadeau',
+    subtitle: 'Hint naar het pakje zonder het te verklappen',
   },
   {
     name: 'blog-sinterklaasgedicht-last-minute',

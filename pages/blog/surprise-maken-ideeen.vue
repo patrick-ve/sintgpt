@@ -69,6 +69,9 @@
       <li><strong>Kies een openingsmethode:</strong> maak een geheim luikje met klittenband, een deksel met een touwtje of een plek die de ontvanger moet openscheuren.</li>
       <li><strong>Voeg een dwaalspoor toe:</strong> stop op de meest voor de hand liggende plek een fopcadeau of een briefje met een aanwijzing die naar een ander deel van de surprise leidt.</li>
     </ol>
+    <p class="leading-relaxed mb-4">
+      Het gedicht bij de surprise mag ook hints geven, zolang het niet zegt wat erin zit. Voorbeelden staan in het artikel over <NuxtLink to="/blog/sinterklaasgedicht-bij-cadeau" class="text-red-700 underline underline-offset-2 hover:text-red-900">een sinterklaasgedicht bij een cadeau</NuxtLink>.
+    </p>
 
     <h2 id="surprise-ideeen-per-type-ontvanger" class="text-3xl font-bold mt-8 mb-4">Surprise-ideeën per type ontvanger</h2>
     <p class="leading-relaxed mb-4">

@@ -25,7 +25,7 @@
 
     <h2 id="hoe-pikant-mag-een-sinterklaasgedicht-voor-je-partner-zijn" class="text-3xl font-bold mt-8 mb-4">Hoe pikant mag een sinterklaasgedicht voor je partner zijn?</h2>
     <p class="leading-relaxed mb-4">
-      Zo pikant als het publiek toelaat, en nooit expliciet. Met zijn tweeën mag een ondeugende knipoog. Luisteren er kinderen of schoonouders mee, dan bewaar je pikante toespelingen voor later. Een gedicht dat op de bank goed valt, geeft in een volle kamer ongemakkelijke blikken. Je kunt ook <NuxtLink to="/" data-cta="blog:sinterklaasgedicht-partner:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">een gedicht voor je partner laten schrijven</NuxtLink> en daarbij kiezen voor welk publiek het is.
+      Zo pikant als het publiek toelaat, en nooit expliciet. Met zijn tweeën mag een ondeugende knipoog. Luisteren er kinderen of schoonouders mee, dan bewaar je pikante toespelingen voor later. Een gedicht dat op de bank goed valt, geeft in een volle kamer ongemakkelijke blikken. Je kunt ook <NuxtLink to="/?voor=partner#poem-form" data-cta="blog:sinterklaasgedicht-partner:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">een gedicht voor je partner laten schrijven</NuxtLink> en daarbij kiezen voor welk publiek het is.
     </p>
     <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
       <li>Alleen met zijn tweeën: hier past romantiek, een persoonlijke belofte of een ondeugende knipoog die alleen jullie twee begrijpen.</li>
@@ -143,7 +143,7 @@
         Vul een paar weetjes in over je partner en ontvang in ongeveer een minuut een persoonlijk gedicht. Je eerste gedicht is gratis.
       </p>
       <NuxtLink
-        to="/"
+        to="/?voor=partner#poem-form"
         data-cta="blog:sinterklaasgedicht-partner"
         class="inline-block px-8 py-3 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-transform transform hover:scale-105 text-lg border border-[#F4CD60]"
       >

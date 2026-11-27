@@ -29,7 +29,7 @@
 
     <h2 id="lootjes-trekken-op-het-werk" class="text-3xl font-bold mt-8 mb-4">Lootjes trekken op het werk</h2>
     <p class="leading-relaxed mb-4">
-      Met lootjes houd je pakjesavond voor een team overzichtelijk. Ieder teamlid koopt één cadeau en schrijft één gedicht voor wie op het lootje staat. Zo is het voor niemand veel werk, en krijgt iedereen evenveel aandacht. Dicht je niet graag, dan kun je ook <NuxtLink to="/" data-cta="blog:sinterklaas-op-het-werk:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">een gedicht voor je collega laten schrijven</NuxtLink>.
+      Met lootjes houd je pakjesavond voor een team overzichtelijk. Ieder teamlid koopt één cadeau en schrijft één gedicht voor wie op het lootje staat. Zo is het voor niemand veel werk, en krijgt iedereen evenveel aandacht. Dicht je niet graag, dan kun je ook <NuxtLink to="/?voor=collega#poem-form" data-cta="blog:sinterklaas-op-het-werk:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">een gedicht voor je collega laten schrijven</NuxtLink>.
     </p>
     <p class="leading-relaxed mb-4">
       Het kan ook zonder papieren briefjes die kwijtraken. Via <NuxtLink to="/lootjes" class="text-red-700 underline underline-offset-2 hover:text-red-900">lootjes trekken</NuxtLink> voer je 3 tot 50 namen in op één telefoon. De telefoon gaat rond in de pauze. Iedereen tikt op de eigen naam en ziet alleen het eigen lootje. Niemand trekt zichzelf, en bij drie of meer deelnemers trekken twee mensen elkaar nooit over en weer. Je hebt geen e-mailadressen of accounts nodig, en de namen blijven op die telefoon. Meer afspraken en regels lees je in het artikel met <NuxtLink to="/blog/lootjes-trekken-tips" class="text-red-700 underline underline-offset-2 hover:text-red-900">tips voor lootjes trekken</NuxtLink>.
@@ -128,7 +128,7 @@
         Vul de naam, het cadeau en een paar leuke werkgewoontes in. Je eerste persoonlijke sinterklaasgedicht op SintGPT is gratis.
       </p>
       <NuxtLink
-        to="/"
+        to="/?voor=collega#poem-form"
         data-cta="blog:sinterklaas-op-het-werk"
         class="inline-block px-8 py-3 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-transform transform hover:scale-105 text-lg border border-[#F4CD60]"
       >

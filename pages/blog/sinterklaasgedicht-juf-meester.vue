@@ -53,7 +53,7 @@
       <p class="text-red-800">Vraag thuis aan je kind welke uitspraken de juf of meester vaak doet. Kinderen zien precies welke gewoontes typerend zijn en dat levert meteen bruikbare ideeën op voor je rijmregels.</p>
     </div>
     <p class="leading-relaxed mb-4">
-      Met twee of drie van zulke weetjes kun je ook <NuxtLink to="/" data-cta="blog:sinterklaasgedicht-juf-meester:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">een gedicht voor de juf of meester laten schrijven</NuxtLink>.
+      Met twee of drie van zulke weetjes kun je ook <NuxtLink to="/?voor=leerkracht#poem-form" data-cta="blog:sinterklaasgedicht-juf-meester:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">een gedicht voor de juf of meester laten schrijven</NuxtLink>.
     </p>
 
     <h2 id="de-opbouw-van-een-klassikaal-sinterklaasgedicht" class="text-3xl font-bold mt-8 mb-4">De opbouw van een klassikaal sinterklaasgedicht</h2>
@@ -151,7 +151,7 @@
         Vul een paar leuke weetjes over de juf of meester in, kies een stijl, en lees in ongeveer een minuut een persoonlijk gedicht. Je eerste gedicht is gratis.
       </p>
       <NuxtLink
-        to="/"
+        to="/?voor=leerkracht#poem-form"
         data-cta="blog:sinterklaasgedicht-juf-meester"
         class="inline-block px-8 py-3 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-transform transform hover:scale-105 text-lg border border-[#F4CD60]"
       >

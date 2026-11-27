@@ -74,6 +74,16 @@ Lastig om op te rijmen: "december", "pakjesavond", "surprise". Zet zulke woorden
 const AABB_ONLY = 'Schrijf elk voorbeeldgedicht en elk voorbeeldcouplet in rijmschema AABB (rijmparen), want dat kiezen de meeste mensen.';
 
 export const BLOG_BRIEFS: BlogBrief[] = [
+  // A poem that fits one present (27 November 2026; NL volumes from OpenSEO:
+  // chocoladeletter 70, geld 50, voetbal 50, sokken 40, boek 30, cadeaubon 20).
+  {
+    slug: 'sinterklaasgedicht-bij-cadeau',
+    keyword: 'sinterklaasgedicht bij een cadeau',
+    secondary: ['sinterklaasgedicht chocoladeletter', 'sinterklaasgedicht geld', 'sinterklaasgedicht cadeaubon', 'sinterklaasgedicht sokken', 'sinterklaasgedicht boek', 'sinterklaasgedicht voetbal'],
+    angle: `Een gedicht dat past bij één bepaald cadeau. De kern: hint naar het cadeau zonder het te verraden. Leg eerst uit hoe dat werkt: beschrijf wat je met het cadeau doet of hoe het voelt in plaats van wat het is, laat de ontvanger raden, en verklap het pas in de laatste regel of helemaal niet. Waarschuw voor de valkuil: het cadeau in de eerste regel noemen, of de vorm van het pakje beschrijven zodat iedereen het meteen weet. Dan één sectie per cadeau, elk met een tussenkop, een paar tips en één kort voorbeeldcouplet van 4 regels (rijmparen, ongeveer 10 lettergrepen per regel, volrijm, geen stopwoorden): een chocoladeletter (de letter van de naam, wie hem het eerst opeet, een hapje uit de hoek), geld en een cadeaubon (een cadeau dat klein lijkt, zelf kiezen, sparen of meteen uitgeven; nooit iets over geldzorgen), sokken (koude voeten, het eeuwige zoeken naar een tweede sok), een boek (lezen onder een dekentje, de laatste bladzijde), een voetbal of sportspullen (de sportclub, juichen, de wedstrijd van zaterdag). Daarna kort: wat je doet als het cadeau een geheim moet blijven (laat het gedicht dan over de ontvanger gaan, niet over het cadeau). Voor elk voorbeeld een verzonnen ontvanger met een naam. ${AABB_ONLY}`,
+    material: RHYMES,
+    cta: '/',
+  },
   // Seasonal and recipient posts (16 November 2026).
   {
     slug: 'sinterklaasgedicht-last-minute',

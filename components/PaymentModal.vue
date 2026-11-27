@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { pakjesavondCountdown } from '~/utils/pakjesavond';
 import {
+  CARD_TIER_IDS,
   fillSeasons,
   formatPrice,
   poemsBelowOneEuro,
@@ -44,7 +45,7 @@ const {
 // The tier cards. Gezin is the recommended one and selected by default; a
 // buyer sees what they have and can only choose a tier above it.
 const selectedTier = ref<TierId>(RECOMMENDED_TIER);
-const tierCards = computed(() => TIER_IDS.filter(id => tiersOnSale.value.includes(id)).map((id) => {
+const allCards = computed(() => TIER_IDS.filter(id => tiersOnSale.value.includes(id)).map((id) => {
   const tier = TIERS[id];
   const perPoem = pricePerPoemCents(tier);
   const owned = ownedTier.value !== null && TIER_IDS.indexOf(id) <= TIER_IDS.indexOf(ownedTier.value);
@@ -61,8 +62,17 @@ const tierCards = computed(() => TIER_IDS.filter(id => tiersOnSale.value.include
     owned,
   };
 }));
+const tierCards = computed(() => allCards.value.filter(card => CARD_TIER_IDS.includes(card.id)));
 
-const selectedCard = computed(() => tierCards.value.find(card => card.id === selectedTier.value));
+// The single poem: a small option under the cards, for a visitor without a
+// purchase who wants just one more poem. Not for a rewrite or a Hele familie
+// feature, which it does not include.
+const singleCard = computed(() => {
+  if (ownedTier.value || (props.trigger && ['rewrite', 'surprise', 'design', 'credits'].includes(props.trigger))) return null;
+  return allCards.value.find(card => !CARD_TIER_IDS.includes(card.id)) ?? null;
+});
+
+const selectedCard = computed(() => allCards.value.find(card => card.id === selectedTier.value));
 
 // A real deadline: the days to pakjesavond, the date the hero counts down to.
 const countdownText = computed(() => {
@@ -75,15 +85,20 @@ const countdownText = computed(() => {
 
 // "Voor €1 meer schrijf je met Gezin zoveel gedichten als je wilt": plain maths.
 const upgradeNudge = computed(() => {
-  if (selectedTier.value !== 'drie' || !tiersOnSale.value.includes('gezin')) return '';
-  const difference = TIERS.gezin.priceCents - TIERS.drie.priceCents;
-  const amount = difference % 100 === 0 ? `€${difference / 100}` : formatPrice(difference, locale.value);
-  return t('payment.tiers.nudge', { difference: amount });
+  const nudge = (from: TierId, to: TierId, key: string) => {
+    const difference = TIERS[to].priceCents - TIERS[from].priceCents;
+    const amount = difference % 100 === 0 ? `€${difference / 100}` : formatPrice(difference, locale.value);
+    return t(key, { difference: amount });
+  };
+  if (selectedTier.value === 'drie' && tiersOnSale.value.includes('gezin')) return nudge('drie', 'gezin', 'payment.tiers.nudge');
+  if (selectedTier.value === 'een' && tiersOnSale.value.includes('drie')) return nudge('een', 'drie', 'payment.tiers.singleNudge');
+  return '';
 });
 
 const intro = computed(() => {
   if (props.trigger === 'rewrite' && ownedTier.value) return t('payment.intro.rewriteTier');
-  if (props.trigger === 'credits' || props.trigger === 'surprise' || props.trigger === 'design' || props.trigger === 'preview') {
+  if (props.trigger === 'credits') return t('payment.intro.credits', { count: (ownedTier.value ? TIERS[ownedTier.value].poems : null) ?? 3 });
+  if (props.trigger === 'surprise' || props.trigger === 'design' || props.trigger === 'preview') {
     return t(`payment.intro.${props.trigger}`);
   }
   return t('payment.nextStep');
@@ -306,10 +321,32 @@ const closeModal = (how: 'button' | 'backdrop' | 'continue free' | 'edit') => {
             </li>
           </ul>
         </label>
+        <!-- One poem: a small option, so the choice between the cards stays the same -->
+        <label v-if="singleCard" class="tier-single" :data-tier="singleCard.id">
+          <input
+            v-model="selectedTier"
+            type="radio"
+            name="payment-tier"
+            class="tier-single-input"
+            :value="singleCard.id"
+          >
+          <span class="tier-single-text">
+            <span class="tier-single-question">{{ t('payment.tiers.single') }}</span>
+            <span>
+              <strong>{{ singleCard.name }} · {{ singleCard.price }}</strong> <span class="tier-single-detail">· {{ singleCard.features[singleCard.features.length - 1] }}</span>
+            </span>
+          </span>
+        </label>
       </fieldset>
 
       <p v-if="!paymentsUnavailable" class="tier-summary">
         {{ t('payment.oneTimePayment') }} · {{ t('payment.includesVAT') }}
+      </p>
+      <!-- iDEAL first: most Dutch buyers look for it before they choose -->
+      <p v-if="!paymentsUnavailable" class="pay-methods">
+        <span class="sr-only">{{ t('payment.methods') }}:</span>
+        <span class="pay-method pay-method-ideal">iDEAL</span>
+        <span class="pay-method">{{ t('payment.methodCard') }}</span>
       </p>
       <p v-if="upgradeNudge" class="tier-nudge" aria-live="polite">{{ upgradeNudge }}</p>
 
@@ -415,6 +452,82 @@ const closeModal = (how: 'button' | 'backdrop' | 'continue free' | 'edit') => {
 </template>
 
 <style scoped>
+/* The single poem, under the cards */
+.tier-single {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.875rem;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  color: #3d2914;
+  border: 1px dashed rgba(160, 136, 80, 0.8);
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.tier-single:has(input:checked) {
+  background: #fff;
+  border: 2px solid #8b1538;
+  padding: calc(0.5rem - 1px) calc(0.875rem - 1px);
+}
+
+.tier-single-input {
+  flex-shrink: 0;
+  width: 1.125rem;
+  height: 1.125rem;
+  accent-color: #8b1538;
+}
+
+.tier-single-input:focus-visible {
+  outline: 3px solid #3d0716;
+  outline-offset: 2px;
+}
+
+.tier-single-text {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 0.5rem;
+}
+
+.tier-single-question {
+  font-weight: 700;
+  color: #5c0f26;
+}
+
+.tier-single-detail {
+  color: #5c4a3a;
+}
+
+/* Payment methods: iDEAL in its own colour, so it is found at once */
+.pay-methods {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.375rem;
+  margin: 0 0 0.75rem;
+}
+
+.pay-method {
+  padding: 0.125rem 0.625rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #3d2914;
+  background: #fff;
+  border: 1px solid rgba(160, 136, 80, 0.7);
+  border-radius: 6px;
+}
+
+.pay-method-ideal {
+  color: #fff;
+  background: #cc0066;
+  border-color: #cc0066;
+}
+
 /* Tier cards */
 .tiers {
   position: relative;
