@@ -648,7 +648,9 @@ Owner steps:
   - English page `/sinterklaas-poem` ("sinterklaas poem" 90 a month, English variants 50 each, generator 40).
 - **Live 27 Nov** (`2b401a23`, commit `3e29b33`): smoke test passed; IndexNow sent for `/`, `/blog`,
   `/sinterklaas-poem`, the new post and the begin-and-end post (200).
-- **Owner:** set the secret `NUXT_DODO_PRODUCT_ID_EEN` (until then the single poem is not on sale); request indexing in Search Console for `/sinterklaas-poem`
+- **27 Nov:** the owner set `NUXT_DODO_PRODUCT_ID_EEN`; `/api/payment/status` lists `een`. Not yet seen: a real
+  checkout of the single poem (Dodo page at €1,99, iDEAL).
+- **Owner:** request indexing in Search Console for `/sinterklaas-poem`
   and `/blog/sinterklaasgedicht-bij-cadeau`; finish the Dynadot contact check (#1 outage of 26 November).
 - **Measure from 28 November:** `Proceed to payment` per `Show payment modal` (by tier, `een` against the
   others); `Poem unlocked` per `Poem preview`; `Shared poem to form` `poem` per `Open shared poem`; `Rate poem`
