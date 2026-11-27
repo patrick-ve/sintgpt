@@ -183,7 +183,7 @@ On the home page the section is "ChatGPT vs SintGPT": per style, ChatGPT's poem 
 Only show numbers, reviews and ratings that come from real data. This includes the JSON-LD on the home page. Keep its offer in line with the real price and free limit.
 
 ### Open Graph images
-- Specs in `scripts/og-images.ts`, rendered by `scripts/build-og-image.ts` (Puppeteer + sharp) to `public/og/<name>.jpg`.
+- Specs in `scripts/og-images.ts`, rendered by `scripts/build-og-image.ts` (Puppeteer + sharp) to `public/og/<name>.jpg`. The images named `blog` and `blog-<slug>` get the look of the blog (cream page, red title, the chapter of the post from `BLOG_CHAPTERS` as label); the others are red with gold.
 - Pages call `useOgImage('<name>', alt)`, which sets absolute `og:image` URLs plus width/height/type/alt and Twitter tags. Re-run `npm run build:og` after changing a spec.
 
 ### Icons and static files

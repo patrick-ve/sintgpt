@@ -12,6 +12,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import puppeteer from 'puppeteer';
 import sharp from 'sharp';
+import { chapterOfBlogPost } from '../utils/blogPosts';
 import { OG_IMAGES, SINT_PORTRAIT, type OgImageSpec } from './og-images';
 
 const WIDTH = 1200;
@@ -34,6 +35,27 @@ const giftIcon = `
         fill="none" stroke="#f4cd60" stroke-width="4" stroke-linejoin="round"/>
 </svg>`;
 
+// The blog images have the look of the blog ("Het Grote Boek"): cream paper,
+// red title, gold rules, and the mitre mark of the blog header.
+const isBook = (spec: OgImageSpec) => spec.name === 'blog' || spec.name.startsWith('blog-');
+
+const mitreIcon = `
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
+  <path d="M12 2.5c3.2 3 5 6 5 9.5V20H7v-8c0-3.5 1.8-6.5 5-9.5z"/>
+  <path d="M12 8v9M9 12.5h6"/>
+</svg>`;
+
+const star = `
+<svg viewBox="0 0 24 24" aria-hidden="true">
+  <path d="M12 2l2.4 7.2H22l-6.1 4.5 2.3 7.3L12 16.6 5.8 21l2.3-7.3L2 9.2h7.6z"/>
+</svg>`;
+
+/** "Hoofdstuk I · Schrijven" for a post, "Het Grote Boek van Sinterklaas" for the index. */
+function bookLabel(spec: OgImageSpec): string {
+  const chapter = chapterOfBlogPost(spec.name.replace(/^blog-/, ''));
+  return chapter ? `Hoofdstuk ${chapter.numeral} · ${chapter.name}` : 'Het Grote Boek van Sinterklaas';
+}
+
 const sparkle = (cls: string) => `
 <svg class="sparkle ${cls}" viewBox="0 0 24 24" aria-hidden="true">
   <path d="M12 0c1 7 5 11 12 12-7 1-11 5-12 12-1-7-5-11-12-12 7-1 11-5 12-12z"/>
@@ -46,6 +68,14 @@ function body(spec: OgImageSpec): string {
       <p class="hook">${escape(spec.hook)}</p>
       <h1 class="headline">${escape(spec.headline).replace(' ', '<br>')}</h1>
       <p class="pill">${escape(spec.claim)}</p>`;
+  }
+  if (isBook(spec)) {
+    return `
+      <div class="book-brand">${mitreIcon}<span>SintGPT</span></div>
+      <p class="book-label">${escape(bookLabel(spec))}</p>
+      <h1 class="title" data-fit>${escape(spec.title)}</h1>
+      <div class="book-rule"><i></i>${star}<i></i></div>
+      <p class="subtitle">${escape(spec.subtitle)}</p>`;
   }
   return `
     <div class="brand brand-small">${giftIcon}<span>SintGPT</span><em>${escape(spec.label ?? 'Blog')}</em></div>
@@ -158,13 +188,43 @@ function html(spec: OgImageSpec, sintDataUrl: string): string {
   }
   .portrait img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
+  /* ===== Blog images: a page of the book ===== */
+  body.book { background: #f6ecd4; color: #2b1b12; }
+  body.book::before { display: none; }
+  body.book .band, body.book .sparkle { display: none; }
+  body.book .frame {
+    inset: 26px 436px 26px 26px; background: #fffbee;
+    border: 1.5px solid #d9c596; box-shadow: 0 14px 34px rgba(74,55,40,.16);
+  }
+  body.book .frame::before, body.book .frame::after { display: none; }
+  body.book .content { left: 78px; top: 60px; bottom: 60px; width: 634px; }
+  .book-brand {
+    display: flex; align-items: center; gap: 12px; color: var(--wine);
+    font-family: 'Texturina', serif; font-weight: 700; font-size: 36px;
+  }
+  .book-brand svg { width: 40px; height: 40px; }
+  .book-label {
+    margin-top: 34px; font-family: 'Alegreya Sans', sans-serif; font-weight: 700;
+    font-size: 21px; letter-spacing: .16em; text-transform: uppercase; color: #7a5c16;
+  }
+  body.book .title { margin-top: 14px; color: var(--wine); text-shadow: none; }
+  .book-rule { margin-top: 26px; display: flex; align-items: center; gap: 14px; }
+  .book-rule i { display: block; width: 110px; height: 2px; background: #b8923c; }
+  .book-rule svg { width: 24px; height: 24px; fill: #b8923c; }
+  body.book .subtitle { margin-top: 22px; color: #4a3728; }
+  body.book .portrait {
+    top: 26px; right: 26px; bottom: 26px; width: 384px;
+    border: 1.5px solid #d9c596; outline: 5px solid #f6ecd4; outline-offset: -7px;
+    box-shadow: 0 14px 34px rgba(74,55,40,.16);
+  }
+
   .sparkle { position: absolute; fill: var(--gold); opacity: .85; }
   .s1 { width: 30px; top: 70px; right: 470px; }
   .s2 { width: 18px; top: 120px; right: 450px; opacity: .6; }
   .s3 { width: 22px; bottom: 90px; right: 460px; opacity: .55; }
 </style>
 </head>
-<body class="${spec.kind}">
+<body class="${spec.kind}${isBook(spec) ? ' book' : ''}">
   <div class="frame"></div>
   <div class="band"></div>
   ${sparkle('s1')}${sparkle('s2')}${sparkle('s3')}
