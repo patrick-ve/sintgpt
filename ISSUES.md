@@ -9,7 +9,7 @@ findings worth keeping. Newest information first within each section.
   `docs/pricing-tiers.md`.
 - Never put API keys, webhook secrets or gift codes in this file.
 
-Last updated: 27 November 2026. Live version: `6495006a-0039-4b41-a65a-b04fab5ac177` (7f146fb: blog design "Het Grote Boek"; IndexNow sent for /blog)
+Last updated: 27 November 2026. Live version: `9b63ad55-1d7f-4f2f-8277-74cdbd9301aa` (86a5720: contents list on every blog post, blog share images in the look of the book)
 (commit `6061832`, on GitHub).
 
 ## Priorities
