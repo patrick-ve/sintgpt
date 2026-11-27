@@ -1,9 +1,18 @@
 <script setup lang="ts">
-import { BLOG_POSTS, formatDutchDate } from '~/utils/blogPosts';
+import { BLOG_CHAPTERS, BLOG_POSTS, chapterBlogPosts, formatDutchDate, latestBlogPost } from '~/utils/blogPosts';
 
 const { locale } = useI18n();
 
-const posts = BLOG_POSTS.map(post => ({ ...post, dateLabel: formatDutchDate(post.published) }));
+const chapters = BLOG_CHAPTERS.map(chapter => ({ ...chapter, posts: chapterBlogPosts(chapter) }));
+// The open book: chapters I and II on the left page, III and IV on the right.
+const bookPages = [chapters.slice(0, 2), chapters.slice(2)];
+
+const postCount = BLOG_POSTS.length;
+
+const latest = latestBlogPost();
+const latestLabel = latest.modified && latest.modified !== latest.published
+  ? `Bijgewerkt ${formatDutchDate(latest.modified)}`
+  : `Nieuw, ${formatDutchDate(latest.published)}`;
 
 const title = 'Tips voor sinterklaasgedichten en surprises | SintGPT';
 const description = 'Tips voor je sinterklaasgedicht en surprise: rijm en ritme, grappige en roast-gedichten, lootjes trekken en Sinterklaas op het werk.';
@@ -56,70 +65,75 @@ useHead({
 </script>
 
 <template>
-  <div class="min-h-screen bg-sinterklaas-pattern">
-    <header class="bg-red-900 text-white shadow-xl border-b-4 border-[#F4CD60] relative overflow-hidden">
-      <div class="absolute top-0 left-0 w-16 h-16 bg-[#F4CD60] -translate-x-8 -translate-y-8 rotate-45 transform" aria-hidden="true"></div>
-      <div class="absolute top-0 right-0 w-16 h-16 bg-[#F4CD60] translate-x-8 -translate-y-8 rotate-45 transform" aria-hidden="true"></div>
+  <div class="blog-book min-h-screen bg-[#f6ecd4] text-[#2b1b12]">
+    <BlogHeader cta="blog:index:kop" />
 
-      <div class="container mx-auto px-6 py-8 text-[#F4CD60] relative z-10">
-        <div class="flex flex-wrap items-center justify-between gap-4">
-          <NuxtLink to="/" class="hover:opacity-80 transition-opacity flex items-center gap-4">
-            <span class="hidden md:block text-4xl" aria-hidden="true">🎁</span>
-            <span class="text-3xl md:text-5xl font-bold font-display drop-shadow-md">SintGPT Blog</span>
-          </NuxtLink>
-          <NuxtLink
-            to="/"
-            class="px-4 py-2 bg-[#F4CD60] text-red-900 rounded-lg font-bold hover:bg-yellow-400 transition-colors border-2 border-red-900 shadow-md"
-          >
-            {{ locale === 'nl' ? 'Terug naar SintGPT' : 'Back to SintGPT' }}
-          </NuxtLink>
+    <main>
+      <div class="mx-auto max-w-[820px] px-6 pb-10 pt-14 text-center md:pt-[72px]">
+        <p class="mb-4 text-[15px] font-bold uppercase tracking-[0.18em] text-[#7a5c16]">Uit het Grote Boek van Sinterklaas</p>
+        <h1 class="font-display text-[clamp(2.5rem,6vw,4.25rem)] font-bold leading-[1.05] text-[#8b1538] text-balance">
+          Tips voor je sinterklaasgedicht
+        </h1>
+        <div class="my-7 flex items-center justify-center gap-3.5 text-[#b8923c]" aria-hidden="true">
+          <span class="h-px w-24 bg-[#b8923c] sm:w-[120px]"></span>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.2H22l-6.1 4.5 2.3 7.3L12 16.6 5.8 21l2.3-7.3L2 9.2h7.6z" /></svg>
+          <span class="h-px w-24 bg-[#b8923c] sm:w-[120px]"></span>
         </div>
+        <p class="font-text text-[1.35rem] leading-normal text-[#4a3728] text-pretty">
+          {{ postCount }} artikelen in vier hoofdstukken: van de eerste regel tot het voorlezen op pakjesavond. Sla het boek open waar je vastloopt.
+        </p>
       </div>
-    </header>
 
-    <main class="container mx-auto px-6 py-12">
-      <div class="max-w-4xl mx-auto">
-        <div class="text-center mb-12 relative">
-          <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-12 text-6xl opacity-20 pointer-events-none" aria-hidden="true">✍️</div>
-          <h1 class="text-4xl font-bold text-white mb-4 font-display drop-shadow-lg text-balance">
-            Tips voor je sinterklaasgedicht
-          </h1>
-          <p class="text-xl text-[#F4CD60] font-medium drop-shadow-md text-pretty">
-            Rijm en ritme, grappige en roast-gedichten, surprises en lootjes trekken.
-          </p>
-        </div>
+      <div class="mx-auto max-w-[1120px] px-6 pb-14">
+        <NuxtLink :to="`/blog/${latest.slug}`" class="latest-card flex flex-wrap items-center gap-x-8 gap-y-4 rounded bg-[#8b1538] px-6 py-6 text-[#fff8e7] sm:px-8">
+          <span class="whitespace-nowrap text-sm font-bold uppercase tracking-[0.16em] text-[#f4cd60]">{{ latestLabel }}</span>
+          <span class="flex min-w-0 flex-[999_1_420px] flex-col gap-1">
+            <span class="font-display text-2xl font-bold leading-tight">{{ latest.title }}</span>
+            <span class="text-lg text-[#f7dfc0]">{{ latest.description }}</span>
+          </span>
+          <span class="flex items-center gap-2 whitespace-nowrap font-bold text-[#f4cd60]" aria-hidden="true">
+            Sla open
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </span>
+        </NuxtLink>
+      </div>
 
-        <ul class="grid gap-8">
-          <li
-            v-for="post in posts"
-            :key="post.slug"
-            class="post-card bg-[#fffdf0] rounded-2xl shadow-xl border-4 border-red-900 relative p-8"
+      <section aria-label="Inhoudsopgave" class="mx-auto max-w-[1120px] px-6 pb-[72px]">
+        <div class="book grid border border-[#d9c596] bg-[#fffbee] lg:grid-cols-2">
+          <div
+            v-for="(bookPage, pageIndex) in bookPages"
+            :key="pageIndex"
+            class="book-page px-6 pb-4 pt-10 sm:px-11 sm:pb-8 sm:pt-12"
           >
-            <div class="absolute top-3 right-3 text-2xl opacity-50" aria-hidden="true">📜</div>
-            <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-red-700 mb-3 font-bold">
-              <time :datetime="post.published">{{ post.dateLabel }}</time>
-              <span aria-hidden="true">•</span>
-              <span>{{ post.readMinutes }} min</span>
-            </div>
-            <h2 class="text-2xl font-bold text-red-900 mb-3 font-display text-balance pr-8">
-              <NuxtLink :to="`/blog/${post.slug}`" class="post-link">{{ post.title }}</NuxtLink>
-            </h2>
-            <p class="text-gray-800 mb-4 leading-relaxed font-medium">
-              {{ post.description }}
-            </p>
-            <span class="text-red-600 font-bold flex items-center gap-2" aria-hidden="true">
-              Lees meer <span class="text-xl">→</span>
-            </span>
-          </li>
-        </ul>
+            <section
+              v-for="chapter in bookPage"
+              :key="chapter.id"
+              :aria-labelledby="`chapter-${chapter.id}`"
+              class="chapter"
+            >
+              <div class="mb-1.5 flex items-baseline gap-4">
+                <span class="font-display text-[2.75rem] font-bold leading-none text-[#b8923c]" aria-hidden="true">{{ chapter.numeral }}</span>
+                <h2 :id="`chapter-${chapter.id}`" class="font-display text-[1.75rem] font-bold text-[#8b1538] sm:text-[2rem]">{{ chapter.question }}</h2>
+              </div>
+              <p class="mb-3.5 font-text text-[1.2rem] italic text-[#5e4a36]">{{ chapter.intro }}</p>
+              <ul>
+                <li v-for="post in chapter.posts" :key="post.slug" class="toc-row">
+                  <NuxtLink :to="`/blog/${post.slug}`" class="toc-link">{{ post.title }}</NuxtLink>
+                  <span class="toc-leader" aria-hidden="true"></span>
+                  <span class="whitespace-nowrap text-[15px] font-bold text-[#7a5c16]">{{ post.readMinutes }} min</span>
+                </li>
+              </ul>
+            </section>
+          </div>
+        </div>
+      </section>
 
-        <div class="mt-16 bg-[#fffdf0] rounded-2xl shadow-xl p-8 text-center sint-border relative overflow-hidden">
-          <div class="absolute -left-4 -bottom-4 text-6xl opacity-20 rotate-45" aria-hidden="true">🎁</div>
-          <div class="absolute -right-4 -top-4 text-6xl opacity-20 -rotate-12" aria-hidden="true">🌙</div>
-          <h2 class="text-3xl font-bold text-red-900 mb-4 font-display">
+      <section class="bg-[#8b1538] text-[#fff8e7]">
+        <div class="mx-auto max-w-[820px] px-6 py-16 text-center">
+          <h2 class="mb-3.5 font-display text-[2.25rem] font-bold leading-[1.1] text-[#f4cd60] sm:text-[2.5rem]">
             {{ locale === 'nl' ? 'Zin in je eigen gedicht?' : 'Ready for your own poem?' }}
           </h2>
-          <p class="text-gray-800 mb-8 text-lg font-medium max-w-2xl mx-auto">
+          <p class="mb-8 font-text text-[1.35rem] leading-normal">
             {{ locale === 'nl'
               ? 'SintGPT schrijft in ongeveer een minuut een persoonlijk sinterklaasgedicht. Je eerste gedicht is gratis.'
               : 'SintGPT writes a personal Sinterklaas poem in about a minute. Your first poem is free.' }}
@@ -127,84 +141,98 @@ useHead({
           <NuxtLink
             to="/"
             data-cta="blog:index"
-            class="inline-block px-8 py-4 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-transform transform hover:scale-105 shadow-lg border-2 border-[#F4CD60] text-xl"
+            class="cta-button inline-block rounded-md bg-[#f4cd60] px-7 py-4 font-display text-xl font-bold text-[#5c0f26]"
           >
             {{ locale === 'nl' ? 'Schrijf gratis je sinterklaasgedicht' : 'Write your first poem for free' }}
           </NuxtLink>
-          <p class="mt-6 text-gray-800 font-medium">
+          <p class="mt-6 text-lg">
             Eerst inspiratie opdoen? Lees de
-            <NuxtLink to="/voorbeelden" class="font-bold text-red-800 underline underline-offset-4">voorbeelden van sinterklaasgedichten</NuxtLink>.
+            <NuxtLink to="/voorbeelden" class="cta-link font-bold text-[#f4cd60] underline underline-offset-4">voorbeelden van sinterklaasgedichten</NuxtLink>.
           </p>
         </div>
-      </div>
+      </section>
     </main>
 
-    <footer class="bg-red-900 mt-12 border-t-4 border-[#F4CD60] relative">
-      <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-900 border-4 border-[#F4CD60] rounded-full p-3" aria-hidden="true">
-        <div class="text-2xl">🎁</div>
-      </div>
-      <div class="container mx-auto px-6 py-12 text-center text-[#F4CD60]">
-        <div class="flex justify-center gap-8 mb-6 text-3xl opacity-80" aria-hidden="true">
-          <span>🌙</span>
-          <span>🐴</span>
-          <span>🥕</span>
-        </div>
-        <nav class="mb-6 flex flex-wrap justify-center gap-x-6 gap-y-3 font-bold" aria-label="Voettekst">
-          <NuxtLink to="/" class="underline underline-offset-4">Sinterklaasgedicht maken</NuxtLink>
-          <NuxtLink to="/voorbeelden" class="underline underline-offset-4">Voorbeelden</NuxtLink>
-          <NuxtLink to="/lootjes" class="underline underline-offset-4">Lootjes trekken</NuxtLink>
-          <NuxtLink to="/privacy" class="underline underline-offset-4">Privacy</NuxtLink>
-          <NuxtLink to="/voorwaarden" class="underline underline-offset-4">{{ locale === 'nl' ? 'Voorwaarden' : 'Terms' }}</NuxtLink>
-        </nav>
-        <p class="font-bold text-lg">
-          Copyright {{ new Date().getFullYear() }} SintGPT. {{ locale === 'nl' ? 'Alle rechten voorbehouden.' : 'All rights reserved.' }}
-        </p>
-      </div>
-    </footer>
+    <BlogFooter />
   </div>
 </template>
 
 <style scoped>
-.bg-sinterklaas-pattern {
-  background-color: #7f1d1d;
-  background-image:
-    radial-gradient(#F4CD60 1px, transparent 1px),
-    radial-gradient(#F4CD60 1px, transparent 1px);
-  background-size: 50px 50px;
-  background-position: 0 0, 25px 25px;
-  background-attachment: fixed;
+.book {
+  box-shadow: 0 18px 40px rgba(74, 55, 40, 0.16);
+}
+.book-page + .book-page {
+  border-top: 1px solid #e6d6ae;
+}
+@media (min-width: 1024px) {
+  .book-page + .book-page {
+    border-top: 0;
+    border-left: 1px solid #e6d6ae;
+  }
+}
+.chapter + .chapter {
+  margin-top: 2.75rem;
 }
 
-.sint-border {
-  border: 4px solid #7f1d1d;
-  outline: 2px solid #F4CD60;
-  outline-offset: -8px;
+/* The whole row is clickable, but the link text is only the title. */
+.toc-row {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  min-height: 44px;
+  padding: 0.85rem 0;
+  border-top: 1px solid #eadcb8;
 }
-
-/* The whole card is clickable, but the link text is only the title. */
-.post-link::after {
+.toc-link {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.2rem;
+  line-height: 1.25;
+  color: #2b1b12;
+  min-width: 0;
+}
+.toc-link::after {
   content: '';
   position: absolute;
   inset: 0;
-  border-radius: 1rem;
 }
-.post-link:focus-visible {
-  outline: none;
-}
-.post-link:focus-visible::after {
-  outline: 3px solid #F4CD60;
-  outline-offset: 4px;
-}
-.post-card {
-  transition-property: box-shadow, translate;
-  transition-duration: 150ms;
+.toc-leader {
+  flex: 1;
+  min-width: 1rem;
+  border-bottom: 2px dotted #c9b37c;
+  transform: translateY(-5px);
 }
 @media (hover: hover) {
-  .post-card:hover {
-    translate: 0 -4px;
+  .toc-row:hover .toc-link {
+    color: #8b1538;
   }
-  .post-card:hover .post-link {
-    color: #b91c1c;
+  .latest-card:hover,
+  .cta-button:hover {
+    filter: brightness(1.08);
   }
+}
+.toc-link:focus-visible {
+  outline: none;
+}
+.toc-link:focus-visible::after {
+  outline: 2px solid #8b1538;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* A double frame, like the cover of the book. */
+.latest-card {
+  box-shadow: 0 0 0 5px #f6ecd4, 0 0 0 6px #b8923c;
+}
+.latest-card:focus-visible,
+.cta-button:focus-visible,
+.cta-link:focus-visible {
+  outline: 3px solid #f4cd60;
+  outline-offset: 3px;
+}
+.latest-card:focus-visible {
+  outline-color: #8b1538;
+  outline-offset: 8px;
 }
 </style>

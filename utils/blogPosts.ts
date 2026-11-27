@@ -228,6 +228,95 @@ export const BLOG_POSTS: BlogPostSummary[] = [
 export const findBlogPost = (slug: string): BlogPostSummary | undefined =>
   BLOG_POSTS.find(post => post.slug === slug);
 
+export interface BlogChapter {
+  id: string;
+  /** Roman numeral, in the order the blog index shows the chapters. */
+  numeral: string;
+  /** Short name, for the breadcrumb above a post. */
+  name: string;
+  /** The heading on the blog index: the reader's question. */
+  question: string;
+  intro: string;
+  /** In reading order, not by date. Every post is in exactly one chapter. */
+  slugs: string[];
+}
+
+// The blog index is a table of contents ("Het Grote Boek"): every post is in
+// one chapter. A new post must be added to a chapter; a unit test checks it.
+export const BLOG_CHAPTERS: BlogChapter[] = [
+  {
+    id: 'schrijven',
+    numeral: 'I',
+    name: 'Schrijven',
+    question: 'Hoe pak je het aan?',
+    intro: 'Rijm, ritme, lengte en de eerste regel.',
+    slugs: [
+      'hoe-schrijf-je-het-perfecte-sinterklaasgedicht',
+      'sinterklaasgedicht-beginnen-en-afsluiten',
+      'rijmwoorden-sinterklaas',
+      'rijm-en-ritme-sinterklaasgedicht',
+      'kort-sinterklaasgedicht',
+      'sinterklaasgedicht-last-minute',
+      'sinterklaasgedicht-in-het-engels',
+    ],
+  },
+  {
+    id: 'pakjesavond',
+    numeral: 'II',
+    name: 'Pakjesavond',
+    question: 'Wat hoort er bij pakjesavond?',
+    intro: 'Lootjes, surprises en tradities.',
+    slugs: [
+      'lootjes-trekken-tips',
+      'surprise-maken-ideeen',
+      'sinterklaas-tradities',
+    ],
+  },
+  {
+    id: 'stijlen',
+    numeral: 'III',
+    name: 'Stijlen',
+    question: 'Welke toon kies je?',
+    intro: 'Zes tonen, van klassiek tot roast.',
+    slugs: [
+      'sinterklaasgedicht-stijlen',
+      'grappige-sinterklaasgedichten-tips',
+      'klassiek-sinterklaasgedicht',
+      'ironisch-sinterklaasgedicht',
+      'ouderwets-sinterklaasgedicht',
+      'pikant-sinterklaasgedicht',
+      'roast-sinterklaasgedicht-zonder-te-kwetsen',
+    ],
+  },
+  {
+    id: 'voor-wie',
+    numeral: 'IV',
+    name: 'Voor wie',
+    question: 'Voor wie schrijf je?',
+    intro: 'Een gedicht dat past bij de ontvanger.',
+    slugs: [
+      'sinterklaasgedicht-papa-mama',
+      'sinterklaasgedicht-opa-oma',
+      'sinterklaasgedicht-partner',
+      'sinterklaasgedicht-voor-kinderen',
+      'sinterklaasgedicht-juf-meester',
+      'sinterklaas-op-het-werk',
+    ],
+  },
+];
+
+export const chapterOfBlogPost = (slug: string): BlogChapter | undefined =>
+  BLOG_CHAPTERS.find(chapter => chapter.slugs.includes(slug));
+
+export const chapterBlogPosts = (chapter: BlogChapter): BlogPostSummary[] =>
+  chapter.slugs
+    .map(findBlogPost)
+    .filter((post): post is BlogPostSummary => Boolean(post));
+
+/** The post whose text changed last: the blog index puts it above the chapters. */
+export const latestBlogPost = (): BlogPostSummary =>
+  [...BLOG_POSTS].sort((a, b) => (b.modified ?? b.published).localeCompare(a.modified ?? a.published))[0]!;
+
 export const relatedBlogPosts = (slug: string): BlogPostSummary[] =>
   (findBlogPost(slug)?.related ?? [])
     .map(findBlogPost)

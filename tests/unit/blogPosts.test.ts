@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { OG_IMAGES } from '../../scripts/og-images';
-import { BLOG_POSTS, formatDutchDate, relatedBlogPosts } from '../../utils/blogPosts';
+import { BLOG_CHAPTERS, BLOG_POSTS, chapterBlogPosts, chapterOfBlogPost, formatDutchDate, latestBlogPost, relatedBlogPosts } from '../../utils/blogPosts';
 
 const root = new URL('../../', import.meta.url);
 const read = (path: string) => readFileSync(new URL(path, root), 'utf8');
@@ -51,6 +51,21 @@ describe('blog posts', () => {
       for (const slug of post.related) inbound.set(slug, inbound.get(slug)! + 1);
     }
     for (const [slug, count] of inbound) expect(count, slug).toBeGreaterThanOrEqual(2);
+  });
+
+  it('puts every post in exactly one chapter of the blog index', () => {
+    const inChapters = BLOG_CHAPTERS.flatMap(chapter => chapter.slugs);
+    expect(new Set(inChapters).size).toBe(inChapters.length);
+    expect([...inChapters].sort()).toEqual(BLOG_POSTS.map(post => post.slug).sort());
+    for (const post of BLOG_POSTS) expect(chapterOfBlogPost(post.slug), post.slug).toBeDefined();
+    expect(BLOG_CHAPTERS.flatMap(chapterBlogPosts)).toHaveLength(BLOG_POSTS.length);
+  });
+
+  it('features the post that changed last', () => {
+    const latest = latestBlogPost();
+    for (const post of BLOG_POSTS) {
+      expect((latest.modified ?? latest.published) >= (post.modified ?? post.published)).toBe(true);
+    }
   });
 
   it('formats Dutch dates without a time zone', () => {

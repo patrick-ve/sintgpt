@@ -609,6 +609,19 @@ Owner steps:
 - **Fix (live 26 Nov 2026, `db1ad86b`, commit `7f6f8ce`; checked on the live site):** once the visitor has typed or picked anything in the form, a line above the button says "Je hebt bij stap 1 nog geen naam ingevuld." with a button "Vul de naam in" that scrolls to the field and focuses it (`showNameHint` in `pages/index.vue`; the submit button gets `aria-describedby`). It goes away when the name is filled in. The placeholder is now "Bijvoorbeeld: Marieke" ("For example: Emma"). The refusal on submit is unchanged. E2e test: "warns above the button while the name is empty".
 - **Watch:** the share of `Form refused` `no name` per `Generate poem` after the deploy (26 Nov: 3 of 7).
 
+### #39 Blog design "Het Grote Boek"
+
+- 27 November 2026: the owner chose design A out of 4 (canvas with all 4, desktop and phone:
+  https://claude.ai/artifact/LUEC3XzB4n3LTJkxnSGseU). Built: the index is a table of contents
+  in 4 chapters (`BLOG_CHAPTERS`), the posts are a page of the book (drop cap, examples between
+  gold rules, a contents list in the margin for posts with `toc`), shared `BlogHeader` and
+  `BlogFooter`. The rhyme words post shows its lists as a "rijmregister" table.
+- The header button "Schrijf een gedicht" sends `Go to poem form` with `blog:<slug>:kop`
+  (index: `blog:index:kop`). Watch: do blog readers reach the form more often than before
+  (compare `Go to poem form` `blog:*` per blog `Page view` with the days before 27 November).
+- Open: only the rhyme words post has `toc`. Add it to other long posts when they get heading ids.
+- Open: the Open Graph images of the blog still have the old look (red with gold dots).
+
 ## Findings
 
 ### Rewrite model and thinking level (15 November 2026)

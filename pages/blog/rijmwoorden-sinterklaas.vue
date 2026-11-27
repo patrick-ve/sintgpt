@@ -5,25 +5,21 @@
     seo-title="Rijmwoorden Sinterklaas: lijst met zuiver rijm | SintGPT"
     seo-description="Rijmwoorden Sinterklaas per woord: zuiver rijm op Sint, Piet, cadeau, lekkers, familie en 22 namen, plus tips als een woord niet wil rijmen."
     og-image="blog-rijmwoorden-sinterklaas"
+    :toc="[
+      { id: 'sint-en-piet', label: 'Sinterklaas, Sint en Piet' },
+      { id: 'cadeau-en-lekkers', label: 'Cadeau, pakjes en lekkers' },
+      { id: 'cadeaus', label: 'Veelgegeven cadeaus' },
+      { id: 'ontvanger', label: 'Jaar, lief, stout en blij' },
+      { id: 'familie', label: 'Familie en vrienden' },
+      { id: 'sfeer', label: 'Sfeer, winter en het gedicht' },
+      { id: 'naam', label: 'Rijmen op een naam' },
+      { id: 'namen', label: '22 namen' },
+      { id: 'klank', label: 'Rijm op klank' },
+      { id: 'lastige-woorden', label: 'Lastige woorden' },
+      { id: 'rijmfouten', label: 'Rijmfouten' },
+      { id: 'vragen', label: 'Veelgestelde vragen' },
+    ]"
   >
-    <nav aria-label="Rijmwoorden per onderwerp" class="not-prose bg-[#fff3c9] p-6 rounded-lg my-6 border border-[#F4CD60]">
-      <p class="font-bold text-red-900 mb-3">Snel naar</p>
-      <ul class="flex flex-wrap gap-x-5 gap-y-2 text-base">
-        <li><a href="#sint-en-piet" class="text-red-700 underline underline-offset-2 hover:text-red-900">Sinterklaas, Sint en Piet</a></li>
-        <li><a href="#cadeau-en-lekkers" class="text-red-700 underline underline-offset-2 hover:text-red-900">Cadeau, pakjes en lekkers</a></li>
-        <li><a href="#cadeaus" class="text-red-700 underline underline-offset-2 hover:text-red-900">Veelgegeven cadeaus</a></li>
-        <li><a href="#ontvanger" class="text-red-700 underline underline-offset-2 hover:text-red-900">Jaar, lief, stout en blij</a></li>
-        <li><a href="#familie" class="text-red-700 underline underline-offset-2 hover:text-red-900">Familie en vrienden</a></li>
-        <li><a href="#sfeer" class="text-red-700 underline underline-offset-2 hover:text-red-900">Sfeer, winter en het gedicht</a></li>
-        <li><a href="#naam" class="text-red-700 underline underline-offset-2 hover:text-red-900">Rijmen op een naam</a></li>
-        <li><a href="#namen" class="text-red-700 underline underline-offset-2 hover:text-red-900">22 namen</a></li>
-        <li><a href="#klank" class="text-red-700 underline underline-offset-2 hover:text-red-900">Rijm op klank</a></li>
-        <li><a href="#lastige-woorden" class="text-red-700 underline underline-offset-2 hover:text-red-900">Lastige woorden</a></li>
-        <li><a href="#rijmfouten" class="text-red-700 underline underline-offset-2 hover:text-red-900">Rijmfouten</a></li>
-        <li><a href="#vragen" class="text-red-700 underline underline-offset-2 hover:text-red-900">Veelgestelde vragen</a></li>
-      </ul>
-    </nav>
-
     <h2 id="sint-en-piet" class="text-3xl font-bold mt-8 mb-4">Rijmwoorden voor Sinterklaas, Sint en Piet</h2>
     <p class="leading-relaxed mb-4">
       Bijna elk sinterklaasgedicht noemt de Sint of Piet, en op die namen rijmt veel. Voor de eerste en de laatste regel zijn er ook <NuxtLink to="/blog/sinterklaasgedicht-beginnen-en-afsluiten" class="text-red-700 underline underline-offset-2 hover:text-red-900">zinnen om een sinterklaasgedicht te beginnen en af te sluiten</NuxtLink>.
@@ -32,10 +28,12 @@
     <p class="leading-relaxed mb-4">
       Deze woorden rijmen zuiver op de naam van de Sint. Speculaas rijmt op dezelfde klank als Sinterklaas.
     </p>
-    <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
-      <li>Sinterklaas en speculaas: baas, kaas, haas, dwaas, vaas, gaas, blaas, verbaas, geraas, relaas</li>
-      <li>Sint: kind, vindt, wint, begint, lint, print, bemint, blind, wind, tint, verslindt, verzint, bezint, hint</li>
-    </ul>
+    <table class="rijmregister">
+      <tbody>
+        <tr><th scope="row">Sinterklaas en speculaas</th><td>baas, kaas, haas, dwaas, vaas, gaas, blaas, verbaas, geraas, relaas</td></tr>
+        <tr><th scope="row">Sint</th><td>kind, vindt, wint, begint, lint, print, bemint, blind, wind, tint, verslindt, verzint, bezint, hint</td></tr>
+      </tbody>
+    </table>
     <p class="leading-relaxed mb-4">
       Sint rijmt ook op hint. Handig, want een hint over het cadeau is vaak de grap van het gedicht.
     </p>
@@ -54,15 +52,17 @@
     <p class="leading-relaxed mb-4">
       Voor Piet en de spullen van de Sint heb je deze rijmwoorden:
     </p>
-    <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
-      <li>Piet: niet, ziet, verdriet, lied, riet, geniet, biedt, verschiet, gebied</li>
-      <li>Pieten: genieten, schieten, gieten, bieten, verlieten</li>
-      <li>Hooi: mooi, gooi, strooi, kooi, prooi, tooi</li>
-      <li>Paard en baard: waard, haard, aard, bewaard, gespaard, verklaard, verjaard, kaart, taart, staart, vaart, maart, zwaard</li>
-      <li>Spanje: oranje, kastanje, franje</li>
-      <li>Staf: af, straf, laf, draf, gaf</li>
-      <li>Roe: moe, toe, doe, hoe, koe, boe</li>
-    </ul>
+    <table class="rijmregister">
+      <tbody>
+        <tr><th scope="row">Piet</th><td>niet, ziet, verdriet, lied, riet, geniet, biedt, verschiet, gebied</td></tr>
+        <tr><th scope="row">Pieten</th><td>genieten, schieten, gieten, bieten, verlieten</td></tr>
+        <tr><th scope="row">Hooi</th><td>mooi, gooi, strooi, kooi, prooi, tooi</td></tr>
+        <tr><th scope="row">Paard en baard</th><td>waard, haard, aard, bewaard, gespaard, verklaard, verjaard, kaart, taart, staart, vaart, maart, zwaard</td></tr>
+        <tr><th scope="row">Spanje</th><td>oranje, kastanje, franje</td></tr>
+        <tr><th scope="row">Staf</th><td>af, straf, laf, draf, gaf</td></tr>
+        <tr><th scope="row">Roe</th><td>moe, toe, doe, hoe, koe, boe</td></tr>
+      </tbody>
+    </table>
     <p class="leading-relaxed mb-4">
       Kaart en taart rijmen op paard, want de d aan het eind klinkt als een t.
     </p>
@@ -82,9 +82,11 @@
     <p class="leading-relaxed mb-4">
       Cadeau heeft de klemtoon op de laatste lettergreep. Je rijmt dus op de lange o, ook als de spelling anders is:
     </p>
-    <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
-      <li>Cadeau: zo, stro, vlo, bureau, niveau, plateau, tableau, sowieso</li>
-    </ul>
+    <table class="rijmregister">
+      <tbody>
+        <tr><th scope="row">Cadeau</th><td>zo, stro, vlo, bureau, niveau, plateau, tableau, sowieso</td></tr>
+      </tbody>
+    </table>
     <div class="bg-red-50 border-l-4 border-red-600 p-6 my-6 rounded-r-lg">
       <p class="font-bold text-red-900 mb-2">Voorbeeld met cadeau</p>
       <p class="font-text text-lg text-red-900 leading-relaxed mb-3 last:mb-0">
@@ -96,40 +98,44 @@
     <p class="leading-relaxed mb-4">
       Voor snoepgoed en kleine cadeaus heb je deze rijmwoorden:
     </p>
-    <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
-      <li>Pakje: zakje, takje, dakje, plakje, vlakje, bakje</li>
-      <li>Boek: zoek, hoek, broek, koek, doek, bezoek, onderzoek, verzoek</li>
-      <li>Chocolade: schade, genade, salade, parade, ballade, marmelade, limonade, tirade</li>
-      <li>Marsepein, wijn en mandarijn: fijn, klein, zijn, trein, plein, lijn, konijn, gordijn, fontein</li>
-      <li>Taai-taai: draai, kraai, zwaai, saai, haai, fraai, aai, baai</li>
-      <li>Snoep: groep, roep, soep, stoep, sloep, troep, oproep</li>
-      <li>Chocola: ja, na, sla, ha, hoera, aha</li>
-      <li>Chocoladeletter: spetter, pletter, vetter</li>
-      <li>Melk: elk, welk, kelk</li>
-      <li>Pepernoot en stoomboot: groot, boot, brood, rood, schoot, poot, genoot, sloot, vloot</li>
-      <li>Pepernoten: boten, poten, sloten, loten, stoten, schoten, genoten, gesloten, besloten, vergroten</li>
-      <li>Lootje: bootje, pootje, broodje, slootje, stootje</li>
-      <li>Schoen: doen, zoen, groen, toen, fatsoen, miljoen, kampioen, citroen, seizoen</li>
-      <li>Sokken: lokken, rokken, brokken, jokken, klokken, vlokken</li>
-      <li>Sjaal: taal, verhaal, maal, schaal, normaal, totaal, allemaal, signaal</li>
-    </ul>
+    <table class="rijmregister">
+      <tbody>
+        <tr><th scope="row">Pakje</th><td>zakje, takje, dakje, plakje, vlakje, bakje</td></tr>
+        <tr><th scope="row">Boek</th><td>zoek, hoek, broek, koek, doek, bezoek, onderzoek, verzoek</td></tr>
+        <tr><th scope="row">Chocolade</th><td>schade, genade, salade, parade, ballade, marmelade, limonade, tirade</td></tr>
+        <tr><th scope="row">Marsepein, wijn en mandarijn</th><td>fijn, klein, zijn, trein, plein, lijn, konijn, gordijn, fontein</td></tr>
+        <tr><th scope="row">Taai-taai</th><td>draai, kraai, zwaai, saai, haai, fraai, aai, baai</td></tr>
+        <tr><th scope="row">Snoep</th><td>groep, roep, soep, stoep, sloep, troep, oproep</td></tr>
+        <tr><th scope="row">Chocola</th><td>ja, na, sla, ha, hoera, aha</td></tr>
+        <tr><th scope="row">Chocoladeletter</th><td>spetter, pletter, vetter</td></tr>
+        <tr><th scope="row">Melk</th><td>elk, welk, kelk</td></tr>
+        <tr><th scope="row">Pepernoot en stoomboot</th><td>groot, boot, brood, rood, schoot, poot, genoot, sloot, vloot</td></tr>
+        <tr><th scope="row">Pepernoten</th><td>boten, poten, sloten, loten, stoten, schoten, genoten, gesloten, besloten, vergroten</td></tr>
+        <tr><th scope="row">Lootje</th><td>bootje, pootje, broodje, slootje, stootje</td></tr>
+        <tr><th scope="row">Schoen</th><td>doen, zoen, groen, toen, fatsoen, miljoen, kampioen, citroen, seizoen</td></tr>
+        <tr><th scope="row">Sokken</th><td>lokken, rokken, brokken, jokken, klokken, vlokken</td></tr>
+        <tr><th scope="row">Sjaal</th><td>taal, verhaal, maal, schaal, normaal, totaal, allemaal, signaal</td></tr>
+      </tbody>
+    </table>
     <h3 id="cadeaus" class="text-2xl font-bold mt-6 mb-3">Wat rijmt op veelgegeven cadeaus?</h3>
     <p class="leading-relaxed mb-4">
       Het cadeau staat vaak aan het eind van de laatste regel. Voor deze cadeaus is er zuiver rijm:
     </p>
-    <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
-      <li>Telefoon: gewoon, schoon, toon, zoon, kroon, loon, persoon, beloon, icoon</li>
-      <li>Spel: wel, snel, bel, tel, vel, vertel, hotel, model</li>
-      <li>Fiets: iets, niets</li>
-      <li>Bal: al, val, stal, wal, knal, geval, carnaval</li>
-      <li>Tas en jas: was, pas, glas, gras, plas, das, kas</li>
-      <li>Mok: rok, klok, stok, blok, sok, schok, hok, brok</li>
-      <li>Doos: roos, boos, poos, koos, matroos</li>
-      <li>Pyjama: drama, lama, panorama</li>
-      <li>Bier: hier, plezier, vier, mier, dier, papier, manier, kwartier</li>
-      <li>Thee: mee, twee, zee, nee, idee, oké, café</li>
-      <li>Wekker: lekker, stekker, trekker</li>
-    </ul>
+    <table class="rijmregister">
+      <tbody>
+        <tr><th scope="row">Telefoon</th><td>gewoon, schoon, toon, zoon, kroon, loon, persoon, beloon, icoon</td></tr>
+        <tr><th scope="row">Spel</th><td>wel, snel, bel, tel, vel, vertel, hotel, model</td></tr>
+        <tr><th scope="row">Fiets</th><td>iets, niets</td></tr>
+        <tr><th scope="row">Bal</th><td>al, val, stal, wal, knal, geval, carnaval</td></tr>
+        <tr><th scope="row">Tas en jas</th><td>was, pas, glas, gras, plas, das, kas</td></tr>
+        <tr><th scope="row">Mok</th><td>rok, klok, stok, blok, sok, schok, hok, brok</td></tr>
+        <tr><th scope="row">Doos</th><td>roos, boos, poos, koos, matroos</td></tr>
+        <tr><th scope="row">Pyjama</th><td>drama, lama, panorama</td></tr>
+        <tr><th scope="row">Bier</th><td>hier, plezier, vier, mier, dier, papier, manier, kwartier</td></tr>
+        <tr><th scope="row">Thee</th><td>mee, twee, zee, nee, idee, oké, café</td></tr>
+        <tr><th scope="row">Wekker</th><td>lekker, stekker, trekker</td></tr>
+      </tbody>
+    </table>
     <div class="bg-red-50 border-l-4 border-red-600 p-6 my-6 rounded-r-lg">
       <p class="font-bold text-red-900 mb-2">Voorbeeld met een cadeau aan het eind</p>
       <p class="font-text text-lg text-red-900 leading-relaxed mb-3 last:mb-0">
@@ -142,15 +148,17 @@
     <p class="leading-relaxed mb-4">
       Regels over de ontvanger eindigen vaak op dezelfde woorden. Hier is zuiver rijm voor die woorden:
     </p>
-    <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
-      <li>Jaar: maar, naar, haar, waar, daar, elkaar, klaar, paar, raar, zwaar</li>
-      <li>Lief: brief, dief, actief, sportief, positief, creatief, naïef</li>
-      <li>Stout en koud: fout, oud, goud, hout, zout, houdt, woud, vertrouwd, gebouwd</li>
-      <li>Braaf: gaaf, graaf, paraaf, fotograaf, paragraaf</li>
-      <li>Blij: hij, jij, mij, wij, zij, vrij, bij, voorbij, rij, partij</li>
-      <li>Laat: gaat, staat, praat, straat, maat, raad, daad, kwaad, draad, resultaat</li>
-      <li>Jou: kou, vrouw, trouw, blauw, gauw, touw, mouw, vertrouw</li>
-    </ul>
+    <table class="rijmregister">
+      <tbody>
+        <tr><th scope="row">Jaar</th><td>maar, naar, haar, waar, daar, elkaar, klaar, paar, raar, zwaar</td></tr>
+        <tr><th scope="row">Lief</th><td>brief, dief, actief, sportief, positief, creatief, naïef</td></tr>
+        <tr><th scope="row">Stout en koud</th><td>fout, oud, goud, hout, zout, houdt, woud, vertrouwd, gebouwd</td></tr>
+        <tr><th scope="row">Braaf</th><td>gaaf, graaf, paraaf, fotograaf, paragraaf</td></tr>
+        <tr><th scope="row">Blij</th><td>hij, jij, mij, wij, zij, vrij, bij, voorbij, rij, partij</td></tr>
+        <tr><th scope="row">Laat</th><td>gaat, staat, praat, straat, maat, raad, daad, kwaad, draad, resultaat</td></tr>
+        <tr><th scope="row">Jou</th><td>kou, vrouw, trouw, blauw, gauw, touw, mouw, vertrouw</td></tr>
+      </tbody>
+    </table>
     <div class="bg-red-50 border-l-4 border-red-600 p-6 my-6 rounded-r-lg">
       <p class="font-bold text-red-900 mb-2">Voorbeeld over het afgelopen jaar</p>
       <p class="font-text text-lg text-red-900 leading-relaxed mb-3 last:mb-0">
@@ -167,18 +175,20 @@
     <p class="leading-relaxed mb-4">
       Een gedicht voor pa, oma of je zus noemt die persoon vaak aan het eind van een regel. Hierop rijm je zuiver:
     </p>
-    <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
-      <li>Pa en ma: ja, na, sla, ha, hoera, aha</li>
-      <li>Oma: coma, aroma, diploma</li>
-      <li>Opa: Europa</li>
-      <li>Broer: boer, vloer, snoer, toer, roer, loer</li>
-      <li>Zus: kus, dus, bus, plus, sus</li>
-      <li>Man: kan, dan, van, pan, plan, span</li>
-      <li>Vriend: verdiend, bediend, dient, verdient</li>
-      <li>Vriendin: in, zin, begin, kin, win, spin, koningin</li>
-      <li>Schat: wat, dat, had, kat, bad, pad, nat, glad, stad, gat</li>
-      <li>Juf: suf, duf, puf</li>
-    </ul>
+    <table class="rijmregister">
+      <tbody>
+        <tr><th scope="row">Pa en ma</th><td>ja, na, sla, ha, hoera, aha</td></tr>
+        <tr><th scope="row">Oma</th><td>coma, aroma, diploma</td></tr>
+        <tr><th scope="row">Opa</th><td>Europa</td></tr>
+        <tr><th scope="row">Broer</th><td>boer, vloer, snoer, toer, roer, loer</td></tr>
+        <tr><th scope="row">Zus</th><td>kus, dus, bus, plus, sus</td></tr>
+        <tr><th scope="row">Man</th><td>kan, dan, van, pan, plan, span</td></tr>
+        <tr><th scope="row">Vriend</th><td>verdiend, bediend, dient, verdient</td></tr>
+        <tr><th scope="row">Vriendin</th><td>in, zin, begin, kin, win, spin, koningin</td></tr>
+        <tr><th scope="row">Schat</th><td>wat, dat, had, kat, bad, pad, nat, glad, stad, gat</td></tr>
+        <tr><th scope="row">Juf</th><td>suf, duf, puf</td></tr>
+      </tbody>
+    </table>
     <p class="leading-relaxed mb-4">
       Op opa rijmt bijna niets. Zet opa daarom vooraan in de regel, net als meester en collega. Meer tips staan in de posts over <NuxtLink to="/blog/sinterklaasgedicht-opa-oma" class="text-red-700 underline underline-offset-2 hover:text-red-900">rijmen voor opa en oma</NuxtLink> en een <NuxtLink to="/blog/sinterklaasgedicht-papa-mama" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht voor papa en mama</NuxtLink>.
     </p>
@@ -194,12 +204,14 @@
     <p class="leading-relaxed mb-4">
       Voor de gezellige sfeer, het gure weer of het dichten zelf heb je deze woorden. Koud staat hierboven bij stout.
     </p>
-    <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
-      <li>Dak: zak, pak, gemak, vak, tak, plak, strak, bak</li>
-      <li>Schoorsteen: steen, heen, alleen, geen, been, meteen, gemeen, bijeen</li>
-      <li>Gedicht: licht, zicht, dicht, gezicht, plicht, bericht, verplicht, zwicht</li>
-      <li>Zoet: goed, doet, moet, voet, groet, hoed, moed, spoed</li>
-    </ul>
+    <table class="rijmregister">
+      <tbody>
+        <tr><th scope="row">Dak</th><td>zak, pak, gemak, vak, tak, plak, strak, bak</td></tr>
+        <tr><th scope="row">Schoorsteen</th><td>steen, heen, alleen, geen, been, meteen, gemeen, bijeen</td></tr>
+        <tr><th scope="row">Gedicht</th><td>licht, zicht, dicht, gezicht, plicht, bericht, verplicht, zwicht</td></tr>
+        <tr><th scope="row">Zoet</th><td>goed, doet, moet, voet, groet, hoed, moed, spoed</td></tr>
+      </tbody>
+    </table>
     <div class="bg-red-50 border-l-4 border-red-600 p-6 my-6 rounded-r-lg">
       <p class="font-bold text-red-900 mb-2">Voorbeeld over het dak en de kou</p>
       <p class="font-text text-lg text-red-900 leading-relaxed mb-3 last:mb-0">
@@ -224,11 +236,13 @@
     <p class="leading-relaxed mb-4">
       Drie verzonnen voorbeelden:
     </p>
-    <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
-      <li>Jeroen (klemtoon op roen): schoen, doen, zoen, groen, toen, citroen, kampioen, seizoen</li>
-      <li>Ellen (klemtoon op El): bellen, tellen, vertellen, spellen, rebellen</li>
-      <li>Marie (klemtoon op rie): drie, knie, wie, zie, die, genie, fantasie, melodie</li>
-    </ul>
+    <table class="rijmregister">
+      <tbody>
+        <tr><th scope="row">Jeroen (klemtoon op roen)</th><td>schoen, doen, zoen, groen, toen, citroen, kampioen, seizoen</td></tr>
+        <tr><th scope="row">Ellen (klemtoon op El)</th><td>bellen, tellen, vertellen, spellen, rebellen</td></tr>
+        <tr><th scope="row">Marie (klemtoon op rie)</th><td>drie, knie, wie, zie, die, genie, fantasie, melodie</td></tr>
+      </tbody>
+    </table>
     <p class="leading-relaxed mb-4">
       Geen goed rijm? Zet de naam dan vooraan of midden in de regel.
     </p>
@@ -236,30 +250,32 @@
     <p class="leading-relaxed mb-4">
       De meeste van deze namen hebben één lettergreep of de klemtoon aan het eind. Daardoor zijn er veel zuivere rijmwoorden:
     </p>
-    <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4 marker:text-red-600">
-      <li>Daan: gaan, staan, maan, baan, aan, slaan, banaan, ontstaan</li>
-      <li>Sem: hem, stem, klem, rem, zwem</li>
-      <li>Bram: kwam, nam, dam, kam, lam, stam, ham</li>
-      <li>Jan: kan, dan, man, pan, van, plan</li>
-      <li>Kees en Mees: lees, vrees, wees, pees</li>
-      <li>Tim en Kim: slim, klim, schim</li>
-      <li>Finn: in, zin, begin, kin, win, spin</li>
-      <li>Rik: ik, dik, blik, schrik, klik, prik, ogenblik</li>
-      <li>Tom: om, dom, krom, som, kom, trom</li>
-      <li>Bas: tas, jas, glas, was, pas, gras</li>
-      <li>Bart: hart, start, zwart, apart, verward</li>
-      <li>Mark: park, kwark, ark</li>
-      <li>Henk: denk, schenk, geschenk, bedenk, wenk</li>
-      <li>Joost: troost, oost, kroost, getroost</li>
-      <li>Teun: steun, leun, deun, kreun</li>
-      <li>Thijs en Gijs: prijs, reis, wijs, ijs, grijs, paradijs</li>
-      <li>Tess: les, mes, fles, zes, bes, succes</li>
-      <li>Fleur: deur, geur, kleur, sleur, humeur, chauffeur</li>
-      <li>Roos: doos, boos, poos, matroos</li>
-      <li>Floor en Noor: door, voor, oor, koor, spoor, gehoor</li>
-      <li>Anouk (klemtoon op noek): boek, zoek, hoek, broek, koek, bezoek</li>
-      <li>Peter: beter, meter, eter, veter, kilometer</li>
-    </ul>
+    <table class="rijmregister">
+      <tbody>
+        <tr><th scope="row">Daan</th><td>gaan, staan, maan, baan, aan, slaan, banaan, ontstaan</td></tr>
+        <tr><th scope="row">Sem</th><td>hem, stem, klem, rem, zwem</td></tr>
+        <tr><th scope="row">Bram</th><td>kwam, nam, dam, kam, lam, stam, ham</td></tr>
+        <tr><th scope="row">Jan</th><td>kan, dan, man, pan, van, plan</td></tr>
+        <tr><th scope="row">Kees en Mees</th><td>lees, vrees, wees, pees</td></tr>
+        <tr><th scope="row">Tim en Kim</th><td>slim, klim, schim</td></tr>
+        <tr><th scope="row">Finn</th><td>in, zin, begin, kin, win, spin</td></tr>
+        <tr><th scope="row">Rik</th><td>ik, dik, blik, schrik, klik, prik, ogenblik</td></tr>
+        <tr><th scope="row">Tom</th><td>om, dom, krom, som, kom, trom</td></tr>
+        <tr><th scope="row">Bas</th><td>tas, jas, glas, was, pas, gras</td></tr>
+        <tr><th scope="row">Bart</th><td>hart, start, zwart, apart, verward</td></tr>
+        <tr><th scope="row">Mark</th><td>park, kwark, ark</td></tr>
+        <tr><th scope="row">Henk</th><td>denk, schenk, geschenk, bedenk, wenk</td></tr>
+        <tr><th scope="row">Joost</th><td>troost, oost, kroost, getroost</td></tr>
+        <tr><th scope="row">Teun</th><td>steun, leun, deun, kreun</td></tr>
+        <tr><th scope="row">Thijs en Gijs</th><td>prijs, reis, wijs, ijs, grijs, paradijs</td></tr>
+        <tr><th scope="row">Tess</th><td>les, mes, fles, zes, bes, succes</td></tr>
+        <tr><th scope="row">Fleur</th><td>deur, geur, kleur, sleur, humeur, chauffeur</td></tr>
+        <tr><th scope="row">Roos</th><td>doos, boos, poos, matroos</td></tr>
+        <tr><th scope="row">Floor en Noor</th><td>door, voor, oor, koor, spoor, gehoor</td></tr>
+        <tr><th scope="row">Anouk (klemtoon op noek)</th><td>boek, zoek, hoek, broek, koek, bezoek</td></tr>
+        <tr><th scope="row">Peter</th><td>beter, meter, eter, veter, kilometer</td></tr>
+      </tbody>
+    </table>
     <p class="leading-relaxed mb-4">
       Peter heeft de klemtoon op de eerste lettergreep, maar rijmt toch zuiver op beter en meter: vanaf de klemtoon klinkt het hetzelfde.
     </p>
