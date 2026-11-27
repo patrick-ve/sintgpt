@@ -5,8 +5,17 @@
     seo-title="Klassiek sinterklaasgedicht: tips en voorbeelden | SintGPT"
     seo-description="Leer hoe je een warm, klassiek sinterklaasgedicht schrijft met de juiste opbouw, persoonlijke details en complete voorbeeldgedichten."
     og-image="blog-klassiek-sinterklaasgedicht"
+    :toc="[
+      { id: 'wat-is-een-klassiek-sinterklaasgedicht-precies', label: 'Wat is een klassiek sinterklaasgedicht precies?' },
+      { id: 'wanneer-kies-je-voor-deze-traditionele-stijl', label: 'Wanneer kies je voor deze traditionele stijl?' },
+      { id: 'de-vier-vaste-bouwstenen-van-het-gedicht', label: 'De vier vaste bouwstenen van het gedicht' },
+      { id: 'hoe-maak-je-het-gedicht-persoonlijk-zonder-cliches', label: 'Hoe maak je het gedicht persoonlijk zonder clichés?' },
+      { id: 'voorbeeldcoupletten-per-onderdeel', label: 'Voorbeeldcoupletten per onderdeel' },
+      { id: 'compleet-klassiek-sinterklaasgedicht-als-voorbeeld', label: 'Compleet klassiek sinterklaasgedicht als voorbeeld' },
+      { id: 'tips-voor-het-schrijven-en-voordragen', label: 'Tips voor het schrijven en voordragen' },
+    ]"
   >
-    <h2 class="text-3xl font-bold mt-8 mb-4">Wat is een klassiek sinterklaasgedicht precies?</h2>
+    <h2 id="wat-is-een-klassiek-sinterklaasgedicht-precies" class="text-3xl font-bold mt-8 mb-4">Wat is een klassiek sinterklaasgedicht precies?</h2>
     <p class="leading-relaxed mb-4">
       In een <strong>klassiek sinterklaasgedicht</strong> neemt Sint-Nicolaas zelf het woord. Hij vertelt over zijn reis met de stoomboot uit Spanje, over Piet die over de daken sluipt en over het grote boek met alles wat de ontvanger het afgelopen jaar deed. De toon is warm en respectvol. Meer over deze gebruiken lees je bij de <NuxtLink to="/blog/sinterklaas-tradities" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaas tradities</NuxtLink>.
     </p>
@@ -14,7 +23,7 @@
       Een roast neemt de ontvanger flink op de hak. Een ironisch gedicht zegt het tegenovergestelde van wat het bedoelt. Een traditioneel gedicht doet geen van beide: de Sint geeft een gemeend compliment en plaagt hooguit een klein beetje. De ontvanger voelt zich gezien en pakt met een glimlach het cadeau uit. Twijfel je nog over de toon? Bekijk de <NuxtLink to="/blog/sinterklaasgedicht-stijlen" class="text-red-700 underline underline-offset-2 hover:text-red-900">zes stijlen voor een sinterklaasgedicht naast elkaar</NuxtLink>.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Wanneer kies je voor deze traditionele stijl?</h2>
+    <h2 id="wanneer-kies-je-voor-deze-traditionele-stijl" class="text-3xl font-bold mt-8 mb-4">Wanneer kies je voor deze traditionele stijl?</h2>
     <p class="leading-relaxed mb-4">
       Kies de klassieke stijl als er kinderen of grootouders meeluisteren, of als niet iedereen in de kamer elkaar goed kent. Deze vier situaties vragen erom:
     </p>
@@ -25,7 +34,7 @@
       <li>Collega's en klasgenoten: op school of de werkvloer blijft het gedicht netjes en voor iedereen prettig om naar te luisteren.</li>
     </ul>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">De vier vaste bouwstenen van het gedicht</h2>
+    <h2 id="de-vier-vaste-bouwstenen-van-het-gedicht" class="text-3xl font-bold mt-8 mb-4">De vier vaste bouwstenen van het gedicht</h2>
     <p class="leading-relaxed mb-4">
       Een traditioneel gedicht heeft vier vaste onderdelen, in deze volgorde:
     </p>
@@ -39,7 +48,7 @@
       Houd de plagerij klein en vriendelijk, dan blijft het een <strong>warm sinterklaasgedicht</strong>. Geef het compliment meer regels dan de plaagstoot, bijvoorbeeld vier regels lof tegen twee regels plagen. Zoek je die balans liever niet zelf, dan kun je met een paar weetjes ook <NuxtLink to="/?stijl=klassiek#poem-form" data-cta="blog:klassiek-sinterklaasgedicht:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">een klassiek sinterklaasgedicht laten maken</NuxtLink>.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Hoe maak je het gedicht persoonlijk zonder clichés?</h2>
+    <h2 id="hoe-maak-je-het-gedicht-persoonlijk-zonder-cliches" class="text-3xl font-bold mt-8 mb-4">Hoe maak je het gedicht persoonlijk zonder clichés?</h2>
     <p class="leading-relaxed mb-4">
       Een bekende openingsregel mag. Daarna maakt een concreet detail het gedicht persoonlijk: een gewoonte, een uitspraak die de ontvanger vaak doet of iets wat dit jaar echt gebeurde. "Je houdt van tuinieren" past bij duizend mensen. "Je hark lag drie nachten in de regen" past maar bij één.
     </p>
@@ -51,7 +60,7 @@
       <p class="text-red-800">Bij het rijmschema AABB rijmen steeds twee regels na elkaar. Luisteraars horen het rijm dan meteen. Lees meer over het juiste <NuxtLink to="/blog/rijm-en-ritme-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">rijmschema voor je sinterklaasgedicht</NuxtLink> om haperingen bij het voorlezen te voorkomen.</p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Voorbeeldcoupletten per onderdeel</h2>
+    <h2 id="voorbeeldcoupletten-per-onderdeel" class="text-3xl font-bold mt-8 mb-4">Voorbeeldcoupletten per onderdeel</h2>
     <p class="leading-relaxed mb-4">
       Hieronder staan drie onderdelen uitgewerkt als rijmparen. Elk couplet heeft vier regels en volrijm.
     </p>
@@ -86,7 +95,7 @@
       </p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Compleet klassiek sinterklaasgedicht als voorbeeld</h2>
+    <h2 id="compleet-klassiek-sinterklaasgedicht-als-voorbeeld" class="text-3xl font-bold mt-8 mb-4">Compleet klassiek sinterklaasgedicht als voorbeeld</h2>
     <p class="leading-relaxed mb-4">
       Dit voorbeeld van zestien regels gaat over Bram, een verzonnen tuinier die zijn gereedschap weleens buiten laat liggen. Het rijmschema is AABB.
     </p>
@@ -121,7 +130,7 @@
       Zoek je een voorbeeld voor een andere ontvanger? Bekijk de <NuxtLink to="/voorbeelden" class="text-red-700 underline underline-offset-2 hover:text-red-900">voorbeeldgedichten in verschillende stijlen</NuxtLink>.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Tips voor het schrijven en voordragen</h2>
+    <h2 id="tips-voor-het-schrijven-en-voordragen" class="text-3xl font-bold mt-8 mb-4">Tips voor het schrijven en voordragen</h2>
     <p class="leading-relaxed mb-4">
       Begin met een kort lijstje van eigenschappen, gewoontes en hobby's van de ontvanger. Zoek rijmwoorden bij de belangrijkste begrippen en schrijf eerst de grote verhaallijn op.
     </p>

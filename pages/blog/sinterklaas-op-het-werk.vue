@@ -5,8 +5,16 @@
     seo-title="Sinterklaasgedicht collega: tips voor het werk | SintGPT"
     seo-description="Zo schrijf je een sinterklaasgedicht voor een collega: geschikte onderwerpen, voorbeelden en tips voor Sinterklaas op kantoor."
     og-image="blog-sinterklaas-op-het-werk"
+    :toc="[
+      { id: 'sinterklaasgedicht-voor-een-collega-waar-let-je-op', label: 'Sinterklaasgedicht voor een collega: waar let je op?' },
+      { id: 'lootjes-trekken-op-het-werk', label: 'Lootjes trekken op het werk' },
+      { id: 'welke-onderwerpen-passen-in-een-gedicht-voor-een-collega', label: 'Welke onderwerpen passen in een gedicht voor een collega?' },
+      { id: 'opbouw-en-rijmschema-van-het-sinterklaasgedicht', label: 'Opbouw en rijmschema van het sinterklaasgedicht' },
+      { id: 'voorbeelden-van-een-sinterklaasgedicht-voor-een-collega', label: 'Voorbeelden van een sinterklaasgedicht voor een collega' },
+      { id: 'draaiboek-voor-de-sinterklaasviering-op-kantoor', label: 'Draaiboek voor de sinterklaasviering op kantoor' },
+    ]"
   >
-    <h2 class="text-3xl font-bold mt-8 mb-4">Sinterklaasgedicht voor een collega: waar let je op?</h2>
+    <h2 id="sinterklaasgedicht-voor-een-collega-waar-let-je-op" class="text-3xl font-bold mt-8 mb-4">Sinterklaasgedicht voor een collega: waar let je op?</h2>
     <p class="leading-relaxed mb-4">
       Kies onderwerpen waar de collega zelf om kan lachen terwijl de hele afdeling meeluistert. Op het werk gelden andere grenzen dan in een huiskamer vol familie. Een grap die thuis goed valt, kan op kantoor pijnlijk zijn. En de volgende ochtend zit je weer samen aan de vergadertafel.
     </p>
@@ -19,7 +27,7 @@
       <li>Nodig collega's die liever niet dichten wel uit voor de koffie, de traktatie of de lunch.</li>
     </ul>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Lootjes trekken op het werk</h2>
+    <h2 id="lootjes-trekken-op-het-werk" class="text-3xl font-bold mt-8 mb-4">Lootjes trekken op het werk</h2>
     <p class="leading-relaxed mb-4">
       Met lootjes houd je pakjesavond voor een team overzichtelijk. Ieder teamlid koopt één cadeau en schrijft één gedicht voor wie op het lootje staat. Zo is het voor niemand veel werk, en krijgt iedereen evenveel aandacht. Dicht je niet graag, dan kun je ook <NuxtLink to="/" data-cta="blog:sinterklaas-op-het-werk:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">een gedicht voor je collega laten schrijven</NuxtLink>.
     </p>
@@ -31,7 +39,7 @@
       <p class="text-red-800">Spreek vooraf een vast maximumbedrag af, bijvoorbeeld 5 tot 10 euro. Dat houdt meedoen toegankelijk voor iedereen, van stagiair tot leidinggevende. Spreek ook af of een surprise verplicht is of dat een gedicht met cadeau genoeg is.</p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Welke onderwerpen passen in een gedicht voor een collega?</h2>
+    <h2 id="welke-onderwerpen-passen-in-een-gedicht-voor-een-collega" class="text-3xl font-bold mt-8 mb-4">Welke onderwerpen passen in een gedicht voor een collega?</h2>
     <p class="leading-relaxed mb-4">
       Kies gewoontes op kantoor die de hele afdeling herkent en waar de collega zelf om kan lachen. Plaag een beetje en laat ook waardering horen.
     </p>
@@ -52,7 +60,7 @@
       <li>Kantoorroddels en vertrouwelijke zaken die niet voor de hele groep bestemd zijn.</li>
     </ul>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Opbouw en rijmschema van het sinterklaasgedicht</h2>
+    <h2 id="opbouw-en-rijmschema-van-het-sinterklaasgedicht" class="text-3xl font-bold mt-8 mb-4">Opbouw en rijmschema van het sinterklaasgedicht</h2>
     <p class="leading-relaxed mb-4">
       Een sinterklaasgedicht voor een collega heeft drie delen. Begin met een vriendelijke begroeting van de Sint waarin je de werkplek of de rol van de collega noemt. Werk in het midden toe naar een herkenbare anekdote of opvallende werkgewoonte. Sluit af met een compliment of een warme wens, gevolgd door een hint naar het cadeau.
     </p>
@@ -64,7 +72,7 @@
       <p class="text-red-800">Lees je regels hardop voor tijdens het schrijven. Struikel je over een zin of klopt het ritme niet? Pas dan de woordvolgorde aan of vervang lange woorden door kortere synoniemen.</p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Voorbeelden van een sinterklaasgedicht voor een collega</h2>
+    <h2 id="voorbeelden-van-een-sinterklaasgedicht-voor-een-collega" class="text-3xl font-bold mt-8 mb-4">Voorbeelden van een sinterklaasgedicht voor een collega</h2>
     <p class="leading-relaxed mb-4">
       Hieronder vind je twee voorbeeldgedichten voor fictieve collega's. Ze plagen met gewone situaties op het werk, zonder iemand te kwetsen.
     </p>
@@ -101,7 +109,7 @@
       Wil je een collega met een knipoog wat scherper aanspreken? Houd de ondertoon vriendelijk en eindig het gedicht warm. In het artikel over een <NuxtLink to="/blog/roast-sinterklaasgedicht-zonder-te-kwetsen" class="text-red-700 underline underline-offset-2 hover:text-red-900">roast sinterklaasgedicht schrijven</NuxtLink> lees je hoe je die balans bewaakt.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Draaiboek voor de sinterklaasviering op kantoor</h2>
+    <h2 id="draaiboek-voor-de-sinterklaasviering-op-kantoor" class="text-3xl font-bold mt-8 mb-4">Draaiboek voor de sinterklaasviering op kantoor</h2>
     <p class="leading-relaxed mb-4">
       Plan de viering op tijd en stem haar af op je team. Werken er internationale collega's op de afdeling? Bied dan de mogelijkheid om een <NuxtLink to="/blog/sinterklaasgedicht-in-het-engels" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht in het Engels</NuxtLink> te schrijven.
     </p>

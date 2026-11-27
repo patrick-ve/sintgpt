@@ -5,8 +5,17 @@
     seo-title="Sinterklaasgedicht voor opa en oma met voorbeelden | SintGPT"
     seo-description="Tips en voorbeelden voor een sinterklaasgedicht voor opa en oma: herkenbare verhalen, een warme toon en een rustig ritme dat fijn voorleest."
     og-image="blog-sinterklaasgedicht-opa-oma"
+    :toc="[
+      { id: 'wat-maakt-een-sinterklaasgedicht-voor-opa-en-oma-bijzonder', label: 'Wat maakt een sinterklaasgedicht voor opa en oma bijzonder?' },
+      { id: 'onderwerpen-die-goed-werken-voor-opa-en-oma', label: 'Onderwerpen die goed werken voor opa en oma' },
+      { id: 'de-juiste-toon-plagen-met-respect-en-warmte', label: 'De juiste toon: plagen met respect en warmte' },
+      { id: 'aandacht-voor-rustig-ritme-en-duidelijk-voorlezen', label: 'Aandacht voor rustig ritme en duidelijk voorlezen' },
+      { id: 'drie-voorbeeldgedichten-voor-opa-en-oma', label: 'Drie voorbeeldgedichten voor opa en oma' },
+      { id: 'vier-valkuilen-bij-een-gedicht-voor-grootouders', label: 'Vier valkuilen bij een gedicht voor grootouders' },
+      { id: 'zelf-een-gedicht-schrijven-in-vier-stappen', label: 'Zelf een gedicht schrijven in vier stappen' },
+    ]"
   >
-    <h2 class="text-3xl font-bold mt-8 mb-4">Wat maakt een sinterklaasgedicht voor opa en oma bijzonder?</h2>
+    <h2 id="wat-maakt-een-sinterklaasgedicht-voor-opa-en-oma-bijzonder" class="text-3xl font-bold mt-8 mb-4">Wat maakt een sinterklaasgedicht voor opa en oma bijzonder?</h2>
     <p class="leading-relaxed mb-4">
       Een <strong>sinterklaasgedicht voor opa en oma</strong> vraagt een andere toon dan een gedicht voor een vriend of collega. Bij een broer of vriend kies je vaak scherpe grappen. Bij grootouders staat je waardering voor hen centraal.
     </p>
@@ -14,7 +23,7 @@
       Een gedicht voor grootouders mag zacht en warm zijn, met een vrolijke knipoog erin. Noem wat opa en oma voor de familie doen. Voeg daarna een anekdote toe over een kleine eigenaardigheid, zoals het snoepkastje dat nooit leeg raakt.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Onderwerpen die goed werken voor opa en oma</h2>
+    <h2 id="onderwerpen-die-goed-werken-voor-opa-en-oma" class="text-3xl font-bold mt-8 mb-4">Onderwerpen die goed werken voor opa en oma</h2>
     <p class="leading-relaxed mb-4">
       Deze vijf onderwerpen geven bij opa's en oma's meteen herkenning:
     </p>
@@ -29,7 +38,7 @@
       Met zulke kleine details voelt de ontvanger zich meteen aangesproken. Wil je weten hoe je persoonlijke weetjes op rijm zet? Bekijk dan onze algemene schrijftips over een <NuxtLink to="/blog/hoe-schrijf-je-het-perfecte-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht schrijven</NuxtLink>.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">De juiste toon: plagen met respect en warmte</h2>
+    <h2 id="de-juiste-toon-plagen-met-respect-en-warmte" class="text-3xl font-bold mt-8 mb-4">De juiste toon: plagen met respect en warmte</h2>
     <p class="leading-relaxed mb-4">
       Sinterklaas mag plagen, maar bij opa en oma moet een grapje goed vallen. Plaag de familie zelf, of noem onschuldige gewoontes. Een overvol snoepkastje of een stapel ongelezen kranten werkt goed, zolang de toon liefdevol blijft. Vind je die toon lastig, dan kun je met een paar weetjes ook <NuxtLink to="/" data-cta="blog:sinterklaasgedicht-opa-oma:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">een gedicht voor opa en oma laten schrijven</NuxtLink>.
     </p>
@@ -41,7 +50,7 @@
       Zoek je toch wat meer humor voor een grootouder die van een geintje houdt? Lees dan onze tips voor een <NuxtLink to="/blog/grappige-sinterklaasgedichten-tips" class="text-red-700 underline underline-offset-2 hover:text-red-900">grappig sinterklaasgedicht</NuxtLink> dat gezellig en vriendelijk blijft voor iedereen aan tafel.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Aandacht voor rustig ritme en duidelijk voorlezen</h2>
+    <h2 id="aandacht-voor-rustig-ritme-en-duidelijk-voorlezen" class="text-3xl font-bold mt-8 mb-4">Aandacht voor rustig ritme en duidelijk voorlezen</h2>
     <p class="leading-relaxed mb-4">
       Op pakjesavond is de woonkamer vaak vol en rumoerig. Grootouders die minder goed horen of een gehoorapparaat dragen, kunnen een snel gedicht moeilijk volgen. Houd daar bij het schrijven en voorlezen rekening mee:
     </p>
@@ -56,7 +65,7 @@
       Wil je dat je gedicht soepel loopt, zonder haperingen? Lees dan meer over het juiste <NuxtLink to="/blog/rijm-en-ritme-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">rijmschema voor je sinterklaasgedicht</NuxtLink>.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Drie voorbeeldgedichten voor opa en oma</h2>
+    <h2 id="drie-voorbeeldgedichten-voor-opa-en-oma" class="text-3xl font-bold mt-8 mb-4">Drie voorbeeldgedichten voor opa en oma</h2>
     <p class="leading-relaxed mb-4">
       Deze drie voorbeelden hebben elk acht regels in rijmschema AABB. Gebruik ze zoals ze zijn, of vervang de details door je eigen herinneringen.
     </p>
@@ -109,7 +118,7 @@
       </p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Vier valkuilen bij een gedicht voor grootouders</h2>
+    <h2 id="vier-valkuilen-bij-een-gedicht-voor-grootouders" class="text-3xl font-bold mt-8 mb-4">Vier valkuilen bij een gedicht voor grootouders</h2>
     <p class="leading-relaxed mb-4">
       Een gedicht voor oudere familieleden kan onbedoeld een ongemakkelijk moment geven. Let op deze vier fouten:
     </p>
@@ -120,7 +129,7 @@
       <li>Geen link met het cadeau: geef in de laatste regels een hint naar het pakje.</li>
     </ul>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Zelf een gedicht schrijven in vier stappen</h2>
+    <h2 id="zelf-een-gedicht-schrijven-in-vier-stappen" class="text-3xl font-bold mt-8 mb-4">Zelf een gedicht schrijven in vier stappen</h2>
     <p class="leading-relaxed mb-4">
       Zo schrijf je zelf een persoonlijk sinterklaasgedicht voor opa en oma:
     </p>

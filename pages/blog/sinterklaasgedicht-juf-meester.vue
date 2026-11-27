@@ -5,8 +5,17 @@
     seo-title="Sinterklaasgedicht voor de juf of meester: tips | SintGPT"
     seo-description="Lees hoe je een sinterklaasgedicht voor de juf of meester schrijft. Met handige tips, voorbeeldrijmen en ideeën voor een passend klassencadeau."
     og-image="blog-sinterklaasgedicht-juf-meester"
+    :toc="[
+      { id: 'waarom-een-sinterklaasgedicht-voor-de-juf-of-meester-bijzonder-is', label: 'Waarom een sinterklaasgedicht voor de juf of meester bijzonder is' },
+      { id: 'de-juiste-toon-vriendelijk-en-veilig-voor-de-klas', label: 'De juiste toon: vriendelijk en veilig voor de klas' },
+      { id: 'herkenbare-onderwerpen-voor-het-rijm', label: 'Herkenbare onderwerpen voor het rijm' },
+      { id: 'de-opbouw-van-een-klassikaal-sinterklaasgedicht', label: 'De opbouw van een klassikaal sinterklaasgedicht' },
+      { id: 'voorbeeldcoupletten-voor-juf-meester-en-de-groep', label: 'Voorbeeldcoupletten voor juf, meester en de groep' },
+      { id: 'compleet-voorbeeldgedicht-voor-de-leerkracht', label: 'Compleet voorbeeldgedicht voor de leerkracht' },
+      { id: 'tips-voor-het-voorlezen-in-de-klas', label: 'Tips voor het voorlezen in de klas' },
+    ]"
   >
-    <h2 class="text-3xl font-bold mt-8 mb-4">Waarom een sinterklaasgedicht voor de juf of meester bijzonder is</h2>
+    <h2 id="waarom-een-sinterklaasgedicht-voor-de-juf-of-meester-bijzonder-is" class="text-3xl font-bold mt-8 mb-4">Waarom een sinterklaasgedicht voor de juf of meester bijzonder is</h2>
     <p class="leading-relaxed mb-4">
       Rond 5 december vieren veel basisscholen het sinterklaasfeest met surprises en cadeautjes. Naast de pakjes voor de leerlingen zetten ouders en kinderen ook graag de leerkracht in het zonnetje. Een sinterklaasgedicht voor de juf of meester is een fijne manier om waardering uit te spreken voor alle inzet en toewijding in het klaslokaal.
     </p>
@@ -14,7 +23,7 @@
       Er zijn verschillende momenten waarop zo'n rijm tevoorschijn komt. Soms organiseren de klassenouders een gezamenlijk <strong>klassencadeau</strong> en hoort daar een centrale rijmtekst bij. In andere gevallen knutselt een kind zelf een surprise of schrijft een gezin een persoonlijk bedankje. Een goed gedicht hoeft niet ingewikkeld te zijn. Een oprechte tekst met een kleine attentie, zoals chocolade of thee, maakt al een grote indruk.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">De juiste toon: vriendelijk en veilig voor de klas</h2>
+    <h2 id="de-juiste-toon-vriendelijk-en-veilig-voor-de-klas" class="text-3xl font-bold mt-8 mb-4">De juiste toon: vriendelijk en veilig voor de klas</h2>
     <p class="leading-relaxed mb-4">
       Wanneer je dicht voor een leerkracht, is het publiek een belangrijk punt van aandacht. Het gedicht wordt vrijwel altijd hardop voorgelezen in de klas waar alle kinderen en collega's bij zijn. Dat vraagt om een andere benadering dan een plaaggedicht voor een broer of vriend.
     </p>
@@ -28,7 +37,7 @@
       Een veilige vuistregel is: schrijf alleen dingen op waar de hele klas hartelijk om kan lachen zonder dat de leerkracht zich ongemakkelijk voelt.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Herkenbare onderwerpen voor het rijm</h2>
+    <h2 id="herkenbare-onderwerpen-voor-het-rijm" class="text-3xl font-bold mt-8 mb-4">Herkenbare onderwerpen voor het rijm</h2>
     <p class="leading-relaxed mb-4">
       De beste inspiratie voor een schoolgedicht vind je in de dagelijkse gewoontes van de groep. Typische situaties die elk kind herkent, zorgen meteen voor een glimlach op elk gezicht.
     </p>
@@ -47,7 +56,7 @@
       Met twee of drie van zulke weetjes kun je ook <NuxtLink to="/" data-cta="blog:sinterklaasgedicht-juf-meester:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">een gedicht voor de juf of meester laten schrijven</NuxtLink>.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">De opbouw van een klassikaal sinterklaasgedicht</h2>
+    <h2 id="de-opbouw-van-een-klassikaal-sinterklaasgedicht" class="text-3xl font-bold mt-8 mb-4">De opbouw van een klassikaal sinterklaasgedicht</h2>
     <p class="leading-relaxed mb-4">
       Een heldere structuur maakt het dichten een stuk eenvoudiger. Je bouwt het gedicht logisch op in vier overzichtelijke stappen.
     </p>
@@ -61,7 +70,7 @@
       Kies bij voorkeur voor een eenvoudig <strong>rijmschema</strong> zoals AABB. Dit schema leest heel natuurlijk voor en helpt het kind om in het juiste ritme te blijven.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Voorbeeldcoupletten voor juf, meester en de groep</h2>
+    <h2 id="voorbeeldcoupletten-voor-juf-meester-en-de-groep" class="text-3xl font-bold mt-8 mb-4">Voorbeeldcoupletten voor juf, meester en de groep</h2>
     <p class="leading-relaxed mb-4">
       Onderstaande korte coupletten kun je direct overnemen op een feestelijk kaartje of combineren in een langer gedicht.
     </p>
@@ -96,7 +105,7 @@
       </p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Compleet voorbeeldgedicht voor de leerkracht</h2>
+    <h2 id="compleet-voorbeeldgedicht-voor-de-leerkracht" class="text-3xl font-bold mt-8 mb-4">Compleet voorbeeldgedicht voor de leerkracht</h2>
     <p class="leading-relaxed mb-4">
       Zoek je een compleet sinterklaasgedicht van twaalf regels voor een surprise of het uitpakmoment in de kring? Dit voorbeeld heeft een regelmatig ritme en leent zich uitstekend om hardop voor te dragen.
     </p>
@@ -122,7 +131,7 @@
       </p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Tips voor het voorlezen in de klas</h2>
+    <h2 id="tips-voor-het-voorlezen-in-de-klas" class="text-3xl font-bold mt-8 mb-4">Tips voor het voorlezen in de klas</h2>
     <p class="leading-relaxed mb-4">
       Voor veel kinderen is <strong>voorlezen</strong> voor een volle klas een spannend moment. Met een goede voorbereiding geef je een kind het nodige zelfvertrouwen.
     </p>

@@ -5,8 +5,16 @@
     seo-title="Sinterklaasgedicht last minute: snel klaar | SintGPT"
     seo-description="Heb je snel een rijm nodig? Zo schrijf je last minute een sinterklaasgedicht, met een invulsjabloon, rijmwoorden die altijd werken en slimme tips."
     og-image="blog-sinterklaasgedicht-last-minute"
+    :toc="[
+      { id: 'sinterklaasgedicht-last-minute-in-10-minuten', label: 'Sinterklaasgedicht last minute in 10 minuten' },
+      { id: 'het-invulsjabloon-van-8-regels', label: 'Het invulsjabloon van 8 regels' },
+      { id: 'rijmwoorden-die-altijd-werken', label: 'Rijmwoorden die altijd werken' },
+      { id: 'valkuilen-als-je-haast-hebt', label: 'Valkuilen als je haast hebt' },
+      { id: 'geen-printer-zo-geef-je-het-gedicht-toch', label: 'Geen printer? Zo geef je het gedicht toch' },
+      { id: 'zo-lees-je-een-snel-geschreven-rijm-goed-voor', label: 'Zo lees je een snel geschreven rijm goed voor' },
+    ]"
   >
-    <h2 class="text-3xl font-bold mt-8 mb-4">Sinterklaasgedicht last minute in 10 minuten</h2>
+    <h2 id="sinterklaasgedicht-last-minute-in-10-minuten" class="text-3xl font-bold mt-8 mb-4">Sinterklaasgedicht last minute in 10 minuten</h2>
     <p class="leading-relaxed mb-4">
       Begint pakjesavond over een uur en ben je het gedicht vergeten? Je hoeft geen uren aan de keukentafel te zitten. Met een vaste tijdverdeling schrijf je in tien minuten een gedicht waar iedereen met plezier naar luistert.
     </p>
@@ -23,7 +31,7 @@
       <p class="text-red-800">Zet een timer van tien minuten op je telefoon. Met een duidelijke grens hak je sneller knopen door en blijf je niet hangen bij één woord.</p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Het invulsjabloon van 8 regels</h2>
+    <h2 id="het-invulsjabloon-van-8-regels" class="text-3xl font-bold mt-8 mb-4">Het invulsjabloon van 8 regels</h2>
     <p class="leading-relaxed mb-4">
       Met weinig tijd is een invulsjabloon je beste vriend. Acht regels zijn lang genoeg voor een persoonlijke noot en kort genoeg om snel te schrijven. Het sjabloon gebruikt het <strong>rijmschema AABB</strong>: steeds twee regels na elkaar rijmen. Dat geeft houvast en leest prettig voor.
     </p>
@@ -79,7 +87,7 @@
       </p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Rijmwoorden die altijd werken</h2>
+    <h2 id="rijmwoorden-die-altijd-werken" class="text-3xl font-bold mt-8 mb-4">Rijmwoorden die altijd werken</h2>
     <p class="leading-relaxed mb-4">
       Onder tijdsdruk loop je snel vast op een moeilijk woord. Op woorden als december, pakjesavond en surprise rijmt bijna niets. Zet zulke woorden daarom vooraan of midden in een regel, en bewaar makkelijke klanken voor het eind.
     </p>
@@ -99,7 +107,7 @@
       Met deze vertrouwde klanken krijg je vanzelf een helder <NuxtLink to="/blog/rijm-en-ritme-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">rijm en ritme</NuxtLink>. Je hoeft dan niet lang te zoeken en houdt het tempo erin.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Valkuilen als je haast hebt</h2>
+    <h2 id="valkuilen-als-je-haast-hebt" class="text-3xl font-bold mt-8 mb-4">Valkuilen als je haast hebt</h2>
     <p class="leading-relaxed mb-4">
       Wie snel schrijft, maakt snel een paar bekende fouten. Let op deze vier punten, dan klinkt je gedicht toch verzorgd.
     </p>
@@ -113,7 +121,7 @@
       Twijfel je over een regel? Tik met je vinger op tafel mee op het ritme. Moet je woorden inslikken om de regel rond te krijgen, schrap dan een paar woorden.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Geen printer? Zo geef je het gedicht toch</h2>
+    <h2 id="geen-printer-zo-geef-je-het-gedicht-toch" class="text-3xl font-bold mt-8 mb-4">Geen printer? Zo geef je het gedicht toch</h2>
     <p class="leading-relaxed mb-4">
       Is de tekst klaar, maar werkt de printer niet of is het papier op? Ook zonder printer geef je het gedicht netjes.
     </p>
@@ -130,7 +138,7 @@
       <p class="text-red-800">Schrijf je het gedicht met de hand, gebruik dan een donkere pen of stift en duidelijke blokletters. Bij kaarslicht lees je dat veel makkelijker voor.</p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Zo lees je een snel geschreven rijm goed voor</h2>
+    <h2 id="zo-lees-je-een-snel-geschreven-rijm-goed-voor" class="text-3xl font-bold mt-8 mb-4">Zo lees je een snel geschreven rijm goed voor</h2>
     <p class="leading-relaxed mb-4">
       Het voorlezen is net zo belangrijk als de tekst. Ook een eenvoudig rijm van acht regels komt goed aan als je het rustig voorleest.
     </p>

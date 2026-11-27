@@ -5,8 +5,18 @@
     seo-title="Sinterklaas tradities: van intocht tot pakjesavond | SintGPT"
     seo-description="Wat zijn de bekendste sinterklaas tradities? Lees alles over de intocht, schoen zetten, lekkernijen, surprises en het gedicht op pakjesavond."
     og-image="blog-sinterklaas-tradities"
+    :toc="[
+      { id: 'de-bekendste-sinterklaas-tradities-op-een-rij', label: 'De bekendste sinterklaas tradities op een rij' },
+      { id: 'waar-komt-het-sinterklaasfeest-vandaan', label: 'Waar komt het sinterklaasfeest vandaan?' },
+      { id: 'de-aanloop-intocht-en-je-schoen-zetten', label: 'De aanloop: intocht en je schoen zetten' },
+      { id: 'traditionele-sinterklaas-lekkernijen', label: 'Traditionele sinterklaas lekkernijen' },
+      { id: 'pakjesavond-cadeaus-surprises-en-gedichten', label: 'Pakjesavond: cadeaus, surprises en gedichten' },
+      { id: 'valkuilen-bij-het-vieren-van-sinterklaas', label: 'Valkuilen bij het vieren van Sinterklaas' },
+      { id: 'hoe-leg-je-de-sinterklaas-tradities-uit-aan-nieuwkomers', label: 'Hoe leg je de sinterklaas tradities uit aan nieuwkomers?' },
+      { id: 'nieuwe-manieren-om-het-feest-te-vieren', label: 'Nieuwe manieren om het feest te vieren' },
+    ]"
   >
-    <h2 class="text-3xl font-bold mt-8 mb-4">De bekendste sinterklaas tradities op een rij</h2>
+    <h2 id="de-bekendste-sinterklaas-tradities-op-een-rij" class="text-3xl font-bold mt-8 mb-4">De bekendste sinterklaas tradities op een rij</h2>
     <p class="leading-relaxed mb-4">
       Ieder gezin viert Sinterklaas op een eigen manier, maar een paar gewoontes keren in Nederland en Vlaanderen overal terug.
     </p>
@@ -25,7 +35,7 @@
       Jonge kinderen leven toe naar de schoen en de komst van de Sint. Oudere kinderen en volwassenen trekken lootjes en maken surprises en gedichten voor elkaar. Wil het rijmen niet lukken, dan kun je ook <NuxtLink to="/" data-cta="blog:sinterklaas-tradities:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">het gedicht voor pakjesavond laten schrijven</NuxtLink>.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Waar komt het sinterklaasfeest vandaan?</h2>
+    <h2 id="waar-komt-het-sinterklaasfeest-vandaan" class="text-3xl font-bold mt-8 mb-4">Waar komt het sinterklaasfeest vandaan?</h2>
     <p class="leading-relaxed mb-4">
       Het feest gaat terug op Sint-Nicolaas, in de vierde eeuw bisschop van Myra, een stad in het huidige Turkije. Hij stond bekend om zijn vrijgevigheid en zijn hulp aan arme mensen en kinderen. Na zijn dood ontstonden er veel verhalen en legendes over hem.
     </p>
@@ -36,7 +46,7 @@
       Een deel van het verhaal zoals we het nu kennen, kreeg in de negentiende eeuw vorm. Denk aan de Sint die uit Spanje komt en met de stoomboot aankomt.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">De aanloop: intocht en je schoen zetten</h2>
+    <h2 id="de-aanloop-intocht-en-je-schoen-zetten" class="text-3xl font-bold mt-8 mb-4">De aanloop: intocht en je schoen zetten</h2>
     <p class="leading-relaxed mb-4">
       De feestperiode begint met de intocht: de Sint komt met de stoomboot aan. In veel steden en dorpen staan kinderen langs de kade om de Sint en zijn Pieten welkom te heten.
     </p>
@@ -58,7 +68,7 @@
       Volgens het verhaal houdt de Sint in zijn grote boek bij wat ieder kind het afgelopen jaar deed. Vroeger stond daarin vooral wie stout was geweest. Nu leest de Sint er complimenten uit voor, zoals een zwemdiploma of een grappige herinnering.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Traditionele sinterklaas lekkernijen</h2>
+    <h2 id="traditionele-sinterklaas-lekkernijen" class="text-3xl font-bold mt-8 mb-4">Traditionele sinterklaas lekkernijen</h2>
     <p class="leading-relaxed mb-4">
       Bij Sinterklaas hoort eigen snoepgoed. Veel ervan ligt alleen in deze weken in de winkel.
     </p>
@@ -73,7 +83,7 @@
       Het strooien van snoepgoed is een oud gebruik. Het herinnert aan de legende waarin Sint-Nicolaas goudstukken door het raam wierp om mensen in nood te helpen.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Pakjesavond: cadeaus, surprises en gedichten</h2>
+    <h2 id="pakjesavond-cadeaus-surprises-en-gedichten" class="text-3xl font-bold mt-8 mb-4">Pakjesavond: cadeaus, surprises en gedichten</h2>
     <p class="leading-relaxed mb-4">
       Op 5 december is pakjesavond. Families of vriendengroepen komen 's avonds samen om pakjes uit te pakken. Voor volwassenen en oudere kinderen begint de voorbereiding vaak al weken eerder met <NuxtLink to="/lootjes" class="text-red-700 underline underline-offset-2 hover:text-red-900">lootjes trekken</NuxtLink>.
     </p>
@@ -103,7 +113,7 @@
       <p class="text-red-800">Laat iedereen om de beurt een cadeau uitpakken en het bijbehorende gedicht rustig hardop voorlezen. Zo hoort iedereen elk gedicht.</p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Valkuilen bij het vieren van Sinterklaas</h2>
+    <h2 id="valkuilen-bij-het-vieren-van-sinterklaas" class="text-3xl font-bold mt-8 mb-4">Valkuilen bij het vieren van Sinterklaas</h2>
     <p class="leading-relaxed mb-4">
       Deze vier dingen geven vaak stress rond pakjesavond. Zo voorkom je ze:
     </p>
@@ -114,7 +124,7 @@
       <li><strong>Te veel cadeaus tegelijk</strong>: een enorme stapel pakjes is voor jonge kinderen te veel. Een paar goedgekozen cadeaus geven meer rust.</li>
     </ul>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Hoe leg je de sinterklaas tradities uit aan nieuwkomers?</h2>
+    <h2 id="hoe-leg-je-de-sinterklaas-tradities-uit-aan-nieuwkomers" class="text-3xl font-bold mt-8 mb-4">Hoe leg je de sinterklaas tradities uit aan nieuwkomers?</h2>
     <p class="leading-relaxed mb-4">
       Vertel dat de Sint op 5 december cadeaus brengt, en dat bij elk cadeau een zelfgeschreven gedicht hoort dat de ontvanger een beetje plaagt. Wat telt, is de moeite die je in een gedicht en een surprise steekt. Wil je het feest in een gedicht uitleggen? Lees hoe je een <NuxtLink to="/blog/sinterklaasgedicht-in-het-engels" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht in het Engels</NuxtLink> schrijft.
     </p>
@@ -128,7 +138,7 @@
       <li>Houd de spelregels en cadeaubedragen eenvoudig wanneer er mensen meedoen die het feest nog niet kennen.</li>
     </ul>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Nieuwe manieren om het feest te vieren</h2>
+    <h2 id="nieuwe-manieren-om-het-feest-te-vieren" class="text-3xl font-bold mt-8 mb-4">Nieuwe manieren om het feest te vieren</h2>
     <p class="leading-relaxed mb-4">
       Naast lootjes en surprises spelen vriendengroepen en collega's ook het sinterklaasdobbelspel. Met dobbelstenen en opdrachten wisselen de cadeaus van eigenaar.
     </p>

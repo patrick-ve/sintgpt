@@ -5,8 +5,16 @@
     seo-title="Pikant sinterklaasgedicht: tips en voorbeelden | SintGPT"
     seo-description="Leer hoe je een smaakvol en pikant sinterklaasgedicht schrijft vol dubbelzinnigheid. Met handige technieken en nette voorbeeldrijmen voor volwassenen."
     og-image="blog-pikant-sinterklaasgedicht"
+    :toc="[
+      { id: 'wat-maakt-een-pikant-sinterklaasgedicht-geslaagd', label: 'Wat maakt een pikant sinterklaasgedicht geslaagd?' },
+      { id: 'voor-wie-is-een-ondeugend-sinterklaasgedicht-geschikt', label: 'Voor wie is een ondeugend sinterklaasgedicht geschikt?' },
+      { id: 'vier-valkuilen-bij-een-dubbelzinnig-gedicht', label: 'Vier valkuilen bij een dubbelzinnig gedicht' },
+      { id: 'stappenplan-voor-een-dubbelzinnig-sinterklaasgedicht', label: 'Stappenplan voor een dubbelzinnig sinterklaasgedicht' },
+      { id: 'voorbeelden-van-een-sinterklaasgedicht-voor-volwassenen', label: 'Voorbeelden van een sinterklaasgedicht voor volwassenen' },
+      { id: 'rijm-en-ritme-voor-de-juiste-timing', label: 'Rijm en ritme voor de juiste timing' },
+    ]"
   >
-    <h2 class="text-3xl font-bold mt-8 mb-4">Wat maakt een pikant sinterklaasgedicht geslaagd?</h2>
+    <h2 id="wat-maakt-een-pikant-sinterklaasgedicht-geslaagd" class="text-3xl font-bold mt-8 mb-4">Wat maakt een pikant sinterklaasgedicht geslaagd?</h2>
     <p class="leading-relaxed mb-4">
       Een geslaagd pikant sinterklaasgedicht laat de luisteraars lachen om dubbelzinnige taal, zonder grof of plat te worden. Je beschrijft een alledaags cadeau zo dat het publiek even op het verkeerde been staat.
     </p>
@@ -18,7 +26,7 @@
       <p class="text-red-800">Benoem nooit letterlijk wat je suggereert. Hoe onschuldiger het echte cadeau blijkt te zijn, hoe groter de lach in de kamer.</p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Voor wie is een ondeugend sinterklaasgedicht geschikt?</h2>
+    <h2 id="voor-wie-is-een-ondeugend-sinterklaasgedicht-geschikt" class="text-3xl font-bold mt-8 mb-4">Voor wie is een ondeugend sinterklaasgedicht geschikt?</h2>
     <p class="leading-relaxed mb-4">
       Een <strong>ondeugend sinterklaasgedicht</strong> past bij je partner of bij een vriendengroep van volwassenen. Het past niet als er kinderen, collega's of schoonfamilie meeluisteren. Stel jezelf vooraf één vraag: vindt de ontvanger dit zelf ook grappig, met dit publiek erbij?
     </p>
@@ -33,7 +41,7 @@
       Schrijf je een gedicht voor iemand met wie je een relatie hebt? Dan kun je vaak net iets meer hinten naar jullie privéleven. Lees meer over die balans in ons artikel over een <NuxtLink to="/blog/sinterklaasgedicht-partner" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht voor je partner</NuxtLink>.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Vier valkuilen bij een dubbelzinnig gedicht</h2>
+    <h2 id="vier-valkuilen-bij-een-dubbelzinnig-gedicht" class="text-3xl font-bold mt-8 mb-4">Vier valkuilen bij een dubbelzinnig gedicht</h2>
     <p class="leading-relaxed mb-4">
       Bij dubbelzinnige grappen ligt de grens tussen scherp en ongepast dicht bij elkaar. Vermijd deze vier fouten, dan blijft de sfeer ontspannen.
     </p>
@@ -44,7 +52,7 @@
       <li>Het ritme verwaarlozen: hapert het ritme, dan komt de clou niet aan.</li>
     </ul>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Stappenplan voor een dubbelzinnig sinterklaasgedicht</h2>
+    <h2 id="stappenplan-voor-een-dubbelzinnig-sinterklaasgedicht" class="text-3xl font-bold mt-8 mb-4">Stappenplan voor een dubbelzinnig sinterklaasgedicht</h2>
     <p class="leading-relaxed mb-4">
       Voor een <strong>dubbelzinnig sinterklaasgedicht</strong> bouw je de spanning op rond het cadeau en bewaar je de ontknoping tot het einde. Volg deze vijf stappen:
     </p>
@@ -60,7 +68,7 @@
       <p class="text-red-800">Lees het gedicht van tevoren hardop voor aan iemand buiten het gezelschap om te horen of de clou duidelijk overkomt.</p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Voorbeelden van een sinterklaasgedicht voor volwassenen</h2>
+    <h2 id="voorbeelden-van-een-sinterklaasgedicht-voor-volwassenen" class="text-3xl font-bold mt-8 mb-4">Voorbeelden van een sinterklaasgedicht voor volwassenen</h2>
     <p class="leading-relaxed mb-4">
       Deze twee voorbeelden van een <strong>sinterklaasgedicht voor volwassenen</strong> zijn netjes genoeg voor een gemengd gezelschap. Ze staan in rijmschema AABB. De rijmwoorden volgen direct op elkaar, dus de clou komt meteen aan.
     </p>
@@ -101,7 +109,7 @@
       Zoek je voorbeelden voor andere ontvangers? Bekijk onze pagina met <NuxtLink to="/voorbeelden" class="text-red-700 underline underline-offset-2 hover:text-red-900">voorbeeldgedichten</NuxtLink>.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Rijm en ritme voor de juiste timing</h2>
+    <h2 id="rijm-en-ritme-voor-de-juiste-timing" class="text-3xl font-bold mt-8 mb-4">Rijm en ritme voor de juiste timing</h2>
     <p class="leading-relaxed mb-4">
       Bij een ondeugend gedicht draait alles om timing. Hapert het ritme, dan verliest de grap zijn scherpte. Lees je regels hardop en houd een vast ritme aan.
     </p>

@@ -5,8 +5,19 @@
     seo-title="Grappig sinterklaasgedicht: 6 trucs en voorbeelden | SintGPT"
     seo-description="Zo schrijf je een grappig sinterklaasgedicht: zes trucs, rijmende coupletten per type ontvanger, timing bij het voorlezen en een compleet voorbeeld."
     og-image="blog-grappige-sinterklaasgedichten-tips"
+    :toc="[
+      { id: 'hoe-werkt-humor-in-een-grappig-sinterklaasgedicht', label: 'Hoe werkt humor in een grappig sinterklaasgedicht?' },
+      { id: 'zes-technieken-voor-een-grappig-gedicht', label: 'Zes technieken voor een grappig gedicht' },
+      { id: 'grappige-coupletten-per-type-ontvanger', label: 'Grappige coupletten per type ontvanger' },
+      { id: 'voorbeeld-van-een-grappig-sinterklaasgedicht', label: 'Voorbeeld van een grappig sinterklaasgedicht' },
+      { id: 'grappig-voor-kinderen-en-voor-volwassenen', label: 'Grappig voor kinderen en voor volwassenen' },
+      { id: 'rijm-en-ritme-als-motor-voor-de-lach', label: 'Rijm en ritme als motor voor de lach' },
+      { id: 'valkuilen-bij-humor-op-pakjesavond', label: 'Valkuilen bij humor op pakjesavond' },
+      { id: 'stappenplan-voor-je-eigen-grappige-sinterklaasgedicht', label: 'Stappenplan voor je eigen grappige sinterklaasgedicht' },
+      { id: 'veelgestelde-vragen-over-een-grappig-sinterklaasgedicht', label: 'Veelgestelde vragen over een grappig sinterklaasgedicht' },
+    ]"
   >
-    <h2 class="text-3xl font-bold mt-8 mb-4">Hoe werkt humor in een grappig sinterklaasgedicht?</h2>
+    <h2 id="hoe-werkt-humor-in-een-grappig-sinterklaasgedicht" class="text-3xl font-bold mt-8 mb-4">Hoe werkt humor in een grappig sinterklaasgedicht?</h2>
     <p class="leading-relaxed mb-4">
       Een grap in een sinterklaasgedicht werkt door herkenning. De ontvanger hoort een eigen gewoonte terug en de rest van de kamer knikt mee. Daarom werkt een weetje uit het afgelopen jaar beter dan een losse mop.
     </p>
@@ -16,7 +27,7 @@
       <li>Denk aan het publiek in de kamer, zoals jonge kinderen, grootouders of nieuwe partners.</li>
     </ul>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Zes technieken voor een grappig gedicht</h2>
+    <h2 id="zes-technieken-voor-een-grappig-gedicht" class="text-3xl font-bold mt-8 mb-4">Zes technieken voor een grappig gedicht</h2>
     <p class="leading-relaxed mb-4">
       Deze zes technieken laten zien waar de grap zit. Bij elke techniek zie je hoe een gewone zin grappig wordt.
     </p>
@@ -112,7 +123,7 @@
       </p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Grappige coupletten per type ontvanger</h2>
+    <h2 id="grappige-coupletten-per-type-ontvanger" class="text-3xl font-bold mt-8 mb-4">Grappige coupletten per type ontvanger</h2>
     <p class="leading-relaxed mb-4">
       Hieronder staan coupletten voor zes bekende types, met verzonnen namen. Vervang de naam en de details door wat jij van de ontvanger weet.
     </p>
@@ -174,7 +185,7 @@
       De eerste twee regels schetsen de gewoonte, de laatste twee draaien hem om. Complete gedichten vind je bij de <NuxtLink to="/voorbeelden" class="text-red-700 underline underline-offset-2 hover:text-red-900">grappige en andere voorbeeldgedichten</NuxtLink>.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Voorbeeld van een grappig sinterklaasgedicht</h2>
+    <h2 id="voorbeeld-van-een-grappig-sinterklaasgedicht" class="text-3xl font-bold mt-8 mb-4">Voorbeeld van een grappig sinterklaasgedicht</h2>
     <p class="leading-relaxed mb-4">
       Dit <strong>grappig sinterklaasgedicht</strong> gaat over Thomas, die vol goede moed aan een klus begon en al snel zijn buurman nodig had.
     </p>
@@ -209,7 +220,7 @@
       De drie scheve gaten zijn de overdrijving. De laatste strofe wijst warm naar het cadeau.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Grappig voor kinderen en voor volwassenen</h2>
+    <h2 id="grappig-voor-kinderen-en-voor-volwassenen" class="text-3xl font-bold mt-8 mb-4">Grappig voor kinderen en voor volwassenen</h2>
     <p class="leading-relaxed mb-4">
       Wie er in de kamer zit, bepaalt wat grappig is. Een grap waar volwassenen om gieren, gaat langs een kind van zes heen.
     </p>
@@ -221,7 +232,7 @@
       Gemengd gezelschap? Zet een beeldgrap voor de kinderen en een knipoog voor de volwassenen in dezelfde strofe. Voorbeelden per leeftijd staan in het artikel over een <NuxtLink to="/blog/sinterklaasgedicht-voor-kinderen" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht voor kinderen</NuxtLink>.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Rijm en ritme als motor voor de lach</h2>
+    <h2 id="rijm-en-ritme-als-motor-voor-de-lach" class="text-3xl font-bold mt-8 mb-4">Rijm en ritme als motor voor de lach</h2>
     <p class="leading-relaxed mb-4">
       Hapert een regel, dan struikelt de voorlezer en valt de grap weg. Een helder <NuxtLink to="/blog/rijm-en-ritme-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">rijmschema voor je sinterklaasgedicht</NuxtLink> en een vast aantal klemtonen per regel laten de clou op het juiste moment vallen.
     </p>
@@ -243,7 +254,7 @@
       <li>Lach niet om je eigen grap. Een strak gezicht maakt hem sterker.</li>
     </ul>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Valkuilen bij humor op pakjesavond</h2>
+    <h2 id="valkuilen-bij-humor-op-pakjesavond" class="text-3xl font-bold mt-8 mb-4">Valkuilen bij humor op pakjesavond</h2>
     <p class="leading-relaxed mb-4">
       Valt een grap verkeerd, dan slaat de stemming om. Let op deze vijf valkuilen.
     </p>
@@ -255,7 +266,7 @@
       <li>Eindeloos herhalen: hamer niet het hele gedicht op dezelfde misstap. Wissel af met een vriendelijke regel.</li>
     </ul>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Stappenplan voor je eigen grappige sinterklaasgedicht</h2>
+    <h2 id="stappenplan-voor-je-eigen-grappige-sinterklaasgedicht" class="text-3xl font-bold mt-8 mb-4">Stappenplan voor je eigen grappige sinterklaasgedicht</h2>
     <p class="leading-relaxed mb-4">
       Met deze vier stappen schrijf je zelf een grappig sinterklaasgedicht.
     </p>
@@ -269,7 +280,7 @@
       Weinig tijd? SintGPT schrijft in ongeveer een minuut een speels gedicht in de stijl Grappig, met jouw weetjes.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Veelgestelde vragen over een grappig sinterklaasgedicht</h2>
+    <h2 id="veelgestelde-vragen-over-een-grappig-sinterklaasgedicht" class="text-3xl font-bold mt-8 mb-4">Veelgestelde vragen over een grappig sinterklaasgedicht</h2>
     <h3 class="text-2xl font-bold mt-6 mb-3">Hoe maak je een grappig sinterklaasgedicht zonder gemeen te worden?</h3>
     <p class="leading-relaxed mb-4">
       Plaag gedrag, geen persoon. Een gewoonte of blunder mag, uiterlijk en geldzorgen niet. Zou de ontvanger zelf lachen, met dit publiek erbij? Sluit warm af.

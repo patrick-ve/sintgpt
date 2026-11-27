@@ -619,9 +619,9 @@ Owner steps:
 - The header button "Schrijf een gedicht" sends `Go to poem form` with `blog:<slug>:kop`
   (index: `blog:index:kop`). Watch: do blog readers reach the form more often than before
   (compare `Go to poem form` `blog:*` per blog `Page view` with the days before 27 November).
-- Open: only the rhyme words post has `toc`. Add it to other long posts when they get heading ids.
+- 27 November 2026: every post has the contents list (`toc`); all h2 headings got an id.
 - 27 November 2026: the 24 Open Graph images of the blog have the look of the book (cream page,
-  red title, chapter label). Home, Voorbeelden and Lootjes keep the red look. Not deployed yet.
+  red title, chapter label). Home, Voorbeelden and Lootjes keep the red look.
 
 ## Findings
 

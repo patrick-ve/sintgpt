@@ -5,8 +5,16 @@
     seo-title="Soorten sinterklaasgedichten: 6 stijlen vergeleken | SintGPT"
     seo-description="Soorten sinterklaasgedichten vergeleken: grappig, klassiek, ironisch, ouderwets, pikant en roast, met een voorbeeld per stijl en hulp bij kiezen."
     og-image="blog-sinterklaasgedicht-stijlen"
+    :toc="[
+      { id: 'welke-soorten-sinterklaasgedichten-zijn-er', label: 'Welke soorten sinterklaasgedichten zijn er?' },
+      { id: 'klassiek-en-ouderwets-traditioneel-en-warm', label: 'Klassiek en Ouderwets: traditioneel en warm' },
+      { id: 'grappig-en-ironisch-speels-en-gevat', label: 'Grappig en Ironisch: speels en gevat' },
+      { id: 'pikant-en-roast-gewaagd-en-direct', label: 'Pikant en Roast: gewaagd en direct' },
+      { id: 'hoe-kies-je-de-juiste-toon-voor-een-sinterklaasgedicht', label: 'Hoe kies je de juiste toon voor een sinterklaasgedicht?' },
+      { id: 'valkuilen-welke-stijlen-vermijd-je-bij-wie', label: 'Valkuilen: welke stijlen vermijd je bij wie?' },
+    ]"
   >
-    <h2 class="text-3xl font-bold mt-8 mb-4">Welke soorten sinterklaasgedichten zijn er?</h2>
+    <h2 id="welke-soorten-sinterklaasgedichten-zijn-er" class="text-3xl font-bold mt-8 mb-4">Welke soorten sinterklaasgedichten zijn er?</h2>
     <p class="leading-relaxed mb-4">
       Dit overzicht vergelijkt zes stijlen: <strong>Grappig</strong>, <strong>Klassiek</strong>, <strong>Ironisch</strong>, <strong>Ouderwets</strong>, <strong>Pikant</strong> en <strong>Roast</strong>. Uit die zes stijlen kies je ook op SintGPT. Elke stijl heeft een eigen woordkeuze en toon.
     </p>
@@ -18,7 +26,7 @@
       <p class="text-red-800">Vier regels over dezelfde Tante Ria laten zien wat alleen de woordkeuze en de toon aan een gedicht veranderen.</p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Klassiek en Ouderwets: traditioneel en warm</h2>
+    <h2 id="klassiek-en-ouderwets-traditioneel-en-warm" class="text-3xl font-bold mt-8 mb-4">Klassiek en Ouderwets: traditioneel en warm</h2>
     <h3 class="text-2xl font-bold mt-6 mb-3">Het klassieke sinterklaasgedicht</h3>
     <p class="leading-relaxed mb-4">
       Een klassiek gedicht is traditioneel, warm en respectvol. Je noemt wat de ontvanger goed doet en bedankt voor het jaar. Deze stijl past bij ouders, grootouders, buren en mensen die je niet zo goed kent. Lees meer over de kenmerken van een <NuxtLink to="/blog/klassiek-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">klassiek sinterklaasgedicht</NuxtLink>.
@@ -46,7 +54,7 @@
       </p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Grappig en Ironisch: speels en gevat</h2>
+    <h2 id="grappig-en-ironisch-speels-en-gevat" class="text-3xl font-bold mt-8 mb-4">Grappig en Ironisch: speels en gevat</h2>
     <h3 class="text-2xl font-bold mt-6 mb-3">Het grappige sinterklaasgedicht</h3>
     <p class="leading-relaxed mb-4">
       De stijl Grappig is speels en luchtig. Hierin benoem je herkenbare eigenaardigheden met een vrolijke knipoog. Iedereen in de kamer kan meelachen, zonder dat iemand zich aangevallen voelt. Lees praktische <NuxtLink to="/blog/grappige-sinterklaasgedichten-tips" class="text-red-700 underline underline-offset-2 hover:text-red-900">tips voor grappige sinterklaasgedichten</NuxtLink>.
@@ -74,7 +82,7 @@
       </p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Pikant en Roast: gewaagd en direct</h2>
+    <h2 id="pikant-en-roast-gewaagd-en-direct" class="text-3xl font-bold mt-8 mb-4">Pikant en Roast: gewaagd en direct</h2>
     <h3 class="text-2xl font-bold mt-6 mb-3">Het pikante sinterklaasgedicht</h3>
     <p class="leading-relaxed mb-4">
       De stijl Pikant heeft suggestieve dubbelzinnigheden en gewaagde knipogen, maar blijft smaakvol en is nooit expliciet. Deze stijl past bij je partner of bij een vriendengroep van volwassenen die van zulke grappen houdt. Lees waar de grens ligt bij een <NuxtLink to="/blog/pikant-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">pikant sinterklaasgedicht</NuxtLink>.
@@ -102,7 +110,7 @@
       </p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Hoe kies je de juiste toon voor een sinterklaasgedicht?</h2>
+    <h2 id="hoe-kies-je-de-juiste-toon-voor-een-sinterklaasgedicht" class="text-3xl font-bold mt-8 mb-4">Hoe kies je de juiste toon voor een sinterklaasgedicht?</h2>
     <p class="leading-relaxed mb-4">
       Kies de toon op basis van drie dingen: de ontvanger, wie er meeluistert en hoe goed jullie elkaar kennen.
     </p>
@@ -115,7 +123,7 @@
       Twijfel je tussen Grappig en Klassiek? Kies dan Grappig en eindig met een warme regel. Dan lacht de kamer, en hoort de ontvanger ook iets liefs.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Valkuilen: welke stijlen vermijd je bij wie?</h2>
+    <h2 id="valkuilen-welke-stijlen-vermijd-je-bij-wie" class="text-3xl font-bold mt-8 mb-4">Valkuilen: welke stijlen vermijd je bij wie?</h2>
     <p class="leading-relaxed mb-4">
       Bij deze groepen past niet elke stijl:
     </p>

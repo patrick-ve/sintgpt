@@ -5,8 +5,18 @@
     seo-title="Surprise maken: stappen, ideeën en tips | SintGPT"
     seo-description="Wil je een surprise maken voor Sinterklaas? Lees hier hoe je een goed idee bedenkt, papier-maché gebruikt en het cadeau slim verstopt."
     og-image="blog-surprise-maken-ideeen"
+    :toc="[
+      { id: 'een-surprise-maken-begin-bij-de-persoon', label: 'Een surprise maken: begin bij de persoon' },
+      { id: 'materialen-en-gereedschap-verzamelen', label: 'Materialen en gereedschap verzamelen' },
+      { id: 'technieken-bouwen-met-dozen-en-papier-mache', label: 'Technieken: bouwen met dozen en papier-maché' },
+      { id: 'hoe-verstop-je-het-cadeau-in-een-surprise', label: 'Hoe verstop je het cadeau in een surprise?' },
+      { id: 'surprise-ideeen-per-type-ontvanger', label: 'Surprise-ideeën per type ontvanger' },
+      { id: 'surprise-en-gedicht-laten-samenwerken', label: 'Surprise en gedicht laten samenwerken' },
+      { id: 'natte-vullingen-veiligheid-en-afval', label: 'Natte vullingen, veiligheid en afval' },
+      { id: 'wanneer-begin-je-met-een-surprise-maken', label: 'Wanneer begin je met een surprise maken?' },
+    ]"
   >
-    <h2 class="text-3xl font-bold mt-8 mb-4">Een surprise maken: begin bij de persoon</h2>
+    <h2 id="een-surprise-maken-begin-bij-de-persoon" class="text-3xl font-bold mt-8 mb-4">Een surprise maken: begin bij de persoon</h2>
     <p class="leading-relaxed mb-4">
       Een surprise slaagt als iedereen in de kamer meteen snapt over wie het gaat. Daarvoor heb je geen ingewikkeld bouwwerk nodig. Drie dingen helpen:
     </p>
@@ -20,7 +30,7 @@
       Begin bij de ontvanger, niet bij het cadeau. Pak pen en papier. Schrijf vijf dingen op over de ontvanger: dagelijkse bezigheden, vaste uitspraken, hobby's en blunders. Kies het punt waar je zelf het meest om moet lachen. Is iemand altijd sleutels kwijt? Maak een grote sleutelbos van karton. Drinkt iemand liters koffie op een dag? Bouw een enorm koffiezetapparaat. Met hetzelfde lijstje kun je ook <NuxtLink to="/" data-cta="blog:surprise-maken-ideeen:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">het gedicht bij je surprise laten schrijven</NuxtLink>.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Materialen en gereedschap verzamelen</h2>
+    <h2 id="materialen-en-gereedschap-verzamelen" class="text-3xl font-bold mt-8 mb-4">Materialen en gereedschap verzamelen</h2>
     <p class="leading-relaxed mb-4">
       Dure materialen heb je voor een surprise zelden nodig. Veel ligt al in het oud papier of in de keukenkastjes. Zet een paar weken vooraf een doos klaar en verzamel daarin lege verpakkingen.
     </p>
@@ -35,7 +45,7 @@
       <p class="text-red-800">Plak karton aan elkaar met schilderstape. Verf en lijm hechten er veel beter op dan op gladde verpakkingstape.</p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Technieken: bouwen met dozen en papier-maché</h2>
+    <h2 id="technieken-bouwen-met-dozen-en-papier-mache" class="text-3xl font-bold mt-8 mb-4">Technieken: bouwen met dozen en papier-maché</h2>
     <h3 class="text-2xl font-bold mt-6 mb-3">Bouwen met kartonnen dozen</h3>
     <p class="leading-relaxed mb-4">
       Bijna elk voorwerp kun je opbouwen uit rechthoekige vormen. Plak een kleine doos op een grote doos om een auto, een robot of een fotocamera te maken. Snijd ronde hoeken uit met een scherp mes. Beplak de buitenkant met gekleurd papier of schilderstape, zodat merknamen en opdrukken niet meer zichtbaar zijn.
@@ -49,7 +59,7 @@
       <p class="text-red-800">Papier-maché heeft tijd nodig om uit te harden. Reken op 24 tot 48 uur droogtijd voordat je kunt schilderen. Begin hier dus ruim voor pakjesavond mee.</p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Hoe verstop je het cadeau in een surprise?</h2>
+    <h2 id="hoe-verstop-je-het-cadeau-in-een-surprise" class="text-3xl font-bold mt-8 mb-4">Hoe verstop je het cadeau in een surprise?</h2>
     <p class="leading-relaxed mb-4">
       Bepaal voordat je gaat knutselen waar het cadeau komt, en bouw er een eigen vakje voor. Het openmaken is net zo leuk als het bekijken van de buitenkant.
     </p>
@@ -60,7 +70,7 @@
       <li><strong>Voeg een dwaalspoor toe:</strong> stop op de meest voor de hand liggende plek een fopcadeau of een briefje met een aanwijzing die naar een ander deel van de surprise leidt.</li>
     </ol>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Surprise-ideeën per type ontvanger</h2>
+    <h2 id="surprise-ideeen-per-type-ontvanger" class="text-3xl font-bold mt-8 mb-4">Surprise-ideeën per type ontvanger</h2>
     <p class="leading-relaxed mb-4">
       Kijk naar de gewoontes en hobby's van wie op je lootje staat. Moet er nog geloot worden? Lees eerst de tips voor <NuxtLink to="/blog/lootjes-trekken-tips" class="text-red-700 underline underline-offset-2 hover:text-red-900">lootjes trekken voor Sinterklaas</NuxtLink>.
     </p>
@@ -74,7 +84,7 @@
       <li><strong>De thuiswerker:</strong> een kartonnen laptop met een vergaderscherm en het cadeau onder het toetsenbord.</li>
     </ul>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Surprise en gedicht laten samenwerken</h2>
+    <h2 id="surprise-en-gedicht-laten-samenwerken" class="text-3xl font-bold mt-8 mb-4">Surprise en gedicht laten samenwerken</h2>
     <p class="leading-relaxed mb-4">
       Surprise en gedicht werken het best als ze over hetzelfde gaan. In een <NuxtLink to="/blog/grappige-sinterklaasgedichten-tips" class="text-red-700 underline underline-offset-2 hover:text-red-900">grappig sinterklaasgedicht</NuxtLink> leg je uit waarom de surprise deze vorm heeft gekregen. Je kunt in het gedicht ook hints geven over de plek waar het cadeau zit.
     </p>
@@ -97,7 +107,7 @@
       Heb je weinig tijd om zelf te rijmen? Op <NuxtLink to="/" class="text-red-700 underline underline-offset-2 hover:text-red-900">SintGPT</NuxtLink> schrijf je in ongeveer een minuut een persoonlijk sinterklaasgedicht, met het cadeau en de weetjes over de ontvanger die jij invult.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Natte vullingen, veiligheid en afval</h2>
+    <h2 id="natte-vullingen-veiligheid-en-afval" class="text-3xl font-bold mt-8 mb-4">Natte vullingen, veiligheid en afval</h2>
     <h3 class="text-2xl font-bold mt-6 mb-3">Overleg bij natte of vieze surprises</h3>
     <p class="leading-relaxed mb-4">
       In een natte of vieze surprise grabbelt de ontvanger in gelatine, ontbijtkoek met water, zaagsel of chocoladevla. Maak er alleen een als je zeker weet dat de ontvanger en de gastheer dat leuk vinden. Pak het cadeau altijd waterdicht in met meerdere plastic zakken en leg van tevoren een handdoek klaar.
@@ -110,7 +120,7 @@
       Maakt de klas samen een surprise voor de leerkracht? Een kort, vriendelijk gedicht hoort erbij. Tips en voorbeelden staan in het artikel over een <NuxtLink to="/blog/sinterklaasgedicht-juf-meester" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht voor de juf of meester</NuxtLink>.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Wanneer begin je met een surprise maken?</h2>
+    <h2 id="wanneer-begin-je-met-een-surprise-maken" class="text-3xl font-bold mt-8 mb-4">Wanneer begin je met een surprise maken?</h2>
     <p class="leading-relaxed mb-4">
       Begin ongeveer twee weken voor pakjesavond, want papier-maché moet een tot twee dagen drogen. Maak direct na het <NuxtLink to="/lootjes" class="text-red-700 underline underline-offset-2 hover:text-red-900">lootjes trekken</NuxtLink> een planning, dan hoef je de laatste avond niet te haasten.
     </p>

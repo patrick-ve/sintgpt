@@ -5,6 +5,19 @@
     seo-title="Sinterklaasgedicht schrijven: stappen en voorbeeld | SintGPT"
     seo-description="Sinterklaasgedicht schrijven in zeven stappen: weetjes, toon, opbouw, rijm, ritme en het cadeau. Met een uitgewerkt rijmpaar en een compleet voorbeeld."
     og-image="blog-hoe-schrijf-je-het-perfecte-sinterklaasgedicht"
+    :toc="[
+      { id: 'sinterklaasgedicht-schrijven-begin-bij-de-voorbereiding', label: 'Sinterklaasgedicht schrijven: begin bij de voorbereiding' },
+      { id: 'kies-de-toon-en-houd-het-rijmschema-simpel', label: 'Kies de toon (en houd het rijmschema simpel)' },
+      { id: 'de-opbouw-van-een-sinterklaasgedicht', label: 'De opbouw van een sinterklaasgedicht' },
+      { id: 'het-cadeau-verwerken-direct-noemen-of-geheim-houden', label: 'Het cadeau verwerken: direct noemen of geheim houden' },
+      { id: 'van-weetje-tot-couplet-zo-schrijf-je-een-rijmpaar', label: 'Van weetje tot couplet: zo schrijf je een rijmpaar' },
+      { id: 'let-op-het-ritme-en-de-lengte', label: 'Let op het ritme en de lengte' },
+      { id: 'voorbeeld-van-een-persoonlijk-sinterklaasgedicht', label: 'Voorbeeld van een persoonlijk sinterklaasgedicht' },
+      { id: 'loop-je-vast-zo-kom-je-verder', label: 'Loop je vast? Zo kom je verder' },
+      { id: 'veelgemaakte-valkuilen-bij-het-dichten', label: 'Veelgemaakte valkuilen bij het dichten' },
+      { id: 'het-gedicht-afronden-en-voordragen', label: 'Het gedicht afronden en voordragen' },
+      { id: 'veelgestelde-vragen-over-een-sinterklaasgedicht-schrijven', label: 'Veelgestelde vragen over een sinterklaasgedicht schrijven' },
+    ]"
   >
     <p class="leading-relaxed mb-4">
       Het stappenplan in het kort:
@@ -19,7 +32,7 @@
       <li>Lees het gedicht hardop, print het en onderteken het.</li>
     </ol>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Sinterklaasgedicht schrijven: begin bij de voorbereiding</h2>
+    <h2 id="sinterklaasgedicht-schrijven-begin-bij-de-voorbereiding" class="text-3xl font-bold mt-8 mb-4">Sinterklaasgedicht schrijven: begin bij de voorbereiding</h2>
     <p class="leading-relaxed mb-4">
       Een goed gedicht begint met inhoud. Rijmwoorden zoek je pas daarna. Hoe meer weetjes je over de ontvanger hebt, hoe makkelijker het schrijven gaat.
     </p>
@@ -34,7 +47,7 @@
       <p class="text-red-800">Noteer drie tot vijf gebeurtenissen of eigenschappen. Elk punt wordt een strofe. Zo zit je halverwege niet zonder ideeën.</p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Kies de toon (en houd het rijmschema simpel)</h2>
+    <h2 id="kies-de-toon-en-houd-het-rijmschema-simpel" class="text-3xl font-bold mt-8 mb-4">Kies de toon (en houd het rijmschema simpel)</h2>
     <p class="leading-relaxed mb-4">
       Kies eerst de toon. Een klassiek gedicht is warm en waarderend. Een ironisch gedicht zegt droog het omgekeerde van wat je bedoelt. Kies je een roast, neem de ontvanger dan flink op de hak met herkenbare eigenschappen en sluit warm af. In het <NuxtLink to="/blog/sinterklaasgedicht-stijlen" class="text-red-700 underline underline-offset-2 hover:text-red-900">overzicht van de zes stijlen voor een sinterklaasgedicht</NuxtLink> zie je per stijl een voorbeeld.
     </p>
@@ -45,7 +58,7 @@
       Houd het rijmschema simpel. Kies AABB: daarin rijmen steeds twee regels na elkaar, en dat leest vlot voor. Andere vormen staan in de uitleg over een <NuxtLink to="/blog/rijm-en-ritme-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">rijmschema voor je sinterklaasgedicht</NuxtLink>. Met je weetjes en een stijl naar keuze kun je ook <NuxtLink to="/" data-cta="blog:hoe-schrijf-je-het-perfecte-sinterklaasgedicht:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">een persoonlijk sinterklaasgedicht laten schrijven</NuxtLink>.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">De opbouw van een sinterklaasgedicht</h2>
+    <h2 id="de-opbouw-van-een-sinterklaasgedicht" class="text-3xl font-bold mt-8 mb-4">De opbouw van een sinterklaasgedicht</h2>
     <p class="leading-relaxed mb-4">
       Een goed gedicht vertelt een klein verhaal. Deze vijf delen geven je een vaste route.
     </p>
@@ -60,7 +73,7 @@
       De eerste en de laatste regel onthoudt iedereen het best. Voorbeelden per toon vind je bij de <NuxtLink to="/blog/sinterklaasgedicht-beginnen-en-afsluiten" class="text-red-700 underline underline-offset-2 hover:text-red-900">openingszinnen en slotzinnen voor een sinterklaasgedicht</NuxtLink>.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Het cadeau verwerken: direct noemen of geheim houden</h2>
+    <h2 id="het-cadeau-verwerken-direct-noemen-of-geheim-houden" class="text-3xl font-bold mt-8 mb-4">Het cadeau verwerken: direct noemen of geheim houden</h2>
     <p class="leading-relaxed mb-4">
       Het cadeau komt meestal aan het eind. Je verklapt wat er in het pakje zit, of je houdt de spanning vast tot het papier eraf gaat.
     </p>
@@ -83,7 +96,7 @@
       <p class="text-red-800">Rijmt de naam van het cadeau lastig? Omschrijf het. Een fondueset wordt 'iets voor bij de kaas', en dat rijmt op Sinterklaas.</p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Van weetje tot couplet: zo schrijf je een rijmpaar</h2>
+    <h2 id="van-weetje-tot-couplet-zo-schrijf-je-een-rijmpaar" class="text-3xl font-bold mt-8 mb-4">Van weetje tot couplet: zo schrijf je een rijmpaar</h2>
     <p class="leading-relaxed mb-4">
       Een rijmpaar schrijf je vanuit de inhoud, niet vanuit een rijmwoord. Zo gaat dat met één weetje over de verzonnen Sanne.
     </p>
@@ -123,7 +136,7 @@
       De nieuwe versie zegt meer in evenveel regels.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Let op het ritme en de lengte</h2>
+    <h2 id="let-op-het-ritme-en-de-lengte" class="text-3xl font-bold mt-8 mb-4">Let op het ritme en de lengte</h2>
     <p class="leading-relaxed mb-4">
       Een sterk verhaal valt weg als de regels haperen bij het voorlezen. Met een regelmatig ritme vallen de klemtonen op vaste plekken.
     </p>
@@ -134,7 +147,7 @@
       <li>Kies een passende lengte: 8 tot 12 regels voor kinderen en 12 tot 20 regels voor volwassenen is meestal genoeg.</li>
     </ul>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Voorbeeld van een persoonlijk sinterklaasgedicht</h2>
+    <h2 id="voorbeeld-van-een-persoonlijk-sinterklaasgedicht" class="text-3xl font-bold mt-8 mb-4">Voorbeeld van een persoonlijk sinterklaasgedicht</h2>
     <p class="leading-relaxed mb-4">
       Dit gedicht in AABB volgt de opbouw van hierboven. Het gebruikt twee weetjes over de verzonnen Bram, wielrennen en bakken, en eindigt bij het uitpakken.
     </p>
@@ -169,7 +182,7 @@
       Meer gedichten in alle stijlen lees je bij de <NuxtLink to="/voorbeelden" class="text-red-700 underline underline-offset-2 hover:text-red-900">voorbeeldgedichten</NuxtLink>.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Loop je vast? Zo kom je verder</h2>
+    <h2 id="loop-je-vast-zo-kom-je-verder" class="text-3xl font-bold mt-8 mb-4">Loop je vast? Zo kom je verder</h2>
     <p class="leading-relaxed mb-4">
       Zit je vast op een regel? Probeer dan een van deze trucs.
     </p>
@@ -183,7 +196,7 @@
       Zoek je een rijm op Sint, Piet, cadeau of pakje? Gebruik dan de lijst met <NuxtLink to="/blog/rijmwoorden-sinterklaas" class="text-red-700 underline underline-offset-2 hover:text-red-900">rijmwoorden voor Sinterklaas</NuxtLink>.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Veelgemaakte valkuilen bij het dichten</h2>
+    <h2 id="veelgemaakte-valkuilen-bij-het-dichten" class="text-3xl font-bold mt-8 mb-4">Veelgemaakte valkuilen bij het dichten</h2>
     <p class="leading-relaxed mb-4">
       Deze vijf fouten maken een sinterklaasgedicht stroef of pijnlijk. Zo voorkom je ze.
     </p>
@@ -195,7 +208,7 @@
       <li>Pijnlijke onderwerpen: vermijd grappen over gezondheid, relatiebreuken of geldzaken.</li>
     </ul>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Het gedicht afronden en voordragen</h2>
+    <h2 id="het-gedicht-afronden-en-voordragen" class="text-3xl font-bold mt-8 mb-4">Het gedicht afronden en voordragen</h2>
     <p class="leading-relaxed mb-4">
       Controleer het gedicht nog één keer voordat je het bij het cadeau doet.
     </p>
@@ -215,7 +228,7 @@
       </ul>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Veelgestelde vragen over een sinterklaasgedicht schrijven</h2>
+    <h2 id="veelgestelde-vragen-over-een-sinterklaasgedicht-schrijven" class="text-3xl font-bold mt-8 mb-4">Veelgestelde vragen over een sinterklaasgedicht schrijven</h2>
     <h3 class="text-2xl font-bold mt-6 mb-3">Moet een sinterklaasgedicht rijmen?</h3>
     <p class="leading-relaxed mb-4">
       Bijna elk sinterklaasgedicht rijmt, want dat hoort bij de traditie. Een regel die vlot loopt, is wel belangrijker dan een gezocht rijmwoord.

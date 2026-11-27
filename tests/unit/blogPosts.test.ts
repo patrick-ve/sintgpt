@@ -24,6 +24,15 @@ describe('blog posts', () => {
     expect(page).toContain(`data-cta="blog:${slug}"`);
   });
 
+  it.each(pageSlugs)('%s has a contents list whose ids are headings in the post', (slug) => {
+    const page = read(`pages/blog/${slug}.vue`);
+    const toc = page.match(/:toc="\[\n([\s\S]*?)\n {4}\]"/)?.[1] ?? '';
+    const ids = [...toc.matchAll(/\{ id: '([^']+)', label: '/g)].map(match => match[1]!);
+    expect(ids.length).toBeGreaterThanOrEqual(3);
+    expect(new Set(ids).size).toBe(ids.length);
+    for (const id of ids) expect(page, id).toMatch(new RegExp(`<h[23] id="${id}"`));
+  });
+
   it('is in the sitemap and llms.txt', () => {
     const sitemap = read('public/sitemap.xml');
     const llms = read('public/llms.txt');

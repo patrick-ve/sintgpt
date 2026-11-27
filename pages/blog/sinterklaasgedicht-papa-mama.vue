@@ -5,8 +5,17 @@
     seo-title="Sinterklaasgedicht voor papa of mama: tips | SintGPT"
     seo-description="Schrijf een warm sinterklaasgedicht voor papa of mama. Bekijk praktische voorbeelden, herkenbare gewoontes en tips voor kinderen en volwassenen."
     og-image="blog-sinterklaasgedicht-papa-mama"
+    :toc="[
+      { id: 'drie-situaties-voor-een-sinterklaasgedicht-voor-papa-of-mama', label: 'Drie situaties voor een sinterklaasgedicht voor papa of mama' },
+      { id: 'herkenbare-onderwerpen-voor-het-sinterklaasgedicht-van-je-ouders', label: 'Herkenbare onderwerpen voor het sinterklaasgedicht van je ouders' },
+      { id: 'liefdevol-plagen-en-waardering-tonen', label: 'Liefdevol plagen en waardering tonen' },
+      { id: 'voorbeeldcoupletten-voor-papa-mama-of-beide-ouders', label: 'Voorbeeldcoupletten voor papa, mama of beide ouders' },
+      { id: 'compleet-sinterklaasgedicht-voor-een-vader-of-moeder', label: 'Compleet sinterklaasgedicht voor een vader of moeder' },
+      { id: 'stappenplan-voor-het-schrijven-van-je-rijm', label: 'Stappenplan voor het schrijven van je rijm' },
+      { id: 'inspiratie-voor-de-rest-van-de-familie', label: 'Inspiratie voor de rest van de familie' },
+    ]"
   >
-    <h2 class="text-3xl font-bold mt-8 mb-4">Drie situaties voor een sinterklaasgedicht voor papa of mama</h2>
+    <h2 id="drie-situaties-voor-een-sinterklaasgedicht-voor-papa-of-mama" class="text-3xl font-bold mt-8 mb-4">Drie situaties voor een sinterklaasgedicht voor papa of mama</h2>
     <p class="leading-relaxed mb-4">
       Wie de pen vasthoudt, bepaalt voor een groot deel de toon en de inhoud van de regels. Een sinterklaasgedicht voor papa of mama ziet er immers heel anders uit wanneer een kind van acht het voordraagt dan wanneer een volwassene terugblikt op vroeger. Dit zijn de drie situaties die het vaakst voorkomen.
     </p>
@@ -23,7 +32,7 @@
       Schrijf je als ouder namens het gezin een gedicht voor je partner? Let er dan goed op dat de Goedheiligman zelf aan het woord is. Zorg dat er geen toespelingen in staan die het geheim van Sinterklaas verklappen wanneer er nog jonge kinderen meeluisteren tijdens het uitpakken van de surprises.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Herkenbare onderwerpen voor het sinterklaasgedicht van je ouders</h2>
+    <h2 id="herkenbare-onderwerpen-voor-het-sinterklaasgedicht-van-je-ouders" class="text-3xl font-bold mt-8 mb-4">Herkenbare onderwerpen voor het sinterklaasgedicht van je ouders</h2>
     <p class="leading-relaxed mb-4">
       Het leukste sinterklaasgedicht voor papa of mama drijft op herkenning. Ouders hebben vaak vaste gewoontes en typische trekjes waar het hele gezin om moet glimlachen. Met zulke details voelt de ontvanger meteen dat het gedicht met aandacht is geschreven.
     </p>
@@ -39,7 +48,7 @@
       Kies er twee of drie die iedereen aan tafel herkent. Met die weetjes kun je ook <NuxtLink to="/" data-cta="blog:sinterklaasgedicht-papa-mama:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">een gedicht voor je vader of moeder laten schrijven</NuxtLink>.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Liefdevol plagen en waardering tonen</h2>
+    <h2 id="liefdevol-plagen-en-waardering-tonen" class="text-3xl font-bold mt-8 mb-4">Liefdevol plagen en waardering tonen</h2>
     <p class="leading-relaxed mb-4">
       Een beetje plagen hoort traditioneel bij pakjesavond. Een sinterklaasgedicht voor papa of mama mag best een grappige spiegel voorhouden, zolang de ondertoon warm en respectvol blijft. Ouders verzetten het hele jaar door veel werk voor het gezin, dus een vriendelijke balans staat altijd voorop.
     </p>
@@ -51,7 +60,7 @@
       Door een komische anekdote af te wisselen met een compliment over hun toewijding, raak je precies de juiste snaar. Zo ontstaat een gedicht waar iedereen aan tafel hartelijk om lacht en dat een warm gevoel achterlaat.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Voorbeeldcoupletten voor papa, mama of beide ouders</h2>
+    <h2 id="voorbeeldcoupletten-voor-papa-mama-of-beide-ouders" class="text-3xl font-bold mt-8 mb-4">Voorbeeldcoupletten voor papa, mama of beide ouders</h2>
     <p class="leading-relaxed mb-4">
       Hieronder staan drie voorbeeldcoupletten in rijmschema AABB. Daarin rijmen steeds twee regels na elkaar, en dat leest prettig voor. Wil je meer weten over een soepel ritme? Bekijk dan onze gids over <NuxtLink to="/blog/rijm-en-ritme-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">rijm en ritme in een sinterklaasgedicht</NuxtLink>.
     </p>
@@ -83,7 +92,7 @@
       </p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Compleet sinterklaasgedicht voor een vader of moeder</h2>
+    <h2 id="compleet-sinterklaasgedicht-voor-een-vader-of-moeder" class="text-3xl font-bold mt-8 mb-4">Compleet sinterklaasgedicht voor een vader of moeder</h2>
     <p class="leading-relaxed mb-4">
       Heb je behoefte aan een compleet gedicht van begin tot eind? Hieronder staat een voorbeeld van twaalf regels dat je als inspiratie kunt gebruiken. Het gedicht combineert herkenbare situaties met een dankbare afsluiting en een verwijzing naar het cadeau.
     </p>
@@ -109,7 +118,7 @@
       </p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Stappenplan voor het schrijven van je rijm</h2>
+    <h2 id="stappenplan-voor-het-schrijven-van-je-rijm" class="text-3xl font-bold mt-8 mb-4">Stappenplan voor het schrijven van je rijm</h2>
     <p class="leading-relaxed mb-4">
       Met een gestructureerde aanpak schrijf je vlot een persoonlijk gedicht. Volg deze vijf stappen om tot een mooi en ritmisch resultaat te komen.
     </p>
@@ -121,7 +130,7 @@
       <li>Verwijs in de laatste regels subtiel naar de surprise of het ingepakte cadeau.</li>
     </ol>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Inspiratie voor de rest van de familie</h2>
+    <h2 id="inspiratie-voor-de-rest-van-de-familie" class="text-3xl font-bold mt-8 mb-4">Inspiratie voor de rest van de familie</h2>
     <p class="leading-relaxed mb-4">
       Schrijf je dit jaar niet alleen voor je ouders, maar voor het hele gezin of de hele familie? Lees dan ook onze handleiding voor een <NuxtLink to="/blog/sinterklaasgedicht-opa-oma" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht voor opa en oma</NuxtLink> voor meer ideeën en voorbeelden.
     </p>

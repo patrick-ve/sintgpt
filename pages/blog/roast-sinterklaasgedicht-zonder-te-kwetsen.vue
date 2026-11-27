@@ -5,8 +5,17 @@
     seo-title="Roast sinterklaasgedicht: tips om te plagen | SintGPT"
     seo-description="Leer hoe je een scherp roast sinterklaasgedicht schrijft zonder te kwetsen. Bekijk veilige onderwerpen, voorbeelden en tips voor familie en werk."
     og-image="blog-roast-sinterklaasgedicht-zonder-te-kwetsen"
+    :toc="[
+      { id: 'wat-maakt-een-goed-roast-sinterklaasgedicht', label: 'Wat maakt een goed roast sinterklaasgedicht?' },
+      { id: 'de-gouden-regel-plaag-wat-iemand-doet-niet-wie-iemand-is', label: 'De gouden regel: plaag wat iemand doet, niet wie iemand is' },
+      { id: 'hoe-weet-je-of-een-grap-te-ver-gaat', label: 'Hoe weet je of een grap te ver gaat?' },
+      { id: 'gebruik-overdrijving-om-de-spot-te-drijven', label: 'Gebruik overdrijving om de spot te drijven' },
+      { id: 'ken-je-publiek-familie-versus-collega-s', label: 'Ken je publiek: familie versus collega\'s' },
+      { id: 'eindig-altijd-met-een-warme-boodschap', label: 'Eindig altijd met een warme boodschap' },
+      { id: 'voorlezen-zo-breng-je-de-grappen-over', label: 'Voorlezen: zo breng je de grappen over' },
+    ]"
   >
-    <h2 class="text-3xl font-bold mt-8 mb-4">Wat maakt een goed roast sinterklaasgedicht?</h2>
+    <h2 id="wat-maakt-een-goed-roast-sinterklaasgedicht" class="text-3xl font-bold mt-8 mb-4">Wat maakt een goed roast sinterklaasgedicht?</h2>
     <p class="leading-relaxed mb-4">
       Een goed roast sinterklaasgedicht plaagt stevig, en de ontvanger lacht zelf het hardst mee. In een gedicht mag de Sint dingen zeggen die je op gewone dagen niet snel hardop zegt. Denk aan een beruchte blunder, een opvallende gewoonte of een klus die al maanden blijft liggen. Omdat Sinterklaas aan het woord is, voelt de kritiek speels.
     </p>
@@ -14,7 +23,7 @@
       Plagen is iets anders dan kwetsen. Gebruik je een <strong>gemeen sinterklaasgedicht</strong> om oude frustraties te uiten, dan valt er een kille stilte in de kamer. Een geslaagd <strong>roast sinterklaasgedicht</strong> pakt de ontvanger flink aan en laat toch zien dat je om hem geeft. Drie keuzes maken het verschil: het onderwerp, hoe ver je overdrijft en de toon. Bekijk ook onze schrijftips voor een <NuxtLink to="/blog/grappige-sinterklaasgedichten-tips" class="text-red-700 underline underline-offset-2 hover:text-red-900">grappig sinterklaasgedicht</NuxtLink>.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">De gouden regel: plaag wat iemand doet, niet wie iemand is</h2>
+    <h2 id="de-gouden-regel-plaag-wat-iemand-doet-niet-wie-iemand-is" class="text-3xl font-bold mt-8 mb-4">De gouden regel: plaag wat iemand doet, niet wie iemand is</h2>
     <p class="leading-relaxed mb-4">
       Bij <strong>iemand op de hak nemen in een gedicht</strong> is één grens het belangrijkst. Gedrag mag, identiteit niet. Grappen over gewoontes en keuzes zijn veilig. Om een mislukte taart of een overvolle kledingkast kan iemand zelf lachen. Grappen over wie iemand is, raken aan dingen waar die persoon niet zelf voor koos.
     </p>
@@ -38,7 +47,7 @@
       Twijfel je over een onderwerp? Schrap het. Kan een grap pijn doen, dan hoort hij niet in een feestelijk gedicht. Kies dan een ander weetje. De stijl Roast op SintGPT houdt dezelfde grens aan. Hij neemt de ontvanger flink op de hak op basis van wat jij invult. Hij maakt geen grappen over afkomst, geloof, geaardheid, gender, handicap, ziekte, lichaam, gewicht, overleden naasten of geldzorgen. Met die stijl kun je ook <NuxtLink to="/?stijl=roast#poem-form" data-cta="blog:roast-sinterklaasgedicht-zonder-te-kwetsen:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">een roast sinterklaasgedicht laten schrijven</NuxtLink> dat warm eindigt.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Hoe weet je of een grap te ver gaat?</h2>
+    <h2 id="hoe-weet-je-of-een-grap-te-ver-gaat" class="text-3xl font-bold mt-8 mb-4">Hoe weet je of een grap te ver gaat?</h2>
     <p class="leading-relaxed mb-4">
       Een grap gaat te ver als het publiek om de ontvanger lacht in plaats van met hem. Wat voor jou een onschuldige plaagstoot lijkt, kan bij de ander hard aankomen. Misschien zit iemand niet lekker in zijn vel, of ligt een herinnering gevoeliger dan je dacht. Doe daarom voor het voorlezen deze check:
     </p>
@@ -53,7 +62,7 @@
       <p class="text-red-800">Heeft iemand jou iets in vertrouwen verteld over een blunder, relatie of frustratie? Gebruik dat nooit in een gedicht. Op pakjesavond luistert de hele groep mee.</p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Gebruik overdrijving om de spot te drijven</h2>
+    <h2 id="gebruik-overdrijving-om-de-spot-te-drijven" class="text-3xl font-bold mt-8 mb-4">Gebruik overdrijving om de spot te drijven</h2>
     <p class="leading-relaxed mb-4">
       Een goede roast drijft op <strong>overdrijving</strong>. Vergroot een klein, herkenbaar feitje uit tot het absurd wordt. Dan begrijpt iedereen dat je het niet serieus bedoelt. Zeg niet dat iemand vaak te laat komt. Beschrijf hoe de seizoenen wisselen terwijl iedereen op de gang staat te wachten.
     </p>
@@ -79,7 +88,7 @@
       Het gedicht maakt een karikatuur van het gedrag, dus de ontvanger voelt zich niet aangevallen. Het cadeau, een wekker, sluit er logisch op aan.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Ken je publiek: familie versus collega's</h2>
+    <h2 id="ken-je-publiek-familie-versus-collega-s" class="text-3xl font-bold mt-8 mb-4">Ken je publiek: familie versus collega's</h2>
     <p class="leading-relaxed mb-4">
       Waar je voorleest, bepaalt hoe ver je kunt gaan als je iemand in een sinterklaasgedicht wilt plagen. Kijk dus eerst wie er meeluistert.
     </p>
@@ -92,7 +101,7 @@
       Trek je lootjes op het werk, dan gelden strengere regels. Laat het privéleven, salarissen en beoordelingen erbuiten. Houd het bij gewoontes op kantoor die iedereen herkent: de overvolle mailbox, de eeuwige zoektocht naar een vergaderruimte of de favoriete mok bij het koffiezetapparaat. Meer tips lees je in ons artikel over een <NuxtLink to="/blog/sinterklaas-op-het-werk" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht voor een collega</NuxtLink>.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Eindig altijd met een warme boodschap</h2>
+    <h2 id="eindig-altijd-met-een-warme-boodschap" class="text-3xl font-bold mt-8 mb-4">Eindig altijd met een warme boodschap</h2>
     <p class="leading-relaxed mb-4">
       Hoe scherp de plaagstoten ook zijn, een roast slaagt alleen met een hartelijk slot. Zonder warme afronding blijft er een wrange smaak achter. De laatste regels laten zien dat je alles uit vriendschap of liefde schreef.
     </p>
@@ -112,7 +121,7 @@
       In onze verzameling met <NuxtLink to="/voorbeelden" class="text-red-700 underline underline-offset-2 hover:text-red-900">roast en andere voorbeeldgedichten</NuxtLink> zie je meer gedichten met scherpe spot en een warm slot.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Voorlezen: zo breng je de grappen over</h2>
+    <h2 id="voorlezen-zo-breng-je-de-grappen-over" class="text-3xl font-bold mt-8 mb-4">Voorlezen: zo breng je de grappen over</h2>
     <p class="leading-relaxed mb-4">
       Het gedicht op papier is de helft van het werk. De andere helft is hoe je het voorleest. Met een ontspannen houding laat je zien dat het een spel tussen vrienden is.
     </p>

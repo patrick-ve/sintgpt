@@ -5,8 +5,16 @@
     seo-title="Kort sinterklaasgedicht: tips en voorbeelden | SintGPT"
     seo-description="Leer hoe je een kort sinterklaasgedicht van 4 of 8 regels schrijft. Bekijk praktische tips, handige opbouw en zes complete voorbeeldgedichten."
     og-image="blog-kort-sinterklaasgedicht"
+    :toc="[
+      { id: 'wanneer-kies-je-voor-een-kort-sinterklaasgedicht', label: 'Wanneer kies je voor een kort sinterklaasgedicht?' },
+      { id: 'hoe-bouw-je-een-gedicht-van-4-of-8-regels-op', label: 'Hoe bouw je een gedicht van 4 of 8 regels op?' },
+      { id: 'wat-laat-je-weg-in-een-beknopt-gedicht', label: 'Wat laat je weg in een beknopt gedicht?' },
+      { id: 'veelgemaakte-valkuilen-bij-een-kort-sinterklaasgedicht', label: 'Veelgemaakte valkuilen bij een kort sinterklaasgedicht' },
+      { id: 'zes-complete-voorbeeldgedichten', label: 'Zes complete voorbeeldgedichten' },
+      { id: 'tips-voor-het-voordragen-tijdens-pakjesavond', label: 'Tips voor het voordragen tijdens pakjesavond' },
+    ]"
   >
-    <h2 class="text-3xl font-bold mt-8 mb-4">Wanneer kies je voor een kort sinterklaasgedicht?</h2>
+    <h2 id="wanneer-kies-je-voor-een-kort-sinterklaasgedicht" class="text-3xl font-bold mt-8 mb-4">Wanneer kies je voor een kort sinterklaasgedicht?</h2>
     <p class="leading-relaxed mb-4">
       Kies een <strong>kort sinterklaasgedicht</strong> als er veel pakjes zijn, als de ontvanger een jong kind is of als het cadeau een kleinigheid is. Denk aan een avond met een grote groep familie of vrienden en een tafel vol surprises. Duurt elk gedicht minuten, dan zakt de aandacht snel weg.
     </p>
@@ -14,7 +22,7 @@
       Jonge kinderen willen het liefst snel het papier eraf scheuren en gaan spelen. Een gedicht van vier regels houdt hun aandacht vast tot het einde. Op het werk of bij een sportclub past een kort gedicht ook. Bij een kleinigheid voor een collega hoef je geen heel levensverhaal op te rakelen.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Hoe bouw je een gedicht van 4 of 8 regels op?</h2>
+    <h2 id="hoe-bouw-je-een-gedicht-van-4-of-8-regels-op" class="text-3xl font-bold mt-8 mb-4">Hoe bouw je een gedicht van 4 of 8 regels op?</h2>
     <p class="leading-relaxed mb-4">
       In 4 regels noem je één weetje, maak je de stap naar het cadeau en sluit je af. In 8 regels krijgt het weetje een eigen strofe en volgt het cadeau in de tweede. Zo telt elke regel. Is het al bijna pakjesavond? Dan helpt het invulsjabloon voor een <NuxtLink to="/blog/sinterklaasgedicht-last-minute" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht last minute</NuxtLink>.
     </p>
@@ -37,7 +45,7 @@
       <li>Regel 7 en 8: Zorg voor een sterke uitsmijter en een warme slotgroet.</li>
     </ol>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Wat laat je weg in een beknopt gedicht?</h2>
+    <h2 id="wat-laat-je-weg-in-een-beknopt-gedicht" class="text-3xl font-bold mt-8 mb-4">Wat laat je weg in een beknopt gedicht?</h2>
     <p class="leading-relaxed mb-4">
       Laat alles weg wat niets over de ontvanger zegt. Veel gedichten beginnen met algemene regels over Spanje, Pieten op het dak of het grote boek. In een kort gedicht kosten die regels de ruimte die je voor het weetje nodig hebt.
     </p>
@@ -51,7 +59,7 @@
       Begin meteen met het weetje. Dan luistert de kamer vanaf de eerste regel. Met één weetje kun je ook <NuxtLink to="/" data-cta="blog:kort-sinterklaasgedicht:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">een kort gedicht op maat laten schrijven</NuxtLink>, vanaf 8 regels.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Veelgemaakte valkuilen bij een kort sinterklaasgedicht</h2>
+    <h2 id="veelgemaakte-valkuilen-bij-een-kort-sinterklaasgedicht" class="text-3xl font-bold mt-8 mb-4">Veelgemaakte valkuilen bij een kort sinterklaasgedicht</h2>
     <p class="leading-relaxed mb-4">
       In vier regels hoor je elke fout. Let op deze valkuilen:
     </p>
@@ -66,7 +74,7 @@
       <p class="text-red-800">Lees de regels twee keer rustig met stemverheffing voor. Haper je bij een regel of kom je adem tekort? Pas dan het ritme of de woordkeuze direct aan.</p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Zes complete voorbeeldgedichten</h2>
+    <h2 id="zes-complete-voorbeeldgedichten" class="text-3xl font-bold mt-8 mb-4">Zes complete voorbeeldgedichten</h2>
     <p class="leading-relaxed mb-4">
       Hieronder vind je zes voorbeelden van een kort gedicht voor verschillende ontvangers. Elk gedicht telt vier of acht regels en gebruikt zuiver volrijm. Bij onze <NuxtLink to="/voorbeelden" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht voorbeelden per stijl</NuxtLink> vind je gedichten in alle zes stijlen.
     </p>
@@ -143,7 +151,7 @@
       </p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Tips voor het voordragen tijdens pakjesavond</h2>
+    <h2 id="tips-voor-het-voordragen-tijdens-pakjesavond" class="text-3xl font-bold mt-8 mb-4">Tips voor het voordragen tijdens pakjesavond</h2>
     <p class="leading-relaxed mb-4">
       Lees een kort gedicht rustig voor. Er zijn maar een paar regels, dus elke grap en elk rijmwoord moet aankomen.
     </p>

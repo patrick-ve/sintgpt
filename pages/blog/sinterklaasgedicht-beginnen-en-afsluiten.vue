@@ -5,8 +5,16 @@
     seo-title="Sinterklaasgedicht beginnen en afsluiten: 24 zinnen | SintGPT"
     seo-description="Hoe begin je een sinterklaasgedicht, en hoe sluit je het af? 4 manieren om te beginnen, 15 rijmende openingszinnen en 9 slotzinnen."
     og-image="blog-sinterklaasgedicht-beginnen-en-afsluiten"
+    :toc="[
+      { id: 'waarom-het-begin-van-een-sinterklaasgedicht-en-het-slot-zo-belangrijk-zijn', label: 'Waarom het begin van een sinterklaasgedicht en het slot zo belangrijk zijn' },
+      { id: 'hoe-begin-je-een-sinterklaasgedicht', label: 'Hoe begin je een sinterklaasgedicht?' },
+      { id: '15-rijmende-openingszinnen-voor-je-sinterklaasgedicht', label: '15 rijmende openingszinnen voor je sinterklaasgedicht' },
+      { id: 'hoe-sluit-je-een-sinterklaasgedicht-af', label: 'Hoe sluit je een sinterklaasgedicht af?' },
+      { id: '9-rijmende-slotzinnen-voor-de-ontknoping', label: '9 rijmende slotzinnen voor de ontknoping' },
+      { id: 'valkuilen-bij-het-begin-en-einde-van-een-gedicht', label: 'Valkuilen bij het begin en einde van een gedicht' },
+    ]"
   >
-    <h2 class="text-3xl font-bold mt-8 mb-4">Waarom het begin van een sinterklaasgedicht en het slot zo belangrijk zijn</h2>
+    <h2 id="waarom-het-begin-van-een-sinterklaasgedicht-en-het-slot-zo-belangrijk-zijn" class="text-3xl font-bold mt-8 mb-4">Waarom het begin van een sinterklaasgedicht en het slot zo belangrijk zijn</h2>
     <p class="leading-relaxed mb-4">
       Leest iemand het gedicht hardop voor, dan luistert de hele kamer mee. De <strong>openingszin</strong> zet de toon: na één regel weet iedereen of het gedicht grappig of klassiek wordt. Een warrige eerste regel laat de voorlezer meteen struikelen.
     </p>
@@ -18,7 +26,7 @@
       <p class="text-red-800">Struikel je zelf al over de woorden? Pas de zinsbouw aan tot de regel vanzelf loopt als je hem rustig uitspreekt.</p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Hoe begin je een sinterklaasgedicht?</h2>
+    <h2 id="hoe-begin-je-een-sinterklaasgedicht" class="text-3xl font-bold mt-8 mb-4">Hoe begin je een sinterklaasgedicht?</h2>
     <p class="leading-relaxed mb-4">
       Begin met het grote boek van de Sint, met een gebeurtenis uit het jaar van de ontvanger, met de naam van de ontvanger of meteen met de grap. Kies er één en schrijf daar je eerste twee regels mee.
     </p>
@@ -32,7 +40,7 @@
       Wil je weten hoe je na de start de rest van het gedicht opbouwt? Lees dan onze uitgebreide gids over <NuxtLink to="/blog/hoe-schrijf-je-het-perfecte-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">een sinterklaasgedicht schrijven</NuxtLink>. Heb je haast, gebruik dan het sjabloon voor een <NuxtLink to="/blog/sinterklaasgedicht-last-minute" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht last minute</NuxtLink>. Kom je er zelf niet uit, dan kun je met een paar weetjes ook <NuxtLink to="/" data-cta="blog:sinterklaasgedicht-beginnen-en-afsluiten:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">een gedicht met begin en slot laten schrijven</NuxtLink>.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">15 rijmende openingszinnen voor je sinterklaasgedicht</h2>
+    <h2 id="15-rijmende-openingszinnen-voor-je-sinterklaasgedicht" class="text-3xl font-bold mt-8 mb-4">15 rijmende openingszinnen voor je sinterklaasgedicht</h2>
     <p class="leading-relaxed mb-4">
       Hieronder staan vijftien rijmende openingen van twee regels, per toon. Vervang [naam] door de naam van de ontvanger.
     </p>
@@ -150,7 +158,7 @@
       Zoek je meer inspiratie voor humor of de werkvloer? Bekijk dan onze <NuxtLink to="/blog/grappige-sinterklaasgedichten-tips" class="text-red-700 underline underline-offset-2 hover:text-red-900">tips voor een grappig sinterklaasgedicht</NuxtLink> of lees specifieke tips voor een <NuxtLink to="/blog/sinterklaas-op-het-werk" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht voor een collega</NuxtLink>.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Hoe sluit je een sinterklaasgedicht af?</h2>
+    <h2 id="hoe-sluit-je-een-sinterklaasgedicht-af" class="text-3xl font-bold mt-8 mb-4">Hoe sluit je een sinterklaasgedicht af?</h2>
     <p class="leading-relaxed mb-4">
       Het <strong>slot van het sinterklaasgedicht</strong> kondigt het cadeau aan, geeft een warme wens mee of komt terug op het begin. Een rommelig einde laat de ontvanger twijfelen of het pakje al open mag. Kies een van deze drie manieren.
     </p>
@@ -160,7 +168,7 @@
       <li>De cirkel rondmaken: verwijs in de laatste regels kort terug naar het grapje of het onderwerp waarmee je het gedicht begon.</li>
     </ul>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">9 rijmende slotzinnen voor de ontknoping</h2>
+    <h2 id="9-rijmende-slotzinnen-voor-de-ontknoping" class="text-3xl font-bold mt-8 mb-4">9 rijmende slotzinnen voor de ontknoping</h2>
     <p class="leading-relaxed mb-4">
       Met deze slotzinnen van twee regels werk je toe naar het uitpakken.
     </p>
@@ -233,7 +241,7 @@
       </p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Valkuilen bij het begin en einde van een gedicht</h2>
+    <h2 id="valkuilen-bij-het-begin-en-einde-van-een-gedicht" class="text-3xl font-bold mt-8 mb-4">Valkuilen bij het begin en einde van een gedicht</h2>
     <p class="leading-relaxed mb-4">
       Let op deze vier fouten in de eerste en de laatste regels.
     </p>

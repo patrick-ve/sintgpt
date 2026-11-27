@@ -5,8 +5,16 @@
     seo-title="Lootjes trekken: eerlijke regels en tips | SintGPT"
     seo-description="Lees hoe je eerlijk lootjes trekt voor Sinterklaas zonder gedoe. Bekijk handige regels voor het budget, surprises en lootjes trekken op afstand."
     og-image="blog-lootjes-trekken-tips"
+    :toc="[
+      { id: 'waarom-gaat-lootjes-trekken-met-briefjes-vaak-mis', label: 'Waarom gaat lootjes trekken met briefjes vaak mis?' },
+      { id: 'lootjes-trekken-online-hoe-werkt-een-digitale-trekking', label: 'Lootjes trekken online: hoe werkt een digitale trekking?' },
+      { id: 'welke-afspraken-maak-je-voor-het-lootjes-trekken', label: 'Welke afspraken maak je voor het lootjes trekken?' },
+      { id: 'partners-jonge-kinderen-en-lootjes-trekken-op-afstand', label: 'Partners, jonge kinderen en lootjes trekken op afstand' },
+      { id: 'de-etiquette-van-het-lootjes-trekken', label: 'De etiquette van het lootjes trekken' },
+      { id: 'pakjesavond-na-het-lootjes-trekken', label: 'Pakjesavond na het lootjes trekken' },
+    ]"
   >
-    <h2 class="text-3xl font-bold mt-8 mb-4">Waarom gaat lootjes trekken met briefjes vaak mis?</h2>
+    <h2 id="waarom-gaat-lootjes-trekken-met-briefjes-vaak-mis" class="text-3xl font-bold mt-8 mb-4">Waarom gaat lootjes trekken met briefjes vaak mis?</h2>
     <p class="leading-relaxed mb-4">
       Met briefjes in een hoed kan iemand de eigen naam trekken, en dan moet de groep opnieuw. Iedereen schrijft een naam op een papiertje, vouwt het op en gooit het in een kom of hoed. Dit gaat er vaak mis:
     </p>
@@ -20,7 +28,7 @@
       Moet je opnieuw trekken, dan weet een deel van de groep al iets. In een grote familie of vriendengroep kost elke nieuwe ronde ook veel tijd.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Lootjes trekken online: hoe werkt een digitale trekking?</h2>
+    <h2 id="lootjes-trekken-online-hoe-werkt-een-digitale-trekking" class="text-3xl font-bold mt-8 mb-4">Lootjes trekken online: hoe werkt een digitale trekking?</h2>
     <p class="leading-relaxed mb-4">
       Bij online lootjes trekken trekt een pagina in één keer voor de hele groep. Er komt geen papiertje aan te pas, dus niemand kan iets afleiden uit een zucht of een handschrift.
     </p>
@@ -38,7 +46,7 @@
       <p class="text-red-800">De namen blijven op die ene telefoon. Je deelt geen e-mailadressen, dus niemand krijgt berichten die hij niet wil.</p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Welke afspraken maak je voor het lootjes trekken?</h2>
+    <h2 id="welke-afspraken-maak-je-voor-het-lootjes-trekken" class="text-3xl font-bold mt-8 mb-4">Welke afspraken maak je voor het lootjes trekken?</h2>
     <p class="leading-relaxed mb-4">
       Spreek vooraf vier dingen af: het budget, wat iedereen maakt, het verlanglijstje en de datum. Dan verwacht niemand meer of minder dan de rest.
     </p>
@@ -53,7 +61,7 @@
       <p class="text-red-800">Spreek af dat de kosten voor karton, lijm en verf buiten het cadeaubudget vallen. Zo gaat het hele bedrag naar het cadeau zelf.</p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Partners, jonge kinderen en lootjes trekken op afstand</h2>
+    <h2 id="partners-jonge-kinderen-en-lootjes-trekken-op-afstand" class="text-3xl font-bold mt-8 mb-4">Partners, jonge kinderen en lootjes trekken op afstand</h2>
     <h3 class="text-2xl font-bold mt-6 mb-3">Wat doe je met partners in de groep?</h3>
     <p class="leading-relaxed mb-4">
       Partners geven elkaar buiten Sinterklaas om vaak al cadeaus. Trekken ze elkaar, dan is de verrassing klein. Op de lootjespagina kun je partners niet uitsluiten. Trekt een stel elkaar toch, trek dan opnieuw voor de hele groep, zodat niemand ziet wie het was.
@@ -67,7 +75,7 @@
       Woont de familie verspreid of viert een vriendengroep het feest niet op één plek? Dan kan de telefoon niet rondgaan. Laat één persoon trekken die zelf niet meedoet. Die stuurt ieder lootje apart door in een persoonlijk bericht.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">De etiquette van het lootjes trekken</h2>
+    <h2 id="de-etiquette-van-het-lootjes-trekken" class="text-3xl font-bold mt-8 mb-4">De etiquette van het lootjes trekken</h2>
     <p class="leading-relaxed mb-4">
       Na de trekking gelden een paar ongeschreven regels:
     </p>
@@ -93,7 +101,7 @@
       </p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Pakjesavond na het lootjes trekken</h2>
+    <h2 id="pakjesavond-na-het-lootjes-trekken" class="text-3xl font-bold mt-8 mb-4">Pakjesavond na het lootjes trekken</h2>
     <p class="leading-relaxed mb-4">
       Met een vaste volgorde krijgt op pakjesavond elk cadeau en elk gedicht aandacht.
     </p>

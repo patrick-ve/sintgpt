@@ -5,8 +5,17 @@
     seo-title="Ouderwets sinterklaasgedicht: tips en oude woorden | SintGPT"
     seo-description="Leer hoe je een deftig en ouderwets sinterklaasgedicht schrijft. Met woordenlijst, handige voorleestips en complete voorbeeldgedichten in AABB-rijm."
     og-image="blog-ouderwets-sinterklaasgedicht"
+    :toc="[
+      { id: 'wat-is-een-ouderwets-sinterklaasgedicht', label: 'Wat is een ouderwets sinterklaasgedicht?' },
+      { id: 'woorden-en-zinswendingen-voor-een-deftig-sinterklaasgedicht', label: 'Woorden en zinswendingen voor een deftig sinterklaasgedicht' },
+      { id: 'het-contrast-tussen-oude-taal-en-moderne-onderwerpen', label: 'Het contrast tussen oude taal en moderne onderwerpen' },
+      { id: 'zo-houd-je-een-sinterklaasgedicht-in-oude-stijl-leesbaar', label: 'Zo houd je een sinterklaasgedicht in oude stijl leesbaar' },
+      { id: 'voor-wie-past-een-ouderwets-sinterklaasgedicht', label: 'Voor wie past een ouderwets sinterklaasgedicht?' },
+      { id: 'hoe-lees-je-een-ouderwets-gedicht-voor', label: 'Hoe lees je een ouderwets gedicht voor?' },
+      { id: 'compleet-voorbeeld-van-een-ouderwets-sinterklaasgedicht', label: 'Compleet voorbeeld van een ouderwets sinterklaasgedicht' },
+    ]"
   >
-    <h2 class="text-3xl font-bold mt-8 mb-4">Wat is een ouderwets sinterklaasgedicht?</h2>
+    <h2 id="wat-is-een-ouderwets-sinterklaasgedicht" class="text-3xl font-bold mt-8 mb-4">Wat is een ouderwets sinterklaasgedicht?</h2>
     <p class="leading-relaxed mb-4">
       Een <strong>ouderwets sinterklaasgedicht</strong> klinkt als een brief van lang geleden. De Sint spreekt de ontvanger aan met Gij en Uwe en gebruikt statige zinnen. Een <NuxtLink to="/blog/klassiek-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">klassiek sinterklaasgedicht</NuxtLink> is warm en gewoon van taal. Een ouderwets gedicht is formeel in taal en toon. Alle zes stijlen naast elkaar lees je in het <NuxtLink to="/blog/sinterklaasgedicht-stijlen" class="text-red-700 underline underline-offset-2 hover:text-red-900">overzicht van soorten sinterklaasgedichten</NuxtLink>.
     </p>
@@ -17,7 +26,7 @@
       De toon past ook bij de Sint zelf. Hij is een oude bisschop, dus deftige taal klinkt uit zijn mond geloofwaardig.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Woorden en zinswendingen voor een deftig sinterklaasgedicht</h2>
+    <h2 id="woorden-en-zinswendingen-voor-een-deftig-sinterklaasgedicht" class="text-3xl font-bold mt-8 mb-4">Woorden en zinswendingen voor een deftig sinterklaasgedicht</h2>
     <p class="leading-relaxed mb-4">
       Voor een sinterklaasgedicht in oude stijl heb je maar een handvol woorden nodig. Vervang een paar gewone werkwoorden en voornaamwoorden door een statige vorm, dan klinkt het gedicht meteen oud.
     </p>
@@ -34,7 +43,7 @@
       Gebruik één of twee van deze woorden per couplet van vier regels. Vervang je elk woord door een oude vorm, dan raakt de luisteraar de draad kwijt. Zoek je die maat liever niet zelf, dan kun je ook <NuxtLink to="/?stijl=ouderwets#poem-form" data-cta="blog:ouderwets-sinterklaasgedicht:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">een ouderwets gedicht laten schrijven</NuxtLink>.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Het contrast tussen oude taal en moderne onderwerpen</h2>
+    <h2 id="het-contrast-tussen-oude-taal-en-moderne-onderwerpen" class="text-3xl font-bold mt-8 mb-4">Het contrast tussen oude taal en moderne onderwerpen</h2>
     <p class="leading-relaxed mb-4">
       Een deftig sinterklaasgedicht werkt het best als je iets van nu beschrijft met woorden van vroeger. Denk aan urenlang scrollen op een telefoon, sporten in de sportschool of videovergaderen in een joggingbroek.
     </p>
@@ -60,7 +69,7 @@
       </p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Zo houd je een sinterklaasgedicht in oude stijl leesbaar</h2>
+    <h2 id="zo-houd-je-een-sinterklaasgedicht-in-oude-stijl-leesbaar" class="text-3xl font-bold mt-8 mb-4">Zo houd je een sinterklaasgedicht in oude stijl leesbaar</h2>
     <p class="leading-relaxed mb-4">
       Een formeel sinterklaasgedicht wordt snel te ingewikkeld. Bij lange zinnen of gekunstelde grammatica hapert de voorlezer. Het gedicht moet plechtig klinken, maar iedereen in de kamer moet de grap meteen snappen.
     </p>
@@ -75,7 +84,7 @@
       <p class="text-red-800">Ouderwetse taal klinkt pas statig als het ritme klopt. Geef de twee regels van een rijmpaar evenveel lettergrepen en laat de klemtonen regelmatig vallen.</p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Voor wie past een ouderwets sinterklaasgedicht?</h2>
+    <h2 id="voor-wie-past-een-ouderwets-sinterklaasgedicht" class="text-3xl font-bold mt-8 mb-4">Voor wie past een ouderwets sinterklaasgedicht?</h2>
     <p class="leading-relaxed mb-4">
       Een ouderwets gedicht past bij volwassenen en tieners die de deftige taal kunnen volgen. Jonge kinderen begrijpen woorden als derhalve vaak niet. Deze vier groepen passen er goed bij:
     </p>
@@ -86,7 +95,7 @@
       <li><strong>Tieners en studenten</strong>: de aanspreekvorm 'Gij' botst grappig met hun telefoon, hun sportschool en hun studie.</li>
     </ul>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Hoe lees je een ouderwets gedicht voor?</h2>
+    <h2 id="hoe-lees-je-een-ouderwets-gedicht-voor" class="text-3xl font-bold mt-8 mb-4">Hoe lees je een ouderwets gedicht voor?</h2>
     <p class="leading-relaxed mb-4">
       Lees een sinterklaasgedicht in oude stijl voor met een plechtige stem en een ernstig gezicht. Hoe deftiger je het brengt, hoe beter de grap werkt.
     </p>
@@ -97,7 +106,7 @@
       <li><strong>Blijf ernstig kijken</strong>: hoe serieuzer je kijkt, hoe droger de grap.</li>
     </ul>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Compleet voorbeeld van een ouderwets sinterklaasgedicht</h2>
+    <h2 id="compleet-voorbeeld-van-een-ouderwets-sinterklaasgedicht" class="text-3xl font-bold mt-8 mb-4">Compleet voorbeeld van een ouderwets sinterklaasgedicht</h2>
     <p class="leading-relaxed mb-4">
       Dit voorbeeld van zestien regels in rijmschema AABB gaat over Maurits, een verzonnen man die veel thuiswerkt en dol is op koffie. Meer stijlen staan bij onze <NuxtLink to="/voorbeelden" class="text-red-700 underline underline-offset-2 hover:text-red-900">voorbeeldgedichten van Klassiek tot Roast</NuxtLink>.
     </p>

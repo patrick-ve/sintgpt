@@ -5,8 +5,17 @@
     seo-title="Sinterklaasgedicht voor kinderen per leeftijd | SintGPT"
     seo-description="Leer hoe je een passend sinterklaasgedicht voor kinderen schrijft. Met praktische tips en voorbeelden voor peuters, jonge kinderen en tieners."
     og-image="blog-sinterklaasgedicht-voor-kinderen"
+    :toc="[
+      { id: 'hoe-schrijf-je-een-sinterklaasgedicht-voor-kinderen', label: 'Hoe schrijf je een sinterklaasgedicht voor kinderen?' },
+      { id: 'sinterklaasgedicht-voor-een-peuter-of-kleuter', label: 'Sinterklaasgedicht voor een peuter of kleuter' },
+      { id: 'gedichten-voor-kinderen-die-nog-geloven', label: 'Gedichten voor kinderen die nog geloven' },
+      { id: 'sinterklaasgedicht-voor-een-tiener', label: 'Sinterklaasgedicht voor een tiener' },
+      { id: 'rijm-en-ritme-afstemmen-op-jonge-luisteraars', label: 'Rijm en ritme afstemmen op jonge luisteraars' },
+      { id: 'veelgemaakte-fouten-bij-kindergedichten', label: 'Veelgemaakte fouten bij kindergedichten' },
+      { id: 'een-gedicht-voor-een-kind-in-vier-stappen', label: 'Een gedicht voor een kind in vier stappen' },
+    ]"
   >
-    <h2 class="text-3xl font-bold mt-8 mb-4">Hoe schrijf je een sinterklaasgedicht voor kinderen?</h2>
+    <h2 id="hoe-schrijf-je-een-sinterklaasgedicht-voor-kinderen" class="text-3xl font-bold mt-8 mb-4">Hoe schrijf je een sinterklaasgedicht voor kinderen?</h2>
     <p class="leading-relaxed mb-4">
       Je past lengte, woorden en toon aan op de leeftijd van het kind. Een driejarige luistert vooral naar de klank van woorden, het vaste ritme en dingen uit het eigen leven. Een veertienjarige wil humor over school of de sportclub en een beetje plagerij.
     </p>
@@ -14,7 +23,7 @@
       Houd bij een <strong>sinterklaasgedicht voor een kind</strong> rekening met de aandachtsspanne. Bij een lange tekst dwaalt een jong kind af. Voor de allerkleinsten werkt een <NuxtLink to="/blog/kort-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">kort sinterklaasgedicht</NuxtLink> het best. Voor oudere kinderen kun je meer herinneringen en details toevoegen.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Sinterklaasgedicht voor een peuter of kleuter</h2>
+    <h2 id="sinterklaasgedicht-voor-een-peuter-of-kleuter" class="text-3xl font-bold mt-8 mb-4">Sinterklaasgedicht voor een peuter of kleuter</h2>
     <p class="leading-relaxed mb-4">
       Voor peuters en kleuters draait pakjesavond om liedjes, de schoen en het pakje. Beeldspraak en lange zinnen begrijpen ze nog niet. Houd de zinnen kort en gebruik eenvoudige woorden die aansluiten bij wat ze elke dag meemaken, zoals buiten spelen, blokken stapelen of het zetten van de schoen. Een <NuxtLink to="/blog/kort-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">kort sinterklaasgedicht</NuxtLink> van vier tot acht regels is voor deze leeftijd vaak genoeg.
     </p>
@@ -41,7 +50,7 @@
       <p class="text-red-800">Lees een peutergedicht voor met een duidelijke klemtoon en een rustig ritme. Pauzeer aan het einde van een regel, zodat het kind zelf het rijmwoord kan raden en aanvullen.</p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Gedichten voor kinderen die nog geloven</h2>
+    <h2 id="gedichten-voor-kinderen-die-nog-geloven" class="text-3xl font-bold mt-8 mb-4">Gedichten voor kinderen die nog geloven</h2>
     <p class="leading-relaxed mb-4">
       Voor kinderen op de basisschool die nog in Sinterklaas geloven, is het gedicht een persoonlijke boodschap van de Goedheiligman zelf. Schrijf daarom steeds vanuit het perspectief van Sinterklaas en Piet. Gebruik vertrouwde zinnen zoals "Sint zat in zijn grote boek te kijken" of "Piet zag op het dak hoe hard jij oefende". Schrijf je kind liever zelf iets voor de klas? Lees dan hoe je samen een <NuxtLink to="/blog/sinterklaasgedicht-juf-meester" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht voor de juf of meester</NuxtLink> schrijft.
     </p>
@@ -68,7 +77,7 @@
       </p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Sinterklaasgedicht voor een tiener</h2>
+    <h2 id="sinterklaasgedicht-voor-een-tiener" class="text-3xl font-bold mt-8 mb-4">Sinterklaasgedicht voor een tiener</h2>
     <p class="leading-relaxed mb-4">
       Tieners weten precies wie de cadeaus koopt en hoe het feest in elkaar zit. Bij hen mag de toon gevatter en losser zijn. Een gedicht voor een tiener slaagt wanneer je herkenbare tienergewoontes aanstipt: moeite met vroeg opstaan, een smartphone die aan de hand geplakt lijkt te zitten, stapels huiswerk op het bureau of een slaapkamer vol rondslingerende kleren.
     </p>
@@ -95,7 +104,7 @@
       </p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Rijm en ritme afstemmen op jonge luisteraars</h2>
+    <h2 id="rijm-en-ritme-afstemmen-op-jonge-luisteraars" class="text-3xl font-bold mt-8 mb-4">Rijm en ritme afstemmen op jonge luisteraars</h2>
     <p class="leading-relaxed mb-4">
       Een sinterklaasgedicht voor kinderen staat of valt met het ritme. Kinderen horen meteen wanneer een regel niet loopt. Is een zin te lang of valt de klemtoon verkeerd, dan hapert het voorlezen en raakt het kind de aandacht kwijt. Geef elke regel daarom ongeveer evenveel lettergrepen en een vast ritme.
     </p>
@@ -107,7 +116,7 @@
       <p class="text-red-800">Lees je gedicht altijd twee keer hardop voor voordat je het opschrijft. Haper je bij een zin, pas dan de woordvolgorde aan of schrap overbodige woorden.</p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Veelgemaakte fouten bij kindergedichten</h2>
+    <h2 id="veelgemaakte-fouten-bij-kindergedichten" class="text-3xl font-bold mt-8 mb-4">Veelgemaakte fouten bij kindergedichten</h2>
     <p class="leading-relaxed mb-4">
       Deze fouten zie je vaak in gedichten voor kinderen:
     </p>
@@ -119,7 +128,7 @@
       <li>Geheimen verklappen: let bij gelovige kinderen goed op dat je geen hints geeft over de winkel, de prijs of wie het cadeau heeft ingepakt.</li>
     </ul>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Een gedicht voor een kind in vier stappen</h2>
+    <h2 id="een-gedicht-voor-een-kind-in-vier-stappen" class="text-3xl font-bold mt-8 mb-4">Een gedicht voor een kind in vier stappen</h2>
     <p class="leading-relaxed mb-4">
       Zo schrijf je in vier stappen een persoonlijk gedicht:
     </p>

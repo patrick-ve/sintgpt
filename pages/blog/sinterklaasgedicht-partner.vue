@@ -5,8 +5,17 @@
     seo-title="Sinterklaasgedicht voor je partner met voorbeelden | SintGPT"
     seo-description="Leer hoe je een sinterklaasgedicht voor je partner schrijft. Met tips over de juiste toon, herinneringen en rijmende voorbeeldgedichten."
     og-image="blog-sinterklaasgedicht-partner"
+    :toc="[
+      { id: 'de-juiste-toon-voor-een-sinterklaasgedicht-voor-je-partner', label: 'De juiste toon voor een sinterklaasgedicht voor je partner' },
+      { id: 'hoe-pikant-mag-een-sinterklaasgedicht-voor-je-partner-zijn', label: 'Hoe pikant mag een sinterklaasgedicht voor je partner zijn?' },
+      { id: 'persoonlijke-herinneringen-en-gewoontes-verzamelen', label: 'Persoonlijke herinneringen en gewoontes verzamelen' },
+      { id: 'romantisch-gevat-of-ondeugend-kies-je-stijl', label: 'Romantisch, gevat of ondeugend: kies je stijl' },
+      { id: 'drie-voorbeeldgedichten-voor-je-partner', label: 'Drie voorbeeldgedichten voor je partner' },
+      { id: 'valkuilen-bij-het-schrijven-van-je-partnergedicht', label: 'Valkuilen bij het schrijven van je partnergedicht' },
+      { id: 'meer-voorbeelden-en-lootjes-trekken', label: 'Meer voorbeelden en lootjes trekken' },
+    ]"
   >
-    <h2 class="text-3xl font-bold mt-8 mb-4">De juiste toon voor een sinterklaasgedicht voor je partner</h2>
+    <h2 id="de-juiste-toon-voor-een-sinterklaasgedicht-voor-je-partner" class="text-3xl font-bold mt-8 mb-4">De juiste toon voor een sinterklaasgedicht voor je partner</h2>
     <p class="leading-relaxed mb-4">
       Een gedicht voor je geliefde vraagt een andere aanpak dan een gedicht voor een collega, buurman of klasgenoot. Je kent elkaar door en door. Je deelt gewoontes, herinneringen en humor. In een <strong>sinterklaasgedicht voor je partner</strong> laat je zien wat je waardeert, en plaag je met een knipoog om de kleine kuren van alledag.
     </p>
@@ -14,7 +23,7 @@
       Schrijf je voor je vriend of man? Noem dan bijvoorbeeld zijn klusprojecten of hoe hij na het eten op de bank in slaap valt. Schrijf je voor je vriendin of vrouw? Combineer dan bijvoorbeeld een lieve herinnering met een compliment over haar steun. Bepaal vooraf welk gevoel je wilt overbrengen: ontroering, een brede glimlach of een lichte blos op de wangen.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Hoe pikant mag een sinterklaasgedicht voor je partner zijn?</h2>
+    <h2 id="hoe-pikant-mag-een-sinterklaasgedicht-voor-je-partner-zijn" class="text-3xl font-bold mt-8 mb-4">Hoe pikant mag een sinterklaasgedicht voor je partner zijn?</h2>
     <p class="leading-relaxed mb-4">
       Zo pikant als het publiek toelaat, en nooit expliciet. Met zijn tweeën mag een ondeugende knipoog. Luisteren er kinderen of schoonouders mee, dan bewaar je pikante toespelingen voor later. Een gedicht dat op de bank goed valt, geeft in een volle kamer ongemakkelijke blikken. Je kunt ook <NuxtLink to="/" data-cta="blog:sinterklaasgedicht-partner:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">een gedicht voor je partner laten schrijven</NuxtLink> en daarbij kiezen voor welk publiek het is.
     </p>
@@ -31,7 +40,7 @@
       <p class="text-red-800">Wil je toch een ondeugende toespeling maken in een volle woonkamer? Gebruik dan een subtiel codewoord of een herinnering aan een specifiek moment dat alleen jullie twee kennen. Voor de familie klinkt het als een onschuldige opmerking, terwijl je partner meteen weet wat je bedoelt.</p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Persoonlijke herinneringen en gewoontes verzamelen</h2>
+    <h2 id="persoonlijke-herinneringen-en-gewoontes-verzamelen" class="text-3xl font-bold mt-8 mb-4">Persoonlijke herinneringen en gewoontes verzamelen</h2>
     <p class="leading-relaxed mb-4">
       Een geslaagd sinterklaasgedicht draait om herkenbare details. Een regel over koude decemberdagen en chocoladeletters past bij iedereen. Een gewoonte die alleen je partner heeft, past maar bij één persoon. Loop daarom de afgelopen twaalf maanden door:
     </p>
@@ -42,7 +51,7 @@
       <li>Een heldere structuur: kies een vast rijmschema zoals AABB of ABAB en houd het ritme strak. In onze handleiding over <NuxtLink to="/blog/hoe-schrijf-je-het-perfecte-sinterklaasgedicht" class="text-red-700 underline underline-offset-2 hover:text-red-900">een sinterklaasgedicht schrijven</NuxtLink> lees je stap voor stap hoe je een goede opbouw maakt.</li>
     </ol>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Romantisch, gevat of ondeugend: kies je stijl</h2>
+    <h2 id="romantisch-gevat-of-ondeugend-kies-je-stijl" class="text-3xl font-bold mt-8 mb-4">Romantisch, gevat of ondeugend: kies je stijl</h2>
     <p class="leading-relaxed mb-4">
       Voor je partner kun je drie kanten op. Kies de toon die past bij hoe jullie normaal met elkaar praten.
     </p>
@@ -59,7 +68,7 @@
       Kies je voor een <strong>pikant sinterklaasgedicht</strong>, houd het dan smaakvol en nooit expliciet. Een pikante grap werkt door suggestie en timing. Platte woorden maken hem kapot. Noem geen lichaamsdelen en laat je partner de tweede betekenis zelf invullen.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Drie voorbeeldgedichten voor je partner</h2>
+    <h2 id="drie-voorbeeldgedichten-voor-je-partner" class="text-3xl font-bold mt-8 mb-4">Drie voorbeeldgedichten voor je partner</h2>
     <p class="leading-relaxed mb-4">
       Hieronder staan drie voorbeelden in rijmschema AABB: romantisch, met een vrolijke knipoog en ondeugend. Gebruik ze als basis en vul je eigen herinneringen in.
     </p>
@@ -109,7 +118,7 @@
       </p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Valkuilen bij het schrijven van je partnergedicht</h2>
+    <h2 id="valkuilen-bij-het-schrijven-van-je-partnergedicht" class="text-3xl font-bold mt-8 mb-4">Valkuilen bij het schrijven van je partnergedicht</h2>
     <p class="leading-relaxed mb-4">
       Ook met de beste bedoelingen kan een gedicht de verkeerde snaar raken. Let op deze vier valkuilen voor je de laatste versie opschrijft:
     </p>
@@ -120,7 +129,7 @@
       <li>Vergeten warm af te sluiten: wat je tussendoor ook schrijft over gekke gewoontes of kleine ergernissen, laat in de laatste regels zien hoeveel je om de ander geeft.</li>
     </ul>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Meer voorbeelden en lootjes trekken</h2>
+    <h2 id="meer-voorbeelden-en-lootjes-trekken" class="text-3xl font-bold mt-8 mb-4">Meer voorbeelden en lootjes trekken</h2>
     <p class="leading-relaxed mb-4">
       Wil je zien hoe andere onderwerpen en rijmschema's uitpakken? Bekijk dan onze <NuxtLink to="/voorbeelden" class="text-red-700 underline underline-offset-2 hover:text-red-900">voorbeeldgedichten voor andere ontvangers</NuxtLink>.
     </p>

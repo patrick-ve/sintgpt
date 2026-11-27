@@ -5,8 +5,16 @@
     seo-title="Rijmschema sinterklaasgedicht: 4 vormen en tips | SintGPT"
     seo-description="Welk rijmschema kies je voor je sinterklaasgedicht? Voorbeelden van AABB, ABAB, ABBA en de limerick, plus tips voor ritme en klemtoon."
     og-image="blog-rijm-en-ritme-sinterklaasgedicht"
+    :toc="[
+      { id: 'waarom-het-rijmschema-van-je-sinterklaasgedicht-het-ritme-bepaalt', label: 'Waarom het rijmschema van je sinterklaasgedicht het ritme bepaalt' },
+      { id: 'heffingen-tellen-voor-een-vast-ritme', label: 'Heffingen tellen voor een vast ritme' },
+      { id: 'staand-en-slepend-rijm-volrijm-en-halfrijm', label: 'Staand en slepend rijm, volrijm en halfrijm' },
+      { id: 'welk-rijmschema-kies-je-voor-een-sinterklaasgedicht', label: 'Welk rijmschema kies je voor een sinterklaasgedicht?' },
+      { id: 'vijf-valkuilen-bij-rijm-en-ritme', label: 'Vijf valkuilen bij rijm en ritme' },
+      { id: 'het-sinterklaasgedicht-controleren-met-de-voorleestest', label: 'Het sinterklaasgedicht controleren met de voorleestest' },
+    ]"
   >
-    <h2 class="text-3xl font-bold mt-8 mb-4">Waarom het rijmschema van je sinterklaasgedicht het ritme bepaalt</h2>
+    <h2 id="waarom-het-rijmschema-van-je-sinterklaasgedicht-het-ritme-bepaalt" class="text-3xl font-bold mt-8 mb-4">Waarom het rijmschema van je sinterklaasgedicht het ritme bepaalt</h2>
     <p class="leading-relaxed mb-4">
       Op pakjesavond leest iemand je gedicht hardop voor, vaak voor het eerst en zonder vooraf te oefenen. Struikelt de voorlezer over een regel, dan is de grap weg. Een vast rijmschema voor je sinterklaasgedicht geeft houvast: de voorlezer hoort waar het rijm komt en legt daar de klemtoon.
     </p>
@@ -14,7 +22,7 @@
       Met een vast ritme klinkt een rijtje zinnen als een voordracht. Klopt de maat, dan hoeft de voorlezer niet te zoeken naar de juiste klemtoon.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Heffingen tellen voor een vast ritme</h2>
+    <h2 id="heffingen-tellen-voor-een-vast-ritme" class="text-3xl font-bold mt-8 mb-4">Heffingen tellen voor een vast ritme</h2>
     <p class="leading-relaxed mb-4">
       Elk Nederlands woord van twee of meer lettergrepen heeft een vaste klemtoon. Denk aan woorden zoals koken, pepernoot of chocolade. Zo'n beklemtoonde lettergreep heet in de dichtkunst een <strong>heffing</strong>. De onbeklemtoonde lettergrepen ertussen noem je dalingen.
     </p>
@@ -31,7 +39,7 @@
       In dit voorbeeld staan de heffingen in hoofdletters: Sint HOOR-de dat BRAM graag KOOKT met veel VUUR, de ROOK-mel-der PIEPT bij hem ELK half UUR. Beide regels tellen vier heffingen. Tussen de heffingen staan steeds één of twee dalingen. Dat geeft het bekende sinterklaasritme. Kost het tellen je te veel tijd, dan kun je ook <NuxtLink to="/" data-cta="blog:rijm-en-ritme-sinterklaasgedicht:tekst" class="text-red-700 underline underline-offset-2 hover:text-red-900">een gedicht in AABB of ABAB laten schrijven</NuxtLink>.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Staand en slepend rijm, volrijm en halfrijm</h2>
+    <h2 id="staand-en-slepend-rijm-volrijm-en-halfrijm" class="text-3xl font-bold mt-8 mb-4">Staand en slepend rijm, volrijm en halfrijm</h2>
     <p class="leading-relaxed mb-4">
       Rijm draait om klank en niet om hoe je een woord schrijft. Twee woorden rijmen zodra de klank vanaf de laatste beklemtoonde klinker gelijk is. De woorden stad en nat rijmen daarom prima op elkaar, omdat je de eindletter d uitspreekt als een t.
     </p>
@@ -48,7 +56,7 @@
       In een sinterklaasgedicht verwacht het publiek <strong>volrijm</strong>. Bij volrijm klinken zowel de klinkers als de daaropvolgende medeklinkers gelijk, zoals bij pakje en dakje. Bij halfrijm klinkt alleen de klinker gelijk (zoals boot en boom) of alleen de medeklinker. Halfrijm valt op, omdat de luisteraars een volle rijmklank verwachten. Laat ook niet twee keer hetzelfde woord op elkaar rijmen. Zoek liever een ander woord in het overzicht van <NuxtLink to="/blog/rijmwoorden-sinterklaas" class="text-red-700 underline underline-offset-2 hover:text-red-900">rijmwoorden voor Sinterklaas</NuxtLink>.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Welk rijmschema kies je voor een sinterklaasgedicht?</h2>
+    <h2 id="welk-rijmschema-kies-je-voor-een-sinterklaasgedicht" class="text-3xl font-bold mt-8 mb-4">Welk rijmschema kies je voor een sinterklaasgedicht?</h2>
     <p class="leading-relaxed mb-4">
       Kies AABB als je twijfelt: dat schrijf je het makkelijkst en de luisteraars volgen het meteen. ABAB, ABBA en de limerick geven meer afwisseling. Een rijmschema geeft met letters aan welke regels op elkaar rijmen. Regels met dezelfde letter rijmen.
     </p>
@@ -106,7 +114,7 @@
       </p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Vijf valkuilen bij rijm en ritme</h2>
+    <h2 id="vijf-valkuilen-bij-rijm-en-ritme" class="text-3xl font-bold mt-8 mb-4">Vijf valkuilen bij rijm en ritme</h2>
     <p class="leading-relaxed mb-4">
       Deze vijf fouten halen het ritme uit een gedicht.
     </p>
@@ -122,7 +130,7 @@
       <p class="text-red-800">Bedenk eerst het rijmwoord aan het einde van de regel, vooral bij de clou van het gedicht. Bouw de zin daarna terug naar voren op. Zo staat het sterkste woord altijd op de plek waar de voorlezer vanzelf de meeste klemtoon legt.</p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Het sinterklaasgedicht controleren met de voorleestest</h2>
+    <h2 id="het-sinterklaasgedicht-controleren-met-de-voorleestest" class="text-3xl font-bold mt-8 mb-4">Het sinterklaasgedicht controleren met de voorleestest</h2>
     <p class="leading-relaxed mb-4">
       Lees je gedicht minstens één keer hardop voor, aan jezelf of aan een huisgenoot. Let daarbij op drie dingen.
     </p>

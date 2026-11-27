@@ -5,8 +5,17 @@
     seo-title="Ironisch sinterklaasgedicht: zo schrijf je het | SintGPT"
     seo-description="Leer hoe je een subtiel, ironisch sinterklaasgedicht schrijft. Bekijk slimme technieken voor droge humor en lees een compleet voorbeeldgedicht."
     og-image="blog-ironisch-sinterklaasgedicht"
+    :toc="[
+      { id: 'wat-is-een-ironisch-sinterklaasgedicht', label: 'Wat is een ironisch sinterklaasgedicht?' },
+      { id: 'vier-technieken-voor-een-droog-sinterklaasgedicht', label: 'Vier technieken voor een droog sinterklaasgedicht' },
+      { id: 'voor-wie-is-een-sarcastisch-sinterklaasgedicht-geschikt', label: 'Voor wie is een sarcastisch sinterklaasgedicht geschikt?' },
+      { id: 'veelgemaakte-valkuilen-bij-ironie-op-pakjesavond', label: 'Veelgemaakte valkuilen bij ironie op pakjesavond' },
+      { id: 'hoe-lees-je-een-gedicht-met-een-knipoog-voor', label: 'Hoe lees je een gedicht met een knipoog voor?' },
+      { id: 'voorbeeld-van-een-compleet-ironisch-sinterklaasgedicht', label: 'Voorbeeld van een compleet ironisch sinterklaasgedicht' },
+      { id: 'zo-schrijf-je-je-eigen-ironische-gedicht', label: 'Zo schrijf je je eigen ironische gedicht' },
+    ]"
   >
-    <h2 class="text-3xl font-bold mt-8 mb-4">Wat is een ironisch sinterklaasgedicht?</h2>
+    <h2 id="wat-is-een-ironisch-sinterklaasgedicht" class="text-3xl font-bold mt-8 mb-4">Wat is een ironisch sinterklaasgedicht?</h2>
     <p class="leading-relaxed mb-4">
       Een ironisch sinterklaasgedicht zegt iets anders dan het bedoelt. Het staat op de grens tussen een compliment en een plaagstoot. Je prijst iemand uitbundig om een eigenschap die helemaal niet handig is, of je noemt een duidelijke blunder een meesterlijke zet.
     </p>
@@ -14,7 +23,7 @@
       Zo verschilt ironie van de andere stijlen. Een <NuxtLink to="/blog/grappige-sinterklaasgedichten-tips" class="text-red-700 underline underline-offset-2 hover:text-red-900">grappig sinterklaasgedicht</NuxtLink> is speels en luchtig. Een <NuxtLink to="/blog/roast-sinterklaasgedicht-zonder-te-kwetsen" class="text-red-700 underline underline-offset-2 hover:text-red-900">roast sinterklaasgedicht</NuxtLink> neemt iemand openlijk en flink op de hak. Een ironisch gedicht is een <strong>sinterklaasgedicht met een knipoog</strong>: de grap zit tussen de regels. De luisteraar hoort wat er letterlijk staat en begrijpt zelf wat je bedoelt. In het <NuxtLink to="/blog/sinterklaasgedicht-stijlen" class="text-red-700 underline underline-offset-2 hover:text-red-900">overzicht van alle stijlen voor een sinterklaasgedicht</NuxtLink> zie je de zes stijlen naast elkaar.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Vier technieken voor een droog sinterklaasgedicht</h2>
+    <h2 id="vier-technieken-voor-een-droog-sinterklaasgedicht" class="text-3xl font-bold mt-8 mb-4">Vier technieken voor een droog sinterklaasgedicht</h2>
     <p class="leading-relaxed mb-4">
       Met deze vier technieken blijft de humor droog. Elk voorbeeld heeft vier regels in rijmschema AABB.
     </p>
@@ -71,7 +80,7 @@
       </p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Voor wie is een sarcastisch sinterklaasgedicht geschikt?</h2>
+    <h2 id="voor-wie-is-een-sarcastisch-sinterklaasgedicht-geschikt" class="text-3xl font-bold mt-8 mb-4">Voor wie is een sarcastisch sinterklaasgedicht geschikt?</h2>
     <p class="leading-relaxed mb-4">
       Een ironisch gedicht past bij volwassenen die jou goed kennen en om zichzelf kunnen lachen. Bedenk vooraf wie er in de kring zit.
     </p>
@@ -84,7 +93,7 @@
       Voor jonge kinderen werkt deze stijl bijna nooit. Ze nemen taal vaak letterlijk en begrijpen niet waarom de Sint hen prijst voor iets wat eigenlijk niet mag. Voor hen is een traditioneel <NuxtLink to="/blog/sinterklaasgedicht-voor-kinderen" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht voor kinderen</NuxtLink> een betere keuze. Pas ook op bij mensen die je nog niet goed kent. Zij kunnen denken dat je het meent.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Veelgemaakte valkuilen bij ironie op pakjesavond</h2>
+    <h2 id="veelgemaakte-valkuilen-bij-ironie-op-pakjesavond" class="text-3xl font-bold mt-8 mb-4">Veelgemaakte valkuilen bij ironie op pakjesavond</h2>
     <p class="leading-relaxed mb-4">
       Ironie gaat mis als de toon te scherp wordt of als de luisteraar de grap mist. Let op deze vier valkuilen:
     </p>
@@ -99,7 +108,7 @@
       <p class="text-red-800">Kies gewoontes waar iedereen om kan glimlachen, zoals een voorliefde voor chocola, altijd sleutels kwijt zijn of luid meezingen in de auto. Laat lichaam, gewicht, geld en ziekte buiten het gedicht.</p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Hoe lees je een gedicht met een knipoog voor?</h2>
+    <h2 id="hoe-lees-je-een-gedicht-met-een-knipoog-voor" class="text-3xl font-bold mt-8 mb-4">Hoe lees je een gedicht met een knipoog voor?</h2>
     <p class="leading-relaxed mb-4">
       Lees een ironisch gedicht voor met een strak gezicht en een rustige stem. Breng je het te enthousiast, dan klinkt het als een gemeend compliment. Lach je om je eigen regels, dan verpest je de grap.
     </p>
@@ -114,7 +123,7 @@
       <p class="text-red-800">Draag het gedicht niet theatraal voor. Een droge, zakelijke toon maakt het contrast met de overdreven woorden groter.</p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Voorbeeld van een compleet ironisch sinterklaasgedicht</h2>
+    <h2 id="voorbeeld-van-een-compleet-ironisch-sinterklaasgedicht" class="text-3xl font-bold mt-8 mb-4">Voorbeeld van een compleet ironisch sinterklaasgedicht</h2>
     <p class="leading-relaxed mb-4">
       Dit voorbeeld van twaalf regels in rijmschema AABB gaat over iemand die zichzelf een topkok vindt, terwijl het eten vaak aanbrandt.
     </p>
@@ -143,7 +152,7 @@
       In dit gedicht zie je de technieken terug. Aangebrand eten heet 'haute cuisine', een zwart randje hoort 'bij de smaak' en de rookmelder geeft 'een warm applaus'. De toon blijft vriendelijk, maar iedereen begrijpt wat je bedoelt.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Zo schrijf je je eigen ironische gedicht</h2>
+    <h2 id="zo-schrijf-je-je-eigen-ironische-gedicht" class="text-3xl font-bold mt-8 mb-4">Zo schrijf je je eigen ironische gedicht</h2>
     <p class="leading-relaxed mb-4">
       Begin met één kleine gewoonte van de ontvanger die je flink in het zonnetje kunt zetten. Volg dan deze vier stappen:
     </p>

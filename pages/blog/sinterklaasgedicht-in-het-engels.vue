@@ -5,8 +5,17 @@
     seo-title="Sinterklaasgedicht in het Engels met voorbeelden | SintGPT"
     seo-description="Schrijf een sinterklaasgedicht in het Engels. Lees praktische tips voor rijm en ritme, bekijk tweetalige voorbeelden en leg de traditie helder uit."
     og-image="blog-sinterklaasgedicht-in-het-engels"
+    :toc="[
+      { id: 'wanneer-kies-je-voor-een-sinterklaasgedicht-in-het-engels', label: 'Wanneer kies je voor een sinterklaasgedicht in het Engels?' },
+      { id: 'sinterklaas-uitleggen-aan-internationale-gasten-in-het-gedicht', label: 'Sinterklaas uitleggen aan internationale gasten in het gedicht' },
+      { id: 'rijm-en-ritme-in-het-engels-waar-let-je-op', label: 'Rijm en ritme in het Engels: waar let je op?' },
+      { id: 'voorbeelden-van-een-sinterklaasgedicht-in-het-engels', label: 'Voorbeelden van een sinterklaasgedicht in het Engels' },
+      { id: 'een-tweetalig-sinterklaasgedicht-schrijven', label: 'Een tweetalig sinterklaasgedicht schrijven' },
+      { id: 'stappenplan-voor-een-engels-sinterklaasgedicht', label: 'Stappenplan voor een Engels sinterklaasgedicht' },
+      { id: 'praktische-tips-voor-een-internationale-pakjesavond', label: 'Praktische tips voor een internationale pakjesavond' },
+    ]"
   >
-    <h2 class="text-3xl font-bold mt-8 mb-4">Wanneer kies je voor een sinterklaasgedicht in het Engels?</h2>
+    <h2 id="wanneer-kies-je-voor-een-sinterklaasgedicht-in-het-engels" class="text-3xl font-bold mt-8 mb-4">Wanneer kies je voor een sinterklaasgedicht in het Engels?</h2>
     <p class="leading-relaxed mb-4">
       Kies Engels als er iemand meeluistert die geen Nederlands verstaat. Denk aan een studentenhuis met buitenlandse studenten, een vriendengroep met expats of een familie met een buitenlandse partner. Ook op veel werkplekken is de voertaal Engels. Met een <strong>sinterklaasgedicht in het Engels</strong> kan iedereen meedoen.
     </p>
@@ -14,7 +23,7 @@
       Een gedicht in een taal die je niet verstaat, is een lange zit. Met een Engels of tweetalig gedicht snapt iedereen de grapjes en anekdotes. Zeker bij een <NuxtLink to="/blog/sinterklaas-op-het-werk" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaasgedicht voor een collega</NuxtLink> zorgt Engels ervoor dat niemand buiten de grap valt.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Sinterklaas uitleggen aan internationale gasten in het gedicht</h2>
+    <h2 id="sinterklaas-uitleggen-aan-internationale-gasten-in-het-gedicht" class="text-3xl font-bold mt-8 mb-4">Sinterklaas uitleggen aan internationale gasten in het gedicht</h2>
     <p class="leading-relaxed mb-4">
       Voor wie niet in Nederland is opgegroeid, kan het sinterklaasfeest verwarrend zijn. Mensen uit andere landen denken bij een man met een witte baard en een rood gewaad al snel aan de Kerstman. Maak daarom aan het begin van het gedicht kort duidelijk wie de Sint is. Zo weet de ontvanger direct wie de afzender is en waarom er een gedicht bij het cadeau zit. Een uitgebreidere uitleg staat in het artikel over <NuxtLink to="/blog/sinterklaas-tradities" class="text-red-700 underline underline-offset-2 hover:text-red-900">sinterklaas tradities</NuxtLink>.
     </p>
@@ -29,7 +38,7 @@
       Twee tot vier regels aan het begin van je gedicht zijn genoeg. Een geschiedenisles in rijm hoeft niet.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Rijm en ritme in het Engels: waar let je op?</h2>
+    <h2 id="rijm-en-ritme-in-het-engels-waar-let-je-op" class="text-3xl font-bold mt-8 mb-4">Rijm en ritme in het Engels: waar let je op?</h2>
     <p class="leading-relaxed mb-4">
       Voor een <strong>Engels sinterklaasgedicht</strong> gelden dezelfde regels als in het Nederlands: een vast ritme en echt rijm. Het verschil zit in de spelling. In het Engels zegt de spelling minder over de uitspraak dan in het Nederlands. Rijm ook niet steeds op '-ing', net zoals je in het Nederlands niet elke regel op '-en' laat eindigen.
     </p>
@@ -42,7 +51,7 @@
       <p class="text-red-800">Gebruik geen ingewikkelde Engelse uitdrukkingen die alleen moedertaalsprekers kennen. Houd de zinnen kort en eenvoudig. Dan kan ook wie Engels als tweede taal spreekt het gedicht volgen.</p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Voorbeelden van een sinterklaasgedicht in het Engels</h2>
+    <h2 id="voorbeelden-van-een-sinterklaasgedicht-in-het-engels" class="text-3xl font-bold mt-8 mb-4">Voorbeelden van een sinterklaasgedicht in het Engels</h2>
     <p class="leading-relaxed mb-4">
       Hieronder vind je twee voorbeelden van een sinterklaasgedicht in het Engels. Je kunt deze teksten gebruiken als inspiratie voor een collega of een vriend die nieuw is in Nederland.
     </p>
@@ -77,7 +86,7 @@
       </p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Een tweetalig sinterklaasgedicht schrijven</h2>
+    <h2 id="een-tweetalig-sinterklaasgedicht-schrijven" class="text-3xl font-bold mt-8 mb-4">Een tweetalig sinterklaasgedicht schrijven</h2>
     <p class="leading-relaxed mb-4">
       Is de ontvanger volop Nederlands aan het leren, of vier je pakjesavond in een gemengde familie? Dan is een <strong>tweetalig sinterklaasgedicht</strong> een goede tussenweg. Je wisselt Nederlandse en Engelse coupletten af. Iedereen begrijpt de inhoud, en de ontvanger hoort toch hoe een Nederlands sinterklaasgedicht klinkt.
     </p>
@@ -100,7 +109,7 @@
       </p>
     </div>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Stappenplan voor een Engels sinterklaasgedicht</h2>
+    <h2 id="stappenplan-voor-een-engels-sinterklaasgedicht" class="text-3xl font-bold mt-8 mb-4">Stappenplan voor een Engels sinterklaasgedicht</h2>
     <p class="leading-relaxed mb-4">
       Wil je zelf een Engels gedicht schrijven? Volg deze zes stappen.
     </p>
@@ -116,7 +125,7 @@
       Kom je er zelf niet uit of heb je weinig tijd? SintGPT (sintgpt.com) schrijft in ongeveer een minuut een persoonlijk sinterklaasgedicht in het Nederlands of het Engels. Je kiest uit zes stijlen, van Klassiek tot Roast.
     </p>
 
-    <h2 class="text-3xl font-bold mt-8 mb-4">Praktische tips voor een internationale pakjesavond</h2>
+    <h2 id="praktische-tips-voor-een-internationale-pakjesavond" class="text-3xl font-bold mt-8 mb-4">Praktische tips voor een internationale pakjesavond</h2>
     <p class="leading-relaxed mb-4">
       Met internationale gasten maak je vooraf een paar duidelijke afspraken. Begin met lootjes trekken. Op <NuxtLink to="/lootjes" class="text-red-700 underline underline-offset-2 hover:text-red-900">sintgpt.com/lootjes</NuxtLink> trek je gratis lootjes op één telefoon, zonder accounts en zonder e-mailadressen. Iedereen tikt op de eigen naam en ziet alleen het eigen lootje.
     </p>

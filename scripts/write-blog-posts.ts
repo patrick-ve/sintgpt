@@ -168,8 +168,13 @@ function renderBlock(block: z.infer<typeof BlockSchema>, warnings: string[]): st
 }
 
 function render(brief: BlogBrief, post: Post, warnings: string[]): string {
+  // Every h2 gets an id, and BlogPost shows them as the contents list (`toc`).
+  const headingId = (heading: string) => plain(heading).normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const toc = post.sections.map(section =>
+    `      { id: '${headingId(section.heading)}', label: '${plain(section.heading).replace(/['"&<>]/g, '')}' },`).join('\n');
   const body = post.sections.map(section => [
-    `    <h2 class="text-3xl font-bold mt-8 mb-4">${inline(section.heading, warnings)}</h2>`,
+    `    <h2 id="${headingId(section.heading)}" class="text-3xl font-bold mt-8 mb-4">${inline(section.heading, warnings)}</h2>`,
     ...section.blocks.map(block => renderBlock(block, warnings)),
   ].join('\n')).join('\n\n');
   return `<template>
@@ -179,6 +184,9 @@ function render(brief: BlogBrief, post: Post, warnings: string[]): string {
     seo-title="${escapeAttr(`${plain(post.seoTitle)} | SintGPT`)}"
     seo-description="${escapeAttr(plain(post.seoDescription))}"
     og-image="blog-${brief.slug}"
+    :toc="[
+${toc}
+    ]"
   >
 ${body}
 
