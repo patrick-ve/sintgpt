@@ -9,7 +9,7 @@ findings worth keeping. Newest information first within each section.
   `docs/pricing-tiers.md`.
 - Never put API keys, webhook secrets or gift codes in this file.
 
-Last updated: 27 November 2026. Live version: `9b63ad55-1d7f-4f2f-8277-74cdbd9301aa` (86a5720: contents list on every blog post, blog share images in the look of the book)
+Last updated: 27 November 2026. Live version: `2b401a23-5fe5-4d4c-bc1c-c50f13af06c9` (3e29b33: analytics review, #40)
 (commit `6061832`, on GitHub).
 
 ## Priorities
@@ -646,7 +646,9 @@ Owner steps:
     and English posts; new post `sinterklaasgedicht-bij-cadeau` (OpenSEO NL volumes: chocoladeletter 70,
     geld 50, voetbal 50, sokken 40, boek 30, cadeaubon 20 a month).
   - English page `/sinterklaas-poem` ("sinterklaas poem" 90 a month, English variants 50 each, generator 40).
-- **Owner:** set the secret (see the deploy report); request indexing in Search Console for `/sinterklaas-poem`
+- **Live 27 Nov** (`2b401a23`, commit `3e29b33`): smoke test passed; IndexNow sent for `/`, `/blog`,
+  `/sinterklaas-poem`, the new post and the begin-and-end post (200).
+- **Owner:** set the secret `NUXT_DODO_PRODUCT_ID_EEN` (until then the single poem is not on sale); request indexing in Search Console for `/sinterklaas-poem`
   and `/blog/sinterklaasgedicht-bij-cadeau`; finish the Dynadot contact check (#1 outage of 26 November).
 - **Measure from 28 November:** `Proceed to payment` per `Show payment modal` (by tier, `een` against the
   others); `Poem unlocked` per `Poem preview`; `Shared poem to form` `poem` per `Open shared poem`; `Rate poem`
