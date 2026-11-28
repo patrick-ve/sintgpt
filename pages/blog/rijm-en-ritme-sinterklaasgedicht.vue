@@ -2,8 +2,8 @@
   <BlogPost
     slug="rijm-en-ritme-sinterklaasgedicht"
     lead="Het meest gebruikte rijmschema voor een sinterklaasgedicht is AABB: steeds rijmen twee regels na elkaar. Je kunt ook ABAB, ABBA of de limerick (AABBA) kiezen. Hieronder zie je elk rijmschema met een voorbeeld, en lees je hoe je het ritme laat kloppen."
-    seo-title="Rijmschema sinterklaasgedicht: 4 vormen en tips | SintGPT"
-    seo-description="Welk rijmschema kies je voor je sinterklaasgedicht? Voorbeelden van AABB, ABAB, ABBA en de limerick, plus tips voor ritme en klemtoon."
+    seo-title="Rijmschema sinterklaasgedicht: AABB, ABAB of ABBA? | SintGPT"
+    seo-description="Het meest gebruikte rijmschema voor een sinterklaasgedicht is AABB. Zie AABB, ABAB, ABBA en de limerick met een voorbeeld, plus tips voor ritme."
     og-image="blog-rijm-en-ritme-sinterklaasgedicht"
     :toc="[
       { id: 'waarom-het-rijmschema-van-je-sinterklaasgedicht-het-ritme-bepaalt', label: 'Waarom het rijmschema van je sinterklaasgedicht het ritme bepaalt' },
