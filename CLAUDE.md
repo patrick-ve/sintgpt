@@ -187,6 +187,7 @@ On the home page the section is "ChatGPT vs SintGPT": per style, ChatGPT's poem 
 
 ### Social proof
 Only show numbers, reviews and ratings that come from real data. This includes the JSON-LD on the home page. Keep its offer in line with the real price and free limit.
+- Poem counter in the hero (`components/PoemCounter.vue`, design A of https://claude.ai/artifact/S6fkA5MxiSbQ2nHS6FsWFG, live 28 Nov 2026): "De Sint schreef dit seizoen al {count} gedichten · {today} vandaag", under both hero buttons (on phones below "Hoe werkt het?", because the buttons stack). `GET /api/stats/poems` (`server/utils/poemCounter.ts`) counts `Generate poem`, `Regenerate poem` and `Poem preview` (the owner's choice: with previews) in Analytics Engine since 1 September of the season, and since 00:00 Dutch time for today, weighted with `_sample_interval`. It uses `NUXT_CLOUDFLARE_ANALYTICS_TOKEN` (runtime config `cloudflareAnalyticsToken`, the token of the alerts) and caches the answer 5 minutes per location (Cache API, no KV writes) and per isolate. Without the token or on any error the route answers 404 and the page shows nothing. "vandaag" shows from 3 poems that day (`MIN_TODAY`). The owner's own poems (`sintgpt-intern`) are not counted. `utils/dutchDay.ts` is shared with the analytics scripts.
 
 ### Open Graph images
 - Specs in `scripts/og-images.ts`, rendered by `scripts/build-og-image.ts` (Puppeteer + sharp) to `public/og/<name>.jpg`. The images named `blog` and `blog-<slug>` get the look of the blog (cream page, red title, the chapter of the post from `BLOG_CHAPTERS` as label); the others are red with gold.
@@ -230,7 +231,7 @@ Runtime config is read from `NUXT_*` env vars at runtime (not baked into the bui
 | `NUXT_GIFT_CODES_SEASON` | Optional. Comma-separated season gift codes: Hele familie until `NUXT_GIFT_SEASON_END` (default `2026-12-05`), at most 3 browsers per code |
 | `NUXT_FREE_REWRITE` | Optional. `off` stops the free visitor's free rewrite without a deploy |
 | `NUXT_POEM_PREVIEW` | Optional. `off` stops writing poems before payment (the page then opens the payment window) |
-| `NUXT_CLOUDFLARE_ANALYTICS_TOKEN` | Optional. Cloudflare API token with only **Account Analytics Read**, for the alert check. Without it (or the two below) there are no alerts |
+| `NUXT_CLOUDFLARE_ANALYTICS_TOKEN` | Optional. Cloudflare API token with only **Account Analytics Read**, for the alert check and the poem counter in the hero. Without it (or the two below) there are no alerts; without it the counter is hidden |
 | `NUXT_TELEGRAM_BOT_TOKEN` | Optional. Telegram bot from @BotFather that sends the alerts |
 | `NUXT_TELEGRAM_CHAT_ID` | Optional. The Telegram chat that gets the alerts and the contact form messages |
 | `NUXT_TURNSTILE_SECRET_KEY` | Optional. Cloudflare Turnstile secret for the contact form. Without it (or the site key) the form is off and the page shows the e-mail address |

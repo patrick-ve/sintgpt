@@ -673,6 +673,38 @@ describe('changes of 27 November 2026', () => {
   });
 });
 
+describe('poem counter in the hero', () => {
+  it('shows the real count below both hero buttons, also on phones', async () => {
+    const page = await createPage();
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.route('**/api/stats/poems', route => route.fulfill({ json: { season: 237, today: 25 } }));
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+    const counter = page.locator('.poem-counter');
+    await expect.poll(() => counter.textContent()).toMatch(/De Sint schreef dit seizoen al\s*237\s*gedichten/);
+    expect(await counter.textContent()).toContain('25 vandaag');
+    const button = await page.getByRole('button', { name: 'Hoe werkt het?' }).boundingBox();
+    const box = await counter.boundingBox();
+    expect(box!.y).toBeGreaterThan(button!.y + button!.height);
+    await page.close();
+  }, 30_000);
+
+  it('leaves out a small day count, and shows nothing without a count', async () => {
+    const page = await createPage();
+    await page.route('**/api/stats/poems', route => route.fulfill({ json: { season: 237, today: 1 } }));
+    await page.goto(url('/'), { waitUntil: 'networkidle' });
+    await expect.poll(() => page.locator('.poem-counter').textContent()).toContain('237');
+    expect(await page.locator('.poem-counter').textContent()).not.toContain('vandaag');
+    await page.close();
+
+    // The test build has no analytics token: the route answers 404 and the page shows nothing.
+    expect((await fetch('/api/stats/poems')).status).toBe(404);
+    const plain = await createPage('/');
+    await plain.waitForTimeout(500);
+    expect(await plain.locator('.poem-counter').count()).toBe(0);
+    await plain.close();
+  }, 30_000);
+});
+
 describe('Herschrijf dit gedicht', () => {
   async function paidPage() {
     const page = await createPage();

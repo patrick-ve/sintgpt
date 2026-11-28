@@ -21,6 +21,12 @@ export default {
     photoCaption: 'Even Sinterklaas finds rhyming hard sometimes.',
     note: 'Your first poem is free. After that, a one-time {gezinPrice} covers poems for the whole family, or €3.99 buys 3 poems.',
   },
+  counter: {
+    before: 'Sinterklaas has written',
+    after: 'poems this season',
+    season: 'Sinterklaas has written {count} poems this season.',
+    today: '{count} today',
+  },
   countdown: {
     days: 'Pakjesavond is in {count} day | Pakjesavond is in {count} days',
     tomorrow: 'Pakjesavond is tomorrow',

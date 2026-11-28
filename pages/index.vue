@@ -1571,6 +1571,9 @@ useHead({
             </button>
           </div>
 
+          <!-- Real poem count (design A, 28 Nov 2026). Below both buttons, also on phones. -->
+          <PoemCounter />
+
           <p class="text-base text-[#f7e6c0]">
             {{ t('hero.note', { gezinPrice: gezinPriceText(locale) }) }}
           </p>

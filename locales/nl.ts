@@ -22,6 +22,14 @@ export default {
     photoCaption: 'Ook de Sint rijmt niet altijd vanzelf.',
     note: 'Je eerste gedicht is gratis. Daarna schrijf je voor eenmalig {gezinPrice} gedichten voor het hele gezin, of 3 gedichten voor €3,99.',
   },
+  // The poem counter in the hero (components/PoemCounter.vue): new poems,
+  // rewrites and poems written before payment this season.
+  counter: {
+    before: 'De Sint schreef dit seizoen al',
+    after: 'gedichten',
+    season: 'De Sint schreef dit seizoen al {count} gedichten.',
+    today: '{count} vandaag',
+  },
   countdown: {
     days: 'Nog {count} dag tot pakjesavond | Nog {count} dagen tot pakjesavond',
     tomorrow: 'Morgen is het pakjesavond',

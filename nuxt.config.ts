@@ -56,6 +56,9 @@ export default defineNuxtConfig({
     turnstileSecretKey: '',
     telegramBotToken: '',
     telegramChatId: '',
+    // The hero's poem counter (server/api/stats/poems.get.ts) reads Analytics
+    // Engine with the token of the alerts: NUXT_CLOUDFLARE_ANALYTICS_TOKEN.
+    cloudflareAnalyticsToken: '',
     // Kill switches, without a deploy: set NUXT_FREE_REWRITE=off to stop the
     // free visitor's free rewrite (server/utils/freeRewrite.ts), and
     // NUXT_POEM_PREVIEW=off to stop writing poems before payment

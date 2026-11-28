@@ -54,6 +54,7 @@ Last updated: 28 November 2026. Live version: `31d84f6a-98ea-44f3-a751-7595208a4
 | [#37](#37-share-image-shows-the-sint-of-the-poem-style) | Low | Share image shows the Sint of the poem style | Live 25 Nov (dab5b377); check one real roast link |
 | [#38](#38-hint-for-writers-who-forget-the-name) | Low | Hint for writers who forget the name | Live 26 Nov (db1ad86b); watch `no name` refusals |
 | [#40](#40-analytics-review-27-november) | High | Analytics review: single poem, English page, form offers | Built 27 Nov; measure from 28 Nov |
+| [#41](#41-poem-counter-in-the-hero) | Medium | Poem counter in the hero | Built 28 Nov; measure `Form started` per home `Page view` |
 
 ## Open
 
@@ -656,6 +657,13 @@ Owner steps:
 - **Measure from 28 November:** `Proceed to payment` per `Show payment modal` (by tier, `een` against the
   others); `Poem unlocked` per `Poem preview`; `Shared poem to form` `poem` per `Open shared poem`; `Rate poem`
   per `Poem ready`; `Go to poem form` `blog:sinterklaasgedicht-beginnen-en-afsluiten:blok` per view of that post.
+
+### #41 Poem counter in the hero
+
+- **28 Nov 2026:** the owner chose design A (under the hero buttons; on phones below "Hoe werkt het?") and the count
+  rule "with previews". Canvas: https://claude.ai/artifact/S6fkA5MxiSbQ2nHS6FsWFG (phone board updated). First live
+  value: 237 this season, 25 that day. How it works: Social proof in `CLAUDE.md`.
+- **Watch:** `Form started` and `Scroll to poem form` `hero` per home `Page view`, against the week before. Small counts.
 
 ## Findings
 
