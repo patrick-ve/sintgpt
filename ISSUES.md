@@ -9,7 +9,7 @@ findings worth keeping. Newest information first within each section.
   `docs/pricing-tiers.md`.
 - Never put API keys, webhook secrets or gift codes in this file.
 
-Last updated: 28 November 2026. Live version: `31d84f6a-98ea-44f3-a751-7595208a480d` (e94168d: rijmschema title, beginzinnen and afsluiting)
+Last updated: 28 November 2026. Live version: `6aa50f03-92e2-47a4-9df5-f8f8d09cd1e7` (c1f2e56: poem counter in the hero)
 (commit `6061832`, on GitHub).
 
 ## Priorities
@@ -663,6 +663,8 @@ Owner steps:
 - **28 Nov 2026:** the owner chose design A (under the hero buttons; on phones below "Hoe werkt het?") and the count
   rule "with previews". Canvas: https://claude.ai/artifact/S6fkA5MxiSbQ2nHS6FsWFG (phone board updated). First live
   value: 237 this season, 25 that day. How it works: Social proof in `CLAUDE.md`.
+- **Live 28 Nov** (`6aa50f03`, commit `c1f2e56`): smoke test passed; the live page showed 239 this season and 27 that day,
+  below "Hoe werkt het?" on a phone.
 - **Watch:** `Form started` and `Scroll to poem form` `hero` per home `Page view`, against the week before. Small counts.
 
 ## Findings
