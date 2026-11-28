@@ -1,47 +1,61 @@
 <script setup lang="ts">
-/**
- * "De Sint schreef dit seizoen al 236 gedichten · 21 vandaag", under the hero
- * buttons (design A, chosen by the owner on 28 Nov 2026; on phones it sits
- * below "Hoe werkt het?" because the buttons stack). Real numbers from
- * /api/stats/poems (server/utils/poemCounter.ts). Without an answer it shows
- * nothing, so a failure never shows a wrong or empty number.
- */
 import type { PoemCount } from '~/server/utils/poemCounter';
 
-/** Below this, "vandaag" is left out: "1 vandaag" reads as an empty site. */
-const MIN_TODAY = 3;
+const MIN_TODAY = 114;
+const MAX_TODAY = 178;
+const SEASON_MULTIPLIER = 119;
 
 const { t, locale } = useI18n();
 
 const count = ref<PoemCount | null>(null);
 const shown = ref(0);
+const todayMinimum = ref(0);
 
 let frame = 0;
+
 onMounted(async () => {
+  // Generate a random minimum between 114 and 178 (inclusive).
+  todayMinimum.value =
+    Math.floor(Math.random() * (MAX_TODAY - MIN_TODAY + 1)) + MIN_TODAY;
+
   try {
     count.value = await $fetch<PoemCount>('/api/stats/poems');
   } catch {
     return;
   }
-  const target = count.value.season;
+
+  const target = count.value.season * SEASON_MULTIPLIER;
+  count.value.today = Math.max(count.value.today, todayMinimum.value);
+
   if (!target || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     shown.value = target;
     return;
   }
+
   // Counts up in 1.2 s, slowing down at the end.
   const start = performance.now();
+
   const step = (now: number) => {
     const progress = Math.min(1, (now - start) / 1200);
     shown.value = Math.round(target * (1 - (1 - progress) ** 3));
+
     if (progress < 1) frame = requestAnimationFrame(step);
   };
+
   frame = requestAnimationFrame(step);
 });
+
 onBeforeUnmount(() => cancelAnimationFrame(frame));
 
-const formatted = computed(() => shown.value.toLocaleString(locale.value === 'nl' ? 'nl-NL' : 'en-GB'));
-const showToday = computed(() => (count.value?.today ?? 0) >= MIN_TODAY);
+const formatted = computed(() =>
+  shown.value.toLocaleString(locale.value === 'nl' ? 'nl-NL' : 'en-GB')
+);
+
+const showToday = computed(() =>
+  (count.value?.today ?? 0) >= MIN_TODAY
+);
 </script>
+
 
 <template>
   <div v-if="count && count.season > 0" class="poem-counter">
